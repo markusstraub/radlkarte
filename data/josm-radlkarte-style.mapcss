@@ -1,0 +1,24 @@
+way {
+    color: #FF6600;
+}
+
+way[ambience=calm] {
+    width: 5;
+}
+
+way[ambience=medium] {
+    width: 2;
+}
+
+way[ambience=stressful] {
+    width: 1;
+    dashes: 5,5;
+}
+
+way[detail=1] {
+    opacity: 0.5;
+}
+
+way[detail=2] {
+    opacity: 0.2;
+}

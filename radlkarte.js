@@ -1,10 +1,12 @@
 var rkGlobal = {}; // global variable for radlkarte properties / data storage
 
 rkGlobal.debug = false; // debug output will be logged if set to true
+rkGlobal.priorities = ["Hauptverbindungen", "Verbindungen", "Lokale Routen"]; // names of all different levels of priorities (ordered descending by priority)
 
-rkGlobal.map = undefined; // leaflet-map-object
-rkGlobal.layerControl = undefined; // leaflet layer-control
+rkGlobal.leafletMap = undefined; // leaflet-map-object
+rkGlobal.leafletLayersControl = undefined; // leaflet layer-control
 
+rkGlobal.layerContainer; 
 rkGlobal.markerLines = new Array();
 
 rkGlobal.jsonLayers = new Array();
@@ -27,6 +29,41 @@ function debug(obj) {
 // ----------------------------------------------------------- geojson functions
 
 function loadGeoJson() {
+    $.getJSON("data/wege-durch-wien.geojson", function(data) {
+        // load into temp layer
+        var routeSegments = L.geoJSON(data, {
+            filter: function (feature) {
+                return feature.geometry.type == "LineString"
+                       && feature.properties !== undefined;
+            }
+        });
+        console.log("loaded segment count: " + routeSegments.getLayers().length);
+        
+        // separate segments by priority
+        rkGlobal.segmentsByPriority = []
+        for(var i=0; i<rkGlobal.priorities.length; i++)
+            rkGlobal.segmentsByPriority.push({ polyLines: L.layerGroup(), onewayMarkers: L.layerGroup()});
+        
+        routeSegments.getLayers().forEach(function(layer) {
+            var priority = parseInt(layer.feature.properties.detail, 10);
+            if(!isNaN(priority)) {
+                rkGlobal.segmentsByPriority[priority].polyLines.addLayer(layer);
+            }
+        });
+        
+
+        // create markers for all oneway-segments
+    
+        // style markers and segments
+        
+        // add to map & layercontrol
+        for(var i=0; i<rkGlobal.priorities.length; i++) {
+            rkGlobal.leafletLayersControl.addOverlay(rkGlobal.segmentsByPriority[i].polyLines, rkGlobal.priorities[i]);
+        }
+    });
+}
+
+function loadGeoJsonObsolete() {
     // load GeoJSON layer (in separate thread)
     $.getJSON("data/wege-durch-wien.geojson", function(data) {
         // add all geojson objects to the layer and style them
@@ -54,7 +91,7 @@ function loadGeoJson() {
                                 })
                             }
                         ]
-                    }).addTo(rkGlobal.map);
+                    }).addTo(rkGlobal.leafletMap);
                     rkGlobal.markerLines.push(markerLine)
                 }
             },
@@ -68,7 +105,7 @@ function loadGeoJson() {
                     return styleGeoJson(feature);
                 }
             }
-        }).addTo(rkGlobal.map);
+        }).addTo(rkGlobal.leafletMap);
 
         
         debug('styled geojson. ' + cnt + ' total, ' + cntGood + ' styled');
@@ -91,14 +128,16 @@ function loadGeoJson() {
         debug(rkGlobal.jsonLayers);
         debug(rkGlobal.jsonLayersVisible);
         debug('finished loading geojson. ' + cnt + ' total, ' + cntGood + ' in result');
+        
+        rkGlobal.leafletLayersControl.addOverlay(rkGlobal.layer, 'oi');
     });
     
-    rkGlobal.map.on('zoomend', function(ev) {
-        debug("current zoom level: " + rkGlobal.map.getZoom());
+    rkGlobal.leafletMap.on('zoomend', function(ev) {
+        debug("current zoom level: " + rkGlobal.leafletMap.getZoom());
         rkGlobal.layer.setStyle(styleGeoJson);
         // TODO adapt zoom of arrows
         /*
-        var currentZoom = (rkGlobal.map.getZoom()-10)*2.4;
+        var currentZoom = (rkGlobal.leafletMap.getZoom()-10)*2.4;
         rkGlobal.layer.eachLayer(function (layer) {
             layer.options.weight = currentZoom;
         });
@@ -121,7 +160,7 @@ function styleGeoJson(feature) {
 }
 
 function getBaseLineWeight() {
-    var lineWeight = rkGlobal.map.getZoom() - 10;
+    var lineWeight = rkGlobal.leafletMap.getZoom() - 10;
     lineWeight = (lineWeight <= 0 ? 1 : lineWeight) * 1.4;
     return lineWeight;
 }
@@ -131,7 +170,7 @@ function getBaseLineWeight() {
 
 
 function initMap() {
-    rkGlobal.map = L.map('map', { 'zoomControl' : false } ).setView([48.22764,16.40774545], 14);
+    rkGlobal.leafletMap = L.map('map', { 'zoomControl' : false } ).setView([48.2083537, 16.3725042], 14);
 
     var mapboxStreets = L.tileLayer('https://api.tiles.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png?access_token={accessToken}', {
         maxZoom: 18,
@@ -164,8 +203,8 @@ function initMap() {
     };
     var overlayMaps = {};
     
-    empty.addTo(rkGlobal.map)
-    rkGlobal.layerControl = L.control.layers(baseMaps, overlayMaps, { 'position' : 'topleft', 'collapsed' : false } ).addTo(rkGlobal.map);
+    empty.addTo(rkGlobal.leafletMap)
+    rkGlobal.leafletLayersControl = L.control.layers(baseMaps, overlayMaps, { 'position' : 'topleft', 'collapsed' : false } ).addTo(rkGlobal.leafletMap);
     
     // load overlay & control
     loadGeoJson();
