@@ -1,9 +1,10 @@
 var rkGlobal = {}; // global variable for radlkarte properties / data storage
 
 rkGlobal.debug = false; // debug output will be logged if set to true
-rkGlobal.priorities = ["Hauptverbindungen", "Verbindungen", "Lokale Routen"]; // names of all different levels of priorities (ordered descending by priority)
+rkGlobal.priorityStrings = ["Überregional", "Regional", "Lokal"]; // names of all different levels of priorities (ordered descending by priority)
+rkGlobal.priorityWidthFactor = [1.2, 0.5, 0.4];
 
-rkGlobal.leafletMap = undefined; // leaflet-map-object
+rkGlobal.leafletMap = undefined; // the main leaflet map
 rkGlobal.leafletLayersControl = undefined; // leaflet layer-control
 
 rkGlobal.layerContainer; 
@@ -13,6 +14,7 @@ rkGlobal.jsonLayers = new Array();
 rkGlobal.jsonLayersVisible = new Array();
 rkGlobal.layer; // radlkarte-overlay layer displaying the geojson objects
 rkGlobal.opacity = 0.7;
+rkGlobal.color = '#FF6600';
 rkGlobal.widthFactor = {
     "premium" : 1.2,
     "calm" : 1.2,
@@ -25,9 +27,6 @@ function debug(obj) {
         console.log(obj);
 }
 
-
-// ----------------------------------------------------------- geojson functions
-
 function loadGeoJson() {
     $.getJSON("data/wege-durch-wien.geojson", function(data) {
         // load into temp layer
@@ -39,13 +38,16 @@ function loadGeoJson() {
         });
         console.log("loaded segment count: " + routeSegments.getLayers().length);
         
-        // separate segments by priority
+        // separate segments by priority & extract latLons
         rkGlobal.segmentsByPriority = []
-        for(var i=0; i<rkGlobal.priorities.length; i++)
-            rkGlobal.segmentsByPriority.push({ polyLines: L.layerGroup(), onewayMarkers: L.layerGroup()});
+        for(var i=0; i<rkGlobal.priorityStrings.length; i++)
+            rkGlobal.segmentsByPriority.push({
+                all: L.layerGroup(), // contains polylines & onewaymarkers (for easy toggling of visibility in the map)
+                polyLines: L.featureGroup(), // contains polylines (for easy styling)
+                onewayMarkers: undefined, // contains oneway markers in a L.polylineDecorator (for easy styling)
+                onewayLatLons: []
+            });
         
-        
-        var onewayLatLons = [];
         routeSegments.getLayers().forEach(function(layer) {
             var priority = parseInt(layer.feature.properties.detail, 10);
             if(!isNaN(priority) && layer.getLatLngs().length >= 2) {
@@ -53,65 +55,63 @@ function loadGeoJson() {
                 rkGlobal.segmentsByPriority[priority].polyLines.addLayer(layer);
                 
                 // (2) the markers (warning latLon expected!)
-                onewayLatLons.push(layer.getLatLngs());
-//                 var arrowWidth = 10;//getBaseLineWeight() * rkGlobal.widthFactor[feature.properties.ambience];
-//                 arrowWidth = Math.max(arrowWidth * 2, arrowWidth + 8);
-//                 var markerLine = L.polylineDecorator(layer.getLatLngs(), {
-//                     patterns: [
-//                         {
-//                             offset: 25,
-//                             repeat: 50,
-//                             symbol: L.Symbol.arrowHead({
-//                                 pixelSize: arrowWidth,
-//                                 headAngle: 90,
-//                                 pathOptions: {
-//                                     color: '#FF66FF',
-//                                     fillOpacity: rkGlobal.opacity,
-//                                     weight: 0}
-//                             })
-//                         }
-//                     ]
-//                 });
-//                 rkGlobal.segmentsByPriority[priority].onewayMarkers.addLayer(markerLine);
+                if(layer.feature.properties.oneway == 'yes') {
+                    rkGlobal.segmentsByPriority[priority].onewayLatLons.push(layer.getLatLngs());
+                }
             }
         });
         
-        var arrowWidth = 20;
-        var markerLine = L.polylineDecorator(onewayLatLons, {
-            patterns: [
-                {
-                    offset: 25,
-                    repeat: 50,
-                    symbol: L.Symbol.arrowHead({
-                        pixelSize: arrowWidth,
-                        headAngle: 90,
-                        pathOptions: {
-                            color: '#FF66FF',
-                            fillOpacity: rkGlobal.opacity,
-                            weight: 0}
-                    })
-                }
-            ]
-        });
-        markerLine.setPatterns(getOnewayArrowPatterns());
-        rkGlobal.leafletLayersControl.addOverlay(markerLine);
-        //rkGlobal.segmentsByPriority[priority].onewayMarkers.addLayer(markerLine);
+        // create a single polylineDecorator layer (which is a layergroup) per priority (so can be styled in one go)
+        for(var priority=0; priority<rkGlobal.priorityStrings.length; priority++) {
+            var markerLayer = L.polylineDecorator(rkGlobal.segmentsByPriority[priority].onewayLatLons);
+            rkGlobal.segmentsByPriority[priority].onewayMarkers = markerLayer;
+        }
 
-        // style markers and segments
-//         for(var i=0; i<rkGlobal.priorities.length; i++) {
-//             rkGlobal.segmentsByPriority[i].polyLines
-//             rkGlobal.segmentsByPriority[i].onewayMarkers.setPatterns(getOnewayArrowPatterns());
-//         }
+        // collect lines & markers in 'all'
+        for(var priority=0; priority<rkGlobal.priorityStrings.length; priority++) {
+            rkGlobal.segmentsByPriority[priority].all.addLayer(rkGlobal.segmentsByPriority[priority].polyLines);
+            rkGlobal.segmentsByPriority[priority].all.addLayer(rkGlobal.segmentsByPriority[priority].onewayMarkers);
+        }
+        
+        // initial styling for markers and segments
+        updateStyles();
         
         // add to map & layercontrol
-        for(var i=0; i<rkGlobal.priorities.length; i++) {
-            rkGlobal.leafletLayersControl.addOverlay(rkGlobal.segmentsByPriority[i].polyLines, rkGlobal.priorities[i]);
-//             rkGlobal.leafletLayersControl.addOverlay(rkGlobal.segmentsByPriority[i].onewayMarkers, rkGlobal.priorities[i]);
+        for(var priority=0; priority<rkGlobal.priorityStrings.length; priority++) {
+            rkGlobal.segmentsByPriority[priority].all.addTo(rkGlobal.leafletMap);
+            rkGlobal.leafletLayersControl.addOverlay(rkGlobal.segmentsByPriority[priority].all, rkGlobal.priorityStrings[priority]);
         }
+        
+        rkGlobal.leafletMap.on('zoomend', function(ev) {
+            debug("current zoom level: " + rkGlobal.leafletMap.getZoom());
+            updateStyles();
+        });
     });
 }
 
-function getOnewayArrowPatterns(arrowWidth) {
+
+/**
+ * Updates the styles of all layers. Takes current zoom level into account
+ */
+function updateStyles() {
+    for(var priority=0; priority<rkGlobal.priorityStrings.length; priority++) {
+        rkGlobal.segmentsByPriority[priority].polyLines.setStyle(getLineStringStyle(priority));
+        rkGlobal.segmentsByPriority[priority].onewayMarkers.setPatterns(getOnewayArrowPatterns(priority));
+    }
+}
+
+function getLineStringStyle(priority) {
+    var style = {color: rkGlobal.color, weight: getLineWeight(priority), opacity: rkGlobal.opacity};
+    if(priority >= 2)
+        style.dashArray = "5, 5";
+    return style;
+}
+
+/**
+ * @return an array of patterns as expected by L.PolylineDecorator.setPatterns
+ */ 
+function getOnewayArrowPatterns(priority) {
+    var arrowWidth = getLineWeight(priority) * 2;
     return [
         {
             offset: 25,
@@ -120,13 +120,20 @@ function getOnewayArrowPatterns(arrowWidth) {
                 pixelSize: arrowWidth,
                 headAngle: 90,
                 pathOptions: {
-                    color: '#FF66FF',
+                    color: rkGlobal.color,
                     fillOpacity: rkGlobal.opacity,
                     weight: 0
                 }
             })
         }
     ];
+}
+
+function getLineWeight(priority) {
+    var lineWeight = rkGlobal.leafletMap.getZoom() - 10;
+    lineWeight = (lineWeight <= 0 ? 1 : lineWeight) * 1.4;
+    lineWeight *= rkGlobal.priorityWidthFactor[priority]
+    return lineWeight;
 }
 
 function loadGeoJsonObsolete() {
@@ -151,7 +158,7 @@ function loadGeoJsonObsolete() {
                                     pixelSize: arrowWidth,
                                     headAngle: 90,
                                     pathOptions: {
-                                        color: '#FF6600',
+                                        color: rkGlobal.color,
                                         fillOpacity: rkGlobal.opacity,
                                         weight: 0}
                                 })
@@ -224,15 +231,6 @@ function styleGeoJson(feature) {
         case 'stressful': return {color: "#FF6600", weight: lineWeight, opacity: rkGlobal.opacity, dashArray: "5, 5"}; //#008837
     }
 }
-
-function getBaseLineWeight() {
-    var lineWeight = rkGlobal.leafletMap.getZoom() - 10;
-    lineWeight = (lineWeight <= 0 ? 1 : lineWeight) * 1.4;
-    return lineWeight;
-}
-
-
-// ------------------------------------------------------------------------ main
 
 
 function initMap() {
