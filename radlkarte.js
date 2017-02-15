@@ -2,8 +2,9 @@ var rkGlobal = {}; // global variable for radlkarte properties / data storage
 rkGlobal.leafletMap = undefined; // the main leaflet map
 rkGlobal.leafletLayersControl = undefined; // leaflet layer-control
 rkGlobal.priorityStrings = ["Überregional", "Regional", "Lokal"]; // names of all different levels of priorities (ordered descending by priority)
-rkGlobal.priorityWidthFactor = [1.2, 0.5, 0.4];
-rkGlobal.opacity = 0.7;
+rkGlobal.priorityLineWidthFactor = [1.2, 0.5, 0.4];
+rkGlobal.priorityArrowWidthFactor = [2, 3, 3];
+rkGlobal.opacity = 1;
 rkGlobal.color = '#FF6600';
 rkGlobal.debug = false; // debug output will be logged if set to true
 
@@ -96,7 +97,7 @@ function getLineStringStyle(priority) {
  * @return an array of patterns as expected by L.PolylineDecorator.setPatterns
  */ 
 function getOnewayArrowPatterns(priority) {
-    var arrowWidth = getLineWeight(priority) * 2;
+    var arrowWidth = Math.max(5, getLineWeight(priority) * rkGlobal.priorityArrowWidthFactor[priority]);
     return [
         {
             offset: 25,
@@ -117,7 +118,7 @@ function getOnewayArrowPatterns(priority) {
 function getLineWeight(priority) {
     var lineWeight = rkGlobal.leafletMap.getZoom() - 10;
     lineWeight = (lineWeight <= 0 ? 1 : lineWeight) * 1.4;
-    lineWeight *= rkGlobal.priorityWidthFactor[priority]
+    lineWeight *= rkGlobal.priorityLineWidthFactor[priority]
     return lineWeight;
 }
 
@@ -155,8 +156,8 @@ function initMap() {
     };
     var overlayMaps = {};
     
-    empty.addTo(rkGlobal.leafletMap)
-    rkGlobal.leafletLayersControl = L.control.layers(baseMaps, overlayMaps, { 'position' : 'topleft', 'collapsed' : false } ).addTo(rkGlobal.leafletMap);
+    mapboxStreets.addTo(rkGlobal.leafletMap)
+    rkGlobal.leafletLayersControl = L.control.layers(baseMaps, overlayMaps, { 'position' : 'topleft', 'collapsed' : true } ).addTo(rkGlobal.leafletMap);
     
     // load overlay & control
     loadGeoJson();

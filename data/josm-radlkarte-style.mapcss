@@ -1,4 +1,4 @@
-way {
+way[ambience] {
     color: #FF6600;
 }
 
