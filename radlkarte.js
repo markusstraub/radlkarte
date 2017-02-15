@@ -44,23 +44,89 @@ function loadGeoJson() {
         for(var i=0; i<rkGlobal.priorities.length; i++)
             rkGlobal.segmentsByPriority.push({ polyLines: L.layerGroup(), onewayMarkers: L.layerGroup()});
         
+        
+        var onewayLatLons = [];
         routeSegments.getLayers().forEach(function(layer) {
             var priority = parseInt(layer.feature.properties.detail, 10);
-            if(!isNaN(priority)) {
+            if(!isNaN(priority) && layer.getLatLngs().length >= 2) {
+                // (1) the line
                 rkGlobal.segmentsByPriority[priority].polyLines.addLayer(layer);
+                
+                // (2) the markers (warning latLon expected!)
+                onewayLatLons.push(layer.getLatLngs());
+//                 var arrowWidth = 10;//getBaseLineWeight() * rkGlobal.widthFactor[feature.properties.ambience];
+//                 arrowWidth = Math.max(arrowWidth * 2, arrowWidth + 8);
+//                 var markerLine = L.polylineDecorator(layer.getLatLngs(), {
+//                     patterns: [
+//                         {
+//                             offset: 25,
+//                             repeat: 50,
+//                             symbol: L.Symbol.arrowHead({
+//                                 pixelSize: arrowWidth,
+//                                 headAngle: 90,
+//                                 pathOptions: {
+//                                     color: '#FF66FF',
+//                                     fillOpacity: rkGlobal.opacity,
+//                                     weight: 0}
+//                             })
+//                         }
+//                     ]
+//                 });
+//                 rkGlobal.segmentsByPriority[priority].onewayMarkers.addLayer(markerLine);
             }
         });
         
+        var arrowWidth = 20;
+        var markerLine = L.polylineDecorator(onewayLatLons, {
+            patterns: [
+                {
+                    offset: 25,
+                    repeat: 50,
+                    symbol: L.Symbol.arrowHead({
+                        pixelSize: arrowWidth,
+                        headAngle: 90,
+                        pathOptions: {
+                            color: '#FF66FF',
+                            fillOpacity: rkGlobal.opacity,
+                            weight: 0}
+                    })
+                }
+            ]
+        });
+        markerLine.setPatterns(getOnewayArrowPatterns());
+        rkGlobal.leafletLayersControl.addOverlay(markerLine);
+        //rkGlobal.segmentsByPriority[priority].onewayMarkers.addLayer(markerLine);
 
-        // create markers for all oneway-segments
-    
         // style markers and segments
+//         for(var i=0; i<rkGlobal.priorities.length; i++) {
+//             rkGlobal.segmentsByPriority[i].polyLines
+//             rkGlobal.segmentsByPriority[i].onewayMarkers.setPatterns(getOnewayArrowPatterns());
+//         }
         
         // add to map & layercontrol
         for(var i=0; i<rkGlobal.priorities.length; i++) {
             rkGlobal.leafletLayersControl.addOverlay(rkGlobal.segmentsByPriority[i].polyLines, rkGlobal.priorities[i]);
+//             rkGlobal.leafletLayersControl.addOverlay(rkGlobal.segmentsByPriority[i].onewayMarkers, rkGlobal.priorities[i]);
         }
     });
+}
+
+function getOnewayArrowPatterns(arrowWidth) {
+    return [
+        {
+            offset: 25,
+            repeat: 50,
+            symbol: L.Symbol.arrowHead({
+                pixelSize: arrowWidth,
+                headAngle: 90,
+                pathOptions: {
+                    color: '#FF66FF',
+                    fillOpacity: rkGlobal.opacity,
+                    weight: 0
+                }
+            })
+        }
+    ];
 }
 
 function loadGeoJsonObsolete() {
