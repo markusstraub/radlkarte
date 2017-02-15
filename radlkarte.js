@@ -1,26 +1,11 @@
 var rkGlobal = {}; // global variable for radlkarte properties / data storage
-
-rkGlobal.debug = false; // debug output will be logged if set to true
-rkGlobal.priorityStrings = ["Überregional", "Regional", "Lokal"]; // names of all different levels of priorities (ordered descending by priority)
-rkGlobal.priorityWidthFactor = [1.2, 0.5, 0.4];
-
 rkGlobal.leafletMap = undefined; // the main leaflet map
 rkGlobal.leafletLayersControl = undefined; // leaflet layer-control
-
-rkGlobal.layerContainer; 
-rkGlobal.markerLines = new Array();
-
-rkGlobal.jsonLayers = new Array();
-rkGlobal.jsonLayersVisible = new Array();
-rkGlobal.layer; // radlkarte-overlay layer displaying the geojson objects
+rkGlobal.priorityStrings = ["Überregional", "Regional", "Lokal"]; // names of all different levels of priorities (ordered descending by priority)
+rkGlobal.priorityWidthFactor = [1.2, 0.5, 0.4];
 rkGlobal.opacity = 0.7;
 rkGlobal.color = '#FF6600';
-rkGlobal.widthFactor = {
-    "premium" : 1.2,
-    "calm" : 1.2,
-    "medium": 0.5,
-    "stressful": 0.4
-};
+rkGlobal.debug = false; // debug output will be logged if set to true
 
 function debug(obj) {
     if(rkGlobal.debug)
@@ -135,103 +120,6 @@ function getLineWeight(priority) {
     lineWeight *= rkGlobal.priorityWidthFactor[priority]
     return lineWeight;
 }
-
-function loadGeoJsonObsolete() {
-    // load GeoJSON layer (in separate thread)
-    $.getJSON("data/wege-durch-wien.geojson", function(data) {
-        // add all geojson objects to the layer and style them
-        var cnt = 0;
-        var cntGood = 0;
-        rkGlobal.layer = L.geoJSON(data, {
-            onEachFeature: function (feature, layer) {
-                if(feature.properties.oneway == 'yes') {
-                    // warning latLon expected!
-                    //console.log("layer.getLatLngs: " + layer.getLatLngs());
-                    var arrowWidth = getBaseLineWeight() * rkGlobal.widthFactor[feature.properties.ambience];
-                    arrowWidth = Math.max(arrowWidth * 2, arrowWidth + 8);
-                    var markerLine = L.polylineDecorator(layer.getLatLngs(), {
-                        patterns: [
-                            {
-                                offset: 25,
-                                repeat: 50,
-                                symbol: L.Symbol.arrowHead({
-                                    pixelSize: arrowWidth,
-                                    headAngle: 90,
-                                    pathOptions: {
-                                        color: rkGlobal.color,
-                                        fillOpacity: rkGlobal.opacity,
-                                        weight: 0}
-                                })
-                            }
-                        ]
-                    }).addTo(rkGlobal.leafletMap);
-                    rkGlobal.markerLines.push(markerLine)
-                }
-            },
-            style: function(feature) {
-                cnt++;
-                // ignore invalid entries
-                if(feature.geometry.type != "LineString" || feature.properties == undefined) {
-                    return;
-                } else {
-                    cntGood++;
-                    return styleGeoJson(feature);
-                }
-            }
-        }).addTo(rkGlobal.leafletMap);
-
-        
-        debug('styled geojson. ' + cnt + ' total, ' + cntGood + ' styled');
-        
-        // filter out empty/invalid objects & put the rest into an array
-        var cnt = 0;
-        var cntGood = 0;
-        rkGlobal.layer.eachLayer(function (layer) {
-            cnt++;
-            if(layer.feature.geometry.type != "LineString" || layer.feature.properties == undefined || layer.feature.geometry.coordinates.length == 0) {
-                debug("removing feature:");
-                debug(layer.feature);
-                rkGlobal.layer.removeLayer(layer);
-                return;
-            }
-            rkGlobal.jsonLayers.push(layer);
-            rkGlobal.jsonLayersVisible.push(true);
-            cntGood++;
-        });
-        debug(rkGlobal.jsonLayers);
-        debug(rkGlobal.jsonLayersVisible);
-        debug('finished loading geojson. ' + cnt + ' total, ' + cntGood + ' in result');
-        
-        rkGlobal.leafletLayersControl.addOverlay(rkGlobal.layer, 'oi');
-    });
-    
-    rkGlobal.leafletMap.on('zoomend', function(ev) {
-        debug("current zoom level: " + rkGlobal.leafletMap.getZoom());
-        rkGlobal.layer.setStyle(styleGeoJson);
-        // TODO adapt zoom of arrows
-        /*
-        var currentZoom = (rkGlobal.leafletMap.getZoom()-10)*2.4;
-        rkGlobal.layer.eachLayer(function (layer) {
-            layer.options.weight = currentZoom;
-        });
-        */
-    });
-}
-
-/** 
-expects: a feature (linestring) with properties
-returns: a style for the feature depending on the properties & the current zoom level
-*/
-function styleGeoJson(feature) {
-    var lineWeight = getBaseLineWeight() * rkGlobal.widthFactor[feature.properties.ambience];
-    switch (feature.properties.ambience) {
-        case 'premium':   return {color: "#FF6600", weight: lineWeight, opacity: rkGlobal.opacity}; //#7b3294
-        case 'calm':      return {color: "#FF6600", weight: lineWeight, opacity: rkGlobal.opacity}; //#c2a5cf
-        case 'medium':    return {color: "#FF6600", weight: lineWeight, opacity: rkGlobal.opacity}; //#a6dba0
-        case 'stressful': return {color: "#FF6600", weight: lineWeight, opacity: rkGlobal.opacity, dashArray: "5, 5"}; //#008837
-    }
-}
-
 
 function initMap() {
     rkGlobal.leafletMap = L.map('map', { 'zoomControl' : false } ).setView([48.2083537, 16.3725042], 14);
