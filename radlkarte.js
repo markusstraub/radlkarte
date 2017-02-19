@@ -166,7 +166,7 @@ function initMap() {
     var overlayMaps = {};
     
     mapboxStreets.addTo(rkGlobal.leafletMap)
-    rkGlobal.leafletLayersControl = L.control.layers(baseMaps, overlayMaps, { 'position' : 'topleft', 'collapsed' : true } ).addTo(rkGlobal.leafletMap);
+    rkGlobal.leafletLayersControl = L.control.layers(baseMaps, overlayMaps, { 'position' : 'topright', 'collapsed' : true } ).addTo(rkGlobal.leafletMap);
     
     // load overlay & control
     loadGeoJson();

@@ -7,9 +7,20 @@
 
     <script src="js/leaflet_1.0.3/leaflet.js"></script>
     <link rel="stylesheet" href="js/leaflet_1.0.3/leaflet.css" />
+    
+    <script src="js/leaflet-sidebar-v2-1.0.0/leaflet-sidebar.js"></script>
+    <link rel="stylesheet" href="js/leaflet-sidebar-v2-1.0.0/leaflet-sidebar.css"/>
+    <!-- font awesome is required by sidebar -->
+    <link rel="stylesheet" href="css/font-awesome-4.6.3/css/font-awesome.min.css"/>
+    
     <script src="js/leaflet.polylineDecorator_1.1.0/leaflet.polylineDecorator.js"></script>
+    
     <script src="js/leaflet-hash-1.0.1/leaflet-hash.min.js"></script>
+    
     <script src="js/jquery-3.1.1.min.js"></script>
+    
+    <link href="css/museo-500/style.css" rel="stylesheet" type="text/css"/>
+    <link href='https://fonts.googleapis.com/css?family=Roboto:400,400italic,700' rel='stylesheet' type='text/css'/>
     
     <script src="./radlkarte.js"></script>
     <link rel="stylesheet" href="./radlkarte.css" />
@@ -17,8 +28,70 @@
 
 <body>
     <div id="map"></div>
+    <div id="sidebar" class="sidebar sidebar-left">
+        <!-- Nav tabs -->
+        <div class="sidebar-tabs">
+            <ul role="tablist">
+                <li class="active"><a href="#radlkarte_legend" role="tab"><i class="fa fa-question-circle"></i></a></li>
+                <li><a href="#radlkarte_description" role="tab"><i class="fa fa-align-justify"></i></a></li>
+                <li><a href="#radlkarte_contact" role="tab"><i class="fa fa-envelope"></i></a></li>
+            </ul>
+        </div>
+
+        <!-- Tab panes -->
+        <div class="sidebar-content">
+            <div class="sidebar-pane active" id="radlkarte_legend">
+                <h1 class="sidebar-header">
+                    <span class="sidebar-close"><i class="fa fa-caret-left"></i></span> Legende
+                </h1>
+                <p>
+                    Die Radlkarte der <a href="https://www.radlobby.at/wien" target="_blank">Radlobby Wien</a> ist eine kostenlose Online-Orientierungshilfe für Sie, mit der Sie Ihre Fahrten mit dem Fahrrad schneller und gemütlicher gestalten können.
+                </p>
+            </div>
+
+            <div class="sidebar-pane" id="radlkarte_description">
+                <h1 class="sidebar-header">
+                    <span class="sidebar-close"><i class="fa fa-caret-left"></i></span> Die Radlkarte
+                </h1>
+                </p>
+                    Ein alltagstaugliches Netz an Wegen durch Wien spiegelt unsere langjährige Erfahrung des Alltagsradelns und unsere Ortskenntnis in Wien wider. Dieses Netz zeigt, welche Strecken sich am besten fürs Radeln eignen und hält sich dabei nicht zwingend an <a href="https://www.radlobby.at/wien/radverkehrsnetz" target="_blank">das leider lückenhafte Radverkehrsnetz der Stadt Wien</a>. Es hilft Ihnen mit der Bewertung der einzelnen Abschnitte in die Kategorien <code>gemütlich, durchschnittlich</code> und <code>stressig</code> beim Finden von Routenvarianten zwischen Ihren Zielen. Die Abwägung zwischen Direktheit/Schnelligkeit und Gemütlichkeit/Sicherheit liegt dabei ganz bei Ihnen: ist noch genügend Zeit für eine entspannte Strecke bis zum Läuten der Schulglocken? Ist der nächste Arbeitstermin doch schon näher als gewünscht und Schnelligkeit ist die oberste Prämisse? Geht's gemeinsam mit Ihren Kindern zur Schule oder in den Park?
+                </p>
+                <p>
+                    Die drei Kategorien werden anhand der Strichstärke unterschieden: je dicker der Strich, desto angenehmer ist die Strecke zum Radfahren. Abschnitte, die nur in eine Richtung befahren werden können sind durch Pfeile markiert:
+                    <ul>
+                        <li>Gemütlich (dick): vom Autoverkehr getrennter Radweg oder sehr verkehrsarme Strecke</li>
+                        <li>Durchschnittlich (dünn): Radeln im Mischverkehr, aber ohne starkes Verkehrsaufkommen und moderaten Kfz-Geschwindigkeiten</li>
+                        <li>Stressig (dünn strichliert): schnelle aber unangenehme Strecke, z.B. aufgrund von starkem Kfz-Verkehr oder <a href="https://www.radlobby.at/oesterreich/abstand-zur-tuerzone-macht-sicher" target="_blank">beengten Verhältnissen</a></li>
+                    </ul>
+                    </p>
+                <p>
+                    Wir hoffen, dass Sie sich mit Hilfe der Radlkarte in Wien leichter zurechtfinden und wünschen Ihnen schönes und angenehmes Radeln. Sollten Sie Verbesserungsvorschläge oder neue Routenvorschläge haben freuen wir uns auf <a href="mailto:markus.straub.at@gmail.com">ein Email</a>.
+                </p>
+            </div>
+            
+            <div class="sidebar-pane" id="radlkarte_contact">
+                <h1 class="sidebar-header">
+                    <span class="sidebar-close"><i class="fa fa-caret-left"></i></span> Impressum
+                </h1>
+                <p>
+                    <img src="css/radlobby_wien.png" width="150px" />
+                </p>
+                <p>
+                    <a href="https://www.radlobby.at/wien" target="_blank">Radlobby Wien</a><br/>
+                    Lichtenauergasse 4/1/1<br/>
+                    1020 Wien
+                </p>
+                <p>
+                    Für den Inhalt verantwortlich:<br />
+                    <a href="mailto:markus.straub.at@gmail.com">Markus Straub</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
     <script>
         initMap();
+        var sidebar = L.control.sidebar('sidebar').addTo(map);
     </script>
 </body>
 </html>

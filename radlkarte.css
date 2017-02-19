@@ -6,18 +6,40 @@ html, body, #map {
     height: 100%;
     width: 100%;
 }
-.info {
-    padding: 6px 8px;
-    font: 14px/16px Arial, Helvetica, sans-serif;
-    background: white;
-    background: rgba(255,255,255,0.8);
-    box-shadow: 0 0 15px rgba(0,0,0,0.2);
-    border-radius: 5px;
+
+* {
+    font-family: Roboto, arial, sans-serif;
+    color: #004B67;
 }
-.info h4 {
-    margin: 0 0 5px;
-    color: #777;
+
+h1, h2, h3 {
+    font-family: 'Museo 500 Regular', sans-serif;
 }
-pre {
-    font-size: 65%;
-} 
+
+.sidebar-header, .sidebar-tabs > ul > li.active {
+    background-color: #B8CC24;
+    color: #fff
+}
+.sidebar-tabs > ul > li.active > a > i {
+    color: #fff;
+}
+a, a:visited, a:active {
+    color: #AAB622;
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
+
+
+/*
+- #AAB622 Grün für Schrift
+
+- #F0F4D9 Grün für Flächen (sehr hell)
+- #B8CC24 Grün für Logo, Flächen & andere Stilelemente (satt)
+- #004B67 Blau für Text & andere Stilelemente (satt, dunkel)
+
+- #51A4B6 Sekundärfarbe (Türkis)
+- #A2C8D3 Sekundärfarbe (Hellblau)
+- #FF6600 Sekundärfarbe (Orange)
+*/
