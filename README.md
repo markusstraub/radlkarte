@@ -8,7 +8,13 @@
   - oneway arrow for route segments only usable in one direction
 
 
-### Desired Feature List
+### Must-Have Features for new public release via radlobby
+- Credits
+- Legend
+
+
+### Future Work
+- GPS localization (especially for smartphones)
 - hide parts of the recommended routes when zooming out (two / three importance levels?)
 - Simple & Advanced UI.
   - simple: auto-hides parts of the network based on zoom level, no layer switcher
@@ -17,6 +23,5 @@
 - add basemap.at as background layer?
 - Visualize short parts where bicycle has to be pushed
 - Geocoding (Google Maps? wien.gv.at?)
-- GPS localization (especially for smartphones)
 - nicer opacity? not possible with current approach: https://github.com/Leaflet/Leaflet/issues/3610
   but maybe just add the background layer on top again with high opacity?

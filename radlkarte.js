@@ -14,6 +14,14 @@ function debug(obj) {
 }
 
 function loadGeoJson() {
+    // get rid of "XML Parsing Error: not well-formed" during $.getJSON
+    $.ajaxSetup({
+        beforeSend: function (xhr) {
+            if (xhr.overrideMimeType) {
+                xhr.overrideMimeType("application/json");
+            }
+        }
+    });
     $.getJSON("data/wege-durch-wien.geojson", function(data) {
         // load into temp layer
         var routeSegments = L.geoJSON(data, {
@@ -124,6 +132,7 @@ function getLineWeight(priority) {
 
 function initMap() {
     rkGlobal.leafletMap = L.map('map', { 'zoomControl' : false } ).setView([48.2083537, 16.3725042], 14);
+    new L.Hash(rkGlobal.leafletMap);
 
     var mapboxStreets = L.tileLayer('https://api.tiles.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png?access_token={accessToken}', {
         maxZoom: 18,
