@@ -7,12 +7,19 @@ html, body, #map {
     width: 100%;
 }
 
+.leaflet-container {
+    background-color: #fff;
+}
+
 * {
     font-family: Roboto, arial, sans-serif;
     color: #004B67;
 }
-h1, h2, h3 {
+h1, h2 {
     font-family: 'Museo 500 Regular', sans-serif;
+}
+h2 {
+    font-size: 13pt;
 }
 emph {
     font-weight: bold;
@@ -33,7 +40,40 @@ a:hover {
     text-decoration: underline;
 }
 
+li {
+    margin-bottom: 0.5em;
+}
 
+.legend {
+    background-color: #FF6600;
+    width: 200px;
+    height: 10px;
+    margin-top: 5px;
+}
+.legend-main {
+}
+.legend-regional {
+    background-color: #51A4B6;
+}
+.legend-local {
+    background-color: #51A4B6;
+    opacity: 0.5;
+}
+.legend-calm {
+}
+.legend-medium {
+    height: 4px;
+}
+.legend-stressful {
+    background: repeating-linear-gradient(
+        90deg,
+        #FF6600,
+        #FF6600 10px,
+        #fff 10px,
+        #fff 20px
+    );
+    height: 4px;
+}
 /*
 - #AAB622 Grün für Schrift
 

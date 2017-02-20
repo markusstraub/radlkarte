@@ -45,8 +45,47 @@
                     <span class="sidebar-close"><i class="fa fa-caret-left"></i></span> Legende
                 </h1>
                 <p>
-                    3 Kategorien zur Wichtigkeit, 3 Kategorien zur Sicherheit. Grafik! (<img src="js/leaflet-1.0.3/images/layers.png" alt="layers" height="15px" />).
-                    Und ein Link <a href="#radlkarte_contact" role="tab"><i class="fa fa-envelope"></i></a> 
+                    Die Radlkarte unterscheidet drei Prioritätsstufen und drei Kategorien zur Gemütlichkeit / Sicherheit der einzelnen Streckenabschnitte. Streckenabschnitte, die nur in eine Richtung befahrbar sind (Einbahnen), sind mittels Pfeilen gekennzeichnet.
+                </p>
+                <h2>Prioritätsstufen</h2>
+                <p>
+                    Ein- bzw. ausblendbar in der Ebenenübersicht (<img src="js/leaflet-1.0.3/images/layers.png" alt="layers" height="15px" />).
+                    <ol>
+                        <li>
+                            <emph>Überregional (orange)</emph><br/>
+                            Hauptrouten<br/>
+                            <div class="legend legend-main" />
+                        </li>
+                        <li>
+                            <emph>Regional (blau)</emph><br/>
+                            <div class="legend legend-regional" />
+                        </li>
+                        <li>
+                            <emph>Lokal (blau - halbtransparent)</emph><br/>
+                            Abkürzungen oder Zubringer<br/>
+                            <div class="legend legend-local" />
+                        </li>
+                    </ol>
+                </p>
+                <h2>Kategorien der Streckenabschnitte</h2>
+                <p>
+                    <ol>
+                        <li>
+                            <emph>Gemütlich (dick)</emph><br/>
+                            Vom Autoverkehr getrennter Radweg oder sehr verkehrsarme Strecke<br/>
+                            <div class="legend legend-calm" />
+                        </li>
+                        <li>
+                            <emph>Durchschnittlich (dünn)</emph><br/>
+                            Radeln im Mischverkehr, aber ohne starkes Verkehrsaufkommen und moderaten Kfz-Geschwindigkeiten<br/>
+                            <div class="legend legend-medium" />
+                        </li>
+                        <li>
+                            <emph>Stressig (dünn strichliert)</emph><br/>
+                            Schnelle aber unangenehme Strecke, z.B. aufgrund von starkem Kfz-Verkehr oder <a href="https://www.radlobby.at/oesterreich/abstand-zur-tuerzone-macht-sicher" target="_blank">beengten Verhältnissen</a><br/>
+                            <div class="legend legend-stressful" />
+                        </li>
+                    </ol>
                 </p>
             </div>
 
@@ -63,17 +102,40 @@
                 <p>
                     Zur individuellen Entscheidungsfindung ist das Wegenetz in <emph>drei Prioritätsstufen</emph> gegliedert, die bei der Ebenenübersicht (<img src="js/leaflet-1.0.3/images/layers.png" alt="layers" height="15px" />) auch einzeln ausgeblendet werden können.
                     <ol>
-                        <li><emph>Überregional (orange):</emph> Hauptrouten</li>
-                        <li><emph>Regional (blau)</emph></li>
-                        <li><emph>Lokal (blau - halbtransparent):</emph> Abkürzungen oder Zubringer</li>
+                        <li>
+                            <emph>Überregional (orange)</emph><br/>
+                            Hauptrouten<br/>
+                            <div class="legend legend-main" />
+                        </li>
+                        <li>
+                            <emph>Regional (blau)</emph><br/>
+                            <div class="legend legend-regional" />
+                        </li>
+                        <li>
+                            <emph>Lokal (blau - halbtransparent)</emph><br/>
+                            Abkürzungen oder Zubringer<br/>
+                            <div class="legend legend-local" />
+                        </li>
                     </ol>
                 </p>
                 <p>
                     Zusätzlich sind die einzelnen Abschnitte hinsichtlich unserer (subjektiven) Erfahrung zur <emph>Sicherheit bzw. Gemütlichkeit in drei Kategorien</emph> bewertet: gemütlich, durchschnittlich, stressig. Wir halten uns dabei nicht zwingend an <a href="https://www.radlobby.at/wien/radverkehrsnetz" target="_blank">das zum Teil leider lückenhafte Radverkehrsnetz der Stadt Wien</a>. Die drei Kategorien werden anhand der Strichstärke unterschieden: je dicker der Strich, desto angenehmer ist die Strecke zum Radfahren. Abschnitte, die nur in eine Richtung befahren werden können sind durch Pfeile markiert:
                     <ol>
-                        <li><emph>Gemütlich (dick):</emph> vom Autoverkehr getrennter Radweg oder sehr verkehrsarme Strecke</li>
-                        <li><emph>Durchschnittlich (dünn)</emph>: Radeln im Mischverkehr, aber ohne starkes Verkehrsaufkommen und moderaten Kfz-Geschwindigkeiten</li>
-                        <li><emph>Stressig (dünn strichliert):</emph> schnelle aber unangenehme Strecke, z.B. aufgrund von starkem Kfz-Verkehr oder <a href="https://www.radlobby.at/oesterreich/abstand-zur-tuerzone-macht-sicher" target="_blank">beengten Verhältnissen</a></li>
+                        <li>
+                            <emph>Gemütlich (dick)</emph><br/>
+                            Vom Autoverkehr getrennter Radweg oder sehr verkehrsarme Strecke<br/>
+                            <div class="legend legend-calm" />
+                        </li>
+                        <li>
+                            <emph>Durchschnittlich (dünn)</emph><br/>
+                            Radeln im Mischverkehr, aber ohne starkes Verkehrsaufkommen und moderaten Kfz-Geschwindigkeiten<br/>
+                            <div class="legend legend-medium" />
+                        </li>
+                        <li>
+                            <emph>Stressig (dünn strichliert)</emph><br/>
+                            Schnelle aber unangenehme Strecke, z.B. aufgrund von starkem Kfz-Verkehr oder <a href="https://www.radlobby.at/oesterreich/abstand-zur-tuerzone-macht-sicher" target="_blank">beengten Verhältnissen</a><br/>
+                            <div class="legend legend-stressful" />
+                        </li>
                     </ol>
                 </p>
                 <p>
@@ -86,7 +148,7 @@
                     <span class="sidebar-close"><i class="fa fa-caret-left"></i></span> Impressum
                 </h1>
                 <p>
-                    <img src="css/radlobby_wien.png" width="150px" />
+                    <img src="css/radlobby-wien.png" width="150px" />
                 </p>
                 <p>
                     <a href="https://www.radlobby.at/wien" target="_blank">Radlobby Wien</a><br/>

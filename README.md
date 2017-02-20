@@ -7,12 +7,6 @@
   - three importance levels of route segments: main, regional, local
   - oneway arrow for route segments only usable in one direction
 
-
-### Must-Have Features for new public release via radlobby
-- Credits
-- Legend
-
-
 ### Future Work
 - GPS localization (especially for smartphones)
 - hide parts of the recommended routes when zooming out (two / three importance levels?)
