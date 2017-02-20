@@ -11,9 +11,11 @@ html, body, #map {
     font-family: Roboto, arial, sans-serif;
     color: #004B67;
 }
-
 h1, h2, h3 {
     font-family: 'Museo 500 Regular', sans-serif;
+}
+emph {
+    font-weight: bold;
 }
 
 .sidebar-header, .sidebar-tabs > ul > li.active {
