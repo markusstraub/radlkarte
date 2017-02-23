@@ -6,6 +6,22 @@ html, body, #map {
     height: 100%;
     width: 100%;
 }
+#radlobby-logo {
+    position: fixed;
+    right: 0px;
+    bottom: 10px;
+    z-index: 900;
+}
+#radlobby-logo img {
+    padding: 5px;
+    width: 150px;
+}
+@media (max-width: 600px) {
+    #radlobby-logo img {
+        width: 75px;
+    }
+}
+
 
 .leaflet-container {
     background-color: #fff;
