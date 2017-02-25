@@ -5,17 +5,15 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <!-- Google Analytics -->
-    <script>
+<!--    <script>
+        // google analytics
         (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
         (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
         m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
         })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
         ga('create', 'UA-25564832-1', 'auto');
         ga('send', 'pageview');
-    </script>
-    <!-- Hotjar Tracking Code for www.radlkarte.at -->
-    <script>
+        // hotjar
         (function(h,o,t,j,a,r){
             h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
             h._hjSettings={hjid:427648,hjsv:5};
@@ -24,7 +22,7 @@
             r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
             a.appendChild(r);
         })(window,document,'//static.hotjar.com/c/hotjar-','.js?sv=');
-    </script>
+    </script>-->
 
     <script src="js/leaflet-1.0.3/leaflet.js"></script>
     <link rel="stylesheet" href="js/leaflet-1.0.3/leaflet.css" />
@@ -66,48 +64,46 @@
         <div class="sidebar-content">
             <div class="sidebar-pane active" id="radlkarte_legend">
                 <h1 class="sidebar-header">
-                    <span class="sidebar-close"><i class="fa fa-caret-left"></i></span> Legende
+                    <span class="sidebar-close"><i class="fa fa-caret-left"></i></span> Kurzübersicht
                 </h1>
+                <h2>Was kann die Radlkarte?</h2>
                 <p>
-                    Die Radlkarte unterscheidet drei Prioritätsstufen und drei Kategorien zur Gemütlichkeit / Sicherheit der einzelnen Streckenabschnitte. Streckenabschnitte, die nur in eine Richtung befahrbar sind (Einbahnen), sind mittels Pfeilen gekennzeichnet.
-                </p>
-                <h2>Prioritätsstufen</h2>
-                <p>
-                    Ein- bzw. ausblendbar in der Ebenenübersicht (<img src="js/leaflet-1.0.3/images/layers.png" alt="layers" height="15px" />).
-                    <ol>
-                        <li>
-                            <emph>Überregional (orange)</emph><br/>
-                            Hauptrouten<br/>
-                            <div class="legend legend-main" />
-                        </li>
-                        <li>
-                            <emph>Regional (blau)</emph><br/>
-                            <div class="legend legend-regional" />
-                        </li>
-                        <li>
-                            <emph>Lokal (blau - halbtransparent)</emph><br/>
-                            Abkürzungen oder Zubringer<br/>
-                            <div class="legend legend-local" />
-                        </li>
-                    </ol>
+                    Finden Sie <emph>Ihren optimalen Weg durch die Stadt</emph> mit der Radlkarte der <a href="https://www.radlobby.at/wien" target="_blank">Radlobby Wien</a>. Auf zu neuen Wegen, unbekannten Gegenden, oder Alternativrouten!
                 </p>
                 <h2>Kategorien der Streckenabschnitte</h2>
                 <p>
+                    Ob gemütlich, durchschnittlich oder stressig zeigt die Stärke der Linie:
                     <ol>
                         <li>
                             <emph>Gemütlich (dick)</emph><br/>
-                            Vom Autoverkehr getrennter Radweg oder sehr verkehrsarme Strecke<br/>
-                            <div class="legend legend-calm" />
+                            <div class="legend legend-calm"></div>
                         </li>
                         <li>
                             <emph>Durchschnittlich (dünn)</emph><br/>
-                            Radeln im Mischverkehr, aber ohne starkes Verkehrsaufkommen und moderaten Kfz-Geschwindigkeiten<br/>
-                            <div class="legend legend-medium" />
+                            <div class="legend legend-medium"></div>
                         </li>
                         <li>
                             <emph>Stressig (dünn strichliert)</emph><br/>
-                            Schnelle aber unangenehme Strecke, z.B. aufgrund von starkem Kfz-Verkehr oder <a href="https://www.radlobby.at/oesterreich/abstand-zur-tuerzone-macht-sicher" target="_blank">beengten Verhältnissen</a><br/>
-                            <div class="legend legend-stressful" />
+                            <div class="legend legend-stressful"></div>
+                        </li>
+                    </ol>
+                    Streckenabschnitte, die nur in eine Richtung befahrbar sind (Einbahnen), sind mittels Pfeilen gekennzeichnet.
+                </p>
+                <h2>Prioritätsstufen</h2>
+                Die Priorität wird durch Farbabstufungen dargestellt:
+                <p>
+                    <ol>
+                        <li>
+                            <emph>Überregional (dunkel)</emph><br/>
+                            <div class="legend legend-main"></div>
+                        </li>
+                        <li>
+                            <emph>Regional</emph><br/>
+                            <div class="legend legend-regional"></div>
+                        </li>
+                        <li>
+                            <emph>Lokal (hell)</emph><br/>
+                            <div class="legend legend-local"></div>
                         </li>
                     </ol>
                 </p>
@@ -118,52 +114,53 @@
                     <span class="sidebar-close"><i class="fa fa-caret-left"></i></span> Die Radlkarte stellt sich vor
                 </h1>
                 <p>
-                    Die Radlkarte der <a href="https://www.radlobby.at/wien" target="_blank">Radlobby Wien</a> ist eine kostenlose Online-Orientierungshilfe mit der Sie Ihre Fahrten mit dem Fahrrad schneller und gemütlicher gestalten können.
+                    Die Radlkarte der <a href="https://www.radlobby.at/wien" target="_blank">Radlobby Wien</a> ist eine kostenlose Online-Orientierungshilfe mit der Sie Ihre Fahrten mit dem Fahrrad schneller und gemütlicher gestalten können. Sie ist jederzeit im Browser bereit, ob am Smartphone, Tablet, oder PC.
                 </p>
                 </p>
                     Ein <emph>alltagstaugliches Wegenetz</emph> spiegelt unsere langjährige Erfahrung des Alltagsradelns und unsere Ortskenntnis in Wien wider. Dieses Netz zeigt, welche Strecken sich am besten fürs Radeln eignen. So hilft Ihnen die Radlkarte beim <emph>Finden von Routenvarianten zwischen Ihren Zielen</emph>. Die Abwägung zwischen Direktheit/Schnelligkeit und Gemütlichkeit/Sicherheit liegt dabei ganz bei Ihnen: ist noch genügend Zeit für eine entspannte Strecke bis zum Läuten der Schulglocken? Ist der nächste Arbeitstermin doch schon näher als gewünscht und Schnelligkeit ist die oberste Prämisse? Geht's gemeinsam mit Ihren Kindern zur Schule oder in den Park?
                 </p>
                 <p>
-                    Zur individuellen Entscheidungsfindung ist das Wegenetz in <emph>drei Prioritätsstufen</emph> gegliedert, die bei der Ebenenübersicht (<img src="js/leaflet-1.0.3/images/layers.png" alt="layers" height="15px" />) auch einzeln ausgeblendet werden können.
-                    <ol>
-                        <li>
-                            <emph>Überregional (orange)</emph><br/>
-                            Hauptrouten<br/>
-                            <div class="legend legend-main" />
-                        </li>
-                        <li>
-                            <emph>Regional (blau)</emph><br/>
-                            <div class="legend legend-regional" />
-                        </li>
-                        <li>
-                            <emph>Lokal (blau - halbtransparent)</emph><br/>
-                            Abkürzungen oder Zubringer<br/>
-                            <div class="legend legend-local" />
-                        </li>
-                    </ol>
-                </p>
-                <p>
-                    Zusätzlich sind die einzelnen Abschnitte hinsichtlich unserer (subjektiven) Erfahrung zur <emph>Sicherheit bzw. Gemütlichkeit in drei Kategorien</emph> bewertet: gemütlich, durchschnittlich, stressig. Wir halten uns dabei nicht zwingend an <a href="https://www.radlobby.at/wien/radverkehrsnetz" target="_blank">das zum Teil leider lückenhafte Radverkehrsnetz der Stadt Wien</a>. Die drei Kategorien werden anhand der Strichstärke unterschieden: je dicker der Strich, desto angenehmer ist die Strecke zum Radfahren. Abschnitte, die nur in eine Richtung befahren werden können sind durch Pfeile markiert:
+                    Zur individuellen Entscheidungsfindung sind Abschnitte hinsichtlich unserer (subjektiven) Erfahrung zur <emph>Sicherheit bzw. Gemütlichkeit in drei Kategorien</emph> bewertet: gemütlich, durchschnittlich, stressig. Wir halten uns dabei nicht zwingend an <a href="https://www.radlobby.at/wien/radverkehrsnetz" target="_blank">das zum Teil leider lückenhafte Radverkehrsnetz der Stadt Wien</a>. Die drei Kategorien werden anhand der Strichstärke unterschieden: je dicker der Strich, desto angenehmer ist die Strecke zum Radfahren. Abschnitte, die nur in eine Richtung befahren werden können sind durch Pfeile markiert:
                     <ol>
                         <li>
                             <emph>Gemütlich (dick)</emph><br/>
-                            Vom Autoverkehr getrennter Radweg oder sehr verkehrsarme Strecke<br/>
-                            <div class="legend legend-calm" />
+                            <div class="legend legend-calm"></div><br/>
+                            Vom Autoverkehr getrennter Radweg oder sehr verkehrsarme Strecke
                         </li>
                         <li>
                             <emph>Durchschnittlich (dünn)</emph><br/>
-                            Radeln im Mischverkehr, aber ohne starkes Verkehrsaufkommen und moderaten Kfz-Geschwindigkeiten<br/>
-                            <div class="legend legend-medium" />
+                            <div class="legend legend-medium"></div><br/>
+                            Radeln im Mischverkehr, aber ohne starkes Verkehrsaufkommen und moderaten Kfz-Geschwindigkeiten
                         </li>
                         <li>
                             <emph>Stressig (dünn strichliert)</emph><br/>
-                            Schnelle aber unangenehme Strecke, z.B. aufgrund von starkem Kfz-Verkehr oder <a href="https://www.radlobby.at/oesterreich/abstand-zur-tuerzone-macht-sicher" target="_blank">beengten Verhältnissen</a><br/>
-                            <div class="legend legend-stressful" />
+                            <div class="legend legend-stressful"></div><br/>
+                            Schnelle aber unangenehme Strecke, z.B. aufgrund von starkem Kfz-Verkehr oder <a href="https://www.radlobby.at/oesterreich/abstand-zur-tuerzone-macht-sicher" target="_blank">beengten Verhältnissen</a>
                         </li>
                     </ol>
                 </p>
                 <p>
-                    Wir hoffen, dass Sie sich mit Hilfe der Radlkarte in Wien leichter zurechtfinden und wünschen Ihnen schönes und angenehmes Radeln. Sollten Sie Verbesserungsvorschläge oder neue Routenvorschläge haben freuen wir uns auf <a href="mailto:markus.straub.at@gmail.com">ein Email</a>.
+                    Zusätzlich ist das Wegenetz für mehr Übersichtlichkeit - vor allem bei langen Strecken quer durch die ganze Stadt - in <emph>drei Prioritätsstufen</emph> gegliedert.
+                    <ol>
+                        <li>
+                            <emph>Überregional (dunkel)</emph><br/>
+                            <div class="legend legend-main"></div><br/>
+                            <span>Hauptrouten</span>
+                        </li>
+                        <li>
+                            <emph>Regional</emph><br/>
+                            <div class="legend legend-regional"></div>
+                        </li>
+                        <li>
+                            <emph>Lokal (hell)</emph><br/>
+                            <div class="legend legend-local"></div><br/>
+                            Abkürzungen oder Zubringer
+                        </li>
+                    </ol>
+                    Tipp: in der Ebenenübersicht (<img src="js/leaflet-1.0.3/images/layers.png" alt="layers" height="15px" />) können Sie die einzelnen Prioritätsstufen aus- und einblenden.
+                </p>
+                <p>
+                    Wir hoffen, dass Sie sich mit Hilfe der Radlkarte in Wien leichter zurechtfinden und wünschen Ihnen schönes und angenehmes Radeln. Sollten Sie Verbesserungsvorschläge oder neue Routenvorschläge haben <a href="mailto:markus.straub.at@gmail.com">freuen wir uns auf Rückmeldungen</a>.
                 </p>
             </div>
             

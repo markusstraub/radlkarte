@@ -5,8 +5,8 @@ rkGlobal.priorityStrings = ["Überregional", "Regional", "Lokal"]; // names of a
 rkGlobal.stressfulnessStrings = ["Ruhig", "Durchschnittlich", "Stressig"]
 rkGlobal.stressfulnessLineWidthFactor = [1.2, 0.5, 0.4];
 rkGlobal.stressfulnessArrowWidthFactor = [2, 3, 3];
-rkGlobal.priorityOpacities = [1, 1, 0.5];
-rkGlobal.priorityColors = ['#FF6600', '#51A4B6', '#51A4B6'];
+rkGlobal.priorityOpacities = [1, 1, 1];
+rkGlobal.priorityColors = ['#004B67', '#51A4B6', '#a8d1da'];
 rkGlobal.debug = true; // debug output will be logged if set to true
 
 function debug(obj) {

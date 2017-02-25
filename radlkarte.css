@@ -61,10 +61,10 @@ li {
 }
 
 .legend {
-    background-color: #FF6600;
-    width: 200px;
+    display: inline-block;
+    background-color: #004B67;
+    width: 150px;
     height: 10px;
-    margin-top: 5px;
 }
 .legend-main {
 }
@@ -72,8 +72,8 @@ li {
     background-color: #51A4B6;
 }
 .legend-local {
-    background-color: #51A4B6;
-    opacity: 0.5;
+    background-color: #a8d1da;
+    /* opacity: 0.5; */
 }
 .legend-calm {
 }
@@ -83,8 +83,8 @@ li {
 .legend-stressful {
     background: repeating-linear-gradient(
         90deg,
-        #FF6600,
-        #FF6600 10px,
+        #004B67,
+        #004B67 10px,
         #fff 10px,
         #fff 20px
     );
