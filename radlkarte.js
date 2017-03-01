@@ -1,6 +1,7 @@
 var rkGlobal = {}; // global variable for radlkarte properties / data storage
 rkGlobal.leafletMap = undefined; // the main leaflet map
 rkGlobal.leafletLayersControl = undefined; // leaflet layer-control
+rkGlobal.segmentsPS = [] // matrix holding all segments (two dimensions: priority & stressfulness)
 rkGlobal.priorityStrings = ["Überregional", "Regional", "Lokal"]; // names of all different levels of priorities (ordered descending by priority)
 rkGlobal.stressfulnessStrings = ["Ruhig", "Durchschnittlich", "Stressig"];
 rkGlobal.debug = true; // debug output will be logged if set to true
@@ -24,10 +25,8 @@ function loadGeoJson() {
             console.error("expected a GeoJSON FeatureCollection. no radlkarte network can be displayed.");
             return;
         }
-        // combine linestrings with same attributes to multilinestrings
         
         // prepare matrix
-        rkGlobal.segmentsPS = []
         for(var i=0; i<rkGlobal.priorityStrings.length; i++) {
             rkGlobal.segmentsPS[i] = [];
             for(var j=0; j<rkGlobal.stressfulnessStrings.length; j++)
@@ -91,7 +90,7 @@ function loadGeoJson() {
             }
         }
         
-        updateStylesNewskool();
+        updateStylesWithLineWidthDefiningStressfulness();
         
         // add to map & layercontrol
 //         for(var priority=rkGlobal.priorityStrings.length-1; priority>= 0; priority--) {
@@ -101,37 +100,39 @@ function loadGeoJson() {
         
         rkGlobal.leafletMap.on('zoomend', function(ev) {
             debug("restyling - changed zoom level to " + rkGlobal.leafletMap.getZoom());
-            updateStylesNewskool();
+            updateStylesWithLineWidthDefiningStressfulness();
         });
     });
 }
 
 
+// ------------------- style variant B: stressfulness = line width, priority = color
+
 rkGlobal.priorityVisibleFromZoom = [0, 14, 15];
 rkGlobal.stressfulnessLineWidthFactor = [1.2, 0.5, 0.4];
 rkGlobal.stressfulnessArrowWidthFactor = [2, 3, 3];
-rkGlobal.priorityOpacities = [0.75, 0.75, 0.75];
+rkGlobal.priorityOpacities = [0.75, 0.75, 0.5];
 // rkGlobal.priorityColors = ['#004B67', '#29788F', '#51A4B6']; // 3 blues
-// rkGlobal.priorityColors = ['#FF6600', '#51A4B6', '#51A4B6']; // orange - blue
+rkGlobal.priorityColors = ['#FF6600', '#51A4B6', '#51A4B6']; // orange - blue
 // rkGlobal.priorityColors = ['#51A4B6', '#51A4B6', '#51A4B6']; // blue (light)
 // rkGlobal.priorityColors = ['#004B67', '#004B67', '#004B67']; // blue (dark)
-rkGlobal.priorityColors = ['#004B67', '#51A4B6', '#FF6600']; // blue - orange
+//rkGlobal.priorityColors = ['#004B67', '#51A4B6', '#FF6600']; // blue - orange
 
 /**
  * Updates the styles of all layers. Takes current zoom level into account
  */
-function updateStylesNewskool() {
+function updateStylesWithLineWidthDefiningStressfulness() {
     for(var priority=0; priority<rkGlobal.priorityStrings.length; priority++) {
         for(var stressfulness=0; stressfulness<rkGlobal.stressfulnessStrings.length; stressfulness++) {
             if(rkGlobal.leafletMap.getZoom() >= rkGlobal.priorityVisibleFromZoom[priority]) {
 //                 rkGlobal.leafletMap.addLayer(rkGlobal.segmentsPS[priority][stressfulness].lines);
-                rkGlobal.segmentsPS[priority][stressfulness].lines.setStyle(getLineStringStyle(stressfulness,priority));
+                rkGlobal.segmentsPS[priority][stressfulness].lines.setStyle(getLineStringStyleWithLineWidthDefiningStressfulness(priority, stressfulness));
                 if(rkGlobal.segmentsPS[priority][stressfulness].decorators != undefined) {
-                    rkGlobal.segmentsPS[priority][stressfulness].decorators.setPatterns(getOnewayArrowPatterns(priority, stressfulness));
+                    rkGlobal.segmentsPS[priority][stressfulness].decorators.setPatterns(getOnewayArrowPatternsWithLineWidthDefiningStressfulness(priority, stressfulness));
                     rkGlobal.leafletMap.addLayer(rkGlobal.segmentsPS[priority][stressfulness].decorators);
                 }
             } else {
-                rkGlobal.segmentsPS[priority][stressfulness].lines.setStyle(getLineStringStyleMinimal(priority,stressfulness));
+                rkGlobal.segmentsPS[priority][stressfulness].lines.setStyle(getLineStringStyleWithLineWidthDefiningStressfulnessMinimal(priority,stressfulness));
 //                 rkGlobal.leafletMap.removeLayer(rkGlobal.segmentsPS[priority][stressfulness].lines);
                 if(rkGlobal.segmentsPS[priority][stressfulness].decorators != undefined) {
                     rkGlobal.leafletMap.removeLayer(rkGlobal.segmentsPS[priority][stressfulness].decorators);
@@ -141,7 +142,7 @@ function updateStylesNewskool() {
     }
 }
 
-function getLineStringStyle(priority,stressfulness) {
+function getLineStringStyleWithLineWidthDefiningStressfulness(priority,stressfulness) {
     var style = {
         color: rkGlobal.priorityColors[priority],
         weight: getLineWeightForStressfulness(stressfulness),
@@ -152,7 +153,7 @@ function getLineStringStyle(priority,stressfulness) {
     return style;
 }
 
-function getLineStringStyleMinimal(priority,stressfulness) {
+function getLineStringStyleWithLineWidthDefiningStressfulnessMinimal(priority,stressfulness) {
     var style = {
         color: '#999',
         weight: 1,
@@ -162,111 +163,10 @@ function getLineStringStyleMinimal(priority,stressfulness) {
     return style;
 }
 
-function loadGeoJsonOld() {
-    // get rid of "XML Parsing Error: not well-formed" during $.getJSON
-    $.ajaxSetup({
-        beforeSend: function (xhr) {
-            if (xhr.overrideMimeType) {
-                xhr.overrideMimeType("application/json");
-            }
-        }
-    });
-    $.getJSON("data/radlkarte-at-vienna.min.geojson", function(data) {
-        // load into temp layer
-        var routeSegments = L.geoJSON(data, {
-            filter: function (feature) {
-                return feature.geometry.type == "LineString"
-                       && feature.properties !== undefined;
-            }
-        });
-        debug("loaded segment count: " + routeSegments.getLayers().length);
-        
-        // prepare layergroups for each priority and each stressfulness for easier showing/hiding and styling
-        rkGlobal.segments = { priority: [], stressfulness: []};
-        for(var i=0; i<rkGlobal.priorityStrings.length; i++) {
-            rkGlobal.segments.priority.push({
-                polyLines: L.featureGroup(), // contains polylines (for easy styling)
-                onewayMarkers: L.featureGroup(), // contains oneway markers as L.polylineDecorator (for easy styling)
-                all: L.layerGroup(), // contains both polylines & onewaymarkers (for easy toggling of visibility in the map)
-            });
-        }
-        for(var i=0; i<rkGlobal.stressfulnessStrings.length; i++) {
-            rkGlobal.segments.stressfulness.push({
-                polyLines: L.featureGroup(), // contains polylines (for easy styling)
-                onewayMarkers: L.featureGroup() // contains oneway markers as L.polylineDecorator (for easy styling)
-            });
-        }
-        
-        routeSegments.getLayers().forEach(function(layer) {
-            let priority = parseInt(layer.feature.properties.p, 10);
-            let stressfulness = parseInt(layer.feature.properties.s, 10);
-            if(!isNaN(priority) && !isNaN(stressfulness) && layer.getLatLngs().length >= 2) {
-                // (1) the line
-                rkGlobal.segments.priority[priority].polyLines.addLayer(layer);
-                rkGlobal.segments.stressfulness[stressfulness].polyLines.addLayer(layer);
-                
-                // (2) the markers (warning latLon expected!)
-                if(layer.feature.properties.oneway == 'yes') {
-                    let decoratorLayer = L.polylineDecorator(layer.getLatLngs());
-                    decoratorLayer.radlkarteProperties = {priority: priority, stressfulness: stressfulness};
-                    rkGlobal.segments.priority[priority].onewayMarkers.addLayer(decoratorLayer);
-                    rkGlobal.segments.stressfulness[stressfulness].onewayMarkers.addLayer(decoratorLayer);
-                }
-            }
-        });
-        
-        // collect lines & markers in 'all' (by priority)
-        for(var priority=0; priority<rkGlobal.priorityStrings.length; priority++) {
-            rkGlobal.segments.priority[priority].all.addLayer(rkGlobal.segments.priority[priority].polyLines);
-            rkGlobal.segments.priority[priority].all.addLayer(rkGlobal.segments.priority[priority].onewayMarkers);
-        }
-        
-        // initial styling for markers and segments
-        updateStyles();
-        
-        // add to map & layercontrol
-        for(var priority=rkGlobal.priorityStrings.length-1; priority>= 0; priority--) {
-            rkGlobal.segments.priority[priority].all.addTo(rkGlobal.leafletMap);
-            rkGlobal.leafletLayersControl.addOverlay(rkGlobal.segments.priority[priority].all, rkGlobal.priorityStrings[priority]);
-        }
-        
-        rkGlobal.leafletMap.on('zoomend', function(ev) {
-            debug("restyling - changed zoom level to " + rkGlobal.leafletMap.getZoom());
-            updateStyles();
-        });
-    });
-}
-
-/**
- * Updates the styles of all layers. Takes current zoom level into account
- */
-function updateStyles() {
-    for(var priority=0; priority<rkGlobal.priorityStrings.length; priority++) {
-        rkGlobal.segments.priority[priority].polyLines.setStyle(getLineStringStyleForPriority(priority));
-        rkGlobal.segments.priority[priority].onewayMarkers.eachLayer(function (layer) {
-            layer.setPatterns(getOnewayArrowPatterns(layer.radlkarteProperties.priority, layer.radlkarteProperties.stressfulness));
-        });
-    }
-    for(var stressfulness=0; stressfulness<rkGlobal.stressfulnessStrings.length; stressfulness++) {
-        rkGlobal.segments.stressfulness[stressfulness].polyLines.setStyle(getLineStringStyleForStressfulness(stressfulness));
-    }
-}
-
-function getLineStringStyleForPriority(priority) {
-    return {color: rkGlobal.priorityColors[priority], opacity: rkGlobal.priorityOpacities[priority]};
-}
-
-function getLineStringStyleForStressfulness(stressfulness) {
-    var style = {weight: getLineWeightForStressfulness(stressfulness)};
-    if(stressfulness >= 2)
-        style.dashArray = "5, 5";
-    return style;
-}
-
 /**
  * @return an array of patterns as expected by L.PolylineDecorator.setPatterns
  */ 
-function getOnewayArrowPatterns(priority, stressfulness) {
+function getOnewayArrowPatternsWithLineWidthDefiningStressfulness(priority, stressfulness) {
     var arrowWidth = Math.max(5, getLineWeightForStressfulness(stressfulness) * rkGlobal.stressfulnessArrowWidthFactor[stressfulness]);
     return [
         {
