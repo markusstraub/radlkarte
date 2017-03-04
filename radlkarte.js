@@ -90,7 +90,7 @@ function loadGeoJson() {
             }
         }
         
-        updateStylesWithLineWidthDefiningStressfulness();
+        updateStylesWithColorDefiningStressfulness();
         
         // add to map & layercontrol
 //         for(var priority=rkGlobal.priorityStrings.length-1; priority>= 0; priority--) {
@@ -100,10 +100,100 @@ function loadGeoJson() {
         
         rkGlobal.leafletMap.on('zoomend', function(ev) {
             debug("restyling - changed zoom level to " + rkGlobal.leafletMap.getZoom());
-            updateStylesWithLineWidthDefiningStressfulness();
+            updateStylesWithColorDefiningStressfulness();
         });
     });
 }
+
+// ------------------- style variant A: stressfulness = color, priority = line width
+
+rkGlobal.tileLayerOpacity = 0.65;
+rkGlobal.styleAPriorityVisibleFromZoom = [0, 14, 15];
+rkGlobal.styleALineWidthFactor = [1.4, 0.5, 0.5];
+rkGlobal.styleAArrowWidthFactor = [2, 3, 3];
+rkGlobal.styleAOpacity = 0.8;
+// rkGlobal.styleAColors = ['#004B67', '#FF6600', '#F00']; // blue - orange - red
+//rkGlobal.styleAColors = ['#004B67', '#51A4B6', '#51A4B6']; // dark blue - light blue
+//rkGlobal.styleAColors = ['#004B67', '#004B67', '#FF6600']; // blue - blue - orange
+rkGlobal.styleAColors = ['#51A4B6', '#FF6600', '#ff0069']; // blue - orange - voilet
+
+/**
+ * Updates the styles of all layers. Takes current zoom level into account
+ */
+function updateStylesWithColorDefiningStressfulness() {
+    for(var priority=0; priority<rkGlobal.priorityStrings.length; priority++) {
+        for(var stressfulness=0; stressfulness<rkGlobal.stressfulnessStrings.length; stressfulness++) {
+            if(rkGlobal.leafletMap.getZoom() >= rkGlobal.priorityVisibleFromZoom[priority]) {
+                rkGlobal.leafletMap.addLayer(rkGlobal.segmentsPS[priority][stressfulness].lines);
+                rkGlobal.segmentsPS[priority][stressfulness].lines.setStyle(getLineStringStyleWithColorDefiningStressfulness(priority, stressfulness));
+                if(rkGlobal.segmentsPS[priority][stressfulness].decorators != undefined) {
+                    rkGlobal.segmentsPS[priority][stressfulness].decorators.setPatterns(getOnewayArrowPatternsWithColorDefiningStressfulness(priority, stressfulness));
+                    rkGlobal.leafletMap.addLayer(rkGlobal.segmentsPS[priority][stressfulness].decorators);
+                }
+            } else if(rkGlobal.leafletMap.getZoom()+1 >= rkGlobal.priorityVisibleFromZoom[priority]) {
+                rkGlobal.segmentsPS[priority][stressfulness].lines.setStyle(getLineStringStyleWithColorDefiningStressfulnessMinimal(priority,stressfulness));
+                rkGlobal.leafletMap.addLayer(rkGlobal.segmentsPS[priority][stressfulness].lines);
+                if(rkGlobal.segmentsPS[priority][stressfulness].decorators != undefined) {
+                    rkGlobal.leafletMap.removeLayer(rkGlobal.segmentsPS[priority][stressfulness].decorators);
+                }
+            } else {
+                rkGlobal.leafletMap.removeLayer(rkGlobal.segmentsPS[priority][stressfulness].lines);
+            }
+        }
+    }
+}
+
+function getLineStringStyleWithColorDefiningStressfulness(priority,stressfulness) {
+    var style = {
+        color: rkGlobal.styleAColors[stressfulness],
+        weight: getLineWeightForCategory(priority),
+        opacity: rkGlobal.styleAOpacity
+    };
+    if(priority >= 2)
+        style.dashArray = "5 10";
+    return style;
+}
+
+function getLineWeightForCategory(category) {
+    var lineWeight = rkGlobal.leafletMap.getZoom() - 10;
+    lineWeight = (lineWeight <= 0 ? 1 : lineWeight) * 1.4;
+    lineWeight *= rkGlobal.styleALineWidthFactor[category]
+    return lineWeight;
+}
+
+function getLineStringStyleWithColorDefiningStressfulnessMinimal(priority,stressfulness) {
+    var style = {
+        color: rkGlobal.styleAColors[stressfulness],
+        weight: 1,
+        opacity: rkGlobal.styleAOpacity
+    };
+    if(priority >= 2)
+        style.dashArray = "5 10";
+    return style;
+}
+
+/**
+ * @return an array of patterns as expected by L.PolylineDecorator.setPatterns
+ */ 
+function getOnewayArrowPatternsWithColorDefiningStressfulness(priority, stressfulness) {
+    var arrowWidth = Math.max(5, getLineWeightForCategory(priority) * rkGlobal.styleAArrowWidthFactor[priority]);
+    return [
+    {
+        offset: 25,
+        repeat: 50,
+        symbol: L.Symbol.arrowHead({
+            pixelSize: arrowWidth,
+            headAngle: 90,
+            pathOptions: {
+                color: rkGlobal.styleAColors[stressfulness],
+                fillOpacity: rkGlobal.styleAOpacity,
+                weight: 0
+            }
+        })
+    }
+    ];
+}
+
 
 
 // ------------------- style variant B: stressfulness = line width, priority = color
@@ -199,7 +289,8 @@ function initMap() {
     var mapboxStreets = L.tileLayer('https://api.tiles.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png?access_token={accessToken}', {
         maxZoom: 18,
         attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery &copy; <a href="http://mapbox.com">Mapbox</a>',
-        accessToken: 'pk.eyJ1IjoiZHRzLWFpdCIsImEiOiJjaW1kbmV5NjIwMDI1dzdtMzBweW14cmZjIn0.VraboGeyXnUjm1e7xWDWbA'
+        accessToken: 'pk.eyJ1IjoiZHRzLWFpdCIsImEiOiJjaW1kbmV5NjIwMDI1dzdtMzBweW14cmZjIn0.VraboGeyXnUjm1e7xWDWbA',
+        opacity: rkGlobal.tileLayerOpacity
     });
     var osm = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         minZoom: 8,
