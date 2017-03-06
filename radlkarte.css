@@ -67,28 +67,32 @@ li {
     height: 10px;
 }
 .legend-main {
+    background-color: #999;
 }
 .legend-regional {
-    background-color: #51A4B6;
+    background-color: #999;
+    height: 4px;
 }
 .legend-local {
-    background-color: #a8d1da;
+    background-color: #CCC;
     /* opacity: 0.5; */
 }
 .legend-calm {
+    background-color: #004B67;
 }
 .legend-medium {
-    height: 4px;
+    background-color: #51A4B6;
 }
 .legend-stressful {
-    background: repeating-linear-gradient(
+    background-color: #FF6600;
+/*    background: repeating-linear-gradient(
         90deg,
         #004B67,
         #004B67 10px,
         #fff 10px,
         #fff 20px
     );
-    height: 4px;
+    height: 4px;*/
 }
 /*
 - #AAB622 Grün für Schrift
