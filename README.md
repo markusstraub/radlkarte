@@ -6,10 +6,10 @@
   - three quality types of route segments: calm, medium, stressful
   - three importance levels of route segments: main, regional, local
   - oneway arrow for route segments only usable in one direction
+- hide parts of the recommended routes when zooming out (two / three importance levels)
 
 ### Future Work
-- GPS localization (especially for smartphones)
-- hide parts of the recommended routes when zooming out (two / three importance levels?)
+- GPS localization (TODO test: does it work on smartphones, i.e. does it follow?)
 - Simple & Advanced UI.
   - simple: auto-hides parts of the network based on zoom level, no layer switcher
   - advanced: layer switcher, control opacity of overlay, freely choose network-parts to show
@@ -19,3 +19,4 @@
 - Geocoding (Google Maps? wien.gv.at?)
 - nicer opacity? not possible with current approach: https://github.com/Leaflet/Leaflet/issues/3610
   but maybe just add the background layer on top again with high opacity?
+- optional overlays for cycling-POIs such as citybike stations or bicycle shops

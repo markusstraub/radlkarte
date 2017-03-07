@@ -243,8 +243,9 @@ function initMap() {
     
     var locateControl = L.control.locate({
         position: 'topright',
+        setView: 'always',
         strings: {
-            title: 'Zeige aktuelle Position'
+            title: 'Verfolge aktuelle Position'
         }
     }).addTo(rkGlobal.leafletMap);
     
