@@ -60,30 +60,36 @@ li {
     margin-bottom: 0.5em;
 }
 
-.legend {
+ul.legend-leftified {
+    padding-left: 0;
+    padding-bottom: 10px;
+}
+ul.legend li {
+    list-style-type: none;
+}
+div.legend {
     display: inline-block;
-    background-color: #004B67;
     width: 150px;
     height: 10px;
 }
-.legend-main {
+div.legend-main {
     background-color: #999;
 }
-.legend-regional {
+div.legend-regional {
     background-color: #999;
     height: 4px;
 }
-.legend-local {
+div.legend-local {
     background-color: #CCC;
     /* opacity: 0.5; */
 }
-.legend-calm {
+div.legend-calm {
     background-color: #004B67;
 }
-.legend-medium {
+div.legend-medium {
     background-color: #51A4B6;
 }
-.legend-stressful {
+div.legend-stressful {
     background-color: #FF6600;
 /*    background: repeating-linear-gradient(
         90deg,
