@@ -241,6 +241,14 @@ function initMap() {
     mapboxStreets.addTo(rkGlobal.leafletMap)
     rkGlobal.leafletLayersControl = L.control.layers(baseMaps, overlayMaps, { 'position' : 'topright', 'collapsed' : true } ).addTo(rkGlobal.leafletMap);
     
+    var locateControl = L.control.locate({
+        position: 'topright',
+        strings: {
+            title: 'Zeige aktuelle Position'
+        }
+    }).addTo(rkGlobal.leafletMap);
+    
+    
     // load overlay & control
     loadGeoJson();
 }
