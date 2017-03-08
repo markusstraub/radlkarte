@@ -244,6 +244,11 @@ function initMap() {
     var locateControl = L.control.locate({
         position: 'topright',
         setView: 'always',
+        flyTo: true,
+        locateOptions: {
+            enableHighAccuracy: true,
+            watch: true
+        },
         strings: {
             title: 'Verfolge aktuelle Position'
         }
