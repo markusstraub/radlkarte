@@ -21,12 +21,12 @@ way[s=2] {
 
 /* p(riority / level in route hierarchy): 0=main, 1=regional, 2=local */
 way[p=0] {
-    width: 9;
+    width: 12;
 }
 way[p=1] {
-    width: 2;
+    width: 3;
 }
 way[p=2] {
-    width: 2;
-    dashes: 2,5;
+    width: 3;
+    dashes: 5,5;
 }

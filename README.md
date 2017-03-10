@@ -1,16 +1,17 @@
-# radlkarte
+# radlkarte.at
+
+online map with the goal to provide useful route information for cyclists
 
 ## Features
-
 - show recommended bicycle routes
   - three quality types of route segments: calm, medium, stressful
   - three importance levels of route segments: main, regional, local
+    - hide parts of the recommended routes when zooming out
   - oneway arrow for route segments only usable in one direction
-- hide parts of the recommended routes when zooming out (two / three importance levels)
+- GPS localization (especially useful for mobile devices)
 
 ### Future Work
-- GPS localization (TODO test: does it work on smartphones, i.e. does it follow?)
-- Simple & Advanced UI.
+- Differentiate between a simple & an advanced UI.
   - simple: auto-hides parts of the network based on zoom level, no layer switcher
   - advanced: layer switcher, control opacity of overlay, freely choose network-parts to show
 - add OpenCycleMap? http://thunderforest.com/maps/opencyclemap/
