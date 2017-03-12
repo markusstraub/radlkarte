@@ -241,6 +241,18 @@ function initMap() {
     mapboxStreets.addTo(rkGlobal.leafletMap)
     rkGlobal.leafletLayersControl = L.control.layers(baseMaps, overlayMaps, { 'position' : 'topright', 'collapsed' : true } ).addTo(rkGlobal.leafletMap);
     
+    var geocodingControl = L.Control.geocoder({
+        position: 'topright',
+        placeholder: 'Adresssuche',
+        errorMessage: 'Leider nicht gefunden',
+        geocoder: L.Control.Geocoder.nominatim({
+            geocodingQueryParams: {
+                countrycodes: 'at',
+                viewbox: [16.1, 48.32, 16.65, 48] //viewbox=<left>,<top>,<right>,<bottom>
+            }
+        })
+    }).addTo(rkGlobal.leafletMap);
+    
     var locateControl = L.control.locate({
         position: 'topright',
         setView: 'always',
@@ -258,6 +270,6 @@ function initMap() {
     
     var sidebar = L.control.sidebar('sidebar').addTo(map);
     
-    // load overlay & control
+    // load overlay
     loadGeoJson();
 }
