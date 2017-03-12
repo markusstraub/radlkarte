@@ -49,7 +49,7 @@ emph {
 .sidebar-tabs > ul > li.active > a > i {
     color: #fff;
 }
-a, a:visited, a:active {
+a, a:visited, a:active, .leaflet-control-attribution a {
     color: #AAB622;
     text-decoration: none;
 }

@@ -208,31 +208,29 @@ function initMap() {
 
     var mapboxStreets = L.tileLayer('https://api.tiles.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png?access_token={accessToken}', {
         maxZoom: 18,
-        attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery &copy; <a href="http://mapbox.com">Mapbox</a>',
+        attribution: 'map data &copy; <a href="http://openstreetmap.org" target="_blank">OpenStreetMap</a> contributors, imagery &copy; <a href="http://mapbox.com" target="_blank">Mapbox</a>',
         accessToken: 'pk.eyJ1IjoiZHRzLWFpdCIsImEiOiJjaW1kbmV5NjIwMDI1dzdtMzBweW14cmZjIn0.VraboGeyXnUjm1e7xWDWbA',
         opacity: rkGlobal.tileLayerOpacity
     });
-    var osm = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        minZoom: 8,
-        maxZoom: 18,
-        attribution: 'Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
-    });
-//     var ocm = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-//         minZoom: 8,
-//         maxZoom: 18,
-//         attribution: 'Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
-//     });
     var mapboxSatellite = L.tileLayer('https://api.tiles.mapbox.com/v4/mapbox.satellite/{z}/{x}/{y}.png?access_token={accessToken}', {
         maxZoom: 18,
-        attribution: 'Imagery &copy; <a href="http://mapbox.com">Mapbox</a>',
+        attribution: 'imagery © <a href="http://mapbox.com" target="_blank">Mapbox</a>',
         accessToken: 'pk.eyJ1IjoiZHRzLWFpdCIsImEiOiJjaW1kbmV5NjIwMDI1dzdtMzBweW14cmZjIn0.VraboGeyXnUjm1e7xWDWbA'
+    });
+    var ocm = L.tileLayer('https://{s}.tile.thunderforest.com/cycle/{z}/{x}/{y}.png?apikey=ab5e4b2d24854fefb139c538ef5187a8', {
+        maxZoom: 18,
+        attribution: 'map data &copy; <a href="http://openstreetmap.org" target="_blank">OpenStreetMap</a> contributors, imagery &copy; <a href="http://www.thunderforest.com" target="_blank">Thunderforest</a>'
+    });
+    var osm = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 18,
+        attribution: 'map data &amp; imagery &copy; <a href="http://openstreetmap.org" target="_blank">OpenStreetMap</a> contributors'
     });
     var empty = L.tileLayer('', {attribution: ''});
     
     var baseMaps = {
         "OpenStreetMap (Mapbox)": mapboxStreets,
         "Satellitenbild (Mapbox)": mapboxSatellite,
-        //"OpenCycleMap": ocm,
+        "OpenCycleMap": ocm,
         "OpenStreetMap": osm,
         "Leer": empty,
     };

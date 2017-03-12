@@ -16,7 +16,6 @@ online map with the goal to provide useful (route) information for cyclists
 - differentiate between a simple & an advanced UI.
   - simple: auto-hides parts of the network based on zoom level, no layer switcher
   - advanced: layer switcher, control opacity of overlay, freely choose network-parts to show
-- add OpenCycleMap? http://thunderforest.com/maps/opencyclemap/
 - add basemap.at as background layer?
 - address searching aka geocoding (nominatim? google? wien.gv.at?)
 - nicer opacity? not possible with current approach: https://github.com/Leaflet/Leaflet/issues/3610
