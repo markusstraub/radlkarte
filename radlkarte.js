@@ -37,7 +37,8 @@ function loadGeoJson() {
         // first step - collect geojson linestring features in the matrix 
         var ignoreCount = 0;
         var goodCount = 0;
-        for (var geojson of data.features) {
+        for (let i=0; i<data.features.length; i++) {
+            let geojson = data.features[i];
             if(geojson.type != 'Feature' || geojson.properties == undefined || geojson.geometry == undefined || geojson.geometry.type != 'LineString' || geojson.geometry.coordinates.length < 2) {
                 console.warn("ignoring invalid object (not a proper linestring feature): " + JSON.stringify(geojson));
                 ++ignoreCount;
