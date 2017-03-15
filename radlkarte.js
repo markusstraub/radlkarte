@@ -249,8 +249,25 @@ function initMap() {
                 countrycodes: 'at',
                 viewbox: [16.1, 48.32, 16.65, 48] //viewbox=<left>,<top>,<right>,<bottom>
             }
-        })
+        }),
+        defaultMarkGeocode: false
+    }).on('markgeocode', function(e) {
+        var result = e.geocode || e;
+        var bbox = result.bbox;
+        var poly = L.polygon([
+            bbox.getSouthEast(),
+            bbox.getNorthEast(),
+            bbox.getNorthWest(),
+            bbox.getSouthWest()
+        ]);
+        rkGlobal.leafletMap.fitBounds(poly.getBounds());
+        var popup = L.popup({
+            autoClose: false,
+            closeOnClick: false,
+            closeButton: true
+        }).setLatLng(e.geocode.center).setContent(result.html || result.name).openOn(rkGlobal.leafletMap);
     }).addTo(rkGlobal.leafletMap);
+    
     
     var locateControl = L.control.locate({
         position: 'topright',
