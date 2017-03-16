@@ -1,7 +1,9 @@
+"use strict";
+
 var rkGlobal = {}; // global variable for radlkarte properties / data storage
 rkGlobal.leafletMap = undefined; // the main leaflet map
 rkGlobal.leafletLayersControl = undefined; // leaflet layer-control
-rkGlobal.segmentsPS = [] // matrix holding all segments (two dimensions: priority & stressfulness)
+rkGlobal.segmentsPS = []; // matrix holding all segments (two dimensions: priority & stressfulness)
 rkGlobal.priorityStrings = ["Überregional", "Regional", "Lokal"]; // names of all different levels of priorities (ordered descending by priority)
 rkGlobal.stressfulnessStrings = ["Ruhig", "Durchschnittlich", "Stressig"];
 rkGlobal.debug = true; // debug output will be logged if set to true
@@ -28,9 +30,9 @@ function loadGeoJson() {
         }
         
         // prepare matrix
-        for(var i=0; i<rkGlobal.priorityStrings.length; i++) {
+        for(let i=0; i<rkGlobal.priorityStrings.length; i++) {
             rkGlobal.segmentsPS[i] = [];
-            for(var j=0; j<rkGlobal.stressfulnessStrings.length; j++)
+            for(let j=0; j<rkGlobal.stressfulnessStrings.length; j++)
                 rkGlobal.segmentsPS[i][j] = {lines: [], decorators: []};
         }
         
@@ -67,8 +69,8 @@ function loadGeoJson() {
         
         // second step - merge the geojson linestring features for the same priority-stressfulness level into a single multilinestring
         // and then put them in a leaflet layer
-        for(var p in rkGlobal.segmentsPS) {
-            for(var s in rkGlobal.segmentsPS[p]) {
+        for(let p in rkGlobal.segmentsPS) {
+            for(let s in rkGlobal.segmentsPS[p]) {
                 let multilinestringfeature = turf.combine(turf.featureCollection(rkGlobal.segmentsPS[p][s].lines));
                 rkGlobal.segmentsPS[p][s].lines = L.geoJSON(multilinestringfeature);
                 rkGlobal.leafletMap.addLayer(rkGlobal.segmentsPS[p][s].lines);
@@ -84,8 +86,8 @@ function loadGeoJson() {
         }
         
         // layer sorting (high priority on top)
-        for(var p in rkGlobal.segmentsPS) {
-            for(var s in rkGlobal.segmentsPS[p]) {
+        for(let p in rkGlobal.segmentsPS) {
+            for(let s in rkGlobal.segmentsPS[p]) {
                 rkGlobal.segmentsPS[p][s].lines.bringToBack();
                 if(rkGlobal.segmentsPS[p][s].decorators != undefined)
                     rkGlobal.segmentsPS[p][s].decorators.bringToBack();
@@ -162,7 +164,7 @@ function getLineStringStyleWithColorDefiningStressfulness(priority,stressfulness
 function getLineWeightForCategory(category) {
     var lineWeight = rkGlobal.leafletMap.getZoom() - 10;
     lineWeight = (lineWeight <= 0 ? 1 : lineWeight) * 1.4;
-    lineWeight *= rkGlobal.styleALineWidthFactor[category]
+    lineWeight *= rkGlobal.styleALineWidthFactor[category];
     return lineWeight;
 }
 
@@ -237,7 +239,7 @@ function initMap() {
     };
     var overlayMaps = {};
     
-    mapboxStreets.addTo(rkGlobal.leafletMap)
+    mapboxStreets.addTo(rkGlobal.leafletMap);
     rkGlobal.leafletLayersControl = L.control.layers(baseMaps, overlayMaps, { 'position' : 'topright', 'collapsed' : true } ).addTo(rkGlobal.leafletMap);
     
     var geocodingControl = L.Control.geocoder({
@@ -284,7 +286,7 @@ function initMap() {
     
 //     L.control.zoom({position: 'topright'}).addTo(rkGlobal.leafletMap);
     
-    var sidebar = L.control.sidebar('sidebar').addTo(map);
+    var sidebar = L.control.sidebar('sidebar').addTo(rkGlobal.leafletMap);
     
     // load overlay
     loadGeoJson();
