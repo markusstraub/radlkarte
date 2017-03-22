@@ -24,43 +24,46 @@ function loadGeoJson() {
         }
     });
     $.getJSON("data/radlkarte-at-vienna.min.geojson", function(data) {
+        var i, j; // loop counter
+        var p, s; // priority / stressfulness
+        
         if(data.type != "FeatureCollection")    {
             console.error("expected a GeoJSON FeatureCollection. no radlkarte network can be displayed.");
             return;
         }
         
         // prepare matrix
-        for(let i=0; i<rkGlobal.priorityStrings.length; i++) {
+        for(i=0; i<rkGlobal.priorityStrings.length; i++) {
             rkGlobal.segmentsPS[i] = [];
-            for(let j=0; j<rkGlobal.stressfulnessStrings.length; j++)
+            for(j=0; j<rkGlobal.stressfulnessStrings.length; j++)
                 rkGlobal.segmentsPS[i][j] = {lines: [], decorators: []};
         }
         
         // first step - collect geojson linestring features in the matrix 
         var ignoreCount = 0;
         var goodCount = 0;
-        for (let i=0; i<data.features.length; i++) {
-            let geojson = data.features[i];
+        for (i=0; i<data.features.length; i++) {
+            var geojson = data.features[i];
             if(geojson.type != 'Feature' || geojson.properties == undefined || geojson.geometry == undefined || geojson.geometry.type != 'LineString' || geojson.geometry.coordinates.length < 2) {
                 console.warn("ignoring invalid object (not a proper linestring feature): " + JSON.stringify(geojson));
                 ++ignoreCount;
                 continue;
             }
             
-            let priority = parseInt(geojson.properties.p, 10);
-            let stressfulness = parseInt(geojson.properties.s, 10);
-            if(isNaN(priority) || isNaN(stressfulness)) {
+            p = parseInt(geojson.properties.p, 10);
+            s = parseInt(geojson.properties.s, 10);
+            if(isNaN(p) || isNaN(s)) {
                 console.warn("ignoring invalid object (priority / stressfulness not set): " + JSON.stringify(geojson));
                 ++ignoreCount;
                 continue;
             }
             
             // 1) for the lines: add geojson linestring features
-            rkGlobal.segmentsPS[priority][stressfulness].lines.push(geojson);
+            rkGlobal.segmentsPS[p][s].lines.push(geojson);
             
             // 2) for the decorators: add latlons
             if(geojson.properties.oneway == 'yes') {
-                rkGlobal.segmentsPS[priority][stressfulness].decorators.push(turf.flip(geojson).geometry.coordinates);
+                rkGlobal.segmentsPS[p][s].decorators.push(turf.flip(geojson).geometry.coordinates);
             }
             
             ++goodCount;
@@ -69,9 +72,9 @@ function loadGeoJson() {
         
         // second step - merge the geojson linestring features for the same priority-stressfulness level into a single multilinestring
         // and then put them in a leaflet layer
-        for(let p in rkGlobal.segmentsPS) {
-            for(let s in rkGlobal.segmentsPS[p]) {
-                let multilinestringfeature = turf.combine(turf.featureCollection(rkGlobal.segmentsPS[p][s].lines));
+        for(p in rkGlobal.segmentsPS) {
+            for(s in rkGlobal.segmentsPS[p]) {
+                var multilinestringfeature = turf.combine(turf.featureCollection(rkGlobal.segmentsPS[p][s].lines));
                 rkGlobal.segmentsPS[p][s].lines = L.geoJSON(multilinestringfeature);
                 rkGlobal.leafletMap.addLayer(rkGlobal.segmentsPS[p][s].lines);
                 
@@ -86,8 +89,8 @@ function loadGeoJson() {
         }
         
         // layer sorting (high priority on top)
-        for(let p in rkGlobal.segmentsPS) {
-            for(let s in rkGlobal.segmentsPS[p]) {
+        for(p in rkGlobal.segmentsPS) {
+            for(s in rkGlobal.segmentsPS[p]) {
                 rkGlobal.segmentsPS[p][s].lines.bringToBack();
                 if(rkGlobal.segmentsPS[p][s].decorators != undefined)
                     rkGlobal.segmentsPS[p][s].decorators.bringToBack();
