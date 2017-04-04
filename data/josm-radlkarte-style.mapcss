@@ -30,3 +30,24 @@ way[p=2] {
     width: 3;
     dashes: 5,5;
 }
+
+way[fixme] {
+    casing-width: 7;
+    casing-color: #FF0;
+    casing-opacity: 0.5;
+}
+
+node[problem=dismount] {
+    icon-image: "presets/vehicle/restriction/bicycle.svg";
+    text: auto;
+}
+
+node[problem=stairs] {
+    icon-image: "presets/transport/way/steps.svg";
+    text: auto;
+}
+
+node[problem=narrow] {
+    icon-image: "presets/vehicle/restriction/maxlength.svg";
+    text: auto;
+}
