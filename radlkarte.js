@@ -291,7 +291,7 @@ function initMap() {
         }
     }).addTo(rkGlobal.leafletMap);
     
-//     L.control.zoom({position: 'topright'}).addTo(rkGlobal.leafletMap);
+    L.control.zoom({position: 'topright'}).addTo(rkGlobal.leafletMap);
     
     var sidebar = L.control.sidebar('sidebar').addTo(rkGlobal.leafletMap);
     
