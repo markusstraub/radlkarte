@@ -57,15 +57,12 @@ a:hover {
     text-decoration: underline;
 }
 
-li {
-    margin-bottom: 0.5em;
-}
-
 ul.legend-leftified {
     padding-left: 0;
 }
 ul.legend li {
     list-style-type: none;
+    margin-bottom: 0.5em;
 }
 div.legend {
     display: inline-block;
