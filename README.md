@@ -12,9 +12,6 @@ online map with the goal to provide useful (route) information for cyclists
 - geocoding with OSM (nominatim)
 
 ### Usability Improvements
-
-- i fa-info statt fragezeichen für details
-- explicit zoom in/out buttons (already two users noted they can't zoom)
 - smaller size footprint of info-bar. especially on mobile devices it would be good to already see the map when the website opens. minimize it by default?
 - describe layer-switching & opencyclemap legend? explicitly show cycleways somehow (user request hotjar)?
 
