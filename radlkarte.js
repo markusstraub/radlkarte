@@ -4,8 +4,9 @@ var rkGlobal = {}; // global variable for radlkarte properties / data storage
 rkGlobal.leafletMap = undefined; // the main leaflet map
 rkGlobal.leafletLayersControl = undefined; // leaflet layer-control
 rkGlobal.segmentsPS = []; // matrix holding all segments (two dimensions: priority & stressfulness)
+rkGlobal.markerLayer = L.layerGroup(); // layer group holding all icons to be viewed at higher zoom levels
 rkGlobal.priorityStrings = ["Überregional", "Regional", "Lokal"]; // names of all different levels of priorities (ordered descending by priority)
-rkGlobal.stressfulnessStrings = ["Ruhig", "Durchschnittlich", "Stressig"];
+rkGlobal.stressStrings = ["Ruhig", "Durchschnittlich", "Stressig"];
 rkGlobal.debug = true; // debug output will be logged if set to true
 rkGlobal.styleFunction = updateStylesWithStyleA;
 
@@ -35,7 +36,7 @@ function loadGeoJson() {
         // prepare matrix
         for(i=0; i<rkGlobal.priorityStrings.length; i++) {
             rkGlobal.segmentsPS[i] = [];
-            for(j=0; j<rkGlobal.stressfulnessStrings.length; j++)
+            for(j=0; j<rkGlobal.stressStrings.length; j++)
                 rkGlobal.segmentsPS[i][j] = {lines: [], decorators: []};
         }
         
@@ -45,12 +46,15 @@ function loadGeoJson() {
         for (i=0; i<data.features.length; i++) {
             var geojson = data.features[i];
             if(geojson.type != 'Feature' || geojson.properties == undefined || geojson.geometry == undefined || geojson.geometry.type != 'LineString' || geojson.geometry.coordinates.length < 2) {
-                if(geojson.geometry.type == 'Point' && (geojson.properties.dismount == 'yes' || geojson.properties.nocargo == 'yes')) {
-                    console.log("Schiebestelle!");
-                    L.marker(L.geoJSON(geojson).getLayers()[0].getLatLng()).addTo(rkGlobal.leafletMap);
+                if(geojson.geometry.type == 'Point') {
+                    var icon = getIcon(geojson.properties);
+                    if(icon != undefined) {
+                        rkGlobal.markerLayer.addLayer(L.marker(L.geoJSON(geojson).getLayers()[0].getLatLng(), {icon: icon}));
+                    }
+                } else {
+                    console.warn("ignoring invalid object (not a proper linestring feature): " + JSON.stringify(geojson));
+                    ++ignoreCount;
                 }
-                console.warn("ignoring invalid object (not a proper linestring feature): " + JSON.stringify(geojson));
-                ++ignoreCount;
                 continue;
             }
             
@@ -122,6 +126,7 @@ function loadGeoJson() {
 rkGlobal.tileLayerOpacity = 1;
 rkGlobal.styleAPriorityFullVisibleFromZoom = [0, 14, 15];
 rkGlobal.styleAPriorityReducedVisibilityFromZoom = [0, 12, 14];
+rkGlobal.styleAIconZoomThreshold = 14;
 rkGlobal.styleALineWidthFactor = [1.4, 0.5, 0.5];
 rkGlobal.styleAArrowWidthFactor = [2, 3, 3];
 rkGlobal.styleAOpacity = 0.62;
@@ -135,8 +140,13 @@ rkGlobal.styleAColors = ['#004B67', '#51A4B6', '#FF6600']; // dark blue - light 
  * Updates the styles of all layers. Takes current zoom level into account
  */
 function updateStylesWithStyleA() {
+    if(rkGlobal.leafletMap.getZoom() >= rkGlobal.styleAIconZoomThreshold) {
+        rkGlobal.leafletMap.addLayer(rkGlobal.markerLayer);
+    } else {
+        rkGlobal.leafletMap.removeLayer(rkGlobal.markerLayer);
+    }
     for(var priority=0; priority<rkGlobal.priorityStrings.length; priority++) {
-        for(var stressfulness=0; stressfulness<rkGlobal.stressfulnessStrings.length; stressfulness++) {
+        for(var stressfulness=0; stressfulness<rkGlobal.stressStrings.length; stressfulness++) {
             if(rkGlobal.leafletMap.getZoom() >= rkGlobal.styleAPriorityFullVisibleFromZoom[priority]) {
                 rkGlobal.leafletMap.addLayer(rkGlobal.segmentsPS[priority][stressfulness].lines);
                 rkGlobal.segmentsPS[priority][stressfulness].lines.setStyle(getLineStringStyleWithColorDefiningStressfulness(priority, stressfulness));
@@ -210,7 +220,6 @@ function getOnewayArrowPatternsWithColorDefiningStressfulness(priority, stressfu
 
 
 // ----------------- end of style A
-
 
 function initMap() {
     rkGlobal.leafletMap = L.map('map', { 'zoomControl' : false } ).setView([48.2083537, 16.3725042], 14);
@@ -295,6 +304,47 @@ function initMap() {
     
     var sidebar = L.control.sidebar('sidebar').addTo(rkGlobal.leafletMap);
     
+    initializeIcons();
+    
     // load overlay
     loadGeoJson();
+}
+
+function initializeIcons() {
+    rkGlobal.icons = {};
+    rkGlobal.icons.dismount = L.icon({
+        iconUrl: 'css/dismount.svg',
+        iconSize:     [33, 29], 
+        iconAnchor:   [16.5, 14.5], 
+        popupAnchor:  [0, 0]
+    });
+    rkGlobal.icons.noCargo = L.icon({
+        iconUrl: 'css/nocargo.svg',
+        iconSize:     [29, 29], 
+        iconAnchor:   [14.5, 14.5], 
+        popupAnchor:  [0, 0]
+    });
+    rkGlobal.icons.noCargoAndDismount = L.icon({
+        iconUrl: 'css/nocargo+dismount.svg',
+        iconSize:     [57.7, 29], 
+        iconAnchor:   [28.85, 14.5], 
+        popupAnchor:  [0, 0]
+    });
+}
+
+/**
+ * @param properties GeoJSON properties of a point
+ * @return an matching icon or undefined if no icon should be used
+ */
+function getIcon(properties) {
+    var dismount = properties.dismount == 'yes';
+    var nocargo = properties.nocargo == 'yes';
+    
+    if(dismount && nocargo)
+        return rkGlobal.icons.noCargoAndDismount;
+    else if(dismount)
+        return rkGlobal.icons.dismount;
+    else if(nocargo)
+        return rkGlobal.icons.noCargo;
+    return undefined;
 }
