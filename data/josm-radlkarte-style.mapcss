@@ -1,34 +1,46 @@
 /** 
  * radlkarte uses three attributes:
- * p=0|1|2 (mandatory)
- * s=0|1|2 (mandatory)
+ * priority=0|1|2 (mandatory)
+ * stress=0|1|2 (mandatory)
  * oneway=yes (optional)
  */
 
-/* s(tressfulness): 0=calm, 1=medium, 2=stressful */
-way[s=0] {
+/* stress: 0=calm, 1=medium, 2=stressful */
+way[stress=0] {
     opacity: 1;
     color: #004B67;
 }
-way[s=1] {
+way[stress=1] {
     opacity: 1;
     color: #51A4B6;
 }
-way[s=2] {
+way[stress=2] {
     opacity: 1;
     color: #FF6600;
 }
 
-/* p(riority / level in route hierarchy): 0=main, 1=regional, 2=local */
-way[p=0] {
+/* priority (level in route hierarchy): 0=main, 1=regional, 2=local */
+way[priority=0] {
     width: 12;
 }
-way[p=1] {
+way[priority=1] {
     width: 3;
 }
-way[p=2] {
+way[priority=2] {
     width: 3;
     dashes: 5,5;
+}
+
+way[unpaved=yes] {
+    casing-width: 7;
+    casing-color: #00ff18;
+    casing-opacity: 0.75;
+}
+
+way[steep=yes] {
+    casing-width: 7;
+    casing-color: #ff00f0;
+    casing-opacity: 0.75;
 }
 
 way[fixme] {
@@ -37,17 +49,12 @@ way[fixme] {
     casing-opacity: 0.5;
 }
 
-node[problem=dismount] {
+node[dismount=yes] {
     icon-image: "presets/vehicle/restriction/bicycle.svg";
     text: auto;
 }
 
-node[problem=stairs] {
-    icon-image: "presets/transport/way/steps.svg";
-    text: auto;
-}
-
-node[problem=narrow] {
+node[nocargo=yes] {
     icon-image: "presets/vehicle/restriction/maxlength.svg";
     text: auto;
 }

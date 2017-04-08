@@ -45,7 +45,7 @@ function loadGeoJson() {
         for (i=0; i<data.features.length; i++) {
             var geojson = data.features[i];
             if(geojson.type != 'Feature' || geojson.properties == undefined || geojson.geometry == undefined || geojson.geometry.type != 'LineString' || geojson.geometry.coordinates.length < 2) {
-                if(geojson.geometry.type == 'Point' && geojson.properties.note == 'Schiebestelle') {
+                if(geojson.geometry.type == 'Point' && (geojson.properties.dismount == 'yes' || geojson.properties.nocargo == 'yes')) {
                     console.log("Schiebestelle!");
                     L.marker(L.geoJSON(geojson).getLayers()[0].getLatLng()).addTo(rkGlobal.leafletMap);
                 }
