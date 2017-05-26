@@ -17,7 +17,7 @@ Website for desktop, tablet & smartphone usage with the goal to provide useful (
 
 ### Future Work
 - Highlighting problematic points along the route
-- Gighlighting properties of lines:
+- Highlighting properties of lines:
   - very steep (e.g. double lines)
   - unpaved paths (e.g. dotted lines)
 - Optional overlays for cycling-POIs such as citybike stations or bicycle shops
