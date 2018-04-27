@@ -227,13 +227,13 @@ function initMap() {
 
     var mapboxStreets = L.tileLayer('https://api.tiles.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png?access_token={accessToken}', {
         maxZoom: 18,
-        attribution: 'map data &copy; <a href="http://openstreetmap.org" target="_blank">OpenStreetMap</a> contributors, imagery &copy; <a href="http://mapbox.com" target="_blank">Mapbox</a>',
+        attribution: 'map data &copy; <a href="https://openstreetmap.org" target="_blank">OpenStreetMap</a> contributors, imagery &copy; <a href="https://mapbox.com" target="_blank">Mapbox</a>',
         accessToken: 'pk.eyJ1IjoiZHRzLWFpdCIsImEiOiJjaW1kbmV5NjIwMDI1dzdtMzBweW14cmZjIn0.VraboGeyXnUjm1e7xWDWbA',
         opacity: rkGlobal.tileLayerOpacity
     });
     var mapboxSatellite = L.tileLayer('https://api.tiles.mapbox.com/v4/mapbox.satellite/{z}/{x}/{y}.png?access_token={accessToken}', {
         maxZoom: 18,
-        attribution: 'imagery © <a href="http://mapbox.com" target="_blank">Mapbox</a>',
+        attribution: 'imagery © <a href="https://mapbox.com" target="_blank">Mapbox</a>',
         accessToken: 'pk.eyJ1IjoiZHRzLWFpdCIsImEiOiJjaW1kbmV5NjIwMDI1dzdtMzBweW14cmZjIn0.VraboGeyXnUjm1e7xWDWbA'
     });
     var ocm = L.tileLayer('https://{s}.tile.thunderforest.com/cycle/{z}/{x}/{y}.png?apikey=ab5e4b2d24854fefb139c538ef5187a8', {
@@ -242,7 +242,7 @@ function initMap() {
     });
     var osm = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 18,
-        attribution: 'map data &amp; imagery &copy; <a href="http://openstreetmap.org" target="_blank">OpenStreetMap</a> contributors'
+        attribution: 'map data &amp; imagery &copy; <a href="https://openstreetmap.org" target="_blank">OpenStreetMap</a> contributors'
     });
     var empty = L.tileLayer('', {attribution: ''});
     
@@ -302,7 +302,10 @@ function initMap() {
     
     L.control.zoom({position: 'topright'}).addTo(rkGlobal.leafletMap);
     
-    var sidebar = L.control.sidebar('sidebar').addTo(rkGlobal.leafletMap);
+    var sidebar = L.control.sidebar({
+        container: 'sidebar',
+        position: 'left'
+    }).addTo(rkGlobal.leafletMap);
     
     initializeIcons();
     

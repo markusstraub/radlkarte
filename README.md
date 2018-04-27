@@ -12,6 +12,7 @@ Website for desktop, tablet & smartphone usage with the goal to provide useful (
 - Geocoding with OSM (nominatim)
 
 ### Pending Usability Improvements
+- Problems with GPS location on Smartphones? (reports of hanging browsers)
 - Smaller size footprint of info-bar. especially on mobile devices it would be good to already see the map when the website opens. minimize it by default?
 - Describe layer-switching & opencyclemap legend? explicitly show cycleways somehow (user request hotjar)?
 

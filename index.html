@@ -24,27 +24,27 @@
         })(window,document,'//static.hotjar.com/c/hotjar-','.js?sv=');
     </script>-->
 
-    <script src="js/leaflet-1.0.3/leaflet.js"></script>
-    <link rel="stylesheet" href="js/leaflet-1.0.3/leaflet.css" />
+    <script src="js/leaflet-1.3.1/leaflet.js"></script>
+    <link rel="stylesheet" href="js/leaflet-1.3.1/leaflet.css" />
     
-    <script src="js/leaflet-sidebar-v2-1.0.0/leaflet-sidebar.js"></script>
-    <link rel="stylesheet" href="js/leaflet-sidebar-v2-1.0.0/leaflet-sidebar.css"/>
+    <script src="js/leaflet-sidebar-v2-3.0.2/leaflet-sidebar.js"></script>
+    <link rel="stylesheet" href="js/leaflet-sidebar-v2-3.0.2/leaflet-sidebar.css"/>
     <!-- font awesome is required by sidebar & leaflet-locatecontrol-->
-    <link rel="stylesheet" href="css/font-awesome-4.6.3/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="css/font-awesome-4.7.0/css/font-awesome.min.css"/>
     
-    <script src="js/leaflet-polylineDecorator-1.1.0/leaflet.polylineDecorator.js"></script>
+    <script src="js/leaflet-polylineDecorator-1.6.0/leaflet.polylineDecorator.js"></script>
     
     <script src="js/leaflet-hash-1.0.1/leaflet-hash.min.js"></script>
     
-    <script src="js/leaflet-locatecontrol-0.60.0/L.Control.Locate.min.js"></script>
-    <link rel="stylesheet" href="js/leaflet-locatecontrol-0.60.0/L.Control.Locate.css"/>
+    <script src="js/leaflet-locatecontrol-0.62.0/L.Control.Locate.min.js"></script>
+    <link rel="stylesheet" href="js/leaflet-locatecontrol-0.62.0/L.Control.Locate.css"/>
     
-    <script src="js/leaflet-geocoder-1.5.4/Control.Geocoder.js"></script>
-    <link rel="stylesheet" href="js/leaflet-geocoder-1.5.4/Control.Geocoder.css"/>
+    <script src="js/leaflet-control-geocoder-1.5.8/Control.Geocoder.js"></script>
+    <link rel="stylesheet" href="js/leaflet-control-geocoder-1.5.8/Control.Geocoder.css"/>
     
     <script src="js/turf-2017-02-16/turf.min.js"></script>
     
-    <script src="js/jquery-3.1.1.min.js"></script>
+    <script src="js/jquery-3.3.1.min.js"></script>
     
     <link href="css/museo-500/style.css" rel="stylesheet" type="text/css"/>
     <link href='https://fonts.googleapis.com/css?family=Roboto:400,400italic,700' rel='stylesheet' type='text/css'/>
@@ -59,9 +59,9 @@
     <div id="radlobby-logo">
         <a href="http://radlobby.at/wien" target="_blank"><img src="css/radlobby.png" alt="Radlobby Wien" /></a>
     </div>
-    <div id="sidebar" class="sidebar sidebar-left">
+    <div id="sidebar" class="leaflet-sidebar">
         <!-- Nav tabs -->
-        <div class="sidebar-tabs">
+        <div class="leaflet-sidebar-tabs">
             <ul role="tablist">
                 <li class="active"><a href="#radlkarte_legend" role="tab"><i class="fa fa-align-justify"></i></a></li>
                 <li><a href="#radlkarte_description" role="tab"><i class="fa fa-info-circle"></i></a></li>
@@ -70,10 +70,10 @@
         </div>
 
         <!-- Tab panes -->
-        <div class="sidebar-content">
-            <div class="sidebar-pane active" id="radlkarte_legend">
-                <h1 class="sidebar-header">
-                    <span class="sidebar-close"><i class="fa fa-caret-left"></i></span> Übersicht
+        <div class="leaflet-sidebar-content">
+            <div class="leaflet-sidebar-pane active" id="radlkarte_legend">
+                <h1 class="leaflet-sidebar-header">
+                    <span class="leaflet-sidebar-close"><i class="fa fa-caret-left"></i></span> Übersicht
                 </h1>
                 <h2>Entspannt durch Wien</h2>
                 <p>
@@ -111,9 +111,9 @@
                 </ul>
             </div>
 
-            <div class="sidebar-pane" id="radlkarte_description">
-                <h1 class="sidebar-header">
-                    <span class="sidebar-close"><i class="fa fa-caret-left"></i></span> Die Radlkarte stellt sich vor
+            <div class="leaflet-sidebar-pane" id="radlkarte_description">
+                <h1 class="leaflet-sidebar-header">
+                    <span class="leaflet-sidebar-close"><i class="fa fa-caret-left"></i></span> Die Radlkarte stellt sich vor
                 </h1>
                 <p>
                     Die Radlkarte der <a href="https://www.radlobby.at/wien" target="_blank">Radlobby Wien</a> ist eine kostenlose Online-Orientierungshilfe, mit der Sie Ihre Fahrten mit dem Fahrrad schneller und gemütlicher gestalten können. Sie ist jederzeit im Browser bereit, ob am Smartphone, Tablet, oder PC.
@@ -161,9 +161,9 @@
                 </p>
             </div>
             
-            <div class="sidebar-pane" id="radlkarte_contact">
-                <h1 class="sidebar-header">
-                    <span class="sidebar-close"><i class="fa fa-caret-left"></i></span> Impressum
+            <div class="leaflet-sidebar-pane" id="radlkarte_contact">
+                <h1 class="leaflet-sidebar-header">
+                    <span class="leaflet-sidebar-close"><i class="fa fa-caret-left"></i></span> Impressum
                 </h1>
                 <p>
                     <img src="css/radlobby-wien.png" width="150" alt="Radlobby Wien" />

@@ -1,12 +1,15 @@
 # Leaflet PolylineDecorator
 
+[![CDNJS](https://img.shields.io/cdnjs/v/leaflet-polylinedecorator.svg)](https://cdnjs.com/libraries/leaflet-polylinedecorator)
+
 A Leaflet plug-in to define and draw patterns on existing Polylines or along coordinate paths.
+[Demo](http://bbecquet.github.io/Leaflet.PolylineDecorator/example/example.html).
 
 ## Compatibility with Leaflet versions
 
-The development version of the plugin (on the `master` branch) is targeted at the 1.x version of Leaflet.
+**The current version of the plugin (on the `master` branch) works only with versions 1.\* of Leaflet**.
 
-For a version of the plugin compatible with the 0.7.x Leaflet release, use the `leaflet-0.7.2` branch.
+For a version of the plugin compatible with the older 0.7.* Leaflet releases, use the `leaflet-0.7.2` branch. But this branch is not maintained anymore and Leaflet 1.* has been around for a while, so you should definitely update.
 
 ## npm / bower
 
@@ -72,8 +75,10 @@ var decorator = L.polylineDecorator(polyline, {
 }).addTo(map);
 ```
 
-## Performance note
+## Performance note/alternatives
 
-Please note that this library is in an early stage, and many operations could still be optimized.
-Moreover, as it requires a lot of (re-)computations, and each pattern symbol is an actual `L.ILayer` object, it can have an impact on the responsiveness of your map, especially if used on many objects.
-In cases where it's applicable (dash patterns), you should probably use instead the `dashArray` property of `L.Path`, as it's natively drawn by the browser.
+This plugin creates actual `L.Layer` objects (markers, polyline, etc.) to draw the pattern symbols. This is extra customizable as you can define your own symbols, but it may have an impact on the responsiveness of your map if you have to draw a lot of symbols on many large polylines.
+
+Here are two light-weight alternatives for simpler cases:
+ - the [`dashArray` property of `L.Path`](http://leafletjs.com/reference-1.1.0.html#path-dasharray), if you only need to draw simple patterns (dashes, dots, etc.).
+ - the [`Leaflet.TextPath`](https://github.com/makinacorpus/Leaflet.TextPath) plugin, which is based on SVG.

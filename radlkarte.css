@@ -42,11 +42,14 @@ strong {
     font-weight: bold;
 }
 
-.sidebar-header, .sidebar-tabs > ul > li.active {
+.leaflet-sidebar {
+    font-size: medium;  
+}
+.leaflet-sidebar-header, .leaflet-sidebar-tabs > ul > li.active {
     background-color: #B8CC24;
     color: #fff
 }
-.sidebar-tabs > ul > li.active > a > i {
+.leaflet-sidebar-tabs > ul > li.active > a > i {
     color: #fff;
 }
 a, a:visited, a:active, .leaflet-control-attribution a {
