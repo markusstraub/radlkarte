@@ -10,6 +10,7 @@ rkGlobal.priorityStrings = ["Überregional", "Regional", "Lokal"]; // names of a
 rkGlobal.stressStrings = ["Ruhig", "Durchschnittlich", "Stressig"];
 rkGlobal.debug = true; // debug output will be logged if set to true
 rkGlobal.styleFunction = updateStylesWithStyleA;
+rkGlobal.fullWidthThreshold = 768;
 
 function debug(obj) {
     if(rkGlobal.debug)
@@ -318,6 +319,9 @@ function initMap() {
         container: 'sidebar',
         position: 'left'
     }).addTo(rkGlobal.leafletMap);
+    if(window.innerWidth < rkGlobal.fullWidthThreshold) {
+        sidebar.close();
+    }
     
     initializeIcons();
     
