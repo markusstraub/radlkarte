@@ -27,6 +27,7 @@ function loadGeoJson() {
     $.getJSON("data/radlkarte-at-vienna.min.geojson", function(data) {
         var i, j; // loop counter
         var p, s; // priority / stressfulness
+        var markerLayer;
         
         if(data.type != "FeatureCollection")    {
             console.error("expected a GeoJSON FeatureCollection. no radlkarte network can be displayed.");
@@ -47,10 +48,9 @@ function loadGeoJson() {
             var geojson = data.features[i];
             if(geojson.type != 'Feature' || geojson.properties == undefined || geojson.geometry == undefined || geojson.geometry.type != 'LineString' || geojson.geometry.coordinates.length < 2) {
                 if(geojson.geometry.type == 'Point') {
-                    var icon = getIcon(geojson.properties);
-                    if(icon != undefined) {
-                        rkGlobal.markerLayer.addLayer(L.marker(L.geoJSON(geojson).getLayers()[0].getLatLng(), {icon: icon}));
-                    }
+                    markerLayer = getMarkerLayerIncludingPopup(geojson);
+                    if(markerLayer != null)
+                        rkGlobal.markerLayer.addLayer(markerLayer);
                 } else {
                     console.warn("ignoring invalid object (not a proper linestring feature): " + JSON.stringify(geojson));
                     ++ignoreCount;
@@ -333,6 +333,29 @@ function initializeIcons() {
         iconAnchor:   [28.85, 14.5], 
         popupAnchor:  [0, 0]
     });
+    rkGlobal.icons.redDot = L.icon({
+        iconUrl: 'css/reddot.svg',
+        iconSize:     [10, 10], 
+        iconAnchor:   [5, 5], 
+        popupAnchor:  [0, 0]
+    });
+}
+
+function getMarkerLayerIncludingPopup(geojsonPoint) {
+    var icon = getIcon(geojsonPoint.properties);
+    if(icon == null)
+        return undefined;
+    
+    var marker = L.marker(L.geoJSON(geojsonPoint).getLayers()[0].getLatLng(), {
+        icon: icon,
+        alt: description
+    });
+    
+    var description = getDescriptionText(geojsonPoint.properties);
+    marker.bindPopup(description, {closeButton: false, offset: L.point(0, -10)});
+    marker.on('mouseover', function() { marker.openPopup(); });
+    marker.on('mouseout', function() { marker.closePopup(); });
+    return marker;
 }
 
 /**
@@ -349,5 +372,27 @@ function getIcon(properties) {
         return rkGlobal.icons.dismount;
     else if(nocargo)
         return rkGlobal.icons.noCargo;
+    return undefined;
+}
+
+/**
+ * @param properties GeoJSON properties of a point
+ * @return a description string
+ */
+function getDescriptionText(properties) {
+    var dismount = properties.dismount == 'yes';
+    var nocargo = properties.nocargo == 'yes';
+    var description = properties.description;
+    if(description == null)
+        description = '';
+    else
+        description = ':<br>' + description;
+    
+    if(dismount && nocargo)
+        return '<span class="popup">Schiebestelle / nicht empfohlen für Lastenräder und Anhänger' + description + '</span>';
+    else if(dismount)
+        return '<span class="popup">Schiebestelle' + description+ '</span>';
+    else if(nocargo)
+        return '<span class="popup">Nicht empfohlen für Lastenräder und Anhänger' + description+ '</span>';
     return undefined;
 }

@@ -27,7 +27,7 @@ html, body, #map {
     background-color: #fff;
 }
 
-p, h3, h4, li {
+span, p, h3, h4, li {
     font-family: Roboto, arial, sans-serif;
     color: #004B67;
 }

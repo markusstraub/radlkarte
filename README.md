@@ -48,6 +48,7 @@ Optional (omitting the attributes means 'no'):
 
 - dismount: yes (bicycle must or should be pushed (in at least one direction), either due to legal restrictions or because it's a very dangrous spot)
 - nocargo: yes (not feasible for heavy/extra-long/extra-wide bicycles, e.g. cargo bicycles or bikes with trailers due to e.g. stairs or chicanes)
+- description: string explaining details about the dismount and/or nocargo restriction
 
 ### Edit Instructions
 
