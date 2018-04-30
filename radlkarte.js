@@ -4,7 +4,8 @@ var rkGlobal = {}; // global variable for radlkarte properties / data storage
 rkGlobal.leafletMap = undefined; // the main leaflet map
 rkGlobal.leafletLayersControl = undefined; // leaflet layer-control
 rkGlobal.segmentsPS = []; // matrix holding all segments (two dimensions: priority & stressfulness)
-rkGlobal.markerLayer = L.layerGroup(); // layer group holding all icons to be viewed at higher zoom levels
+rkGlobal.markerLayerLowZoom = L.layerGroup(); // layer group holding all icons to be viewed at lower zoom levels
+rkGlobal.markerLayerHighZoom = L.layerGroup(); // layer group holding all icons to be viewed at higher zoom levels
 rkGlobal.priorityStrings = ["Überregional", "Regional", "Lokal"]; // names of all different levels of priorities (ordered descending by priority)
 rkGlobal.stressStrings = ["Ruhig", "Durchschnittlich", "Stressig"];
 rkGlobal.debug = true; // debug output will be logged if set to true
@@ -27,7 +28,6 @@ function loadGeoJson() {
     $.getJSON("data/radlkarte-at-vienna.min.geojson", function(data) {
         var i, j; // loop counter
         var p, s; // priority / stressfulness
-        var markerLayer;
         
         if(data.type != "FeatureCollection")    {
             console.error("expected a GeoJSON FeatureCollection. no radlkarte network can be displayed.");
@@ -44,13 +44,20 @@ function loadGeoJson() {
         // first step - collect geojson linestring features in the matrix 
         var ignoreCount = 0;
         var goodCount = 0;
+        var poiCount = 0;
+        var markerLayers;
         for (i=0; i<data.features.length; i++) {
             var geojson = data.features[i];
             if(geojson.type != 'Feature' || geojson.properties == undefined || geojson.geometry == undefined || geojson.geometry.type != 'LineString' || geojson.geometry.coordinates.length < 2) {
                 if(geojson.geometry.type == 'Point') {
-                    markerLayer = getMarkerLayerIncludingPopup(geojson);
-                    if(markerLayer != null)
-                        rkGlobal.markerLayer.addLayer(markerLayer);
+                    markerLayers = getMarkerLayersIncludingPopup(geojson);
+                    if(markerLayers != null) {
+                        rkGlobal.markerLayerLowZoom.addLayer(markerLayers.lowZoom);
+                        rkGlobal.markerLayerHighZoom.addLayer(markerLayers.highZoom);
+                        ++poiCount;
+                    } else {
+                        ++ignoreCount;
+                    }
                 } else {
                     console.warn("ignoring invalid object (not a proper linestring feature): " + JSON.stringify(geojson));
                     ++ignoreCount;
@@ -76,7 +83,7 @@ function loadGeoJson() {
             
             ++goodCount;
         }
-        debug("processed " + goodCount + " valid LineString Features and " + ignoreCount + " ignored objects");
+        debug("processed " + goodCount + " valid LineString features, " + poiCount + " Point features, and " + ignoreCount + " ignored features.");
         
         // second step - merge the geojson linestring features for the same priority-stressfulness level into a single multilinestring
         // and then put them in a leaflet layer
@@ -126,7 +133,7 @@ function loadGeoJson() {
 rkGlobal.tileLayerOpacity = 1;
 rkGlobal.styleAPriorityFullVisibleFromZoom = [0, 14, 15];
 rkGlobal.styleAPriorityReducedVisibilityFromZoom = [0, 12, 14];
-rkGlobal.styleAIconZoomThreshold = 14;
+rkGlobal.styleAIconZoomThresholds = [12, 14];
 rkGlobal.styleALineWidthFactor = [1.4, 0.5, 0.5];
 rkGlobal.styleAArrowWidthFactor = [2, 3, 3];
 rkGlobal.styleAOpacity = 0.62;
@@ -140,10 +147,15 @@ rkGlobal.styleAColors = ['#004B67', '#51A4B6', '#FF6600']; // dark blue - light 
  * Updates the styles of all layers. Takes current zoom level into account
  */
 function updateStylesWithStyleA() {
-    if(rkGlobal.leafletMap.getZoom() >= rkGlobal.styleAIconZoomThreshold) {
-        rkGlobal.leafletMap.addLayer(rkGlobal.markerLayer);
+    if(rkGlobal.leafletMap.getZoom() >= rkGlobal.styleAIconZoomThresholds[1]) {
+        rkGlobal.leafletMap.removeLayer(rkGlobal.markerLayerLowZoom);
+        rkGlobal.leafletMap.addLayer(rkGlobal.markerLayerHighZoom);
+    } else if(rkGlobal.leafletMap.getZoom() >= rkGlobal.styleAIconZoomThresholds[0]) {
+        rkGlobal.leafletMap.removeLayer(rkGlobal.markerLayerHighZoom);
+        rkGlobal.leafletMap.addLayer(rkGlobal.markerLayerLowZoom);
     } else {
-        rkGlobal.leafletMap.removeLayer(rkGlobal.markerLayer);
+        rkGlobal.leafletMap.removeLayer(rkGlobal.markerLayerHighZoom);
+        rkGlobal.leafletMap.removeLayer(rkGlobal.markerLayerLowZoom);
     }
     for(var priority=0; priority<rkGlobal.priorityStrings.length; priority++) {
         for(var stressfulness=0; stressfulness<rkGlobal.stressStrings.length; stressfulness++) {
@@ -319,43 +331,54 @@ function initializeIcons() {
         iconUrl: 'css/dismount.svg',
         iconSize:     [33, 29], 
         iconAnchor:   [16.5, 14.5], 
-        popupAnchor:  [0, 0]
+        popupAnchor:  [0, -14.5]
     });
     rkGlobal.icons.noCargo = L.icon({
         iconUrl: 'css/nocargo.svg',
         iconSize:     [29, 29], 
         iconAnchor:   [14.5, 14.5], 
-        popupAnchor:  [0, 0]
+        popupAnchor:  [0, -14.5]
     });
     rkGlobal.icons.noCargoAndDismount = L.icon({
         iconUrl: 'css/nocargo+dismount.svg',
         iconSize:     [57.7, 29], 
         iconAnchor:   [28.85, 14.5], 
-        popupAnchor:  [0, 0]
+        popupAnchor:  [0, -14.5]
     });
     rkGlobal.icons.redDot = L.icon({
         iconUrl: 'css/reddot.svg',
         iconSize:     [10, 10], 
         iconAnchor:   [5, 5], 
-        popupAnchor:  [0, 0]
+        popupAnchor:  [0, -5]
     });
 }
 
-function getMarkerLayerIncludingPopup(geojsonPoint) {
+function getMarkerLayersIncludingPopup(geojsonPoint) {
     var icon = getIcon(geojsonPoint.properties);
     if(icon == null)
         return undefined;
     
-    var marker = L.marker(L.geoJSON(geojsonPoint).getLayers()[0].getLatLng(), {
-        icon: icon,
-        alt: description
-    });
-    
     var description = getDescriptionText(geojsonPoint.properties);
-    marker.bindPopup(description, {closeButton: false, offset: L.point(0, -10)});
-    marker.on('mouseover', function() { marker.openPopup(); });
-    marker.on('mouseout', function() { marker.closePopup(); });
-    return marker;
+    var markers = {
+        lowZoom: L.marker(L.geoJSON(geojsonPoint).getLayers()[0].getLatLng(), {
+            icon: rkGlobal.icons.redDot,
+            alt: description
+        }),
+        highZoom: L.marker(L.geoJSON(geojsonPoint).getLayers()[0].getLatLng(), {
+            icon: icon,
+            alt: description
+        })
+    }
+    
+    var key, marker;
+    for (key in markers) {
+        console.log(key);
+        marker = markers[key];
+        marker.bindPopup(description, {closeButton: false});  //, offset: L.point(0, -10)});
+        marker.on('mouseover', function() { console.log('x'); marker.openPopup(); });
+        marker.on('mouseout', function() { console.log('y'); marker.closePopup(); }); // FIXME why is mouseover/out not working for lowZoom?
+    }
+    return markers;
 }
 
 /**
@@ -389,10 +412,10 @@ function getDescriptionText(properties) {
         description = ':<br>' + description;
     
     if(dismount && nocargo)
-        return '<span class="popup">Schiebestelle / nicht empfohlen für Lastenräder und Anhänger' + description + '</span>';
+        return '<span class="popup">Schiebestelle / untauglich für Spezialräder' + description + '</span>';
     else if(dismount)
         return '<span class="popup">Schiebestelle' + description+ '</span>';
     else if(nocargo)
-        return '<span class="popup">Nicht empfohlen für Lastenräder und Anhänger' + description+ '</span>';
+        return '<span class="popup">Untauglich für Spezialräder' + description+ '</span>';
     return undefined;
 }

@@ -52,7 +52,7 @@ strong {
 .leaflet-sidebar-tabs > ul > li.active > a > i {
     color: #fff;
 }
-a, a:visited, a:active, .leaflet-control-attribution a {
+a, .leaflet-sidebar-pane a, a:visited, a:active, .leaflet-control-attribution a {
     color: #AAB622;
     text-decoration: none;
 }
@@ -100,6 +100,15 @@ div.legend-stressful {
     );
     height: 4px;*/
 }
+
+ul.legend li img {
+    float: right;
+    margin-left: 1em;
+    margin-right: 1em;
+    margin-bottom: 1em;
+}
+
+
 /*
 - #AAB622 Grün für Schrift
 
