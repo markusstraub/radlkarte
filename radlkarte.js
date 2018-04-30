@@ -121,7 +121,7 @@ function loadGeoJson() {
 //         }
         
         rkGlobal.leafletMap.on('zoomend', function(ev) {
-            debug("restyling - changed zoom level to " + rkGlobal.leafletMap.getZoom());
+            //debug("restyling - changed zoom level to " + rkGlobal.leafletMap.getZoom());
             rkGlobal.styleFunction();
         });
     });
@@ -368,16 +368,25 @@ function getMarkerLayersIncludingPopup(geojsonPoint) {
             icon: icon,
             alt: description
         })
-    }
+    };
     
-    var key, marker;
-    for (key in markers) {
-        console.log(key);
-        marker = markers[key];
-        marker.bindPopup(description, {closeButton: false});  //, offset: L.point(0, -10)});
-        marker.on('mouseover', function() { console.log('x'); marker.openPopup(); });
-        marker.on('mouseout', function() { console.log('y'); marker.closePopup(); }); // FIXME why is mouseover/out not working for lowZoom?
-    }
+    markers.lowZoom.bindPopup(description, {closeButton: false});
+    markers.lowZoom.on('mouseover', function() { markers.lowZoom.openPopup(); });
+    markers.lowZoom.on('mouseout', function() { markers.lowZoom.closePopup(); });
+        
+    markers.highZoom.bindPopup(description, {closeButton: false});
+    markers.highZoom.on('mouseover', function() { markers.highZoom.openPopup(); });
+    markers.highZoom.on('mouseout', function() { markers.highZoom.closePopup(); });
+    
+//     var key, marker;
+//     for (key in markers) {
+//         marker = markers[key];
+//         marker.bindPopup(description, {closeButton: false});  //, offset: L.point(0, -10)});
+//         marker.on('mouseover', function() { marker.openPopup(); });
+//         marker.on('mouseout', function() { marker.closePopup(); }); // FIXME why is mouseover/out not working for lowZoom?
+//         break;
+//     }
+    
     return markers;
 }
 
