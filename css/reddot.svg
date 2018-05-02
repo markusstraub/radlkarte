@@ -5,10 +5,10 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
-   width="580"
-   height="580"
+   id="svg2"
    version="1.1"
-   id="svg2">
+   height="25"
+   width="25">
   <metadata
      id="metadata14">
     <rdf:RDF>
@@ -24,9 +24,9 @@
   <defs
      id="defs12" />
   <circle
-     cx="290"
-     cy="290"
-     r="290"
-     style="fill:#cc0000;fill-opacity:1;stroke:none;stroke-width:93.75"
-     id="RedCircle" />
+     id="RedCircle"
+     style="fill:#cc0000;fill-opacity:1;stroke:none;stroke-width:4"
+     r="12.5"
+     cy="12.5"
+     cx="12.5" />
 </svg>
