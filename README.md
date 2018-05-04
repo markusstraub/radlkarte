@@ -8,16 +8,18 @@ Website for desktop, tablet & smartphone usage with the goal to provide useful (
   - Three importance levels of route segments: main, regional, local
     - Hide parts of the recommended routes when zooming out (for a better overview)
   - Oneway arrow for route segments only usable in one direction
+- Show problematic points along the route where dismounting or usage of heavy/wide bicycles may not be possible
 - GPS localization (especially useful for mobile devices)
 - Geocoding with OSM (nominatim)
 
 ### Pending Usability Improvements
-- Problems with GPS location on Smartphones? (reports of hanging browsers)
-- Smaller size footprint of info-bar. especially on mobile devices it would be good to already see the map when the website opens. minimize it by default?
+- Arrows in wrong size on fast zoom
+- Don't zoom so much when tracking location
+- On Chrome/Android you need to double-tap on symbols to see the popup. Safari/iPhone works.
 - Describe layer-switching & opencyclemap legend? explicitly show cycleways somehow (user request hotjar)?
+- Make problem-POIs hidable in layer switcher
 
 ### Future Work
-- Highlighting problematic points along the route
 - Highlighting properties of lines:
   - very steep (e.g. double lines)
   - unpaved paths (e.g. dotted lines)
