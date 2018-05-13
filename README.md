@@ -13,8 +13,7 @@ Website for desktop, tablet & smartphone usage with the goal to provide useful (
 - Geocoding with OSM (nominatim)
 
 ### Pending Usability Improvements
-- Arrows in wrong size on fast zoom
-- Don't zoom so much when tracking location
+- Arrows in wrong size on fast zoom (synchronization issue of rendering method that is called more than once I fear)
 - On Chrome/Android you need to double-tap on symbols to see the popup. Safari/iPhone works.
 - Describe layer-switching & opencyclemap legend? explicitly show cycleways somehow (user request hotjar)?
 - Make problem-POIs hidable in layer switcher

@@ -122,8 +122,11 @@ function loadGeoJson() {
 //         }
         
         rkGlobal.leafletMap.on('zoomend', function(ev) {
-            //debug("restyling - changed zoom level to " + rkGlobal.leafletMap.getZoom());
-            rkGlobal.styleFunction();
+            //debug("zoom level changed to " + rkGlobal.leafletMap.getZoom() + ".. enqueueing style change");
+            $("#map").queue(function() {
+                rkGlobal.styleFunction();
+                $(this).dequeue();
+            });
         });
     });
 }
@@ -134,6 +137,7 @@ function loadGeoJson() {
 rkGlobal.tileLayerOpacity = 1;
 rkGlobal.styleAPriorityFullVisibleFromZoom = [0, 14, 15];
 rkGlobal.styleAPriorityReducedVisibilityFromZoom = [0, 12, 14];
+rkGlobal.styleAOnewayIconThreshold = 12;
 rkGlobal.styleAIconZoomThresholds = [12, 14];
 rkGlobal.styleALineWidthFactor = [1.4, 0.5, 0.5];
 rkGlobal.styleAArrowWidthFactor = [2, 3, 3];
@@ -148,26 +152,17 @@ rkGlobal.styleAColors = ['#004B67', '#51A4B6', '#FF6600']; // dark blue - light 
  * Updates the styles of all layers. Takes current zoom level into account
  */
 function updateStylesWithStyleA() {
-    if(rkGlobal.leafletMap.getZoom() >= rkGlobal.styleAIconZoomThresholds[1]) {
-        rkGlobal.leafletMap.removeLayer(rkGlobal.markerLayerLowZoom);
-        rkGlobal.leafletMap.addLayer(rkGlobal.markerLayerHighZoom);
-    } else if(rkGlobal.leafletMap.getZoom() >= rkGlobal.styleAIconZoomThresholds[0]) {
-        rkGlobal.leafletMap.removeLayer(rkGlobal.markerLayerHighZoom);
-        rkGlobal.leafletMap.addLayer(rkGlobal.markerLayerLowZoom);
-    } else {
-        rkGlobal.leafletMap.removeLayer(rkGlobal.markerLayerHighZoom);
-        rkGlobal.leafletMap.removeLayer(rkGlobal.markerLayerLowZoom);
-    }
+    var zoom = rkGlobal.leafletMap.getZoom();
     for(var priority=0; priority<rkGlobal.priorityStrings.length; priority++) {
         for(var stressfulness=0; stressfulness<rkGlobal.stressStrings.length; stressfulness++) {
-            if(rkGlobal.leafletMap.getZoom() >= rkGlobal.styleAPriorityFullVisibleFromZoom[priority]) {
+            if(zoom >= rkGlobal.styleAPriorityFullVisibleFromZoom[priority]) {
                 rkGlobal.leafletMap.addLayer(rkGlobal.segmentsPS[priority][stressfulness].lines);
                 rkGlobal.segmentsPS[priority][stressfulness].lines.setStyle(getLineStringStyleWithColorDefiningStressfulness(priority, stressfulness));
                 if(rkGlobal.segmentsPS[priority][stressfulness].decorators != undefined) {
                     rkGlobal.segmentsPS[priority][stressfulness].decorators.setPatterns(getOnewayArrowPatternsWithColorDefiningStressfulness(priority, stressfulness));
                     rkGlobal.leafletMap.addLayer(rkGlobal.segmentsPS[priority][stressfulness].decorators);
                 }
-            } else if(rkGlobal.leafletMap.getZoom() < rkGlobal.styleAPriorityFullVisibleFromZoom[priority] && rkGlobal.leafletMap.getZoom() >= rkGlobal.styleAPriorityReducedVisibilityFromZoom[priority]) {
+            } else if(zoom < rkGlobal.styleAPriorityFullVisibleFromZoom[priority] && zoom >= rkGlobal.styleAPriorityReducedVisibilityFromZoom[priority]) {
                 rkGlobal.segmentsPS[priority][stressfulness].lines.setStyle(getLineStringStyleWithColorDefiningStressfulnessMinimal(priority,stressfulness));
                 rkGlobal.leafletMap.addLayer(rkGlobal.segmentsPS[priority][stressfulness].lines);
                 if(rkGlobal.segmentsPS[priority][stressfulness].decorators != undefined) {
@@ -176,7 +171,20 @@ function updateStylesWithStyleA() {
             } else {
                 rkGlobal.leafletMap.removeLayer(rkGlobal.segmentsPS[priority][stressfulness].lines);
             }
+            if(zoom < rkGlobal.styleAOnewayIconThreshold) {
+                rkGlobal.leafletMap.removeLayer(rkGlobal.segmentsPS[priority][stressfulness].decorators);
+            }
         }
+    }
+    if(zoom >= rkGlobal.styleAIconZoomThresholds[1]) {
+        rkGlobal.leafletMap.removeLayer(rkGlobal.markerLayerLowZoom);
+        rkGlobal.leafletMap.addLayer(rkGlobal.markerLayerHighZoom);
+    } else if(zoom >= rkGlobal.styleAIconZoomThresholds[0]) {
+        rkGlobal.leafletMap.removeLayer(rkGlobal.markerLayerHighZoom);
+        rkGlobal.leafletMap.addLayer(rkGlobal.markerLayerLowZoom);
+    } else {
+        rkGlobal.leafletMap.removeLayer(rkGlobal.markerLayerHighZoom);
+        rkGlobal.leafletMap.removeLayer(rkGlobal.markerLayerLowZoom);
     }
 }
 
@@ -306,7 +314,8 @@ function initMap() {
         flyTo: true,
         locateOptions: {
             enableHighAccuracy: true,
-            watch: true
+            watch: true,
+            maxZoom: 16
         },
         strings: {
             title: 'Verfolge aktuelle Position'
