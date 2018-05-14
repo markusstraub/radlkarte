@@ -312,13 +312,14 @@ function initMap() {
         position: 'topright',
         setView: 'always',
         flyTo: true,
+        keepCurrentZoomLevel: true,
+        markerStyle: { weight: 5 },
         locateOptions: {
             enableHighAccuracy: true,
-            watch: true,
-            maxZoom: 16
+            watch: true
         },
         strings: {
-            title: 'Verfolge aktuelle Position'
+            title: 'Verfolge Position'
         }
     }).addTo(rkGlobal.leafletMap);
     

@@ -27,7 +27,7 @@ Website for desktop, tablet & smartphone usage with the goal to provide useful (
   - simple: auto-hides parts of the network based on zoom level, no layer switcher
   - advanced: layer switcher, control opacity of overlay, freely choose network-parts to show
 - Which background layer could we use as fallback if traffic gets too much for mapbox?
-  basemap.at?
+  basemap.at? (even better: use normal osm/openCycleMap for high zoom levels - more details!)
 
 
 ## Route Data
