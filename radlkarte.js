@@ -310,10 +310,9 @@ function initMap() {
     
     var locateControl = L.control.locate({
         position: 'topright',
-        setView: 'always',
+        setView: 'untilPanOrZoom',
         flyTo: true,
-        keepCurrentZoomLevel: true,
-        markerStyle: { weight: 5 },
+        //markerStyle: { weight: 5 },
         locateOptions: {
             enableHighAccuracy: true,
             watch: true
