@@ -22,7 +22,11 @@ Website for desktop, tablet & smartphone usage with the goal to provide useful (
 - Highlighting properties of lines:
   - very steep (e.g. double lines)
   - unpaved paths (e.g. dotted lines)
-- Optional overlays for cycling-POIs such as citybike stations or bicycle shops
+- Optional overlays for cycling-POIs
+  - bike sharing stations (Citybike + Nextbike),
+  - bicycle shops
+  - bicycle pumps / repair stations
+  - train and metro stations
 - Differentiate between a simple & an advanced UI.
   - simple: auto-hides parts of the network based on zoom level, no layer switcher
   - advanced: layer switcher, control opacity of overlay, freely choose network-parts to show

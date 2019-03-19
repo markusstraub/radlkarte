@@ -246,37 +246,65 @@ function initMap() {
     rkGlobal.leafletMap = L.map('map', { 'zoomControl' : false } ).setView([48.2083537, 16.3725042], 14);
     new L.Hash(rkGlobal.leafletMap);
 
-    var mapboxStreets = L.tileLayer('https://api.tiles.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png?access_token={accessToken}', {
+    var mapboxLowZoom = L.tileLayer('https://api.tiles.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png?access_token={accessToken}', {
+        minZoom: 0,
+        maxZoom: 16,
+        attribution: 'map data &copy; <a href="https://openstreetmap.org" target="_blank">OpenStreetMap</a> contributors, imagery &copy; <a href="https://mapbox.com" target="_blank">Mapbox</a>',
+        accessToken: 'pk.eyJ1IjoiZXZvZCIsImEiOiIyZ1hDaFA0In0.SDZ_bwPEOWNL9AnP-5FggA',
+        opacity: rkGlobal.tileLayerOpacity
+    });
+    var osmHiZoom = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        minZoom: 17,
+        maxZoom: 19,
+        attribution: 'map data &amp; imagery &copy; <a href="https://openstreetmap.org" target="_blank">OpenStreetMap</a> contributors'
+    });
+    var mixed = L.layerGroup([mapboxLowZoom, osmHiZoom]);
+
+    var basemapAtOrthofoto = L.tileLayer('https://maps{s}.wien.gv.at/basemap/bmaporthofoto30cm/normal/google3857/{z}/{y}/{x}.{format}', {
+	    maxZoom: 18, // up to 20 is possible
+	    attribution: 'Datenquelle: <a href="https://www.basemap.at">basemap.at</a>',
+	    subdomains: ["", "1", "2", "3", "4"],
+	    format: 'jpeg',
+	    bounds: [[46.35877, 8.782379], [49.037872, 17.189532]]
+    });
+    var ocm = L.tileLayer('https://{s}.tile.thunderforest.com/cycle/{z}/{x}/{y}.png?apikey=ab5e4b2d24854fefb139c538ef5187a8', {
+        minZoom: 0,
+        maxZoom: 18,
+        attribution: 'map data &copy; <a href="http://openstreetmap.org" target="_blank">OpenStreetMap</a> contributors, imagery &copy; <a href="http://www.thunderforest.com" target="_blank">Thunderforest</a>'
+    });
+    var empty = L.tileLayer('', {attribution: ''});
+
+    /*var mapboxStreets = L.tileLayer('https://api.tiles.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png?access_token={accessToken}', {
+        minZoom: 0,
         maxZoom: 18,
         attribution: 'map data &copy; <a href="https://openstreetmap.org" target="_blank">OpenStreetMap</a> contributors, imagery &copy; <a href="https://mapbox.com" target="_blank">Mapbox</a>',
         accessToken: 'pk.eyJ1IjoiZXZvZCIsImEiOiIyZ1hDaFA0In0.SDZ_bwPEOWNL9AnP-5FggA',
         opacity: rkGlobal.tileLayerOpacity
     });
     var mapboxSatellite = L.tileLayer('https://api.tiles.mapbox.com/v4/mapbox.satellite/{z}/{x}/{y}.png?access_token={accessToken}', {
+        minZoom: 0,
         maxZoom: 18,
         attribution: 'imagery © <a href="https://mapbox.com" target="_blank">Mapbox</a>',
         accessToken: 'pk.eyJ1IjoiZXZvZCIsImEiOiIyZ1hDaFA0In0.SDZ_bwPEOWNL9AnP-5FggA'
     });
-    var ocm = L.tileLayer('https://{s}.tile.thunderforest.com/cycle/{z}/{x}/{y}.png?apikey=ab5e4b2d24854fefb139c538ef5187a8', {
-        maxZoom: 18,
-        attribution: 'map data &copy; <a href="http://openstreetmap.org" target="_blank">OpenStreetMap</a> contributors, imagery &copy; <a href="http://www.thunderforest.com" target="_blank">Thunderforest</a>'
-    });
     var osm = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        minZoom: 0,
         maxZoom: 18,
         attribution: 'map data &amp; imagery &copy; <a href="https://openstreetmap.org" target="_blank">OpenStreetMap</a> contributors'
-    });
-    var empty = L.tileLayer('', {attribution: ''});
+    });*/
     
     var baseMaps = {
-        "OpenStreetMap (Mapbox)": mapboxStreets,
-        "Satellitenbild (Mapbox)": mapboxSatellite,
+        "Straßenkarte": mixed,
+        //"OpenStreetMap (Mapbox)": mapboxStreets,
+        "Luftbild": basemapAtOrthofoto,
         "OpenCycleMap": ocm,
-        "OpenStreetMap": osm,
-        "Leer": empty,
+        //"OpenStreetMap": osm,
+        "Weiß": empty,
     };
     var overlayMaps = {};
     
-    mapboxStreets.addTo(rkGlobal.leafletMap);
+    // TODO zoom level jumps: https://github.com/Leaflet/Leaflet/issues/6557
+    mixed.addTo(rkGlobal.leafletMap);
     rkGlobal.leafletLayersControl = L.control.layers(baseMaps, overlayMaps, { 'position' : 'topright', 'collapsed' : true } ).addTo(rkGlobal.leafletMap);
     
     var geocodingControl = L.Control.geocoder({
