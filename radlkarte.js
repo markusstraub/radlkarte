@@ -12,12 +12,23 @@ rkGlobal.debug = true; // debug output will be logged if set to true
 rkGlobal.styleFunction = updateStylesWithStyleA;
 rkGlobal.fullWidthThreshold = 768;
 
+var configurations = {
+    'vienna' : {
+        latlong: [48.2083537, 16.3725042],
+        geoJsonFile: 'data/radlkarte-at-vienna.min.geojson',
+    },
+    'linz' : {
+        latlong: [48.30, 14.285],
+        geoJsonFile: '../data/radlkarte-at-linz.min.geojson',
+    }
+}
+
 function debug(obj) {
     if(rkGlobal.debug)
         console.log(obj);
 }
 
-function loadGeoJson() {
+function loadGeoJson(file) {
     // get rid of "XML Parsing Error: not well-formed" during $.getJSON
     $.ajaxSetup({
         beforeSend: function (xhr) {
@@ -26,7 +37,7 @@ function loadGeoJson() {
             }
         }
     });
-    $.getJSON("data/radlkarte-at-vienna.min.geojson", function(data) {
+    $.getJSON(file, function(data) {
         var i, j; // loop counter
         var p, s; // priority / stressfulness
         
@@ -242,8 +253,13 @@ function getOnewayArrowPatternsWithColorDefiningStressfulness(priority, stressfu
 
 // ----------------- end of style A
 
-function initMap() {
-    rkGlobal.leafletMap = L.map('map', { 'zoomControl' : false } ).setView([48.2083537, 16.3725042], 14);
+
+
+
+function initMap(location) {
+    location = location || 'vienna';
+    var configuration = configurations[location];
+    rkGlobal.leafletMap = L.map('map', { 'zoomControl' : false } ).setView(configuration.latlong, 14);
     new L.Hash(rkGlobal.leafletMap);
 
     var mapboxLowZoom = L.tileLayer('https://api.tiles.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png?access_token={accessToken}', {
@@ -364,7 +380,7 @@ function initMap() {
     initializeIcons();
     
     // load overlay
-    loadGeoJson();
+    loadGeoJson(configuration.geoJsonFile);
 }
 
 function initializeIcons() {

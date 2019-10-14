@@ -1,3 +1,4 @@
 data/*.geojson
+!data/radlkarte-at-linz.min.geojson
 data/*.osm
 gfx_dev

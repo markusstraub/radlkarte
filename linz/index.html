@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Radlkarte - Entspannt durch Wien</title>
+    <title>Radlkarte - Entspannt durch Linz</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
@@ -24,42 +24,42 @@
         })(window,document,'//static.hotjar.com/c/hotjar-','.js?sv=');
     </script>-->
     
-    <script src="js/polyfills.js"></script>
+    <script src="../js/polyfills.js"></script>
 
-    <script src="js/leaflet-1.4.0/leaflet.js"></script>
-    <link rel="stylesheet" href="js/leaflet-1.4.0/leaflet.css" />
+    <script src="../js/leaflet-1.4.0/leaflet.js"></script>
+    <link rel="stylesheet" href="../js/leaflet-1.4.0/leaflet.css" />
     
-    <script src="js/leaflet-sidebar-v2-3.0.6/leaflet-sidebar.min.js"></script>
-    <link rel="stylesheet" href="js/leaflet-sidebar-v2-3.0.6/leaflet-sidebar.css"/>
+    <script src="../js/leaflet-sidebar-v2-3.0.6/leaflet-sidebar.min.js"></script>
+    <link rel="stylesheet" href="../js/leaflet-sidebar-v2-3.0.6/leaflet-sidebar.css"/>
     <!-- font awesome is required by sidebar & leaflet-locatecontrol-->
-    <link rel="stylesheet" href="css/font-awesome-4.7.0/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="../css/font-awesome-4.7.0/../css/font-awesome.min.css"/>
     
-    <script src="js/leaflet-polylineDecorator-1.6.0/leaflet.polylineDecorator.js"></script>
+    <script src="../js/leaflet-polylineDecorator-1.6.0/leaflet.polylineDecorator.js"></script>
     
-    <script src="js/leaflet-hash-1.0.1/leaflet-hash.min.js"></script>
+    <script src="../js/leaflet-hash-1.0.1/leaflet-hash.min.js"></script>
     
-    <script src="js/leaflet-locatecontrol-0.66.1/L.Control.Locate.min.js"></script>
-    <link rel="stylesheet" href="js/leaflet-locatecontrol-0.66.1/L.Control.Locate.css"/>
+    <script src="../js/leaflet-locatecontrol-0.66.1/L.Control.Locate.min.js"></script>
+    <link rel="stylesheet" href="../js/leaflet-locatecontrol-0.66.1/L.Control.Locate.css"/>
     
-    <script src="js/leaflet-control-geocoder-1.5.8/Control.Geocoder.js"></script>
-    <link rel="stylesheet" href="js/leaflet-control-geocoder-1.5.8/Control.Geocoder.css"/>
+    <script src="../js/leaflet-control-geocoder-1.5.8/Control.Geocoder.js"></script>
+    <link rel="stylesheet" href="../js/leaflet-control-geocoder-1.5.8/Control.Geocoder.css"/>
     
-    <script src="js/turf-2017-02-16/turf.min.js"></script>
+    <script src="../js/turf-2017-02-16/turf.min.js"></script>
     
-    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="../js/jquery-3.3.1.min.js"></script>
     
-    <link href="css/museo-500/style.css" rel="stylesheet" type="text/css"/>
+    <link href="../css/museo-500/style.css" rel="stylesheet" type="text/css"/>
     <link href='https://fonts.googleapis.com/css?family=Roboto:400,400italic,700' rel='stylesheet' type='text/css'/>
     
-    <script src="./radlkarte.js"></script>
-    <link rel="stylesheet" href="./radlkarte.css" />
-    <link rel="icon" type="image/x-icon" href="css/favicon.ico" />
+    <script src="../radlkarte.js"></script>
+    <link rel="stylesheet" href="../radlkarte.css" />
+    <link rel="icon" type="image/x-icon" href="../css/favicon.ico" />
 </head>
 
 <body>
     <div id="map"></div>
     <div id="radlobby-logo">
-        <a href="http://radlobby.at/wien" target="_blank"><img src="css/radlobby.png" alt="Radlobby Wien" /></a>
+        <a href="http://radlobby.at/linz" target="_blank"><img src="../css/radlobby.png" alt="Radlobby Linz" /></a>
     </div>
     <div id="sidebar" class="leaflet-sidebar">
         <!-- Nav tabs -->
@@ -77,9 +77,9 @@
                 <h1 class="leaflet-sidebar-header">
                     <span class="leaflet-sidebar-close"><i class="fa fa-caret-left"></i></span> Übersicht
                 </h1>
-                <h2>Entspannt durch Wien</h2>
+                <h2>Entspannt durch Linz</h2>
                 <p>
-                    Viele Wege führen zum Ziel. Finden Sie Ihren optimalen Weg durch die Stadt mit der Radlkarte der <a href="https://www.radlobby.at/wien" target="_blank">Radlobby Wien</a>. Auf zu neuen Ufern, unbekannten Gegenden, und neuen Alternativen zu Ihren alltäglichen Routen!
+                    Viele Wege führen zum Ziel. Finden Sie Ihren optimalen Weg durch die Stadt mit der Radlkarte der <a href="https://www.radlobby.at/linz" target="_blank">Radlobby Linz</a>. Auf zu neuen Ufern, unbekannten Gegenden, und neuen Alternativen zu Ihren alltäglichen Routen!
                 </p>
                 <h3>Farbe = Gemütlichkeit</h3>
                 <ul class="legend legend-leftified">
@@ -118,13 +118,13 @@
                     <span class="leaflet-sidebar-close"><i class="fa fa-caret-left"></i></span> Die Radlkarte stellt sich vor
                 </h1>
                 <p>
-                    Die Radlkarte der <a href="https://www.radlobby.at/wien" target="_blank">Radlobby Wien</a> ist eine kostenlose Online-Orientierungshilfe, mit der Sie Ihre Fahrten mit dem Fahrrad schneller und gemütlicher gestalten können. Sie ist jederzeit im Browser bereit, ob am Smartphone, Tablet, oder PC.
+                    Die Radlkarte der <a href="https://www.radlobby.at/linz" target="_blank">Radlobby Linz</a> ist eine kostenlose Online-Orientierungshilfe, mit der Sie Ihre Fahrten mit dem Fahrrad schneller und gemütlicher gestalten können. Sie ist jederzeit im Browser bereit, ob am Smartphone, Tablet, oder PC.
                 </p>
                 <p>
-                    Ein <strong>alltagstaugliches Wegenetz</strong> spiegelt unsere langjährige Erfahrung des Alltagsradelns und unsere Ortskenntnis in Wien wider. Dieses Netz zeigt, welche Strecken sich am besten fürs Radeln eignen. So hilft Ihnen die Radlkarte beim <strong>Finden von Routenvarianten zwischen Ihren Zielen</strong>. Die Abwägung zwischen Direktheit/Schnelligkeit und Gemütlichkeit/Sicherheit liegt dabei ganz bei Ihnen: ist noch genügend Zeit für eine entspannte Strecke bis zum Läuten der Schulglocken? Ist der nächste Arbeitstermin doch schon näher als gewünscht und Schnelligkeit ist die oberste Prämisse? Geht's gemeinsam mit Ihren Kindern zur Schule oder in den Park?
+                    Ein <strong>alltagstaugliches Wegenetz</strong> spiegelt unsere langjährige Erfahrung des Alltagsradelns und unsere Ortskenntnis in Linz wider. Dieses Netz zeigt, welche Strecken sich am besten fürs Radeln eignen. So hilft Ihnen die Radlkarte beim <strong>Finden von Routenvarianten zwischen Ihren Zielen</strong>. Die Abwägung zwischen Direktheit/Schnelligkeit und Gemütlichkeit/Sicherheit liegt dabei ganz bei Ihnen: ist noch genügend Zeit für eine entspannte Strecke bis zum Läuten der Schulglocken? Ist der nächste Arbeitstermin doch schon näher als gewünscht und Schnelligkeit ist die oberste Prämisse? Geht's gemeinsam mit Ihren Kindern zur Schule oder in den Park?
                 </p>
                 <p>
-                    Zur individuellen Entscheidungsfindung sind Abschnitte hinsichtlich unserer (subjektiven) Erfahrung zur <strong>Sicherheit bzw. Gemütlichkeit in drei Kategorien</strong> bewertet: gemütlich, durchschnittlich, stressig. Wir halten uns dabei nicht zwingend an <a href="https://www.radlobby.at/wien/radverkehrsnetz" target="_blank">das zum Teil leider lückenhafte Radverkehrsnetz der Stadt Wien</a>. Die drei Kategorien werden anhand der Farbe unterschieden. Abschnitte, die nur in eine Richtung befahren werden können, sind durch Pfeile markiert:
+                    Zur individuellen Entscheidungsfindung sind Abschnitte hinsichtlich unserer (subjektiven) Erfahrung zur <strong>Sicherheit bzw. Gemütlichkeit in drei Kategorien</strong> bewertet: gemütlich, durchschnittlich, stressig. Wir halten uns dabei nicht zwingend an <a href="https://www.radlobby.at/linz/radverkehrsnetz" target="_blank">das zum Teil leider lückenhafte Radverkehrsnetz der Stadt Linz</a>. Die drei Kategorien werden anhand der Farbe unterschieden. Abschnitte, die nur in eine Richtung befahren werden können, sind durch Pfeile markiert:
                 <p>
                 <ul class="legend">
                     <li>
@@ -163,14 +163,14 @@
                 </p>
                 <ul class="legend">
                     <li>
-                        <img src="css/dismount.png" width="60" alt="Symbol: Schiebestellen"> <strong>Schiebestellen:</strong><br> Schiebe-Empfehlung bei unübersichtlichen Kreuzungen oder Fahrverboten
+                        <img src="../css/dismount.png" width="60" alt="Symbol: Schiebestellen"> <strong>Schiebestellen:</strong><br> Schiebe-Empfehlung bei unübersichtlichen Kreuzungen oder Fahrverboten
                     </li>
                     <li>
-                        <img src="css/nocargo.png" width="60" alt="Symbol: Untaublichkeit für Spezialräder"> <strong>Untauglichkeit für Spezialräder:</strong><br> Stellen, die mit Lastenrädern, Rädern mit Anhängern, oder anderen breiten bzw. schweren Rädern nur schwer passierbar sind
+                        <img src="../css/nocargo.png" width="60" alt="Symbol: Untaublichkeit für Spezialräder"> <strong>Untauglichkeit für Spezialräder:</strong><br> Stellen, die mit Lastenrädern, Rädern mit Anhängern, oder anderen breiten bzw. schweren Rädern nur schwer passierbar sind
                     </li>
                 </ul>
                 <p>
-                    Wir hoffen, dass Sie sich mit Hilfe der Radlkarte in Wien leichter zurechtfinden und wünschen Ihnen schönes und angenehmes Radfahren. Sollten Sie Verbesserungsvorschläge oder neue Routenvorschläge haben, <a href="mailto:radlkarte@radlobby.at">freuen wir uns auf Rückmeldungen</a>.
+                    Wir hoffen, dass Sie sich mit Hilfe der Radlkarte in Linz leichter zurechtfinden und wünschen Ihnen schönes und angenehmes Radfahren. Sollten Sie Verbesserungsvorschläge oder neue Routenvorschläge haben, <a href="mailto:radlkarte@radlobby.at">freuen wir uns auf Rückmeldungen</a>.
                     Sie können Problemstellen auch direkt im <a href="https://radkummerkasten.at" target="_blank">Radkummerkasten</a> melden.
                 </p>
             </div>
@@ -180,12 +180,12 @@
                     <span class="leaflet-sidebar-close"><i class="fa fa-caret-left"></i></span> Impressum
                 </h1>
                 <p>
-                    <img src="css/radlobby-wien.png" width="150" alt="Radlobby Wien" />
+                    <img src="../css/radlobby-linz.png" width="150" alt="Radlobby Linz" />
                 </p>
                 <p>
-                    <a href="https://www.radlobby.at/wien" target="_blank">Radlobby Wien</a><br/>
+                    <a href="https://www.radlobby.at/linz" target="_blank">Radlobby Linz</a><br/>
                     Lichtenauergasse 4/1/1<br/>
-                    1020 Wien<br/>
+                    1020 Linz<br/>
                 </p>
                 <h3>Kontakt</h3>
                 <p>
@@ -203,7 +203,7 @@
     </div>
 
     <script>
-        initMap('vienna');
+        initMap('linz');
     </script>
 </body>
 </html>
