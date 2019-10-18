@@ -1,0 +1,20 @@
+<textarea id="input" ></textarea>
+
+<textarea id="output"></textarea>
+
+<button onclick="minify()">Minify</button>
+
+<script type="text/javascript">
+
+function minify() {
+var geojson = document.getElementById("input").value;
+geojson = geojson.replace(/ambience/g, 's')
+geojson = geojson.replace(/stress/g, 's')
+geojson = geojson.replace(/priority/g, 'p')
+
+
+document.getElementById("output").value = geojson;
+
+}
+
+</script>
