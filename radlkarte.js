@@ -264,13 +264,13 @@ function initMap(location) {
 
     var mapboxLowZoom = L.tileLayer('https://api.tiles.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png?access_token={accessToken}', {
         minZoom: 0,
-        maxZoom: 16,
+        maxZoom: 15,
         attribution: 'map data &copy; <a href="https://openstreetmap.org" target="_blank">OpenStreetMap</a> contributors, imagery &copy; <a href="https://mapbox.com" target="_blank">Mapbox</a>',
         accessToken: 'pk.eyJ1IjoiZXZvZCIsImEiOiIyZ1hDaFA0In0.SDZ_bwPEOWNL9AnP-5FggA',
         opacity: rkGlobal.tileLayerOpacity
     });
     var osmHiZoom = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        minZoom: 17,
+        minZoom: 16,
         maxZoom: 19,
         attribution: 'map data &amp; imagery &copy; <a href="https://openstreetmap.org" target="_blank">OpenStreetMap</a> contributors'
     });
