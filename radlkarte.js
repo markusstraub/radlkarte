@@ -169,7 +169,8 @@ function updateStylesWithStyleA() {
         for(var stressfulness=0; stressfulness<rkGlobal.stressStrings.length; stressfulness++) {
             if(zoom >= rkGlobal.styleAPriorityFullVisibleFromZoom[priority]) {
                 rkGlobal.leafletMap.addLayer(rkGlobal.segmentsPS[priority][stressfulness].lines);
-                rkGlobal.segmentsPS[priority][stressfulness].lines.setStyle(getLineStringStyleWithColorDefiningStressfulness(priority, stressfulness));
+                var lineStyle = getLineStringStyleWithColorDefiningStressfulness(priority, stressfulness)
+                rkGlobal.segmentsPS[priority][stressfulness].lines.setStyle(lineStyle);
                 if(rkGlobal.segmentsPS[priority][stressfulness].decorators != undefined) {
                     rkGlobal.segmentsPS[priority][stressfulness].decorators.setPatterns(getOnewayArrowPatternsWithColorDefiningStressfulness(priority, stressfulness));
                     rkGlobal.leafletMap.addLayer(rkGlobal.segmentsPS[priority][stressfulness].decorators);
@@ -183,7 +184,7 @@ function updateStylesWithStyleA() {
             } else {
                 rkGlobal.leafletMap.removeLayer(rkGlobal.segmentsPS[priority][stressfulness].lines);
             }
-            if(zoom < rkGlobal.styleAOnewayIconThreshold) {
+            if(zoom < rkGlobal.styleAOnewayIconThreshold && rkGlobal.segmentsPS[priority][stressfulness].decorators) {
                 rkGlobal.leafletMap.removeLayer(rkGlobal.segmentsPS[priority][stressfulness].decorators);
             }
         }
