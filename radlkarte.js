@@ -11,6 +11,7 @@ rkGlobal.stressStrings = ["Ruhig", "Durchschnittlich", "Stressig"];
 rkGlobal.debug = true; // debug output will be logged if set to true
 rkGlobal.styleFunction = updateStylesWithStyleA;
 rkGlobal.fullWidthThreshold = 768;
+rkGlobal.baseUrl = './'
 
 var configurations = {
     'vienna' : {
@@ -168,7 +169,8 @@ function updateStylesWithStyleA() {
         for(var stressfulness=0; stressfulness<rkGlobal.stressStrings.length; stressfulness++) {
             if(zoom >= rkGlobal.styleAPriorityFullVisibleFromZoom[priority]) {
                 rkGlobal.leafletMap.addLayer(rkGlobal.segmentsPS[priority][stressfulness].lines);
-                rkGlobal.segmentsPS[priority][stressfulness].lines.setStyle(getLineStringStyleWithColorDefiningStressfulness(priority, stressfulness));
+                var lineStyle = getLineStringStyleWithColorDefiningStressfulness(priority, stressfulness)
+                rkGlobal.segmentsPS[priority][stressfulness].lines.setStyle(lineStyle);
                 if(rkGlobal.segmentsPS[priority][stressfulness].decorators != undefined) {
                     rkGlobal.segmentsPS[priority][stressfulness].decorators.setPatterns(getOnewayArrowPatternsWithColorDefiningStressfulness(priority, stressfulness));
                     rkGlobal.leafletMap.addLayer(rkGlobal.segmentsPS[priority][stressfulness].decorators);
@@ -182,7 +184,7 @@ function updateStylesWithStyleA() {
             } else {
                 rkGlobal.leafletMap.removeLayer(rkGlobal.segmentsPS[priority][stressfulness].lines);
             }
-            if(zoom < rkGlobal.styleAOnewayIconThreshold) {
+            if(zoom < rkGlobal.styleAOnewayIconThreshold && rkGlobal.segmentsPS[priority][stressfulness].decorators) {
                 rkGlobal.leafletMap.removeLayer(rkGlobal.segmentsPS[priority][stressfulness].decorators);
             }
         }
@@ -258,6 +260,9 @@ function getOnewayArrowPatternsWithColorDefiningStressfulness(priority, stressfu
 
 function initMap(location) {
     location = location || 'vienna';
+    if(location ===  'linz') {
+        rkGlobal.baseUrl = '../'
+    }
     var configuration = configurations[location];
     rkGlobal.leafletMap = L.map('map', { 'zoomControl' : false } ).setView(configuration.latlong, 14);
     new L.Hash(rkGlobal.leafletMap);
@@ -377,7 +382,7 @@ function initMap(location) {
         sidebar.close();
     }
     
-    initializeIcons();
+    initializeIcons(location);
     
     // load overlay
     loadGeoJson(configuration.geoJsonFile);
@@ -386,25 +391,25 @@ function initMap(location) {
 function initializeIcons() {
     rkGlobal.icons = {};
     rkGlobal.icons.dismount = L.icon({
-        iconUrl: 'css/dismount.png',
+        iconUrl: rkGlobal.baseUrl + 'css/dismount.png',
         iconSize:     [33, 29], 
         iconAnchor:   [16.5, 14.5], 
         popupAnchor:  [0, -14.5]
     });
     rkGlobal.icons.noCargo = L.icon({
-        iconUrl: 'css/nocargo.png',
+        iconUrl: rkGlobal.baseUrl + 'css/nocargo.png',
         iconSize:     [29, 29], 
         iconAnchor:   [14.5, 14.5], 
         popupAnchor:  [0, -14.5]
     });
     rkGlobal.icons.noCargoAndDismount = L.icon({
-        iconUrl: 'css/nocargo+dismount.png',
+        iconUrl: rkGlobal.baseUrl + 'css/nocargo+dismount.png',
         iconSize:     [57.7, 29], 
         iconAnchor:   [28.85, 14.5], 
         popupAnchor:  [0, -14.5]
     });
     rkGlobal.icons.redDot = L.icon({
-        iconUrl: 'css/reddot.png',
+        iconUrl: rkGlobal.baseUrl + 'css/reddot.png',
         iconSize:     [10, 10], 
         iconAnchor:   [5, 5], 
         popupAnchor:  [0, -5]
