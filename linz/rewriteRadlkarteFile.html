@@ -17,7 +17,7 @@ geojson = geojson.replace(/stress/g, 's')
 geojson = geojson.replace(/priority/g, 'p')
 
 object = JSON.parse(geojson);
-geojson = JSON.stringify(object);
+geojson = JSON.stringify(object, null, 2);
 
 
 document.getElementById("output").value = geojson;
