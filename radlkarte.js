@@ -267,19 +267,18 @@ function initMap(location) {
     rkGlobal.leafletMap = L.map('map', { 'zoomControl' : false } ).setView(configuration.latlong, 14);
     new L.Hash(rkGlobal.leafletMap);
 
-    var mapboxLowZoom = L.tileLayer('https://api.tiles.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png?access_token={accessToken}', {
-        minZoom: 0,
-        maxZoom: 15,
-        attribution: 'map data &copy; <a href="https://openstreetmap.org" target="_blank">OpenStreetMap</a> contributors, imagery &copy; <a href="https://mapbox.com" target="_blank">Mapbox</a>',
-        accessToken: 'pk.eyJ1IjoiZXZvZCIsImEiOiIyZ1hDaFA0In0.SDZ_bwPEOWNL9AnP-5FggA',
-        opacity: rkGlobal.tileLayerOpacity
+    var cartodbPositronLowZoom = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+	    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+	    subdomains: 'abcd',
+	    minZoom: 0,
+	    maxZoom: 15
     });
     var osmHiZoom = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         minZoom: 16,
         maxZoom: 19,
         attribution: 'map data &amp; imagery &copy; <a href="https://openstreetmap.org" target="_blank">OpenStreetMap</a> contributors'
     });
-    var mixed = L.layerGroup([mapboxLowZoom, osmHiZoom]);
+    var mixed = L.layerGroup([cartodbPositronLowZoom, osmHiZoom]);
 
     var basemapAtOrthofoto = L.tileLayer('https://maps{s}.wien.gv.at/basemap/bmaporthofoto30cm/normal/google3857/{z}/{y}/{x}.{format}', {
 	    maxZoom: 18, // up to 20 is possible
@@ -295,20 +294,7 @@ function initMap(location) {
     });
     var empty = L.tileLayer('', {attribution: ''});
 
-    /*var mapboxStreets = L.tileLayer('https://api.tiles.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png?access_token={accessToken}', {
-        minZoom: 0,
-        maxZoom: 18,
-        attribution: 'map data &copy; <a href="https://openstreetmap.org" target="_blank">OpenStreetMap</a> contributors, imagery &copy; <a href="https://mapbox.com" target="_blank">Mapbox</a>',
-        accessToken: 'pk.eyJ1IjoiZXZvZCIsImEiOiIyZ1hDaFA0In0.SDZ_bwPEOWNL9AnP-5FggA',
-        opacity: rkGlobal.tileLayerOpacity
-    });
-    var mapboxSatellite = L.tileLayer('https://api.tiles.mapbox.com/v4/mapbox.satellite/{z}/{x}/{y}.png?access_token={accessToken}', {
-        minZoom: 0,
-        maxZoom: 18,
-        attribution: 'imagery © <a href="https://mapbox.com" target="_blank">Mapbox</a>',
-        accessToken: 'pk.eyJ1IjoiZXZvZCIsImEiOiIyZ1hDaFA0In0.SDZ_bwPEOWNL9AnP-5FggA'
-    });
-    var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    /*var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         minZoom: 0,
         maxZoom: 18,
         attribution: 'map data &amp; imagery &copy; <a href="https://openstreetmap.org" target="_blank">OpenStreetMap</a> contributors'
@@ -316,7 +302,6 @@ function initMap(location) {
     
     var baseMaps = {
         "Straßenkarte": mixed,
-        //"OpenStreetMap (Mapbox)": mapboxStreets,
         "Luftbild": basemapAtOrthofoto,
         "OpenCycleMap": ocm,
         //"OpenStreetMap": osm,
