@@ -11,6 +11,7 @@ rkGlobal.stressStrings = ["Ruhig", "Durchschnittlich", "Stressig"];
 rkGlobal.debug = true; // debug output will be logged if set to true
 rkGlobal.styleFunction = updateStylesWithStyleA;
 rkGlobal.fullWidthThreshold = 768;
+rkGlobal.baseUrl = './'
 
 var configurations = {
     'vienna' : {
@@ -168,7 +169,8 @@ function updateStylesWithStyleA() {
         for(var stressfulness=0; stressfulness<rkGlobal.stressStrings.length; stressfulness++) {
             if(zoom >= rkGlobal.styleAPriorityFullVisibleFromZoom[priority]) {
                 rkGlobal.leafletMap.addLayer(rkGlobal.segmentsPS[priority][stressfulness].lines);
-                rkGlobal.segmentsPS[priority][stressfulness].lines.setStyle(getLineStringStyleWithColorDefiningStressfulness(priority, stressfulness));
+                var lineStyle = getLineStringStyleWithColorDefiningStressfulness(priority, stressfulness)
+                rkGlobal.segmentsPS[priority][stressfulness].lines.setStyle(lineStyle);
                 if(rkGlobal.segmentsPS[priority][stressfulness].decorators != undefined) {
                     rkGlobal.segmentsPS[priority][stressfulness].decorators.setPatterns(getOnewayArrowPatternsWithColorDefiningStressfulness(priority, stressfulness));
                     rkGlobal.leafletMap.addLayer(rkGlobal.segmentsPS[priority][stressfulness].decorators);
@@ -182,7 +184,7 @@ function updateStylesWithStyleA() {
             } else {
                 rkGlobal.leafletMap.removeLayer(rkGlobal.segmentsPS[priority][stressfulness].lines);
             }
-            if(zoom < rkGlobal.styleAOnewayIconThreshold) {
+            if(zoom < rkGlobal.styleAOnewayIconThreshold && rkGlobal.segmentsPS[priority][stressfulness].decorators) {
                 rkGlobal.leafletMap.removeLayer(rkGlobal.segmentsPS[priority][stressfulness].decorators);
             }
         }
@@ -258,23 +260,25 @@ function getOnewayArrowPatternsWithColorDefiningStressfulness(priority, stressfu
 
 function initMap(location) {
     location = location || 'vienna';
+    if(location ===  'linz') {
+        rkGlobal.baseUrl = '../'
+    }
     var configuration = configurations[location];
     rkGlobal.leafletMap = L.map('map', { 'zoomControl' : false } ).setView(configuration.latlong, 14);
     new L.Hash(rkGlobal.leafletMap);
 
-    var mapboxLowZoom = L.tileLayer('https://api.tiles.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png?access_token={accessToken}', {
-        minZoom: 0,
-        maxZoom: 15,
-        attribution: 'map data &copy; <a href="https://openstreetmap.org" target="_blank">OpenStreetMap</a> contributors, imagery &copy; <a href="https://mapbox.com" target="_blank">Mapbox</a>',
-        accessToken: 'pk.eyJ1IjoiZXZvZCIsImEiOiIyZ1hDaFA0In0.SDZ_bwPEOWNL9AnP-5FggA',
-        opacity: rkGlobal.tileLayerOpacity
+    var cartodbPositronLowZoom = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+	    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+	    subdomains: 'abcd',
+	    minZoom: 0,
+	    maxZoom: 15
     });
     var osmHiZoom = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         minZoom: 16,
         maxZoom: 19,
         attribution: 'map data &amp; imagery &copy; <a href="https://openstreetmap.org" target="_blank">OpenStreetMap</a> contributors'
     });
-    var mixed = L.layerGroup([mapboxLowZoom, osmHiZoom]);
+    var mixed = L.layerGroup([cartodbPositronLowZoom, osmHiZoom]);
 
     var basemapAtOrthofoto = L.tileLayer('https://maps{s}.wien.gv.at/basemap/bmaporthofoto30cm/normal/google3857/{z}/{y}/{x}.{format}', {
 	    maxZoom: 18, // up to 20 is possible
@@ -290,20 +294,7 @@ function initMap(location) {
     });
     var empty = L.tileLayer('', {attribution: ''});
 
-    /*var mapboxStreets = L.tileLayer('https://api.tiles.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png?access_token={accessToken}', {
-        minZoom: 0,
-        maxZoom: 18,
-        attribution: 'map data &copy; <a href="https://openstreetmap.org" target="_blank">OpenStreetMap</a> contributors, imagery &copy; <a href="https://mapbox.com" target="_blank">Mapbox</a>',
-        accessToken: 'pk.eyJ1IjoiZXZvZCIsImEiOiIyZ1hDaFA0In0.SDZ_bwPEOWNL9AnP-5FggA',
-        opacity: rkGlobal.tileLayerOpacity
-    });
-    var mapboxSatellite = L.tileLayer('https://api.tiles.mapbox.com/v4/mapbox.satellite/{z}/{x}/{y}.png?access_token={accessToken}', {
-        minZoom: 0,
-        maxZoom: 18,
-        attribution: 'imagery © <a href="https://mapbox.com" target="_blank">Mapbox</a>',
-        accessToken: 'pk.eyJ1IjoiZXZvZCIsImEiOiIyZ1hDaFA0In0.SDZ_bwPEOWNL9AnP-5FggA'
-    });
-    var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    /*var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         minZoom: 0,
         maxZoom: 18,
         attribution: 'map data &amp; imagery &copy; <a href="https://openstreetmap.org" target="_blank">OpenStreetMap</a> contributors'
@@ -311,7 +302,6 @@ function initMap(location) {
     
     var baseMaps = {
         "Straßenkarte": mixed,
-        //"OpenStreetMap (Mapbox)": mapboxStreets,
         "Luftbild": basemapAtOrthofoto,
         "OpenCycleMap": ocm,
         //"OpenStreetMap": osm,
@@ -377,7 +367,7 @@ function initMap(location) {
         sidebar.close();
     }
     
-    initializeIcons();
+    initializeIcons(location);
     
     // load overlay
     loadGeoJson(configuration.geoJsonFile);
@@ -386,25 +376,25 @@ function initMap(location) {
 function initializeIcons() {
     rkGlobal.icons = {};
     rkGlobal.icons.dismount = L.icon({
-        iconUrl: 'css/dismount.png',
+        iconUrl: rkGlobal.baseUrl + 'css/dismount.png',
         iconSize:     [33, 29], 
         iconAnchor:   [16.5, 14.5], 
         popupAnchor:  [0, -14.5]
     });
     rkGlobal.icons.noCargo = L.icon({
-        iconUrl: 'css/nocargo.png',
+        iconUrl: rkGlobal.baseUrl + 'css/nocargo.png',
         iconSize:     [29, 29], 
         iconAnchor:   [14.5, 14.5], 
         popupAnchor:  [0, -14.5]
     });
     rkGlobal.icons.noCargoAndDismount = L.icon({
-        iconUrl: 'css/nocargo+dismount.png',
+        iconUrl: rkGlobal.baseUrl + 'css/nocargo+dismount.png',
         iconSize:     [57.7, 29], 
         iconAnchor:   [28.85, 14.5], 
         popupAnchor:  [0, -14.5]
     });
     rkGlobal.icons.redDot = L.icon({
-        iconUrl: 'css/reddot.png',
+        iconUrl: rkGlobal.baseUrl + 'css/reddot.png',
         iconSize:     [10, 10], 
         iconAnchor:   [5, 5], 
         popupAnchor:  [0, -5]
