@@ -21,6 +21,10 @@ var configurations = {
     'linz' : {
         latlong: [48.30, 14.285],
         geoJsonFile: '../data/radlkarte-at-linz.min.geojson',
+    },
+    'klagenfurt' : {
+        latlong: [46.624, 14.308],
+        geoJsonFile: '../data/radlkarte-at-klagenfurt.min.geojson',
     }
 }
 
@@ -260,7 +264,7 @@ function getOnewayArrowPatternsWithColorDefiningStressfulness(priority, stressfu
 
 function initMap(location) {
     location = location || 'vienna';
-    if(location ===  'linz') {
+    if(location !=  'vienna') {
         rkGlobal.baseUrl = '../'
     }
     var configuration = configurations[location];
