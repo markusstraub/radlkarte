@@ -1,10 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Radlkarte - Entspannt durch Klagenfurt, Linz und Wien</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
+    <meta property="og:title" content="Radlkarte - Entspannt durch Klagenfurt, Linz und Wien" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://www.radlkarte.at" />
+    <meta property="og:image" content="https://www.radlkarte.at/linz/assets/radlkarte-linz.png" />
+
+    <title>Radlkarte - Entspannt durch Klagenfurt, Linz und Wien</title>
+
     <script>
         // google analytics
         (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -24,34 +29,34 @@
             a.appendChild(r);
         })(window,document,'//static.hotjar.com/c/hotjar-','.js?sv='); */
     </script>
-    
+
     <script src="js/polyfills.js"></script>
 
     <script src="js/leaflet-1.4.0/leaflet.js"></script>
     <link rel="stylesheet" href="js/leaflet-1.4.0/leaflet.css" />
-    
+
     <script src="js/leaflet-sidebar-v2-3.0.6/leaflet-sidebar.min.js"></script>
     <link rel="stylesheet" href="js/leaflet-sidebar-v2-3.0.6/leaflet-sidebar.css"/>
     <!-- font awesome is required by sidebar & leaflet-locatecontrol-->
     <link rel="stylesheet" href="css/font-awesome-4.7.0/css/font-awesome.min.css"/>
-    
+
     <script src="js/leaflet-polylineDecorator-1.6.0/leaflet.polylineDecorator.js"></script>
-    
+
     <script src="js/leaflet-hash-1.0.1/leaflet-hash.min.js"></script>
-    
+
     <script src="js/leaflet-locatecontrol-0.66.1/L.Control.Locate.min.js"></script>
     <link rel="stylesheet" href="js/leaflet-locatecontrol-0.66.1/L.Control.Locate.css"/>
-    
+
     <script src="js/leaflet-control-geocoder-1.5.8/Control.Geocoder.js"></script>
     <link rel="stylesheet" href="js/leaflet-control-geocoder-1.5.8/Control.Geocoder.css"/>
-    
+
     <script src="js/turf-2017-02-16/turf.min.js"></script>
-    
+
     <script src="js/jquery-3.3.1.min.js"></script>
-    
+
     <link href="css/museo-500/style.css" rel="stylesheet" type="text/css"/>
     <link href='https://fonts.googleapis.com/css?family=Roboto:400,400italic,700' rel='stylesheet' type='text/css'/>
-    
+
     <script src="./radlkarte.js"></script>
     <link rel="stylesheet" href="./radlkarte.css" />
     <link rel="icon" type="image/x-icon" href="css/favicon.ico" />
@@ -78,7 +83,7 @@
                 <h1 class="leaflet-sidebar-header">
                     <span class="leaflet-sidebar-close"><i class="fa fa-caret-left"></i></span> Übersicht
                 </h1>
-                <h2>Entspannt durch <a href="https://radlkarte.at/klagenfurt">Klagenfurt</a>, <a href="https://radlkarte.at/linz">Linz</a> und <a href="https://radlkarte.at/">Wien</a></h2>
+                <h2>Entspannt durch <a href="./?region=klagenfurt">Klagenfurt</a>, <a href="./?region=linz">Linz</a> und <a href="./?region=wien">Wien</a></h2>
                 <p>
                     Viele Wege führen zum Ziel. Finden Sie Ihren optimalen Weg durch die Stadt mit der Radlkarte der <a href="https://www.radlobby.at" target="_blank">Radlobby</a>. Auf zu neuen Ufern, unbekannten Gegenden, und neuen Alternativen zu Ihren alltäglichen Routen.
                 </p>
@@ -175,7 +180,7 @@
                     Sie können Problemstellen (für Wien) auch direkt im <a href="https://radkummerkasten.at" target="_blank">Radkummerkasten</a> melden.
                 </p>
             </div>
-            
+
             <div class="leaflet-sidebar-pane" id="radlkarte_contact">
                 <h1 class="leaflet-sidebar-header">
                     <span class="leaflet-sidebar-close"><i class="fa fa-caret-left"></i></span> Impressum
@@ -212,7 +217,12 @@
     </div>
 
     <script>
-        initMap('vienna');
+        var url = new URL(window.location);
+        var params = new URLSearchParams(url.search);
+        if(!params.has('region')) {
+            params.set('region', 'wien');
+        }
+        initMap(params.get('region'));
     </script>
 </body>
 </html>

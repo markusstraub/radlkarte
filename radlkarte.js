@@ -14,17 +14,17 @@ rkGlobal.fullWidthThreshold = 768;
 rkGlobal.baseUrl = './'
 
 var configurations = {
-    'vienna' : {
+    'wien' : {
         latlong: [48.2083537, 16.3725042],
         geoJsonFile: 'data/radlkarte-at-vienna.min.geojson',
     },
     'linz' : {
         latlong: [48.30, 14.285],
-        geoJsonFile: '../data/radlkarte-at-linz.min.geojson',
+        geoJsonFile: 'data/radlkarte-at-linz.min.geojson',
     },
     'klagenfurt' : {
         latlong: [46.624, 14.308],
-        geoJsonFile: '../data/radlkarte-at-klagenfurt.min.geojson',
+        geoJsonFile: 'data/radlkarte-at-klagenfurt.min.geojson',
     }
 }
 
@@ -45,20 +45,20 @@ function loadGeoJson(file) {
     $.getJSON(file, function(data) {
         var i, j; // loop counter
         var p, s; // priority / stressfulness
-        
+
         if(data.type != "FeatureCollection")    {
             console.error("expected a GeoJSON FeatureCollection. no radlkarte network can be displayed.");
             return;
         }
-        
+
         // prepare matrix
         for(i=0; i<rkGlobal.priorityStrings.length; i++) {
             rkGlobal.segmentsPS[i] = [];
             for(j=0; j<rkGlobal.stressStrings.length; j++)
                 rkGlobal.segmentsPS[i][j] = {lines: [], decorators: []};
         }
-        
-        // first step - collect geojson linestring features in the matrix 
+
+        // first step - collect geojson linestring features in the matrix
         var ignoreCount = 0;
         var goodCount = 0;
         var poiCount = 0;
@@ -81,7 +81,7 @@ function loadGeoJson(file) {
                 }
                 continue;
             }
-            
+
             p = parseInt(geojson.properties.p, 10);
             s = parseInt(geojson.properties.s, 10);
             if(isNaN(p) || isNaN(s)) {
@@ -89,19 +89,19 @@ function loadGeoJson(file) {
                 ++ignoreCount;
                 continue;
             }
-            
+
             // 1) for the lines: add geojson linestring features
             rkGlobal.segmentsPS[p][s].lines.push(geojson);
-            
+
             // 2) for the decorators: add latlons
             if(geojson.properties.oneway == 'yes') {
                 rkGlobal.segmentsPS[p][s].decorators.push(turf.flip(geojson).geometry.coordinates);
             }
-            
+
             ++goodCount;
         }
         debug("processed " + goodCount + " valid LineString features, " + poiCount + " Point features, and " + ignoreCount + " ignored features.");
-        
+
         // second step - merge the geojson linestring features for the same priority-stressfulness level into a single multilinestring
         // and then put them in a leaflet layer
         for(p in rkGlobal.segmentsPS) {
@@ -109,7 +109,7 @@ function loadGeoJson(file) {
                 var multilinestringfeature = turf.combine(turf.featureCollection(rkGlobal.segmentsPS[p][s].lines));
                 rkGlobal.segmentsPS[p][s].lines = L.geoJSON(multilinestringfeature);
                 rkGlobal.leafletMap.addLayer(rkGlobal.segmentsPS[p][s].lines);
-                
+
                 if(rkGlobal.segmentsPS[p][s].decorators.length > 0) {
                     rkGlobal.segmentsPS[p][s].decorators = L.polylineDecorator(rkGlobal.segmentsPS[p][s].decorators);
                     rkGlobal.leafletMap.addLayer(rkGlobal.segmentsPS[p][s].decorators);
@@ -119,7 +119,7 @@ function loadGeoJson(file) {
                 // discard properties of multilinestringfeature? no longer needed.
             }
         }
-        
+
         // layer sorting (high priority on top)
         for(p in rkGlobal.segmentsPS) {
             for(s in rkGlobal.segmentsPS[p]) {
@@ -128,15 +128,15 @@ function loadGeoJson(file) {
                     rkGlobal.segmentsPS[p][s].decorators.bringToBack();
             }
         }
-        
+
         rkGlobal.styleFunction();
-        
+
         // add to map & layercontrol
 //         for(var priority=rkGlobal.priorityStrings.length-1; priority>= 0; priority--) {
 //             rkGlobal.segments.priority[priority].all.addTo(rkGlobal.leafletMap);
 //             rkGlobal.leafletLayersControl.addOverlay(rkGlobal.segments.priority[priority].all, rkGlobal.priorityStrings[priority]);
 //         }
-        
+
         rkGlobal.leafletMap.on('zoomend', function(ev) {
             //debug("zoom level changed to " + rkGlobal.leafletMap.getZoom() + ".. enqueueing style change");
             $("#map").queue(function() {
@@ -236,7 +236,7 @@ function getLineStringStyleWithColorDefiningStressfulnessMinimal(priority,stress
 
 /**
  * @return an array of patterns as expected by L.PolylineDecorator.setPatterns
- */ 
+ */
 function getOnewayArrowPatternsWithColorDefiningStressfulness(priority, stressfulness) {
     var arrowWidth = Math.max(5, getLineWeightForCategory(priority) * rkGlobal.styleAArrowWidthFactor[priority]);
     return [
@@ -263,10 +263,7 @@ function getOnewayArrowPatternsWithColorDefiningStressfulness(priority, stressfu
 
 
 function initMap(location) {
-    location = location || 'vienna';
-    if(location !=  'vienna') {
-        rkGlobal.baseUrl = '../'
-    }
+    location = location || 'wien';
     var configuration = configurations[location];
     rkGlobal.leafletMap = L.map('map', { 'zoomControl' : false } ).setView(configuration.latlong, 14);
     new L.Hash(rkGlobal.leafletMap);
@@ -303,7 +300,7 @@ function initMap(location) {
         maxZoom: 18,
         attribution: 'map data &amp; imagery &copy; <a href="https://openstreetmap.org" target="_blank">OpenStreetMap</a> contributors'
     });*/
-    
+
     var baseMaps = {
         "Straßenkarte": mixed,
         "Luftbild": basemapAtOrthofoto,
@@ -312,11 +309,11 @@ function initMap(location) {
         "Weiß": empty,
     };
     var overlayMaps = {};
-    
+
     // TODO zoom level jumps: https://github.com/Leaflet/Leaflet/issues/6557
     mixed.addTo(rkGlobal.leafletMap);
     rkGlobal.leafletLayersControl = L.control.layers(baseMaps, overlayMaps, { 'position' : 'topright', 'collapsed' : true } ).addTo(rkGlobal.leafletMap);
-    
+
     var geocodingControl = L.Control.geocoder({
         position: 'topright',
         placeholder: 'Adresssuche',
@@ -344,8 +341,8 @@ function initMap(location) {
             closeButton: true
         }).setLatLng(e.geocode.center).setContent(result.html || result.name).openOn(rkGlobal.leafletMap);
     }).addTo(rkGlobal.leafletMap);
-    
-    
+
+
     var locateControl = L.control.locate({
         position: 'topright',
         setView: 'untilPanOrZoom',
@@ -360,9 +357,9 @@ function initMap(location) {
             title: 'Verfolge Position'
         }
     }).addTo(rkGlobal.leafletMap);
-    
+
     L.control.zoom({position: 'topright'}).addTo(rkGlobal.leafletMap);
-    
+
     var sidebar = L.control.sidebar({
         container: 'sidebar',
         position: 'left'
@@ -370,9 +367,9 @@ function initMap(location) {
     if(window.innerWidth < rkGlobal.fullWidthThreshold) {
         sidebar.close();
     }
-    
+
     initializeIcons(location);
-    
+
     // load overlay
     loadGeoJson(configuration.geoJsonFile);
 }
@@ -381,26 +378,26 @@ function initializeIcons() {
     rkGlobal.icons = {};
     rkGlobal.icons.dismount = L.icon({
         iconUrl: rkGlobal.baseUrl + 'css/dismount.png',
-        iconSize:     [33, 29], 
-        iconAnchor:   [16.5, 14.5], 
+        iconSize:     [33, 29],
+        iconAnchor:   [16.5, 14.5],
         popupAnchor:  [0, -14.5]
     });
     rkGlobal.icons.noCargo = L.icon({
         iconUrl: rkGlobal.baseUrl + 'css/nocargo.png',
-        iconSize:     [29, 29], 
-        iconAnchor:   [14.5, 14.5], 
+        iconSize:     [29, 29],
+        iconAnchor:   [14.5, 14.5],
         popupAnchor:  [0, -14.5]
     });
     rkGlobal.icons.noCargoAndDismount = L.icon({
         iconUrl: rkGlobal.baseUrl + 'css/nocargo+dismount.png',
-        iconSize:     [57.7, 29], 
-        iconAnchor:   [28.85, 14.5], 
+        iconSize:     [57.7, 29],
+        iconAnchor:   [28.85, 14.5],
         popupAnchor:  [0, -14.5]
     });
     rkGlobal.icons.redDot = L.icon({
         iconUrl: rkGlobal.baseUrl + 'css/reddot.png',
-        iconSize:     [10, 10], 
-        iconAnchor:   [5, 5], 
+        iconSize:     [10, 10],
+        iconAnchor:   [5, 5],
         popupAnchor:  [0, -5]
     });
 }
@@ -409,7 +406,7 @@ function getMarkerLayersIncludingPopup(geojsonPoint) {
     var icon = getIcon(geojsonPoint.properties);
     if(icon == null)
         return undefined;
-    
+
     var description = getDescriptionText(geojsonPoint.properties);
     var markers = {
         lowZoom: L.marker(L.geoJSON(geojsonPoint).getLayers()[0].getLatLng(), {
@@ -421,15 +418,15 @@ function getMarkerLayersIncludingPopup(geojsonPoint) {
             alt: description
         })
     };
-    
+
     markers.lowZoom.bindPopup(description, {closeButton: false});
     markers.lowZoom.on('mouseover', function() { markers.lowZoom.openPopup(); });
     markers.lowZoom.on('mouseout', function() { markers.lowZoom.closePopup(); });
-        
+
     markers.highZoom.bindPopup(description, {closeButton: false});
     markers.highZoom.on('mouseover', function() { markers.highZoom.openPopup(); });
     markers.highZoom.on('mouseout', function() { markers.highZoom.closePopup(); });
-    
+
 //     var key, marker;
 //     for (key in markers) {
 //         marker = markers[key];
@@ -438,7 +435,7 @@ function getMarkerLayersIncludingPopup(geojsonPoint) {
 //         marker.on('mouseout', function() { marker.closePopup(); }); // FIXME why is mouseover/out not working for lowZoom?
 //         break;
 //     }
-    
+
     return markers;
 }
 
@@ -449,7 +446,7 @@ function getMarkerLayersIncludingPopup(geojsonPoint) {
 function getIcon(properties) {
     var dismount = properties.dismount == 'yes';
     var nocargo = properties.nocargo == 'yes';
-    
+
     if(dismount && nocargo)
         return rkGlobal.icons.noCargoAndDismount;
     else if(dismount)
@@ -471,7 +468,7 @@ function getDescriptionText(properties) {
         description = '';
     else
         description = ':<br>' + description;
-    
+
     if(dismount && nocargo)
         return '<span class="popup">Schiebestelle / untauglich für Spezialräder' + description + '</span>';
     else if(dismount)
