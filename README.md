@@ -30,13 +30,10 @@ Website for desktop, tablet & smartphone usage with the goal to provide useful (
 - Differentiate between a simple & an advanced UI.
   - simple: auto-hides parts of the network based on zoom level, no layer switcher
   - advanced: layer switcher, control opacity of overlay, freely choose network-parts to show
-- Which background layer could we use as fallback if traffic gets too much for mapbox?
-  basemap.at? (even better: use normal osm/openCycleMap for high zoom levels - more details!)
-
 
 ## Route Data
 
-As input for the minifying script a GeoJSON file containing the routes is required with the following attributes.
+Route data is stored in .geojson format with the following attributes.
 
 ### Line Attributes
 
@@ -59,11 +56,9 @@ Optional (omitting the attributes means 'no'):
 
 1. Download JOSM from josm.openstreetmap.de
 2. Add the `josm-radlkartestyle.mapcss` under `edit > preferences > map settings (3rd buttom from the top) > map paint styles`
-3. Create a new layer or load an .osm file
+3. Load an existing radlkarte .geojson file (e.g. `data/radlkarte-example.geojson`) or create a new layer.
 4. Edit the routes
-5. Save the .osm file (for further editing, because JOSM can only load & edit .osm files)
-6. Save the result to .geojson
-7. Run the minify script
+5. Save the result as .geojson (not as .osm!)
 
 
 ## Notes

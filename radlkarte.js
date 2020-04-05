@@ -16,15 +16,15 @@ rkGlobal.baseUrl = './'
 var configurations = {
     'wien' : {
         latlong: [48.2083537, 16.3725042],
-        geoJsonFile: 'data/radlkarte-at-vienna.min.geojson',
+        geoJsonFile: 'wien/radlkarte-wien.geojson',
     },
     'linz' : {
         latlong: [48.30, 14.285],
-        geoJsonFile: 'data/radlkarte-at-linz.min.geojson',
+        geoJsonFile: 'linz/radlkarte-linz.geojson',
     },
     'klagenfurt' : {
         latlong: [46.624, 14.308],
-        geoJsonFile: 'data/radlkarte-at-klagenfurt.min.geojson',
+        geoJsonFile: 'klagenfurt/radlkarte-klagenfurt.geojson',
     }
 }
 
@@ -82,8 +82,8 @@ function loadGeoJson(file) {
                 continue;
             }
 
-            p = parseInt(geojson.properties.p, 10);
-            s = parseInt(geojson.properties.s, 10);
+            p = parseInt(geojson.properties.priority, 10);
+            s = parseInt(geojson.properties.stress, 10);
             if(isNaN(p) || isNaN(s)) {
                 console.warn("ignoring invalid object (priority / stressfulness not set): " + JSON.stringify(geojson));
                 ++ignoreCount;

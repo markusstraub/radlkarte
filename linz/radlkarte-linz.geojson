@@ -5,8 +5,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -41,8 +41,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -77,8 +77,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "0",
-        "s": "0",
+        "priority": "0",
+        "stress": "0",
         "winter_service": "yes"
       },
       "geometry": {
@@ -114,8 +114,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -191,8 +191,8 @@
       "type": "Feature",
       "properties": {
         "oneway": "yes",
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -355,8 +355,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -427,8 +427,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -475,8 +475,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -579,8 +579,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "0",
-        "s": "1"
+        "priority": "0",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -659,8 +659,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -704,8 +704,8 @@
       "type": "Feature",
       "properties": {
         "oneway": "yes",
-        "p": "0",
-        "s": "1",
+        "priority": "0",
+        "stress": "1",
         "winter_service": "yes"
       },
       "geometry": {
@@ -749,8 +749,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -793,8 +793,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "0",
-        "s": "0",
+        "priority": "0",
+        "stress": "0",
         "unpaved": "yes",
         "winter_service": "yes"
       },
@@ -815,8 +815,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1",
+        "priority": "1",
+        "stress": "1",
         "winter_service": "yes"
       },
       "geometry": {
@@ -856,8 +856,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -916,8 +916,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -960,8 +960,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "2",
-        "s": "0"
+        "priority": "2",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -1088,8 +1088,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "0",
-        "s": "0",
+        "priority": "0",
+        "stress": "0",
         "winter_service": "yes"
       },
       "geometry": {
@@ -1141,8 +1141,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -1173,8 +1173,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -1281,8 +1281,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -1381,9 +1381,9 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
+        "priority": "1",
         "source": "wm-oekostadtplan",
-        "s": "1"
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -1498,8 +1498,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "2"
+        "priority": "1",
+        "stress": "2"
       },
       "geometry": {
         "type": "LineString",
@@ -1666,8 +1666,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "0",
-        "s": "1",
+        "priority": "0",
+        "stress": "1",
         "winter_service": "yes"
       },
       "geometry": {
@@ -1719,8 +1719,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -1811,9 +1811,9 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
+        "priority": "1",
         "source": "wm-oekostadtplan",
-        "s": "1"
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -1840,8 +1840,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -1881,8 +1881,8 @@
       "type": "Feature",
       "properties": {
         "dangerous": "yes",
-        "p": "1",
-        "s": "2"
+        "priority": "1",
+        "stress": "2"
       },
       "geometry": {
         "type": "LineString",
@@ -1909,8 +1909,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "2"
+        "priority": "1",
+        "stress": "2"
       },
       "geometry": {
         "type": "LineString",
@@ -1941,8 +1941,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "0",
-        "s": "0"
+        "priority": "0",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -1989,8 +1989,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -2189,8 +2189,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -2665,8 +2665,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -2697,8 +2697,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -2725,8 +2725,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "2",
-        "s": "1"
+        "priority": "2",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -2749,8 +2749,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -2853,8 +2853,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "2",
-        "s": "1"
+        "priority": "2",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -2921,8 +2921,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "0",
-        "s": "0",
+        "priority": "0",
+        "stress": "0",
         "winter_service": "yes"
       },
       "geometry": {
@@ -3022,8 +3022,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -3046,8 +3046,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "0",
-        "s": "1",
+        "priority": "0",
+        "stress": "1",
         "winter_service": "yes"
       },
       "geometry": {
@@ -3071,8 +3071,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "2"
+        "priority": "1",
+        "stress": "2"
       },
       "geometry": {
         "type": "LineString",
@@ -3175,8 +3175,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -3243,8 +3243,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -3303,8 +3303,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "0",
-        "s": "0",
+        "priority": "0",
+        "stress": "0",
         "winter_service": "yes"
       },
       "geometry": {
@@ -3404,8 +3404,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -3468,8 +3468,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -3524,8 +3524,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "0",
-        "s": "0"
+        "priority": "0",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -3612,8 +3612,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -3656,8 +3656,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "0",
-        "s": "1"
+        "priority": "0",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -3684,8 +3684,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -3708,8 +3708,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "2",
+        "priority": "1",
+        "stress": "2",
         "winter_service": "yes"
       },
       "geometry": {
@@ -3749,8 +3749,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -3793,8 +3793,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -3821,8 +3821,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -3905,8 +3905,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "0",
-        "s": "1"
+        "priority": "0",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -3953,8 +3953,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -4005,8 +4005,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "2"
+        "priority": "1",
+        "stress": "2"
       },
       "geometry": {
         "type": "LineString",
@@ -4101,8 +4101,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "2"
+        "priority": "1",
+        "stress": "2"
       },
       "geometry": {
         "type": "LineString",
@@ -4133,8 +4133,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "2"
+        "priority": "1",
+        "stress": "2"
       },
       "geometry": {
         "type": "LineString",
@@ -4205,8 +4205,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "2"
+        "priority": "1",
+        "stress": "2"
       },
       "geometry": {
         "type": "LineString",
@@ -4289,8 +4289,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "0",
-        "s": "0"
+        "priority": "0",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -4653,8 +4653,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -4781,8 +4781,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -4801,8 +4801,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "2"
+        "priority": "1",
+        "stress": "2"
       },
       "geometry": {
         "type": "LineString",
@@ -4857,8 +4857,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "2"
+        "priority": "1",
+        "stress": "2"
       },
       "geometry": {
         "type": "LineString",
@@ -4893,8 +4893,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -4995,8 +4995,8 @@
       "properties": {
         "dangerous": "yes",
         "oneway": "yes",
-        "p": "1",
-        "s": "2"
+        "priority": "1",
+        "stress": "2"
       },
       "geometry": {
         "type": "LineString",
@@ -5019,8 +5019,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -5111,8 +5111,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -5163,8 +5163,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -5223,8 +5223,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "0",
-        "s": "0"
+        "priority": "0",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -5243,8 +5243,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -5263,8 +5263,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "2",
-        "s": "1"
+        "priority": "2",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -5319,8 +5319,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "2"
+        "priority": "1",
+        "stress": "2"
       },
       "geometry": {
         "type": "LineString",
@@ -5383,8 +5383,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "2",
-        "s": "1"
+        "priority": "2",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -5403,8 +5403,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0",
+        "priority": "1",
+        "stress": "0",
         "winter_service": "yes"
       },
       "geometry": {
@@ -5446,8 +5446,8 @@
       "type": "Feature",
       "properties": {
         "oneway": "true",
-        "p": "1",
-        "s": "2"
+        "priority": "1",
+        "stress": "2"
       },
       "geometry": {
         "type": "LineString",
@@ -5546,8 +5546,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -5614,8 +5614,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -5670,8 +5670,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -5718,8 +5718,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -5834,8 +5834,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -5854,8 +5854,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -5954,8 +5954,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "2"
+        "priority": "1",
+        "stress": "2"
       },
       "geometry": {
         "type": "LineString",
@@ -5986,8 +5986,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "0",
-        "s": "0"
+        "priority": "0",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -6030,8 +6030,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -6062,8 +6062,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -6103,8 +6103,8 @@
       "type": "Feature",
       "properties": {
         "oneway": "true",
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -6175,8 +6175,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -6239,8 +6239,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -6551,8 +6551,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "0",
-        "s": "0"
+        "priority": "0",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -6643,8 +6643,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "0",
-        "s": "0",
+        "priority": "0",
+        "stress": "0",
         "winter_service": "yes"
       },
       "geometry": {
@@ -6916,8 +6916,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -6968,8 +6968,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -7024,8 +7024,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "2"
+        "priority": "1",
+        "stress": "2"
       },
       "geometry": {
         "type": "LineString",
@@ -7072,8 +7072,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -7148,8 +7148,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0",
+        "priority": "1",
+        "stress": "0",
         "winter_service": "yes"
       },
       "geometry": {
@@ -7169,8 +7169,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -7413,8 +7413,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -7445,8 +7445,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -7489,8 +7489,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -7553,8 +7553,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "2",
-        "s": "1"
+        "priority": "2",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -7601,8 +7601,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0",
+        "priority": "1",
+        "stress": "0",
         "winter_service": "yes"
       },
       "geometry": {
@@ -7654,8 +7654,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -7694,8 +7694,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -7758,8 +7758,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -7842,8 +7842,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0",
+        "priority": "1",
+        "stress": "0",
         "winter_service": "yes"
       },
       "geometry": {
@@ -7875,8 +7875,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "2"
+        "priority": "1",
+        "stress": "2"
       },
       "geometry": {
         "type": "LineString",
@@ -7899,8 +7899,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -7964,8 +7964,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -7984,8 +7984,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "2"
+        "priority": "1",
+        "stress": "2"
       },
       "geometry": {
         "type": "LineString",
@@ -8097,8 +8097,8 @@
       "type": "Feature",
       "properties": {
         "dangerous": "yes",
-        "p": "1",
-        "s": "2"
+        "priority": "1",
+        "stress": "2"
       },
       "geometry": {
         "type": "LineString",
@@ -8181,8 +8181,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -8237,8 +8237,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "2"
+        "priority": "1",
+        "stress": "2"
       },
       "geometry": {
         "type": "LineString",
@@ -8277,8 +8277,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "2"
+        "priority": "1",
+        "stress": "2"
       },
       "geometry": {
         "type": "LineString",
@@ -8513,8 +8513,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "0",
-        "s": "0"
+        "priority": "0",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -8585,8 +8585,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -8633,8 +8633,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "2"
+        "priority": "1",
+        "stress": "2"
       },
       "geometry": {
         "type": "LineString",
@@ -8665,8 +8665,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -8689,8 +8689,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -8721,8 +8721,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -8773,8 +8773,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "2",
-        "s": "1"
+        "priority": "2",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -8793,8 +8793,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "2"
+        "priority": "1",
+        "stress": "2"
       },
       "geometry": {
         "type": "LineString",
@@ -8953,8 +8953,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "2",
-        "s": "1"
+        "priority": "2",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -9002,8 +9002,8 @@
       "type": "Feature",
       "properties": {
         "oneway": "true",
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -9066,8 +9066,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "0",
-        "s": "0",
+        "priority": "0",
+        "stress": "0",
         "winter_service": "yes"
       },
       "geometry": {
@@ -9087,8 +9087,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "0",
-        "s": "0"
+        "priority": "0",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -9439,8 +9439,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -9491,8 +9491,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -9663,8 +9663,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -9923,8 +9923,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "2"
+        "priority": "1",
+        "stress": "2"
       },
       "geometry": {
         "type": "LineString",
@@ -10175,8 +10175,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "2",
-        "s": "0"
+        "priority": "2",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -10215,8 +10215,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "2",
-        "s": "1"
+        "priority": "2",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -10255,8 +10255,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -10291,8 +10291,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -10423,8 +10423,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -10443,8 +10443,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -10463,8 +10463,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -10755,8 +10755,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -10779,8 +10779,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "0",
-        "s": "0"
+        "priority": "0",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -11279,8 +11279,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -11367,8 +11367,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -11467,8 +11467,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -11491,8 +11491,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "0",
-        "s": "0"
+        "priority": "0",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -11603,8 +11603,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "0",
-        "s": "0"
+        "priority": "0",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -11651,8 +11651,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -11915,8 +11915,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "2"
+        "priority": "1",
+        "stress": "2"
       },
       "geometry": {
         "type": "LineString",
@@ -11939,8 +11939,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -12091,8 +12091,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -12163,8 +12163,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "2",
-        "s": "1"
+        "priority": "2",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -12191,8 +12191,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -12251,8 +12251,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -12291,8 +12291,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -12387,8 +12387,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -12419,8 +12419,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -12487,8 +12487,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "0",
-        "s": "1"
+        "priority": "0",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -12507,8 +12507,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -12539,8 +12539,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -12615,8 +12615,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -12695,8 +12695,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0",
+        "priority": "1",
+        "stress": "0",
         "winter_service": "yes"
       },
       "geometry": {
@@ -12764,8 +12764,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -12800,8 +12800,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0",
+        "priority": "1",
+        "stress": "0",
         "winter_service": "yes"
       },
       "geometry": {
@@ -12849,8 +12849,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "2",
+        "priority": "1",
+        "stress": "2",
         "winter_service": "yes"
       },
       "geometry": {
@@ -12874,8 +12874,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -12942,8 +12942,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -13062,8 +13062,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "2"
+        "priority": "1",
+        "stress": "2"
       },
       "geometry": {
         "type": "LineString",
@@ -13082,8 +13082,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -13107,8 +13107,8 @@
       "type": "Feature",
       "properties": {
         "oneway": "true",
-        "p": "2",
-        "s": "1"
+        "priority": "2",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -13135,8 +13135,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -13188,8 +13188,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "2",
-        "s": "1"
+        "priority": "2",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -13252,8 +13252,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "Point",
@@ -13266,8 +13266,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -13286,8 +13286,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "0",
-        "s": "0",
+        "priority": "0",
+        "stress": "0",
         "winter_service": "yes"
       },
       "geometry": {
@@ -13315,8 +13315,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "2",
-        "s": "0"
+        "priority": "2",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -13351,9 +13351,9 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
+        "priority": "1",
         "source": "wm-oekostadtplan",
-        "s": "1"
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -13384,8 +13384,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -13440,8 +13440,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -13568,8 +13568,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -13616,8 +13616,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -13654,8 +13654,8 @@
       "properties": {
         "dangerous": "yes",
         "oneway": "yes",
-        "p": "1",
-        "s": "2"
+        "priority": "1",
+        "stress": "2"
       },
       "geometry": {
         "type": "LineString",
@@ -13706,8 +13706,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -13802,8 +13802,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "0",
-        "s": "0"
+        "priority": "0",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -13878,8 +13878,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -13907,8 +13907,8 @@
       "type": "Feature",
       "properties": {
         "dangerous": "yes",
-        "p": "1",
-        "s": "2"
+        "priority": "1",
+        "stress": "2"
       },
       "geometry": {
         "type": "LineString",
@@ -13963,9 +13963,9 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
+        "priority": "1",
         "source": "wm-oekostadtplan",
-        "s": "0"
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -14048,8 +14048,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "0",
-        "s": "0"
+        "priority": "0",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -14389,8 +14389,8 @@
       "type": "Feature",
       "properties": {
         "oneway": "yes",
-        "p": "0",
-        "s": "1"
+        "priority": "0",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -14410,8 +14410,8 @@
       "type": "Feature",
       "properties": {
         "dangerous": "yes",
-        "p": "1",
-        "s": "2"
+        "priority": "1",
+        "stress": "2"
       },
       "geometry": {
         "type": "LineString",
@@ -14442,8 +14442,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -14514,8 +14514,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0",
+        "priority": "1",
+        "stress": "0",
         "winter_service": "yes"
       },
       "geometry": {
@@ -14579,8 +14579,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -14627,9 +14627,9 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
+        "priority": "1",
         "steep": "yes",
-        "s": "2"
+        "stress": "2"
       },
       "geometry": {
         "type": "LineString",
@@ -14684,8 +14684,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "0",
-        "s": "0"
+        "priority": "0",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -14704,8 +14704,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -14804,8 +14804,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "0",
-        "s": "0"
+        "priority": "0",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -14836,8 +14836,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "2"
+        "priority": "1",
+        "stress": "2"
       },
       "geometry": {
         "type": "LineString",
@@ -14880,8 +14880,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "2"
+        "priority": "1",
+        "stress": "2"
       },
       "geometry": {
         "type": "LineString",
@@ -14904,8 +14904,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "0",
-        "s": "0"
+        "priority": "0",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -15012,8 +15012,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "2",
-        "s": "0"
+        "priority": "2",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -15040,8 +15040,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "0",
-        "s": "1"
+        "priority": "0",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -15084,9 +15084,9 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
+        "priority": "1",
         "source": "wm-oekostadtplan",
-        "s": "1"
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -15145,8 +15145,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "2"
+        "priority": "1",
+        "stress": "2"
       },
       "geometry": {
         "type": "LineString",
@@ -15253,8 +15253,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -15289,8 +15289,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -15339,9 +15339,9 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "2",
+        "priority": "2",
         "source": "wm-oekostadtplan",
-        "s": "0"
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -15476,8 +15476,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "2"
+        "priority": "1",
+        "stress": "2"
       },
       "geometry": {
         "type": "LineString",
@@ -15496,8 +15496,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "0",
-        "s": "2"
+        "priority": "0",
+        "stress": "2"
       },
       "geometry": {
         "type": "LineString",
@@ -15564,8 +15564,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "0",
-        "s": "2"
+        "priority": "0",
+        "stress": "2"
       },
       "geometry": {
         "type": "LineString",
@@ -15600,8 +15600,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "0",
-        "s": "1"
+        "priority": "0",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -15756,9 +15756,9 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
+        "priority": "1",
         "source": "wm-oekostadtplan",
-        "s": "1"
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -15805,8 +15805,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -15845,8 +15845,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "2",
-        "s": "1"
+        "priority": "2",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -15877,8 +15877,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "2"
+        "priority": "1",
+        "stress": "2"
       },
       "geometry": {
         "type": "LineString",
@@ -15961,8 +15961,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "2",
-        "s": "0"
+        "priority": "2",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -15985,8 +15985,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -16025,8 +16025,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "0",
-        "s": "1",
+        "priority": "0",
+        "stress": "1",
         "winter_service": "yes"
       },
       "geometry": {
@@ -16054,8 +16054,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0",
+        "priority": "1",
+        "stress": "0",
         "winter_service": "yes"
       },
       "geometry": {
@@ -16087,8 +16087,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "0",
-        "s": "1",
+        "priority": "0",
+        "stress": "1",
         "winter_service": "yes"
       },
       "geometry": {
@@ -16156,8 +16156,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0",
+        "priority": "1",
+        "stress": "0",
         "winter_service": "yes"
       },
       "geometry": {
@@ -16185,8 +16185,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -16221,8 +16221,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -16397,8 +16397,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "2",
-        "s": "1"
+        "priority": "2",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -16429,8 +16429,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -16537,8 +16537,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "2"
+        "priority": "1",
+        "stress": "2"
       },
       "geometry": {
         "type": "LineString",
@@ -16565,8 +16565,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -16617,8 +16617,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "0",
-        "s": "1",
+        "priority": "0",
+        "stress": "1",
         "winter_service": "yes"
       },
       "geometry": {
@@ -16706,8 +16706,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "0",
-        "s": "1"
+        "priority": "0",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -16754,8 +16754,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0",
+        "priority": "1",
+        "stress": "0",
         "winter_service": "yes"
       },
       "geometry": {
@@ -16787,8 +16787,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -16855,8 +16855,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "2",
+        "priority": "1",
+        "stress": "2",
         "winter_service": "yes"
       },
       "geometry": {
@@ -16884,8 +16884,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -16932,8 +16932,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -17073,8 +17073,8 @@
       "type": "Feature",
       "properties": {
         "oneway": "yes",
-        "p": "1",
-        "s": "2"
+        "priority": "1",
+        "stress": "2"
       },
       "geometry": {
         "type": "LineString",
@@ -17118,8 +17118,8 @@
       "type": "Feature",
       "properties": {
         "oneway": "yes",
-        "p": "0",
-        "s": "2",
+        "priority": "0",
+        "stress": "2",
         "winter_service": "yes"
       },
       "geometry": {
@@ -17147,8 +17147,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -17179,8 +17179,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "2"
+        "priority": "1",
+        "stress": "2"
       },
       "geometry": {
         "type": "LineString",
@@ -17711,8 +17711,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "0",
-        "s": "0",
+        "priority": "0",
+        "stress": "0",
         "winter_service": "yes"
       },
       "geometry": {
@@ -17772,8 +17772,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -17816,9 +17816,9 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
+        "priority": "1",
         "steep": "yes",
-        "s": "2"
+        "stress": "2"
       },
       "geometry": {
         "type": "LineString",
@@ -17869,8 +17869,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -17906,8 +17906,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -17990,8 +17990,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -18106,8 +18106,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "2"
+        "priority": "1",
+        "stress": "2"
       },
       "geometry": {
         "type": "LineString",
@@ -18135,8 +18135,8 @@
       "type": "Feature",
       "properties": {
         "oneway": "true",
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -18163,8 +18163,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0",
+        "priority": "1",
+        "stress": "0",
         "winter_service": "yes"
       },
       "geometry": {
@@ -18216,8 +18216,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "2"
+        "priority": "1",
+        "stress": "2"
       },
       "geometry": {
         "type": "LineString",
@@ -18264,8 +18264,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -18324,8 +18324,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -18400,8 +18400,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -18436,8 +18436,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1",
+        "priority": "1",
+        "stress": "1",
         "winter_service": "yes"
       },
       "geometry": {
@@ -18494,8 +18494,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -18514,9 +18514,9 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "2",
+        "priority": "2",
         "source": "wm-oekostadtplan",
-        "s": "0"
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -18547,8 +18547,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -18635,8 +18635,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -18683,8 +18683,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "2",
-        "s": "1"
+        "priority": "2",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -18723,8 +18723,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "0",
-        "s": "0"
+        "priority": "0",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -18767,8 +18767,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "2"
+        "priority": "1",
+        "stress": "2"
       },
       "geometry": {
         "type": "LineString",
@@ -18795,8 +18795,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -18823,8 +18823,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "2",
-        "s": "1"
+        "priority": "2",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -18859,8 +18859,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -18887,8 +18887,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -18967,8 +18967,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -18987,8 +18987,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -19035,8 +19035,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "2"
+        "priority": "1",
+        "stress": "2"
       },
       "geometry": {
         "type": "LineString",
@@ -19119,8 +19119,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -19151,8 +19151,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -19200,8 +19200,8 @@
       "type": "Feature",
       "properties": {
         "oneway": "true",
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -19224,8 +19224,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -19432,8 +19432,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -19476,8 +19476,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "0",
-        "s": "0"
+        "priority": "0",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -19496,8 +19496,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "0",
-        "s": "0"
+        "priority": "0",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -20016,8 +20016,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -20060,8 +20060,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "2"
+        "priority": "1",
+        "stress": "2"
       },
       "geometry": {
         "type": "LineString",
@@ -20116,8 +20116,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -20156,8 +20156,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -20180,8 +20180,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "0",
-        "s": "1",
+        "priority": "0",
+        "stress": "1",
         "winter_service": "yes"
       },
       "geometry": {
@@ -20213,8 +20213,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -20273,8 +20273,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "2"
+        "priority": "1",
+        "stress": "2"
       },
       "geometry": {
         "type": "LineString",
@@ -20549,8 +20549,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -20593,8 +20593,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -20646,8 +20646,8 @@
       "type": "Feature",
       "properties": {
         "oneway": "true",
-        "p": "2",
-        "s": "2"
+        "priority": "2",
+        "stress": "2"
       },
       "geometry": {
         "type": "LineString",
@@ -20680,8 +20680,8 @@
       "properties": {
         "dangerous": "yes",
         "oneway": "yes",
-        "p": "1",
-        "s": "2"
+        "priority": "1",
+        "stress": "2"
       },
       "geometry": {
         "type": "LineString",
@@ -20760,8 +20760,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -20800,8 +20800,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -20829,8 +20829,8 @@
       "type": "Feature",
       "properties": {
         "oneway": "yes",
-        "p": "1",
-        "s": "2"
+        "priority": "1",
+        "stress": "2"
       },
       "geometry": {
         "type": "LineString",
@@ -20865,8 +20865,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -20945,8 +20945,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1",
+        "priority": "1",
+        "stress": "1",
         "winter_service": "yes"
       },
       "geometry": {
@@ -20998,8 +20998,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -21018,8 +21018,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "2"
+        "priority": "1",
+        "stress": "2"
       },
       "geometry": {
         "type": "LineString",
@@ -21058,8 +21058,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -21114,8 +21114,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -21146,8 +21146,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "0",
-        "s": "0",
+        "priority": "0",
+        "stress": "0",
         "winter_service": "yes"
       },
       "geometry": {
@@ -21207,8 +21207,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "Point",
@@ -21221,8 +21221,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -21261,8 +21261,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "2",
-        "s": "0"
+        "priority": "2",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -21285,8 +21285,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -21377,8 +21377,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "0",
-        "s": "1"
+        "priority": "0",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -21445,8 +21445,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "2"
+        "priority": "1",
+        "stress": "2"
       },
       "geometry": {
         "type": "LineString",
@@ -21477,8 +21477,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1",
+        "priority": "1",
+        "stress": "1",
         "unpaved": "yes",
         "winter_service": "yes"
       },
@@ -21539,8 +21539,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -21583,9 +21583,9 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "2",
+        "priority": "2",
         "source": "wm-oekostadtplan",
-        "s": "0"
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -21648,8 +21648,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -21716,8 +21716,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "2",
-        "s": "1"
+        "priority": "2",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -21740,8 +21740,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -21824,8 +21824,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "0",
-        "s": "0"
+        "priority": "0",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -21844,8 +21844,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0",
+        "priority": "1",
+        "stress": "0",
         "winter_service": "yes"
       },
       "geometry": {
@@ -21877,8 +21877,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "2",
-        "s": "0"
+        "priority": "2",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -22045,8 +22045,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -22085,8 +22085,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -22145,8 +22145,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -22361,8 +22361,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -22394,8 +22394,8 @@
       "type": "Feature",
       "properties": {
         "fixme": "yes",
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -22430,8 +22430,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "2",
-        "s": "0"
+        "priority": "2",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -22474,8 +22474,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -22538,8 +22538,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -22598,8 +22598,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "2"
+        "priority": "1",
+        "stress": "2"
       },
       "geometry": {
         "type": "LineString",
@@ -22655,8 +22655,8 @@
       "type": "Feature",
       "properties": {
         "oneway": "true",
-        "p": "1",
-        "s": "2"
+        "priority": "1",
+        "stress": "2"
       },
       "geometry": {
         "type": "LineString",
@@ -22675,8 +22675,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -22735,8 +22735,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -22767,8 +22767,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -22883,8 +22883,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0",
+        "priority": "1",
+        "stress": "0",
         "winter_service": "yes"
       },
       "geometry": {
@@ -22948,8 +22948,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "2"
+        "priority": "1",
+        "stress": "2"
       },
       "geometry": {
         "type": "LineString",
@@ -22976,8 +22976,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -23000,8 +23000,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0",
+        "priority": "1",
+        "stress": "0",
         "winter_service": "yes"
       },
       "geometry": {
@@ -23061,8 +23061,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "0",
-        "s": "0"
+        "priority": "0",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -23134,8 +23134,8 @@
       "type": "Feature",
       "properties": {
         "oneway": "yes",
-        "p": "1",
-        "s": "2"
+        "priority": "1",
+        "stress": "2"
       },
       "geometry": {
         "type": "LineString",
@@ -23170,8 +23170,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "2"
+        "priority": "1",
+        "stress": "2"
       },
       "geometry": {
         "type": "LineString",
@@ -23242,8 +23242,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "2"
+        "priority": "1",
+        "stress": "2"
       },
       "geometry": {
         "type": "LineString",
@@ -23266,8 +23266,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -23298,8 +23298,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -23582,8 +23582,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -23630,8 +23630,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "0",
-        "s": "0",
+        "priority": "0",
+        "stress": "0",
         "winter_service": "yes"
       },
       "geometry": {
@@ -23671,8 +23671,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "2",
-        "s": "0"
+        "priority": "2",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -23703,8 +23703,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "0",
-        "s": "0",
+        "priority": "0",
+        "stress": "0",
         "winter_service": "yes"
       },
       "geometry": {
@@ -23804,8 +23804,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "2"
+        "priority": "1",
+        "stress": "2"
       },
       "geometry": {
         "type": "LineString",
@@ -23856,8 +23856,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -23884,8 +23884,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -23904,8 +23904,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -23952,8 +23952,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "2",
-        "s": "1"
+        "priority": "2",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -23976,8 +23976,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -24016,8 +24016,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -24044,8 +24044,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -24068,9 +24068,9 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "0",
+        "priority": "0",
         "steep": "yes",
-        "s": "0"
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -24089,8 +24089,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "0",
-        "s": "0",
+        "priority": "0",
+        "stress": "0",
         "winter_service": "yes"
       },
       "geometry": {
@@ -24134,8 +24134,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -24170,8 +24170,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -24198,8 +24198,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -24222,8 +24222,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -24258,8 +24258,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -24282,8 +24282,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -24318,8 +24318,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -24350,8 +24350,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -24390,8 +24390,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "0",
-        "s": "0"
+        "priority": "0",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -24410,8 +24410,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -24482,8 +24482,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -24650,8 +24650,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -24734,8 +24734,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "0",
-        "s": "0"
+        "priority": "0",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -24766,8 +24766,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -24954,8 +24954,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -25010,8 +25010,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -25030,8 +25030,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -25194,8 +25194,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "0",
-        "s": "0"
+        "priority": "0",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -25222,8 +25222,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -25243,8 +25243,8 @@
       "type": "Feature",
       "properties": {
         "oneway": "yes",
-        "p": "1",
-        "s": "2"
+        "priority": "1",
+        "stress": "2"
       },
       "geometry": {
         "type": "LineString",
@@ -25303,8 +25303,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -25327,8 +25327,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -25655,8 +25655,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "2",
-        "s": "1"
+        "priority": "2",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -25683,8 +25683,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "0",
-        "s": "0",
+        "priority": "0",
+        "stress": "0",
         "winter_service": "yes"
       },
       "geometry": {
@@ -25744,8 +25744,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -25916,8 +25916,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -26188,9 +26188,9 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
+        "priority": "1",
         "steep": "yes",
-        "s": "2"
+        "stress": "2"
       },
       "geometry": {
         "type": "LineString",
@@ -26381,8 +26381,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1",
+        "priority": "1",
+        "stress": "1",
         "winter_service": "yes"
       },
       "geometry": {
@@ -26402,8 +26402,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -26486,8 +26486,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -26511,8 +26511,8 @@
       "type": "Feature",
       "properties": {
         "fixme": "1",
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -26551,8 +26551,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "2",
-        "s": "1"
+        "priority": "2",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -26623,8 +26623,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "2",
-        "s": "0"
+        "priority": "2",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -26663,8 +26663,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "2"
+        "priority": "1",
+        "stress": "2"
       },
       "geometry": {
         "type": "LineString",
@@ -26703,8 +26703,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "0",
-        "s": "0"
+        "priority": "0",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -26747,8 +26747,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "0",
-        "s": "0",
+        "priority": "0",
+        "stress": "0",
         "winter_service": "yes"
       },
       "geometry": {
@@ -26828,8 +26828,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -26916,8 +26916,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -26952,8 +26952,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "0",
-        "s": "0"
+        "priority": "0",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -26972,8 +26972,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -27008,8 +27008,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -27036,8 +27036,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -27080,8 +27080,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -27132,8 +27132,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "2"
+        "priority": "1",
+        "stress": "2"
       },
       "geometry": {
         "type": "LineString",
@@ -27161,8 +27161,8 @@
       "type": "Feature",
       "properties": {
         "oneway": "true",
-        "p": "1",
-        "s": "0",
+        "priority": "1",
+        "stress": "0",
         "winter_service": "yes"
       },
       "geometry": {
@@ -27270,9 +27270,9 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
+        "priority": "1",
         "source": "wm-oekostadtplan",
-        "s": "1"
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -27343,8 +27343,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -27379,8 +27379,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -27407,8 +27407,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -27431,8 +27431,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -27455,8 +27455,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -27499,8 +27499,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -27543,9 +27543,9 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
+        "priority": "1",
         "steep": "yes",
-        "s": "0"
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -27800,8 +27800,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -27857,8 +27857,8 @@
       "type": "Feature",
       "properties": {
         "oneway": "true",
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -27925,8 +27925,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "0",
-        "s": "0"
+        "priority": "0",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -27993,8 +27993,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "2"
+        "priority": "1",
+        "stress": "2"
       },
       "geometry": {
         "type": "LineString",
@@ -28065,9 +28065,9 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
+        "priority": "1",
         "steep": "yes",
-        "s": "2"
+        "stress": "2"
       },
       "geometry": {
         "type": "LineString",
@@ -28130,8 +28130,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -28174,8 +28174,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0",
+        "priority": "1",
+        "stress": "0",
         "winter_service": "yes"
       },
       "geometry": {
@@ -28256,8 +28256,8 @@
       "type": "Feature",
       "properties": {
         "oneway": "yes",
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -28288,8 +28288,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "2",
-        "s": "1"
+        "priority": "2",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -28328,8 +28328,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0",
+        "priority": "1",
+        "stress": "0",
         "winter_service": "yes"
       },
       "geometry": {
@@ -28377,8 +28377,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -28469,8 +28469,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "0",
-        "s": "0",
+        "priority": "0",
+        "stress": "0",
         "winter_service": "yes"
       },
       "geometry": {
@@ -28490,8 +28490,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -28510,8 +28510,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -28606,8 +28606,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "2"
+        "priority": "1",
+        "stress": "2"
       },
       "geometry": {
         "type": "LineString",
@@ -28634,8 +28634,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "0",
-        "s": "0",
+        "priority": "0",
+        "stress": "0",
         "winter_service": "yes"
       },
       "geometry": {
@@ -28735,8 +28735,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -28771,8 +28771,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -28851,8 +28851,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -28903,8 +28903,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "0",
-        "s": "0",
+        "priority": "0",
+        "stress": "0",
         "winter_service": "yes"
       },
       "geometry": {
@@ -28924,8 +28924,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "2",
-        "s": "1"
+        "priority": "2",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -28956,8 +28956,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "0",
-        "s": "0"
+        "priority": "0",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -28984,8 +28984,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -29012,8 +29012,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "2",
-        "s": "0"
+        "priority": "2",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -29156,8 +29156,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "2"
+        "priority": "1",
+        "stress": "2"
       },
       "geometry": {
         "type": "LineString",
@@ -29192,8 +29192,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "0",
-        "s": "2"
+        "priority": "0",
+        "stress": "2"
       },
       "geometry": {
         "type": "LineString",
@@ -29216,8 +29216,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -29240,8 +29240,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -29452,8 +29452,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "2"
+        "priority": "1",
+        "stress": "2"
       },
       "geometry": {
         "type": "LineString",
@@ -29592,8 +29592,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -29704,8 +29704,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "0",
-        "s": "0"
+        "priority": "0",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -29872,8 +29872,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -29916,9 +29916,9 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "2",
+        "priority": "2",
         "source": "wm-oekostadtplan",
-        "s": "0"
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -29946,8 +29946,8 @@
       "type": "Feature",
       "properties": {
         "oneway": "yes",
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -30210,8 +30210,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -30250,8 +30250,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -30335,8 +30335,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "0",
-        "s": "1"
+        "priority": "0",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -30375,9 +30375,9 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
+        "priority": "1",
         "source": "wm-oekostadtplan",
-        "s": "1"
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -30444,8 +30444,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -30532,8 +30532,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "0",
-        "s": "0",
+        "priority": "0",
+        "stress": "0",
         "winter_service": "yes"
       },
       "geometry": {
@@ -30561,8 +30561,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -30662,8 +30662,8 @@
       "type": "Feature",
       "properties": {
         "oneway": "true",
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -30686,8 +30686,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -30734,8 +30734,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "2"
+        "priority": "1",
+        "stress": "2"
       },
       "geometry": {
         "type": "LineString",
@@ -30842,8 +30842,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -30930,8 +30930,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "0",
-        "s": "0",
+        "priority": "0",
+        "stress": "0",
         "winter_service": "yes"
       },
       "geometry": {
@@ -30991,8 +30991,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "2",
-        "s": "0"
+        "priority": "2",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -31027,8 +31027,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -31051,9 +31051,9 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
+        "priority": "1",
         "source": "wm-oekostadtplan",
-        "s": "1"
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -31084,8 +31084,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -31148,8 +31148,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -31409,8 +31409,8 @@
       "type": "Feature",
       "properties": {
         "oneway": "yes",
-        "p": "0",
-        "s": "1",
+        "priority": "0",
+        "stress": "1",
         "winter_service": "yes"
       },
       "geometry": {
@@ -31434,8 +31434,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -31482,8 +31482,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -31506,8 +31506,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "2",
-        "s": "1"
+        "priority": "2",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -31554,8 +31554,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "2"
+        "priority": "1",
+        "stress": "2"
       },
       "geometry": {
         "type": "LineString",
@@ -31578,8 +31578,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -31618,8 +31618,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "2"
+        "priority": "1",
+        "stress": "2"
       },
       "geometry": {
         "type": "LineString",
@@ -31658,8 +31658,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -31682,8 +31682,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -31702,8 +31702,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -31758,8 +31758,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -31799,8 +31799,8 @@
       "type": "Feature",
       "properties": {
         "oneway": "true",
-        "p": "1",
-        "s": "1",
+        "priority": "1",
+        "stress": "1",
         "winter_service": "yes"
       },
       "geometry": {
@@ -31872,8 +31872,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "2"
+        "priority": "1",
+        "stress": "2"
       },
       "geometry": {
         "type": "LineString",
@@ -31900,8 +31900,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -31936,8 +31936,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "2",
-        "s": "2"
+        "priority": "2",
+        "stress": "2"
       },
       "geometry": {
         "type": "LineString",
@@ -31956,8 +31956,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "0",
-        "s": "1",
+        "priority": "0",
+        "stress": "1",
         "winter_service": "yes"
       },
       "geometry": {
@@ -31981,8 +31981,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0",
+        "priority": "1",
+        "stress": "0",
         "winter_service": "yes"
       },
       "geometry": {
@@ -32014,8 +32014,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "2",
-        "s": "0"
+        "priority": "2",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -32054,8 +32054,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -32090,8 +32090,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -32110,8 +32110,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -32142,8 +32142,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -32194,8 +32194,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "0",
-        "s": "0",
+        "priority": "0",
+        "stress": "0",
         "winter_service": "yes"
       },
       "geometry": {
@@ -32231,8 +32231,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "2",
-        "s": "0"
+        "priority": "2",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -32263,8 +32263,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -32307,8 +32307,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -32403,8 +32403,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -32455,8 +32455,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "2"
+        "priority": "1",
+        "stress": "2"
       },
       "geometry": {
         "type": "LineString",
@@ -32487,8 +32487,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -32519,8 +32519,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "2",
-        "s": "0"
+        "priority": "2",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -32555,8 +32555,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -32655,8 +32655,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "2"
+        "priority": "1",
+        "stress": "2"
       },
       "geometry": {
         "type": "LineString",
@@ -32687,8 +32687,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -32779,8 +32779,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -32812,8 +32812,8 @@
       "type": "Feature",
       "properties": {
         "oneway": "true",
-        "p": "1",
-        "s": "0",
+        "priority": "1",
+        "stress": "0",
         "winter_service": "yes"
       },
       "geometry": {
@@ -32857,8 +32857,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "2",
-        "s": "0"
+        "priority": "2",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -32893,8 +32893,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -32957,8 +32957,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -32993,8 +32993,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -33218,8 +33218,8 @@
       "type": "Feature",
       "properties": {
         "fixme": "true",
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -33314,8 +33314,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "2"
+        "priority": "1",
+        "stress": "2"
       },
       "geometry": {
         "type": "LineString",
@@ -33398,8 +33398,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "0",
-        "s": "0",
+        "priority": "0",
+        "stress": "0",
         "winter_service": "yes"
       },
       "geometry": {
@@ -33427,8 +33427,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "0",
-        "s": "0"
+        "priority": "0",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -33471,8 +33471,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "2",
-        "s": "0"
+        "priority": "2",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -33511,8 +33511,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -33584,8 +33584,8 @@
       "type": "Feature",
       "properties": {
         "oneway": "true",
-        "p": "1",
-        "s": "0",
+        "priority": "1",
+        "stress": "0",
         "winter_service": "yes"
       },
       "geometry": {
@@ -33621,8 +33621,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -33653,8 +33653,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -33706,8 +33706,8 @@
       "type": "Feature",
       "properties": {
         "oneway": "yes",
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -33802,8 +33802,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -33854,8 +33854,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -34079,8 +34079,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "2",
-        "s": "0"
+        "priority": "2",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -34099,8 +34099,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -34167,8 +34167,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "0",
-        "s": "0",
+        "priority": "0",
+        "stress": "0",
         "winter_service": "yes"
       },
       "geometry": {
@@ -34240,8 +34240,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -34472,8 +34472,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -34532,8 +34532,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -34568,8 +34568,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -34620,8 +34620,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "2"
+        "priority": "1",
+        "stress": "2"
       },
       "geometry": {
         "type": "LineString",
@@ -34644,8 +34644,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "0",
-        "s": "0",
+        "priority": "0",
+        "stress": "0",
         "winter_service": "yes"
       },
       "geometry": {
@@ -34741,8 +34741,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "2",
-        "s": "0"
+        "priority": "2",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -34769,8 +34769,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1",
+        "priority": "1",
+        "stress": "1",
         "unpaved": "yes"
       },
       "geometry": {
@@ -34790,8 +34790,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -34886,8 +34886,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -34906,8 +34906,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -35014,8 +35014,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -35058,8 +35058,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "2",
-        "s": "0"
+        "priority": "2",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -35114,8 +35114,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -35214,8 +35214,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "2"
+        "priority": "1",
+        "stress": "2"
       },
       "geometry": {
         "type": "LineString",
@@ -35270,8 +35270,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "0",
-        "s": "0"
+        "priority": "0",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -35306,8 +35306,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -35378,8 +35378,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "2",
-        "s": "1"
+        "priority": "2",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -35602,9 +35602,9 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
+        "priority": "1",
         "source": "wm-oekostadtplan",
-        "s": "1"
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -35643,8 +35643,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -35687,8 +35687,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -35855,8 +35855,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -35883,8 +35883,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "2"
+        "priority": "1",
+        "stress": "2"
       },
       "geometry": {
         "type": "LineString",
@@ -35907,8 +35907,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -35979,8 +35979,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -36007,8 +36007,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -36099,8 +36099,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "2"
+        "priority": "1",
+        "stress": "2"
       },
       "geometry": {
         "type": "LineString",
@@ -36135,8 +36135,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -36183,8 +36183,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0",
+        "priority": "1",
+        "stress": "0",
         "winter_service": "yes"
       },
       "geometry": {
@@ -36208,8 +36208,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -36248,8 +36248,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -36296,8 +36296,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -36348,8 +36348,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -36376,8 +36376,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -36588,8 +36588,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "2",
-        "s": "0"
+        "priority": "2",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -36648,8 +36648,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -36712,8 +36712,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "0",
-        "s": "0",
+        "priority": "0",
+        "stress": "0",
         "winter_service": "yes"
       },
       "geometry": {
@@ -36737,8 +36737,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -36801,8 +36801,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "2",
+        "priority": "1",
+        "stress": "2",
         "winter_service": "yes"
       },
       "geometry": {
@@ -36838,8 +36838,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -36870,8 +36870,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -36890,8 +36890,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "2"
+        "priority": "1",
+        "stress": "2"
       },
       "geometry": {
         "type": "LineString",
@@ -36922,8 +36922,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "0",
-        "s": "0"
+        "priority": "0",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -37298,8 +37298,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "2"
+        "priority": "1",
+        "stress": "2"
       },
       "geometry": {
         "type": "LineString",
@@ -37346,8 +37346,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1",
+        "priority": "1",
+        "stress": "1",
         "winter_service": "yes"
       },
       "geometry": {
@@ -37391,8 +37391,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -37415,8 +37415,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -37455,8 +37455,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "0",
-        "s": "0",
+        "priority": "0",
+        "stress": "0",
         "winter_service": "yes"
       },
       "geometry": {
@@ -37500,8 +37500,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "2",
-        "s": "1"
+        "priority": "2",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -37548,8 +37548,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -37660,9 +37660,9 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
+        "priority": "1",
         "source": "wm-oekostadtplan",
-        "s": "0"
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -37753,8 +37753,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -37798,8 +37798,8 @@
       "type": "Feature",
       "properties": {
         "oneway": "true",
-        "p": "2",
-        "s": "0"
+        "priority": "2",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -37822,8 +37822,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -37954,8 +37954,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "0",
-        "s": "1"
+        "priority": "0",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -37982,8 +37982,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0",
+        "priority": "1",
+        "stress": "0",
         "winter_service": "yes"
       },
       "geometry": {
@@ -38051,8 +38051,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -38099,8 +38099,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "2",
-        "s": "0"
+        "priority": "2",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -38127,8 +38127,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "0",
-        "s": "0",
+        "priority": "0",
+        "stress": "0",
         "winter_service": "yes"
       },
       "geometry": {
@@ -38156,8 +38156,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -38244,8 +38244,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -38272,8 +38272,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -38300,8 +38300,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "2"
+        "priority": "1",
+        "stress": "2"
       },
       "geometry": {
         "type": "LineString",
@@ -38328,8 +38328,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "0",
-        "s": "0"
+        "priority": "0",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -38404,8 +38404,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -38428,8 +38428,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -38492,8 +38492,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -38540,8 +38540,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -38564,8 +38564,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -38660,8 +38660,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "2",
-        "s": "1"
+        "priority": "2",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -38696,8 +38696,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -38736,8 +38736,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "2",
-        "s": "0"
+        "priority": "2",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -38808,8 +38808,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -38952,8 +38952,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "0",
-        "s": "1",
+        "priority": "0",
+        "stress": "1",
         "winter_service": "yes"
       },
       "geometry": {
@@ -38985,8 +38985,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -39005,8 +39005,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -39029,8 +39029,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -39089,8 +39089,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "0"
+        "priority": "1",
+        "stress": "0"
       },
       "geometry": {
         "type": "LineString",
@@ -39129,8 +39129,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
@@ -39201,8 +39201,8 @@
     {
       "type": "Feature",
       "properties": {
-        "p": "1",
-        "s": "1"
+        "priority": "1",
+        "stress": "1"
       },
       "geometry": {
         "type": "LineString",
