@@ -16,15 +16,15 @@ rkGlobal.baseUrl = './'
 var configurations = {
     'wien' : {
         latlong: [48.2083537, 16.3725042],
-        geoJsonFile: 'wien/radlkarte-wien.geojson',
+        geoJsonFile: 'data/radlkarte-wien.geojson',
     },
     'linz' : {
         latlong: [48.30, 14.285],
-        geoJsonFile: 'linz/radlkarte-linz.geojson',
+        geoJsonFile: 'data/radlkarte-linz.geojson',
     },
     'klagenfurt' : {
         latlong: [46.624, 14.308],
-        geoJsonFile: 'klagenfurt/radlkarte-klagenfurt.geojson',
+        geoJsonFile: 'data/radlkarte-klagenfurt.geojson',
     }
 }
 
