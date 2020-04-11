@@ -111,6 +111,6 @@ def minimize(infile, outfile):
 if __name__ == '__main__':
     if len(sys.argv) > 1:
         for infile in sys.argv[1:]:
-            minimize(infile, infile + '.min')
+            minimize(infile, infile)
     else:
         print('Usage: add one or more geojson files to be minimized as arguments')
