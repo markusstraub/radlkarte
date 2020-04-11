@@ -6,6 +6,9 @@
 # 1) reduce file size (for faster download)
 # 2) stable feature order for minimum diffs after changes
 #    (JOSM unfortunately reorders the GeoJSON)
+#
+# For the latter point it adds unique ids to each feature and gracefully
+# handles duplicate and invalid ids.
 
 
 import json
@@ -21,8 +24,10 @@ def enforce_int_id_in_feature_properties(feature):
     int_id = -1
     try:
         int_id = int(feature['properties']['id'])
-    except:
-        logging.info('no valid id found in {}'.format(feature['properties']))
+    except KeyError:
+        logging.info('no id in {}'.format(feature['properties']))
+    except ValueError:
+        logging.info('invalid id in {}'.format(feature['properties']))
     feature['properties']['id'] = int_id
 
 
@@ -103,9 +108,8 @@ def minimize(infile, outfile):
 
 
 if __name__ == '__main__':
-    if len(sys.argv) < 1:
-        print('Usage: provide a list of geojson files to be minimized')
+    if len(sys.argv) > 1:
+        for infile in sys.argv[1:]:
+            minimize(infile, infile + '.min')
     else:
-        infile = 'radlkarte-wien.geojson'
-        outfile = 'test.min.geojson'
-        minimize(infile, outfile)
+        print('Usage: add one or more geojson files to be minimized as arguments')
