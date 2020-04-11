@@ -41,8 +41,8 @@ def restrict_decimal_precision(geometry):
         logging.warning('ignoring geometry type {}'.format(geometry['type']))
 
     for tuple in tuples:
-        tuple[0] = '{:.5f}'.format(tuple[0]).rstrip('0').rstrip('.')
-        tuple[1] = '{:.5f}'.format(tuple[1]).rstrip('0').rstrip('.')
+        tuple[0] = float('{:.5f}'.format(tuple[0]).rstrip('0').rstrip('.'))
+        tuple[1] = float('{:.5f}'.format(tuple[1]).rstrip('0').rstrip('.'))
 
 
 def get_max_id(features):
@@ -90,6 +90,7 @@ def minimize(infile, outfile):
 
     bad_features = get_features_with_duplicate_or_invalid_ids(features)
     max_id = max(1, get_max_id(features))
+    logging.info("max id found was {}".format(max_id))
     set_new_ids(bad_features, max_id + 1)
 
     id_to_feature = {feature['properties']['id']: feature for feature in features}
