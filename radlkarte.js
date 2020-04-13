@@ -3,6 +3,7 @@
 var rkGlobal = {}; // global variable for radlkarte properties / data storage
 rkGlobal.leafletMap = undefined; // the main leaflet map
 rkGlobal.leafletLayersControl = undefined; // leaflet layer-control
+rkGlobal.segmentsNew = {};
 rkGlobal.segmentsPS = []; // matrix holding all segments (two dimensions: priority & stressfulness)
 rkGlobal.markerLayerLowZoom = L.layerGroup(); // layer group holding all icons to be viewed at lower zoom levels
 rkGlobal.markerLayerHighZoom = L.layerGroup(); // layer group holding all icons to be viewed at higher zoom levels
@@ -32,6 +33,7 @@ function debug(obj) {
     if(rkGlobal.debug)
         console.log(obj);
 }
+
 
 function loadGeoJson(file) {
     // get rid of "XML Parsing Error: not well-formed" during $.getJSON
@@ -63,6 +65,8 @@ function loadGeoJson(file) {
         var goodCount = 0;
         var poiCount = 0;
         var markerLayers;
+
+        var categorizedLinestrings = {};
         for (i=0; i<data.features.length; i++) {
             var geojson = data.features[i];
             if(geojson.type != 'Feature' || geojson.properties == undefined || geojson.geometry == undefined || geojson.geometry.type != 'LineString' || geojson.geometry.coordinates.length < 2) {
@@ -93,6 +97,8 @@ function loadGeoJson(file) {
             // 1) for the lines: add geojson linestring features
             rkGlobal.segmentsPS[p][s].lines.push(geojson);
 
+            addSegmentToObject(categorizedLinestrings, geojson);
+
             // 2) for the decorators: add latlons
             if(geojson.properties.oneway == 'yes') {
                 rkGlobal.segmentsPS[p][s].decorators.push(turf.flip(geojson).geometry.coordinates);
@@ -104,30 +110,45 @@ function loadGeoJson(file) {
 
         // second step - merge the geojson linestring features for the same priority-stressfulness level into a single multilinestring
         // and then put them in a leaflet layer
-        for(p in rkGlobal.segmentsPS) {
-            for(s in rkGlobal.segmentsPS[p]) {
-                var multilinestringfeature = turf.combine(turf.featureCollection(rkGlobal.segmentsPS[p][s].lines));
-                rkGlobal.segmentsPS[p][s].lines = L.geoJSON(multilinestringfeature);
-                rkGlobal.leafletMap.addLayer(rkGlobal.segmentsPS[p][s].lines);
 
-                if(rkGlobal.segmentsPS[p][s].decorators.length > 0) {
-                    rkGlobal.segmentsPS[p][s].decorators = L.polylineDecorator(rkGlobal.segmentsPS[p][s].decorators);
-                    rkGlobal.leafletMap.addLayer(rkGlobal.segmentsPS[p][s].decorators);
-                } else {
-                    rkGlobal.segmentsPS[p][s].decorators = undefined;
-                }
-                // discard properties of multilinestringfeature? no longer needed.
-            }
+        console.log(categorizedLinestrings);
+        for(const key of Object.keys(categorizedLinestrings)) {
+            console.log(categorizedLinestrings[key].length + " " + key);
+            var multilinestringFeature = turf.combine(turf.featureCollection(categorizedLinestrings[key]));
+            multilinestringFeature['properties'] = JSON.parse(key);
+            rkGlobal.segmentsNew[key] = L.geoJSON(multilinestringFeature);
+            rkGlobal.leafletMap.addLayer(rkGlobal.segmentsNew[key]);
+            //for(linestring in categorizedLinestrings[key]) {
+            //    console
+           // }
         }
 
-        // layer sorting (high priority on top)
-        for(p in rkGlobal.segmentsPS) {
-            for(s in rkGlobal.segmentsPS[p]) {
-                rkGlobal.segmentsPS[p][s].lines.bringToBack();
-                if(rkGlobal.segmentsPS[p][s].decorators != undefined)
-                    rkGlobal.segmentsPS[p][s].decorators.bringToBack();
-            }
-        }
+
+
+//         for(p in rkGlobal.segmentsPS) {
+//             for(s in rkGlobal.segmentsPS[p]) {
+//                 var multilinestringfeature = turf.combine(turf.featureCollection(rkGlobal.segmentsPS[p][s].lines));
+//                 rkGlobal.segmentsPS[p][s].lines = L.geoJSON(multilinestringfeature);
+//                 rkGlobal.leafletMap.addLayer(rkGlobal.segmentsPS[p][s].lines);
+//
+//                 if(rkGlobal.segmentsPS[p][s].decorators.length > 0) {
+//                     rkGlobal.segmentsPS[p][s].decorators = L.polylineDecorator(rkGlobal.segmentsPS[p][s].decorators);
+//                     rkGlobal.leafletMap.addLayer(rkGlobal.segmentsPS[p][s].decorators);
+//                 } else {
+//                     rkGlobal.segmentsPS[p][s].decorators = undefined;
+//                 }
+//                 // discard properties of multilinestringfeature? no longer needed.
+//             }
+//         }
+
+        // TODO layer sorting (high priority on top)
+//         for(p in rkGlobal.segmentsPS) {
+//             for(s in rkGlobal.segmentsPS[p]) {
+//                 rkGlobal.segmentsPS[p][s].lines.bringToBack();
+//                 if(rkGlobal.segmentsPS[p][s].decorators != undefined)
+//                     rkGlobal.segmentsPS[p][s].decorators.bringToBack();
+//             }
+//         }
 
         rkGlobal.styleFunction();
 
@@ -145,6 +166,30 @@ function loadGeoJson(file) {
             });
         });
     });
+}
+
+function addSegmentToObject(o, geojsonLinestring) {
+    var key = getSegmentKey(geojsonLinestring);
+    var keyString = JSON.stringify(key);
+    if(o[keyString] === undefined) {
+        o[keyString] = [];
+    }
+    o[keyString].push(geojsonLinestring);
+}
+
+/*
+ * Get a JSON object as key for a segment linestring.
+ * This object explicitly contains all values to be used in styling
+ */
+function getSegmentKey(geojsonLinestring) {
+    var properties = geojsonLinestring.properties
+    return {
+        "priority": properties.priority,
+        "stress": properties.stress,
+        "unpaved": properties.unpaved === undefined ? 'no' : properties.unpaved,
+        "steep": properties.steep === undefined ? 'no' : properties.steep,
+        "winter": properties.winter === undefined ? 'no' : properties.winter
+    };
 }
 
 
@@ -169,30 +214,50 @@ rkGlobal.styleAColors = ['#004B67', '#51A4B6', '#FF6600']; // dark blue - light 
  */
 function updateStylesWithStyleA() {
     var zoom = rkGlobal.leafletMap.getZoom();
-    for(var priority=0; priority<rkGlobal.priorityStrings.length; priority++) {
-        for(var stressfulness=0; stressfulness<rkGlobal.stressStrings.length; stressfulness++) {
-            if(zoom >= rkGlobal.styleAPriorityFullVisibleFromZoom[priority]) {
-                rkGlobal.leafletMap.addLayer(rkGlobal.segmentsPS[priority][stressfulness].lines);
-                var lineStyle = getLineStringStyleWithColorDefiningStressfulness(priority, stressfulness)
-                rkGlobal.segmentsPS[priority][stressfulness].lines.setStyle(lineStyle);
-                if(rkGlobal.segmentsPS[priority][stressfulness].decorators != undefined) {
-                    rkGlobal.segmentsPS[priority][stressfulness].decorators.setPatterns(getOnewayArrowPatternsWithColorDefiningStressfulness(priority, stressfulness));
-                    rkGlobal.leafletMap.addLayer(rkGlobal.segmentsPS[priority][stressfulness].decorators);
-                }
-            } else if(zoom < rkGlobal.styleAPriorityFullVisibleFromZoom[priority] && zoom >= rkGlobal.styleAPriorityReducedVisibilityFromZoom[priority]) {
-                rkGlobal.segmentsPS[priority][stressfulness].lines.setStyle(getLineStringStyleWithColorDefiningStressfulnessMinimal(priority,stressfulness));
-                rkGlobal.leafletMap.addLayer(rkGlobal.segmentsPS[priority][stressfulness].lines);
-                if(rkGlobal.segmentsPS[priority][stressfulness].decorators != undefined) {
-                    rkGlobal.leafletMap.removeLayer(rkGlobal.segmentsPS[priority][stressfulness].decorators);
-                }
-            } else {
-                rkGlobal.leafletMap.removeLayer(rkGlobal.segmentsPS[priority][stressfulness].lines);
-            }
-            if(zoom < rkGlobal.styleAOnewayIconThreshold && rkGlobal.segmentsPS[priority][stressfulness].decorators) {
-                rkGlobal.leafletMap.removeLayer(rkGlobal.segmentsPS[priority][stressfulness].decorators);
-            }
+    for(const key of Object.keys(rkGlobal.segmentsNew)) {
+        var properties = JSON.parse(key);
+        var showFull = zoom >= rkGlobal.styleAPriorityFullVisibleFromZoom[properties.priority];
+        var showMinimal = zoom < rkGlobal.styleAPriorityFullVisibleFromZoom[properties.priority] && zoom >= rkGlobal.styleAPriorityReducedVisibilityFromZoom[properties.priority];
+
+        var lineStyle;
+        if(showFull) {
+             lineStyle = getLineStringStyleWithColorDefiningStressfulness(properties.priority, properties.stress, properties.unpaved);
+        } else if(showMinimal) {
+            lineStyle = getLineStringStyleWithColorDefiningStressfulnessMinimal(properties.priority, properties.stress, properties.unpaved);
         }
+
+        if(showFull || showMinimal) {
+            rkGlobal.segmentsNew[key].setStyle(lineStyle);
+            rkGlobal.leafletMap.addLayer(rkGlobal.segmentsNew[key]);
+        } else {
+            rkGlobal.leafletMap.removeLayer(rkGlobal.segmentsNew[key]);
+        }
+
     }
+//     for(var priority=0; priority<rkGlobal.priorityStrings.length; priority++) {
+//         for(var stressfulness=0; stressfulness<rkGlobal.stressStrings.length; stressfulness++) {
+//             if(zoom >= rkGlobal.styleAPriorityFullVisibleFromZoom[priority]) {
+//                 rkGlobal.leafletMap.addLayer(rkGlobal.segmentsPS[priority][stressfulness].lines);
+//                 var lineStyle = getLineStringStyleWithColorDefiningStressfulness(priority, stressfulness)
+//                 rkGlobal.segmentsPS[priority][stressfulness].lines.setStyle(lineStyle);
+//                 if(rkGlobal.segmentsPS[priority][stressfulness].decorators != undefined) {
+//                     rkGlobal.segmentsPS[priority][stressfulness].decorators.setPatterns(getOnewayArrowPatternsWithColorDefiningStressfulness(priority, stressfulness));
+//                     rkGlobal.leafletMap.addLayer(rkGlobal.segmentsPS[priority][stressfulness].decorators);
+//                 }
+//             } else if(zoom < rkGlobal.styleAPriorityFullVisibleFromZoom[priority] && zoom >= rkGlobal.styleAPriorityReducedVisibilityFromZoom[priority]) {
+//                 rkGlobal.segmentsPS[priority][stressfulness].lines.setStyle(getLineStringStyleWithColorDefiningStressfulnessMinimal(priority,stressfulness));
+//                 rkGlobal.leafletMap.addLayer(rkGlobal.segmentsPS[priority][stressfulness].lines);
+//                 if(rkGlobal.segmentsPS[priority][stressfulness].decorators != undefined) {
+//                     rkGlobal.leafletMap.removeLayer(rkGlobal.segmentsPS[priority][stressfulness].decorators);
+//                 }
+//             } else {
+//                 rkGlobal.leafletMap.removeLayer(rkGlobal.segmentsPS[priority][stressfulness].lines);
+//             }
+//             if(zoom < rkGlobal.styleAOnewayIconThreshold && rkGlobal.segmentsPS[priority][stressfulness].decorators) {
+//                 rkGlobal.leafletMap.removeLayer(rkGlobal.segmentsPS[priority][stressfulness].decorators);
+//             }
+//         }
+//     }
     if(zoom >= rkGlobal.styleAIconZoomThresholds[1]) {
         rkGlobal.leafletMap.removeLayer(rkGlobal.markerLayerLowZoom);
         rkGlobal.leafletMap.addLayer(rkGlobal.markerLayerHighZoom);
@@ -205,14 +270,15 @@ function updateStylesWithStyleA() {
     }
 }
 
-function getLineStringStyleWithColorDefiningStressfulness(priority,stressfulness) {
+function getLineStringStyleWithColorDefiningStressfulness(priority, stressfulness, unpaved) {
     var style = {
         color: rkGlobal.styleAColors[stressfulness],
         weight: getLineWeightForCategory(priority),
-        opacity: rkGlobal.styleAOpacity
+        opacity: rkGlobal.styleAOpacity,
     };
-//     if(priority >= 2)
-//         style.dashArray = "5 10";
+    if(unpaved === 'yes') {
+        style.dashArray = "5 15";
+    }
     return style;
 }
 
@@ -223,14 +289,15 @@ function getLineWeightForCategory(category) {
     return lineWeight;
 }
 
-function getLineStringStyleWithColorDefiningStressfulnessMinimal(priority,stressfulness) {
+function getLineStringStyleWithColorDefiningStressfulnessMinimal(priority, stressfulness, unpaved) {
     var style = {
         color: rkGlobal.styleAColors[stressfulness],
         weight: 1,
         opacity: rkGlobal.styleAOpacity
     };
-//     if(priority >= 2)
-//         style.dashArray = "5 10";
+    if(unpaved === 'yes') {
+        style.dashArray = "5 10";
+    }
     return style;
 }
 
