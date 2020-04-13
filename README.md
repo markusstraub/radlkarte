@@ -44,7 +44,7 @@ Mandatory:
 Optional (omitting the attributes means 'no'):
 - oneway: yes (route only legal in one direction)
 - steep: yes
-- unpaved: yes (dirt, gravel or very uneven cobblestones)
+- unpaved: yes (dirt, gravel or extremely uneven surfaces paved surfaces)
 
 ### Point Attributes
 
@@ -59,6 +59,7 @@ Optional (omitting the attributes means 'no'):
 3. Load an existing radlkarte .geojson file (e.g. `data/radlkarte-example.geojson`) or create a new layer.
 4. Edit the routes
 5. Save the result as .geojson (not as .osm!)
+6. Minify the .geojson with [minify_and_sort_geojson.py](data/minify_and_sort_geojson.py)
 
 
 ## Notes
