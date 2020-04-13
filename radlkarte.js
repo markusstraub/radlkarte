@@ -187,9 +187,9 @@ function updateStyles() {
 
 		var lineStyle;
 		if(showFull) {
-			 lineStyle = getLineStringStyleWithColorDefiningStressfulness(properties.priority, properties.stress, properties.unpaved);
+			 lineStyle = getLineStyle(zoom, properties);
 		} else if(showMinimal) {
-			lineStyle = getLineStringStyleWithColorDefiningStressfulnessMinimal(properties.priority, properties.stress, properties.unpaved);
+			lineStyle = getLineStyleMinimal(properties);
 		}
 
 		if(showFull || showMinimal) {
@@ -200,7 +200,7 @@ function updateStyles() {
 		}
 
 		if(showFull && zoom >= rkGlobal.onewayIconThreshold && properties.oneway === 'yes') {
-			rkGlobal.segmentsNew[key].decorators.setPatterns(getOnewayArrowPatternsWithColorDefiningStressfulness(properties.priority, properties.stress));
+			rkGlobal.segmentsNew[key].decorators.setPatterns(getOnewayArrowPatterns(zoom, properties));
 			rkGlobal.leafletMap.addLayer(rkGlobal.segmentsNew[key].decorators);
 		} else {
 			rkGlobal.leafletMap.removeLayer(rkGlobal.segmentsNew[key].decorators);
@@ -219,42 +219,46 @@ function updateStyles() {
 	}
 }
 
-function getLineStringStyleWithColorDefiningStressfulness(priority, stress, unpaved) {
+function getLineStyle(zoom, properties) {
 	var style = {
-		color: rkGlobal.colors[stress],
-		weight: getLineWeightForCategory(priority),
+		color: rkGlobal.colors[properties.stress],
+		weight: getLineWeight(zoom, properties.priority),
 		opacity: rkGlobal.opacity,
 	};
-	if(unpaved === 'yes') {
-		style.dashArray = "5 15";
+	if(properties.unpaved === 'yes') {
+		style.dashArray = getDashStyle(style.weight);
 	}
 	return style;
 }
 
-function getLineWeightForCategory(category) {
-	var lineWeight = rkGlobal.leafletMap.getZoom() - 10;
-	lineWeight = (lineWeight <= 0 ? 1 : lineWeight) * 1.4;
-	lineWeight *= rkGlobal.lineWidthFactor[category];
-	return lineWeight;
-}
-
-function getLineStringStyleWithColorDefiningStressfulnessMinimal(priority, stress, unpaved) {
+function getLineStyleMinimal(properties) {
 	var style = {
-		color: rkGlobal.colors[stress],
+		color: rkGlobal.colors[properties.stress],
 		weight: 1,
 		opacity: rkGlobal.opacity
 	};
-	if(unpaved === 'yes') {
-		style.dashArray = "5 10";
+	if(properties.unpaved === 'yes') {
+		style.dashArray = getDashStyle(style.weight);
 	}
 	return style;
+}
+
+function getLineWeight(zoom, priority) {
+	var lineWeight = zoom - 10;
+	lineWeight = (lineWeight <= 0 ? 1 : lineWeight) * 1.4;
+	lineWeight *= rkGlobal.lineWidthFactor[priority];
+	return lineWeight;
+}
+
+function getDashStyle(lineWidth) {
+	return (lineWidth * 2) + " " + (lineWidth * 2);
 }
 
 /**
  * @return an array of patterns as expected by L.PolylineDecorator.setPatterns
  */
-function getOnewayArrowPatternsWithColorDefiningStressfulness(priority, stress) {
-	var arrowWidth = Math.max(5, getLineWeightForCategory(priority) * rkGlobal.arrowWidthFactor[priority]);
+function getOnewayArrowPatterns(zoom, properties) {
+	var arrowWidth = Math.max(5, getLineWeight(zoom, properties.priority) * rkGlobal.arrowWidthFactor[properties.priority]);
 	return [
 	{
 		offset: 25,
@@ -263,7 +267,7 @@ function getOnewayArrowPatternsWithColorDefiningStressfulness(priority, stress) 
 			pixelSize: arrowWidth,
 			headAngle: 90,
 			pathOptions: {
-				color: rkGlobal.colors[stress],
+				color: rkGlobal.colors[properties.stress],
 				fillOpacity: rkGlobal.opacity,
 				weight: 0
 			}
