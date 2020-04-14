@@ -28,17 +28,17 @@ rkGlobal.colors = ['#004B67', '#51A4B6', '#FF6600']; // dark blue - light blue -
 rkGlobal.configurations = {
 	'feldkirch' : {
 		centerPoint: [47.237, 9.598],
-		geocodingBounds: [9.497, 47.122, 9.845, 47.546],
+		geocodingBounds: '9.497,47.122,9.845,47.546',
 		geoJsonFile: 'data/radlkarte-feldkirch.geojson'
 	},
 	'klagenfurt' : {
 		centerPoint: [46.624, 14.308],
-		geocodingBounds: [13.978, 46.477, 14.624, 46.778],
+		geocodingBounds: '13.978,46.477,14.624,46.778',
 		geoJsonFile: 'data/radlkarte-klagenfurt.geojson'
 	},
 	'linz' : {
 		centerPoint: [48.30, 14.285],
-		geocodingBounds: [13.999, 48.171, 14.644, 48.472],
+		geocodingBounds: '13.999,48.171,14.644,48.472',
 		geoJsonFile: 'data/radlkarte-linz.geojson'
 	},
 	'wien' : {
@@ -349,14 +349,17 @@ function initMap(location) {
 		defaultMarkGeocode: false
 	}).on('markgeocode', function(e) {
 		var result = e.geocode || e;
-		var bbox = result.bbox;
-		var poly = L.polygon([
-			bbox.getSouthEast(),
-			bbox.getNorthEast(),
-			bbox.getNorthWest(),
-			bbox.getSouthWest()
-		]);
-		rkGlobal.leafletMap.fitBounds(poly.getBounds(), {maxZoom: 17});
+// 		var bbox = result.bbox;
+// 		var poly = L.polygon([
+// 			bbox.getSouthEast(),
+// 			bbox.getNorthEast(),
+// 			bbox.getNorthWest(),
+// 			bbox.getSouthWest()
+// 		]);
+// 		rkGlobal.leafletMap.fitBounds(poly.getBounds(), {maxZoom: 17});
+		console.log(result);
+		var resultCenter = L.latLng(result.center.lat, result.center.lng);
+		rkGlobal.leafletMap.panTo(resultCenter);
 		var resultText = result.name;
 		resultText = resultText.replace(/, Österreich$/, "").replace(/, /g, "<br/>");
 
