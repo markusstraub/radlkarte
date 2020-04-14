@@ -2,6 +2,8 @@
 
 Website for desktop, tablet & smartphone usage with the goal to provide useful (route) information for cyclists.
 
+![radlkarte banner](css/radlkarte-banner.jpg)
+
 ## Features
 - Show recommended bicycle routes
   - Three quality types of route segments: calm, medium, stressful

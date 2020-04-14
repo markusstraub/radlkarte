@@ -1,0 +1,4 @@
+bundle.js
+dist/
+node_modules/
+spec/vendor/openlocationcode.js
