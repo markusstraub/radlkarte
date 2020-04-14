@@ -25,23 +25,26 @@ rkGlobal.arrowWidthFactor = [2, 3, 3];
 rkGlobal.opacity = 0.62;
 rkGlobal.colors = ['#004B67', '#51A4B6', '#FF6600']; // dark blue - light blue - orange
 
-
-var configurations = {
-	'wien' : {
-		latlong: [48.2083537, 16.3725042],
-		geoJsonFile: 'data/radlkarte-wien.geojson',
-	},
-	'linz' : {
-		latlong: [48.30, 14.285],
-		geoJsonFile: 'data/radlkarte-linz.geojson',
+rkGlobal.configurations = {
+	'feldkirch' : {
+		centerPoint: [47.237, 9.598],
+		geocodingBounds: [9.497, 47.122, 9.845, 47.546],
+		geoJsonFile: 'data/radlkarte-feldkirch.geojson'
 	},
 	'klagenfurt' : {
-		latlong: [46.624, 14.308],
-		geoJsonFile: 'data/radlkarte-klagenfurt.geojson',
+		centerPoint: [46.624, 14.308],
+		geocodingBounds: [13.978, 46.477, 14.624, 46.778],
+		geoJsonFile: 'data/radlkarte-klagenfurt.geojson'
 	},
-	'feldkirch' : {
-		latlong: [47.237, 9.598],
-		geoJsonFile: 'data/radlkarte-feldkirch.geojson',
+	'linz' : {
+		centerPoint: [48.30, 14.285],
+		geocodingBounds: [13.999, 48.171, 14.644, 48.472],
+		geoJsonFile: 'data/radlkarte-linz.geojson'
+	},
+	'wien' : {
+		centerPoint: [48.208, 16.372], // lat lon
+		geocodingBounds: '16.105,47.995,16.710,48.389', // min lon, min lat, max lon, max lat
+		geoJsonFile: 'data/radlkarte-wien.geojson'
 	}
 }
 
@@ -282,8 +285,8 @@ function getOnewayArrowPatterns(zoom, properties) {
 
 function initMap(location) {
 	location = location || 'wien';
-	var configuration = configurations[location];
-	rkGlobal.leafletMap = L.map('map', { 'zoomControl' : false } ).setView(configuration.latlong, 14);
+	var configuration = rkGlobal.configurations[location];
+	rkGlobal.leafletMap = L.map('map', { 'zoomControl' : false } ).setView(configuration.centerPoint, 14);
 	new L.Hash(rkGlobal.leafletMap);
 
 	var cartodbPositronLowZoom = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
@@ -336,10 +339,11 @@ function initMap(location) {
 		position: 'topright',
 		placeholder: 'Adresssuche',
 		errorMessage: 'Leider nicht gefunden',
-		geocoder: L.Control.Geocoder.nominatim({
+		geocoder: L.Control.Geocoder.opencage("657bf10308f144c7a9cbb7675c9b0d36", {
 			geocodingQueryParams: {
-				countrycodes: 'at',
-				viewbox: [16.1, 48.32, 16.65, 48] //viewbox=<left>,<top>,<right>,<bottom>
+				countrycode: 'at',
+				language: 'de',
+				bounds: configuration.geocodingBounds // (min lon, min lat, max lon, max lat)
 			}
 		}),
 		defaultMarkGeocode: false
@@ -352,12 +356,15 @@ function initMap(location) {
 			bbox.getNorthWest(),
 			bbox.getSouthWest()
 		]);
-		rkGlobal.leafletMap.fitBounds(poly.getBounds());
+		rkGlobal.leafletMap.fitBounds(poly.getBounds(), {maxZoom: 17});
+		var resultText = result.name;
+		resultText = resultText.replace(/, Österreich$/, "").replace(/, /g, "<br/>");
+
 		var popup = L.popup({
 			autoClose: false,
 			closeOnClick: false,
 			closeButton: true
-		}).setLatLng(e.geocode.center).setContent(result.html || result.name).openOn(rkGlobal.leafletMap);
+		}).setLatLng(e.geocode.center).setContent(resultText).openOn(rkGlobal.leafletMap);
 	}).addTo(rkGlobal.leafletMap);
 
 
