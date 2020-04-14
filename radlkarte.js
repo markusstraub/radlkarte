@@ -38,6 +38,10 @@ var configurations = {
 	'klagenfurt' : {
 		latlong: [46.624, 14.308],
 		geoJsonFile: 'data/radlkarte-klagenfurt.geojson',
+	},
+	'feldkirch' : {
+		latlong: [47.237, 9.598],
+		geoJsonFile: 'data/radlkarte-feldkirch.geojson',
 	}
 }
 
