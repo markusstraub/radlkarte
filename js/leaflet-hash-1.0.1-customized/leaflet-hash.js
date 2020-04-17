@@ -113,13 +113,13 @@
 				return false;
 			}
 
+			this.autoSwitchRegionIfCloseEnough();
+
 			var hash = this.formatHash(this.map);
 			if (this.lastHash != hash) {
 				location.replace(hash);
 				this.lastHash = hash;
 			}
-
-			this.autoSwitchRegionIfCloseEnough();
 		},
 
 		autoSwitchRegionIfCloseEnough: function() {

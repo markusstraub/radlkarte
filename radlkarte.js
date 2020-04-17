@@ -5,7 +5,7 @@ rkGlobal.leafletMap = undefined; // the main leaflet map
 rkGlobal.hash = undefined; // leaflet-hash object, contains the currently active region
 rkGlobal.leafletLayersControl = undefined; // leaflet layer-control
 rkGlobal.geocodingControl = undefined;
-rkGlobal.segmentsNew = {}; // object holding all linestring and decorator layers (the key represents the properties)
+rkGlobal.segments = {}; // object holding all linestring and decorator layers (the key represents the properties)
 rkGlobal.segmentsPS = []; // matrix holding all segments (two dimensions: priority & stress)
 rkGlobal.markerLayerLowZoom = L.layerGroup(); // layer group holding all icons to be viewed at lower zoom levels
 rkGlobal.markerLayerHighZoom = L.layerGroup(); // layer group holding all icons to be viewed at higher zoom levels
@@ -153,7 +153,7 @@ function loadGeoJson(file) {
 				decoratorCoordinates.push(turf.flip(linestring).geometry.coordinates);
 			}
 
-			rkGlobal.segmentsNew[key] = {
+			rkGlobal.segments[key] = {
 				'lines': L.geoJSON(multilinestringFeatures),
 				'decorators': L.polylineDecorator(decoratorCoordinates)
 			}
@@ -216,7 +216,7 @@ function getSegmentKey(geojsonLinestring) {
  */
 function updateStyles() {
 	var zoom = rkGlobal.leafletMap.getZoom();
-	for(const key of Object.keys(rkGlobal.segmentsNew)) {
+	for(const key of Object.keys(rkGlobal.segments)) {
 		var properties = JSON.parse(key);
 		var showFull = zoom >= rkGlobal.priorityFullVisibleFromZoom[properties.priority];
 		var showMinimal = zoom < rkGlobal.priorityFullVisibleFromZoom[properties.priority] && zoom >= rkGlobal.priorityReducedVisibilityFromZoom[properties.priority];
@@ -229,17 +229,17 @@ function updateStyles() {
 		}
 
 		if(showFull || showMinimal) {
-			rkGlobal.segmentsNew[key].lines.setStyle(lineStyle);
-			rkGlobal.leafletMap.addLayer(rkGlobal.segmentsNew[key].lines);
+			rkGlobal.segments[key].lines.setStyle(lineStyle);
+			rkGlobal.leafletMap.addLayer(rkGlobal.segments[key].lines);
 		} else {
-			rkGlobal.leafletMap.removeLayer(rkGlobal.segmentsNew[key].lines);
+			rkGlobal.leafletMap.removeLayer(rkGlobal.segments[key].lines);
 		}
 
 		if(showFull && zoom >= rkGlobal.onewayIconThreshold && properties.oneway === 'yes') {
-			rkGlobal.segmentsNew[key].decorators.setPatterns(getOnewayArrowPatterns(zoom, properties));
-			rkGlobal.leafletMap.addLayer(rkGlobal.segmentsNew[key].decorators);
+			rkGlobal.segments[key].decorators.setPatterns(getOnewayArrowPatterns(zoom, properties));
+			rkGlobal.leafletMap.addLayer(rkGlobal.segments[key].decorators);
 		} else {
-			rkGlobal.leafletMap.removeLayer(rkGlobal.segmentsNew[key].decorators);
+			rkGlobal.leafletMap.removeLayer(rkGlobal.segments[key].decorators);
 		}
 	}
 
