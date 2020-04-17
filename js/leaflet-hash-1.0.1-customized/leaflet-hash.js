@@ -150,7 +150,6 @@
 				updateRadlkarteRegion(parsed.region);
 				this.region = parsed.region;
 			}
-			console.log(parsed);
 			this.map.setView(parsed.center, parsed.zoom);
 			this.movingMap = false;
 		},
