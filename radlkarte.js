@@ -2,7 +2,9 @@
 
 var rkGlobal = {}; // global variable for radlkarte properties / data storage
 rkGlobal.leafletMap = undefined; // the main leaflet map
+rkGlobal.hash = undefined; // leaflet-hash object, contains the currently active region
 rkGlobal.leafletLayersControl = undefined; // leaflet layer-control
+rkGlobal.geocodingControl = undefined;
 rkGlobal.segmentsNew = {}; // object holding all linestring and decorator layers (the key represents the properties)
 rkGlobal.segmentsPS = []; // matrix holding all segments (two dimensions: priority & stress)
 rkGlobal.markerLayerLowZoom = L.layerGroup(); // layer group holding all icons to be viewed at lower zoom levels
@@ -25,23 +27,29 @@ rkGlobal.arrowWidthFactor = [2, 3, 3];
 rkGlobal.opacity = 0.62;
 rkGlobal.colors = ['#004B67', '#51A4B6', '#FF6600']; // dark blue - light blue - orange
 
+rkGlobal.defaultRegion = 'wien';
+rkGlobal.defaultZoom = 14;
 rkGlobal.configurations = {
 	'feldkirch' : {
+		loaded: false,
 		centerPoint: [47.237, 9.598],
 		geocodingBounds: '9.497,47.122,9.845,47.546',
 		geoJsonFile: 'data/radlkarte-feldkirch.geojson'
 	},
 	'klagenfurt' : {
+		loaded: false,
 		centerPoint: [46.624, 14.308],
 		geocodingBounds: '13.978,46.477,14.624,46.778',
 		geoJsonFile: 'data/radlkarte-klagenfurt.geojson'
 	},
 	'linz' : {
+		loaded: false,
 		centerPoint: [48.30, 14.285],
 		geocodingBounds: '13.999,48.171,14.644,48.472',
 		geoJsonFile: 'data/radlkarte-linz.geojson'
 	},
 	'wien' : {
+		loaded: false,
 		centerPoint: [48.208, 16.372], // lat lon
 		geocodingBounds: '16.105,47.995,16.710,48.389', // min lon, min lat, max lon, max lat
 		geoJsonFile: 'data/radlkarte-wien.geojson'
@@ -51,6 +59,25 @@ rkGlobal.configurations = {
 function debug(obj) {
 	if(rkGlobal.debug)
 		console.log(obj);
+}
+
+/**
+ * set the currently active region.
+ * called from rkGlobal.hash (when region is changed e.g. via hyperlink or by changing the URL)
+ */
+function updateRadlkarteRegion(region) {
+	var configuration = rkGlobal.configurations[region];
+	if(configuration === undefined) {
+		console.log('unknown region ' + region);
+	} else if(configuration.loaded === false) {
+		loadGeoJson(configuration.geoJsonFile);
+		rkGlobal.geocodingControl.options.geocoder.options.geocodingQueryParams.bounds = configuration.geocodingBounds;
+		configuration.loaded = true;
+
+		// virtual page hit in google analytics
+		ga('set', 'page', '/' + region);
+		ga('send', 'pageview');
+	}
 }
 
 function loadGeoJson(file) {
@@ -283,11 +310,8 @@ function getOnewayArrowPatterns(zoom, properties) {
 	];
 }
 
-function initMap(location) {
-	location = location || 'wien';
-	var configuration = rkGlobal.configurations[location];
-	rkGlobal.leafletMap = L.map('map', { 'zoomControl' : false } ).setView(configuration.centerPoint, 14);
-	new L.Hash(rkGlobal.leafletMap);
+function loadLeaflet() {
+	rkGlobal.leafletMap = L.map('map', { 'zoomControl' : false } );
 
 	var cartodbPositronLowZoom = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
 		attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
@@ -335,15 +359,15 @@ function initMap(location) {
 	mixed.addTo(rkGlobal.leafletMap);
 	rkGlobal.leafletLayersControl = L.control.layers(baseMaps, overlayMaps, { 'position' : 'topright', 'collapsed' : true } ).addTo(rkGlobal.leafletMap);
 
-	var geocodingControl = L.Control.geocoder({
+	rkGlobal.geocodingControl = L.Control.geocoder({
 		position: 'topright',
 		placeholder: 'Adresssuche',
 		errorMessage: 'Leider nicht gefunden',
 		geocoder: L.Control.Geocoder.opencage("657bf10308f144c7a9cbb7675c9b0d36", {
 			geocodingQueryParams: {
 				countrycode: 'at',
-				language: 'de',
-				bounds: configuration.geocodingBounds // (min lon, min lat, max lon, max lat)
+				language: 'de'
+				// bounds are set later via updateRadlkarteRegion (min lon, min lat, max lon, max lat)
 			}
 		}),
 		defaultMarkGeocode: false
@@ -370,7 +394,6 @@ function initMap(location) {
 		}).setLatLng(e.geocode.center).setContent(resultText).openOn(rkGlobal.leafletMap);
 	}).addTo(rkGlobal.leafletMap);
 
-
 	var locateControl = L.control.locate({
 		position: 'topright',
 		setView: 'untilPanOrZoom',
@@ -396,10 +419,11 @@ function initMap(location) {
 		sidebar.close();
 	}
 
-	initializeIcons(location);
+	initializeIcons();
 
-	// load overlay
-	loadGeoJson(configuration.geoJsonFile);
+	// initialize hash, this causes loading of the default region
+	// and positioning of the map
+	rkGlobal.hash = new L.Hash(rkGlobal.leafletMap);
 }
 
 function initializeIcons() {

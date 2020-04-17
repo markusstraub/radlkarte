@@ -13,26 +13,51 @@
 		}
 	};
 
+	/** adapted to additionally parse region info from the hash
+	 *  and to provide default values if parts of the hash are not present
+	 */
 	L.Hash.parseHash = function(hash) {
 		if(hash.indexOf('#') === 0) {
 			hash = hash.substr(1);
 		}
-		var args = hash.split("/");
-		if (args.length == 3) {
-			var zoom = (L.version >= '1.0.0') ? parseFloat(args[0]) : parseInt(args[0], 10),
-			lat = parseFloat(args[1]),
-			lon = parseFloat(args[2]);
-			if (isNaN(zoom) || isNaN(lat) || isNaN(lon)) {
-				return false;
-			} else {
-				return {
-					center: new L.LatLng(lat, lon),
-					zoom: zoom
-				};
-			}
-		} else {
-			return false;
+
+		var parsed = {
+			region: rkGlobal.defaultRegion,
+			zoom: rkGlobal.defaultZoom,
+			center: undefined
 		}
+
+		var args = hash.split("/");
+
+		if(args.length >= 1) {
+			var region = args[0];
+			if(region in rkGlobal.configurations) {
+				parsed.region = region;
+			}
+		}
+
+		if(args.length >= 2) {
+			var zoom = (L.version >= '1.0.0') ? parseFloat(args[1]) : parseInt(args[1], 10);
+			if(!isNaN(zoom)) {
+				parsed.zoom = zoom
+			}
+		}
+
+		var lat = undefined;
+		var lon = undefined;
+		if (args.length >= 4) {
+			var lat = parseFloat(args[2]);
+			var lon = parseFloat(args[3]);
+		}
+
+		if (!isNaN(lat) && !isNaN(lon)) {
+			parsed.center = new L.LatLng(lat, lon);
+		} else {
+			var config = rkGlobal.configurations[parsed.region];
+			parsed.center = new L.LatLng(config.centerPoint[0], config.centerPoint[1]);
+		}
+
+		return parsed;
 	};
 
 	L.Hash.formatHash = function(map) {
@@ -40,7 +65,9 @@
 		    zoom = map.getZoom(),
 		    precision = Math.max(0, Math.ceil(Math.log(zoom) / Math.LN2));
 
-		return "#" + [(L.version >= '1.0.0') ? zoom.toFixed(precision) : zoom,
+		return "#" + [this.region,
+			//(L.version >= '1.0.0') ? zoom.toFixed(precision) : zoom,
+			zoom,
 			center.lat.toFixed(precision),
 			center.lng.toFixed(precision)
 		].join("/");
@@ -49,6 +76,7 @@
 	L.Hash.prototype = {
 		map: null,
 		lastHash: null,
+		region: undefined,
 
 		parseHash: L.Hash.parseHash,
 		formatHash: L.Hash.formatHash,
@@ -64,6 +92,16 @@
 				this.startListening();
 			}
 		},
+
+// 		getRegion: function() {
+// 			console.log("returning region " + this.region);
+// 			return this.region;
+// 		},
+
+// 		setRegion: function(region) {
+// 			console.log("replacing region " + this.region + " with new region " + region);
+// 			this.region = region;
+// 		},
 
 		removeFrom: function(map) {
 			if (this.changeTimeout) {
@@ -99,15 +137,15 @@
 				return;
 			}
 			var parsed = this.parseHash(hash);
-			if (parsed) {
-				this.movingMap = true;
-
-				this.map.setView(parsed.center, parsed.zoom);
-
-				this.movingMap = false;
-			} else {
-				this.onMapMove(this.map);
+			this.movingMap = true;
+			if(this.region !== parsed.region) {
+				// console.log('hash update got a new region, change from ' + this.region + ' to ' + parsed.region);
+				updateRadlkarteRegion(parsed.region);
+				this.region = parsed.region;
 			}
+			console.log(parsed);
+			this.map.setView(parsed.center, parsed.zoom);
+			this.movingMap = false;
 		},
 
 		// defer hash change updates every 100ms
