@@ -27,38 +27,40 @@ rkGlobal.arrowWidthFactor = [2, 3, 3];
 rkGlobal.opacity = 0.62;
 rkGlobal.colors = ['#004B67', '#51A4B6', '#FF6600']; // dark blue - light blue - orange
 
+rkGlobal.autoSwitchDistanceMeters = 55000;
 rkGlobal.defaultRegion = 'wien';
 rkGlobal.defaultZoom = 14;
 rkGlobal.configurations = {
 	'feldkirch' : {
 		loaded: false,
-		centerPoint: [47.237, 9.598],
+		centerLatLng: L.latLng(47.237, 9.598),
 		geocodingBounds: '9.497,47.122,9.845,47.546',
 		geoJsonFile: 'data/radlkarte-feldkirch.geojson'
 	},
 	'klagenfurt' : {
 		loaded: false,
-		centerPoint: [46.624, 14.308],
+		centerLatLng: L.latLng(46.624, 14.308),
 		geocodingBounds: '13.978,46.477,14.624,46.778',
 		geoJsonFile: 'data/radlkarte-klagenfurt.geojson'
 	},
 	'linz' : {
 		loaded: false,
-		centerPoint: [48.30, 14.285],
+		centerLatLng: L.latLng(48.30, 14.285),
 		geocodingBounds: '13.999,48.171,14.644,48.472',
 		geoJsonFile: 'data/radlkarte-linz.geojson'
 	},
 	'wien' : {
 		loaded: false,
-		centerPoint: [48.208, 16.372], // lat lon
+		centerLatLng: L.latLng(48.208, 16.372),
 		geocodingBounds: '16.105,47.995,16.710,48.389', // min lon, min lat, max lon, max lat
 		geoJsonFile: 'data/radlkarte-wien.geojson'
 	}
 }
 
 function debug(obj) {
-	if(rkGlobal.debug)
+	if(rkGlobal.debug) {
 		console.log(obj);
+	}
 }
 
 /**

@@ -54,7 +54,7 @@
 			parsed.center = new L.LatLng(lat, lon);
 		} else {
 			var config = rkGlobal.configurations[parsed.region];
-			parsed.center = new L.LatLng(config.centerPoint[0], config.centerPoint[1]);
+			parsed.center = config.centerLatLng;
 		}
 
 		return parsed;
@@ -93,16 +93,6 @@
 			}
 		},
 
-// 		getRegion: function() {
-// 			console.log("returning region " + this.region);
-// 			return this.region;
-// 		},
-
-// 		setRegion: function(region) {
-// 			console.log("replacing region " + this.region + " with new region " + region);
-// 			this.region = region;
-// 		},
-
 		removeFrom: function(map) {
 			if (this.changeTimeout) {
 				clearTimeout(this.changeTimeout);
@@ -127,6 +117,23 @@
 			if (this.lastHash != hash) {
 				location.replace(hash);
 				this.lastHash = hash;
+			}
+
+			this.autoSwitchRegionIfCloseEnough();
+		},
+
+		autoSwitchRegionIfCloseEnough: function() {
+			for(const key of Object.keys(rkGlobal.configurations)) {
+				if(key === this.region) {
+					continue;
+				}
+				var distanceM = this.map.getCenter().distanceTo(rkGlobal.configurations[key].centerLatLng);
+				if(distanceM < rkGlobal.autoSwitchDistanceMeters) {
+					updateRadlkarteRegion(key);
+					this.region = key;
+					console.log("auto-switching region to " + key + ", map center is only " + Math.round(distanceM) + "m away");
+					return;
+				}
 			}
 		},
 
