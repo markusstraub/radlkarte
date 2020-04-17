@@ -6,7 +6,6 @@ rkGlobal.hash = undefined; // leaflet-hash object, contains the currently active
 rkGlobal.leafletLayersControl = undefined; // leaflet layer-control
 rkGlobal.geocodingControl = undefined;
 rkGlobal.segments = {}; // object holding all linestring and decorator layers (the key represents the properties)
-rkGlobal.segmentsPS = []; // matrix holding all segments (two dimensions: priority & stress)
 rkGlobal.markerLayerLowZoom = L.layerGroup(); // layer group holding all icons to be viewed at lower zoom levels
 rkGlobal.markerLayerHighZoom = L.layerGroup(); // layer group holding all icons to be viewed at higher zoom levels
 rkGlobal.priorityStrings = ["Überregional", "Regional", "Lokal"]; // names of all different levels of priorities (ordered descending by priority)
@@ -32,25 +31,21 @@ rkGlobal.defaultRegion = 'wien';
 rkGlobal.defaultZoom = 14;
 rkGlobal.configurations = {
 	'feldkirch' : {
-		loaded: false,
 		centerLatLng: L.latLng(47.237, 9.598),
 		geocodingBounds: '9.497,47.122,9.845,47.546',
 		geoJsonFile: 'data/radlkarte-feldkirch.geojson'
 	},
 	'klagenfurt' : {
-		loaded: false,
 		centerLatLng: L.latLng(46.624, 14.308),
 		geocodingBounds: '13.978,46.477,14.624,46.778',
 		geoJsonFile: 'data/radlkarte-klagenfurt.geojson'
 	},
 	'linz' : {
-		loaded: false,
 		centerLatLng: L.latLng(48.30, 14.285),
 		geocodingBounds: '13.999,48.171,14.644,48.472',
 		geoJsonFile: 'data/radlkarte-linz.geojson'
 	},
 	'wien' : {
-		loaded: false,
 		centerLatLng: L.latLng(48.208, 16.372),
 		geocodingBounds: '16.105,47.995,16.710,48.389', // min lon, min lat, max lon, max lat
 		geoJsonFile: 'data/radlkarte-wien.geojson'
@@ -70,16 +65,30 @@ function debug(obj) {
 function updateRadlkarteRegion(region) {
 	var configuration = rkGlobal.configurations[region];
 	if(configuration === undefined) {
-		console.log('unknown region ' + region);
-	} else if(configuration.loaded === false) {
-		loadGeoJson(configuration.geoJsonFile);
-		rkGlobal.geocodingControl.options.geocoder.options.geocodingQueryParams.bounds = configuration.geocodingBounds;
-		configuration.loaded = true;
-
-		// virtual page hit in google analytics
-		ga('set', 'page', '/' + region);
-		ga('send', 'pageview');
+		console.warn('ignoring unknown region ' + region);
+		return;
 	}
+
+	removeAllSegmentsAndMarkers();
+	loadGeoJson(configuration.geoJsonFile);
+	rkGlobal.geocodingControl.options.geocoder.options.geocodingQueryParams.bounds = configuration.geocodingBounds;
+
+	// virtual page hit in google analytics
+	ga('set', 'page', '/' + region);
+	ga('send', 'pageview');
+}
+
+function removeAllSegmentsAndMarkers() {
+	for(const key of Object.keys(rkGlobal.segments)) {
+		rkGlobal.leafletMap.removeLayer(rkGlobal.segments[key].lines);
+		rkGlobal.leafletMap.removeLayer(rkGlobal.segments[key].decorators);
+	}
+	rkGlobal.segments = {}
+
+	rkGlobal.leafletMap.removeLayer(rkGlobal.markerLayerLowZoom);
+	rkGlobal.markerLayerLowZoom.clearLayers();
+	rkGlobal.leafletMap.removeLayer(rkGlobal.markerLayerHighZoom);
+	rkGlobal.markerLayerHighZoom.clearLayers();
 }
 
 function loadGeoJson(file) {
@@ -104,14 +113,13 @@ function loadGeoJson(file) {
 		var ignoreCount = 0;
 		var goodCount = 0;
 		var poiCount = 0;
-		var markerLayers;
 
 		var categorizedLinestrings = {};
 		for (i=0; i<data.features.length; i++) {
 			var geojson = data.features[i];
 			if(geojson.type != 'Feature' || geojson.properties == undefined || geojson.geometry == undefined || geojson.geometry.type != 'LineString' || geojson.geometry.coordinates.length < 2) {
 				if(geojson.geometry.type == 'Point') {
-					markerLayers = getMarkerLayersIncludingPopup(geojson);
+					var markerLayers = createMarkerLayersIncludingPopup(geojson);
 					if(markerLayers != null) {
 						rkGlobal.markerLayerLowZoom.addLayer(markerLayers.lowZoom);
 						rkGlobal.markerLayerHighZoom.addLayer(markerLayers.highZoom);
@@ -207,7 +215,7 @@ function getSegmentKey(geojsonLinestring) {
 		"oneway": properties.oneway === undefined ? 'no' : properties.oneway,
 		"unpaved": properties.unpaved === undefined ? 'no' : properties.unpaved,
 		"steep": properties.steep === undefined ? 'no' : properties.steep,
-		"winter": properties.winter === undefined ? 'no' : properties.winter
+		"winter_serivce": properties.winter_service === undefined ? 'no' : properties.winter_service
 	};
 }
 
@@ -383,7 +391,7 @@ function loadLeaflet() {
 // 			bbox.getSouthWest()
 // 		]);
 // 		rkGlobal.leafletMap.fitBounds(poly.getBounds(), {maxZoom: 17});
-		console.log(result);
+		debug(result);
 		var resultCenter = L.latLng(result.center.lat, result.center.lng);
 		rkGlobal.leafletMap.panTo(resultCenter);
 		var resultText = result.name;
@@ -456,7 +464,7 @@ function initializeIcons() {
 	});
 }
 
-function getMarkerLayersIncludingPopup(geojsonPoint) {
+function createMarkerLayersIncludingPopup(geojsonPoint) {
 	var icon = getIcon(geojsonPoint.properties);
 	if(icon == null)
 		return undefined;
