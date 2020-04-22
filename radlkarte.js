@@ -12,7 +12,6 @@ rkGlobal.priorityStrings = ["Überregional", "Regional", "Lokal"]; // names of a
 rkGlobal.stressStrings = ["Ruhig", "Durchschnittlich", "Stressig"];
 rkGlobal.debug = true; // debug output will be logged if set to true
 rkGlobal.fullWidthThreshold = 768;
-rkGlobal.baseUrl = './'
 
 // style: stress = color, priority = line width
 rkGlobal.styleFunction = updateStyles;
@@ -101,21 +100,17 @@ function loadGeoJson(file) {
 		}
 	});
 	$.getJSON(file, function(data) {
-		var i, j; // loop counter
-		var p, s; // priority / stress
-
 		if(data.type != "FeatureCollection") {
 			console.error("expected a GeoJSON FeatureCollection. no radlkarte network can be displayed.");
 			return;
 		}
 
-		// first step - collect geojson linestring features
+		// collect geojson linestring features (and marker points)
 		var ignoreCount = 0;
 		var goodCount = 0;
 		var poiCount = 0;
-
 		var categorizedLinestrings = {};
-		for (i=0; i<data.features.length; i++) {
+		for (var i=0; i<data.features.length; i++) {
 			var geojson = data.features[i];
 			if(geojson.type != 'Feature' || geojson.properties == undefined || geojson.geometry == undefined || geojson.geometry.type != 'LineString' || geojson.geometry.coordinates.length < 2) {
 				if(geojson.geometry.type == 'Point') {
@@ -134,9 +129,9 @@ function loadGeoJson(file) {
 				continue;
 			}
 
-			p = parseInt(geojson.properties.priority, 10);
-			s = parseInt(geojson.properties.stress, 10);
-			if(isNaN(p) || isNaN(s)) {
+			var priority = parseInt(geojson.properties.priority, 10);
+			var stress = parseInt(geojson.properties.stress, 10);
+			if(isNaN(priority) || isNaN(stress)) {
 				console.warn("ignoring invalid object (priority / stress not set): " + JSON.stringify(geojson));
 				++ignoreCount;
 				continue;
@@ -149,40 +144,32 @@ function loadGeoJson(file) {
 		}
 		debug("processed " + goodCount + " valid LineString features, " + poiCount + " Point features, and " + ignoreCount + " ignored features.");
 
-		// second step - merge geojson linestring features
+		// merge geojson linestring features
 		// with the same properties into a single multilinestring
 		// and then put them in a leaflet layer
 		for(const key of Object.keys(categorizedLinestrings)) {
 			var multilinestringFeatures = turf.combine(turf.featureCollection(categorizedLinestrings[key]));
-			multilinestringFeatures['properties'] = JSON.parse(key);
+			var properties = JSON.parse(key)
+			multilinestringFeatures['properties'] = properties;
 
 			var decoratorCoordinates = []
 			for(const linestring of categorizedLinestrings[key]) {
 				decoratorCoordinates.push(turf.flip(linestring).geometry.coordinates);
 			}
 
+			// separate panes to allow setting zIndex, which is not possible on
+			// the geojson layers themselves
+			// see https://stackoverflow.com/q/39767499/1648538
+			rkGlobal.leafletMap.createPane(key);
+			rkGlobal.leafletMap.getPane(key).style.zIndex = getSegmentZIndex(properties);
 			rkGlobal.segments[key] = {
-				'lines': L.geoJSON(multilinestringFeatures),
+				'lines': L.geoJSON(multilinestringFeatures, {pane: key}),
 				'decorators': L.polylineDecorator(decoratorCoordinates)
 			}
 		}
 
-		// TODO reactivate layer sorting? (high priority on top)
-//		 for(p in rkGlobal.segmentsPS) {
-//			 for(s in rkGlobal.segmentsPS[p]) {
-//				 rkGlobal.segmentsPS[p][s].lines.bringToBack();
-//				 if(rkGlobal.segmentsPS[p][s].decorators != undefined)
-//					 rkGlobal.segmentsPS[p][s].decorators.bringToBack();
-//			 }
-//		 }
-
+		// adds layers (if the zoom levels requires it)
 		rkGlobal.styleFunction();
-
-		// add to map & layercontrol
-//		for(var priority=rkGlobal.priorityStrings.length-1; priority>= 0; priority--) {
-//			rkGlobal.segments.priority[priority].all.addTo(rkGlobal.leafletMap);
-//			rkGlobal.leafletLayersControl.addOverlay(rkGlobal.segments.priority[priority].all, rkGlobal.priorityStrings[priority]);
-//		}
 
 		rkGlobal.leafletMap.on('zoomend', function(ev) {
 			//debug("zoom level changed to " + rkGlobal.leafletMap.getZoom() + ".. enqueueing style change");
@@ -192,6 +179,18 @@ function loadGeoJson(file) {
 			});
 		});
 	});
+}
+
+/**
+ * Get a zIndex based on priority and stress
+ * where low-stress high-priority is on the top
+ */
+function getSegmentZIndex(properties) {
+	// 400 is the default zIndex for overlayPanes, stay slightly below this level
+	var index = 350;
+	index += 10 * (rkGlobal.priorityStrings.length - properties.priority);
+	index += 1 * (rkGlobal.stressStrings.length - properties.stress);
+	return index;
 }
 
 function addSegmentToObject(object, geojsonLinestring) {
@@ -236,18 +235,20 @@ function updateStyles() {
 			lineStyle = getLineStyleMinimal(properties);
 		}
 
+		var lines = rkGlobal.segments[key].lines;
 		if(showFull || showMinimal) {
-			rkGlobal.segments[key].lines.setStyle(lineStyle);
-			rkGlobal.leafletMap.addLayer(rkGlobal.segments[key].lines);
+			lines.setStyle(lineStyle);
+			rkGlobal.leafletMap.addLayer(lines);
 		} else {
-			rkGlobal.leafletMap.removeLayer(rkGlobal.segments[key].lines);
+			rkGlobal.leafletMap.removeLayer(lines);
 		}
 
+		var decorators = rkGlobal.segments[key].decorators;
 		if(showFull && zoom >= rkGlobal.onewayIconThreshold && properties.oneway === 'yes') {
-			rkGlobal.segments[key].decorators.setPatterns(getOnewayArrowPatterns(zoom, properties));
-			rkGlobal.leafletMap.addLayer(rkGlobal.segments[key].decorators);
+			decorators.setPatterns(getOnewayArrowPatterns(zoom, properties));
+			rkGlobal.leafletMap.addLayer(decorators);
 		} else {
-			rkGlobal.leafletMap.removeLayer(rkGlobal.segments[key].decorators);
+			rkGlobal.leafletMap.removeLayer(decorators);
 		}
 	}
 
@@ -439,25 +440,25 @@ function loadLeaflet() {
 function initializeIcons() {
 	rkGlobal.icons = {};
 	rkGlobal.icons.dismount = L.icon({
-		iconUrl: rkGlobal.baseUrl + 'css/dismount.png',
+		iconUrl: 'css/dismount.png',
 		iconSize: [33, 29],
 		iconAnchor: [16.5, 14.5],
 		popupAnchor: [0, -14.5]
 	});
 	rkGlobal.icons.noCargo = L.icon({
-		iconUrl: rkGlobal.baseUrl + 'css/nocargo.png',
+		iconUrl: 'css/nocargo.png',
 		iconSize: [29, 29],
 		iconAnchor: [14.5, 14.5],
 		popupAnchor: [0, -14.5]
 	});
 	rkGlobal.icons.noCargoAndDismount = L.icon({
-		iconUrl: rkGlobal.baseUrl + 'css/nocargo+dismount.png',
+		iconUrl: 'css/nocargo+dismount.png',
 		iconSize: [57.7, 29],
 		iconAnchor: [28.85, 14.5],
 		popupAnchor: [0, -14.5]
 	});
 	rkGlobal.icons.redDot = L.icon({
-		iconUrl: rkGlobal.baseUrl + 'css/reddot.png',
+		iconUrl: 'css/reddot.png',
 		iconSize: [10, 10],
 		iconAnchor: [5, 5],
 		popupAnchor: [0, -5]
