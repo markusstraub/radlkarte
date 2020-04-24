@@ -29,6 +29,11 @@ rkGlobal.autoSwitchDistanceMeters = 55000;
 rkGlobal.defaultRegion = 'wien';
 rkGlobal.defaultZoom = 14;
 rkGlobal.configurations = {
+	'rendertest' : {
+		centerLatLng: L.latLng(50.088, 14.392),
+		geocodingBounds: '9.497,47.122,9.845,47.546',
+		geoJsonFile: 'data/radlkarte-rendertest.geojson'
+	},
 	'feldkirch' : {
 		centerLatLng: L.latLng(47.237, 9.598),
 		geocodingBounds: '9.497,47.122,9.845,47.546',
@@ -80,6 +85,9 @@ function updateRadlkarteRegion(region) {
 function removeAllSegmentsAndMarkers() {
 	for(const key of Object.keys(rkGlobal.segments)) {
 		rkGlobal.leafletMap.removeLayer(rkGlobal.segments[key].lines);
+		if(rkGlobal.leafletMap.hasLayer(rkGlobal.segments[key].steepLines)) {
+			rkGlobal.leafletMap.removeLayer(rkGlobal.segments[key].steepLines);
+		}
 		rkGlobal.leafletMap.removeLayer(rkGlobal.segments[key].decorators);
 	}
 	rkGlobal.segments = {}
@@ -164,6 +172,7 @@ function loadGeoJson(file) {
 			rkGlobal.leafletMap.getPane(key).style.zIndex = getSegmentZIndex(properties);
 			rkGlobal.segments[key] = {
 				'lines': L.geoJSON(multilinestringFeatures, {pane: key}),
+				'steepLines': properties['steep'] === 'yes' ? L.geoJSON(multilinestringFeatures, {pane: key}) : undefined,
 				'decorators': L.polylineDecorator(decoratorCoordinates)
 			}
 		}
@@ -213,8 +222,7 @@ function getSegmentKey(geojsonLinestring) {
 		"stress": properties.stress,
 		"oneway": properties.oneway === undefined ? 'no' : properties.oneway,
 		"unpaved": properties.unpaved === undefined ? 'no' : properties.unpaved,
-		"steep": properties.steep === undefined ? 'no' : properties.steep,
-		"winter_serivce": properties.winter_service === undefined ? 'no' : properties.winter_service
+		"steep": properties.steep === undefined ? 'no' : properties.steep
 	};
 }
 
@@ -230,7 +238,7 @@ function updateStyles() {
 
 		var lineStyle;
 		if(showFull) {
-			 lineStyle = getLineStyle(zoom, properties);
+			lineStyle = getLineStyle(zoom, properties);
 		} else if(showMinimal) {
 			lineStyle = getLineStyleMinimal(properties);
 		}
@@ -243,9 +251,20 @@ function updateStyles() {
 			rkGlobal.leafletMap.removeLayer(lines);
 		}
 
+		var steepLines = rkGlobal.segments[key].steepLines;
+		if(steepLines !== undefined) {
+			if(showFull || showMinimal) {
+				var steepLineStyle = getSteepLineStyle(zoom, properties);
+				steepLines.setStyle(steepLineStyle);
+				rkGlobal.leafletMap.addLayer(steepLines);
+			} else {
+				rkGlobal.leafletMap.removeLayer(steepLines);
+			}
+		}
+
 		var decorators = rkGlobal.segments[key].decorators;
 		if(showFull && zoom >= rkGlobal.onewayIconThreshold && properties.oneway === 'yes') {
-			decorators.setPatterns(getOnewayArrowPatterns(zoom, properties));
+			decorators.setPatterns(getOnewayArrowPatterns(zoom, properties, lineStyle.weight));
 			rkGlobal.leafletMap.addLayer(decorators);
 		} else {
 			rkGlobal.leafletMap.removeLayer(decorators);
@@ -265,27 +284,42 @@ function updateStyles() {
 }
 
 function getLineStyle(zoom, properties) {
+	var lineWeight = getLineWeight(zoom, properties.priority);
 	var style = {
 		color: rkGlobal.colors[properties.stress],
-		weight: getLineWeight(zoom, properties.priority),
-		opacity: rkGlobal.opacity,
-	};
+		weight: lineWeight,
+		opacity: rkGlobal.opacity
+	}
 	if(properties.unpaved === 'yes') {
-		style.dashArray = getDashStyle(style.weight);
+		style.dashArray = getUnpavedDashStyle(lineWeight);
 	}
 	return style;
 }
 
 function getLineStyleMinimal(properties) {
+	var weight = 1;
 	var style = {
 		color: rkGlobal.colors[properties.stress],
-		weight: 1,
+		weight: weight,
 		opacity: rkGlobal.opacity
 	};
 	if(properties.unpaved === 'yes') {
-		style.dashArray = getDashStyle(style.weight);
+		style.dashArray = getUnpavedDashStyle(weight);
 	}
 	return style;
+}
+
+function getSteepLineStyle(zoom, properties) {
+	var lineWeight = getLineWeight(zoom, properties.priority);
+	var steepHairWeight = 2;
+	return {
+		color: rkGlobal.colors[properties.stress],
+		weight: lineWeight * 2,
+		opacity: rkGlobal.opacity,
+		lineCap: 'butt',
+		dashArray: getSteepDashStyle(lineWeight, steepHairWeight),
+		dashOffset: lineWeight * -0.5 + steepHairWeight / 2
+	};
 }
 
 function getLineWeight(zoom, priority) {
@@ -295,19 +329,27 @@ function getLineWeight(zoom, priority) {
 	return lineWeight;
 }
 
-function getDashStyle(lineWidth) {
-	return (lineWidth * 2) + " " + (lineWidth * 2);
+function getUnpavedDashStyle(lineWeight) {
+	lineWeight = Math.max(2, lineWeight);
+	return lineWeight + " " + lineWeight * 1.5;
+}
+
+function getSteepDashStyle(lineWeight, steepHairWeight) {
+	return steepHairWeight + " " + (lineWeight * 2.5 - steepHairWeight);
+// 	var dashLength = 2;
+// 	var total = lineWeight * 2 - dashLength;
+// 	return dashLength + " " + total;
 }
 
 /**
  * @return an array of patterns as expected by L.PolylineDecorator.setPatterns
  */
-function getOnewayArrowPatterns(zoom, properties) {
-	var arrowWidth = Math.max(5, getLineWeight(zoom, properties.priority) * rkGlobal.arrowWidthFactor[properties.priority]);
+function getOnewayArrowPatterns(zoom, properties, lineWeight) {
+	var arrowWidth = Math.max(5, lineWeight * rkGlobal.arrowWidthFactor[properties.priority]);
 	return [
 	{
-		offset: 25,
-		repeat: 50,
+		offset: arrowWidth-2,
+		repeat: lineWeight * 5,
 		symbol: L.Symbol.arrowHead({
 			pixelSize: arrowWidth,
 			headAngle: 90,

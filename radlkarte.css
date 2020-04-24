@@ -55,7 +55,7 @@ strong {
 .leaflet-sidebar-tabs > ul > li.active > a > i {
 	color: #fff;
 }
-a, .leaflet-sidebar-pane a, a:visited, a:active, .leaflet-control-attribution a {
+.leaflet-sidebar-pane a, .leaflet-sidebar-pane a:visited, .leaflet-sidebar-pane a:active, .leaflet-control-attribution a {
 	color: #AAB622;
 	text-decoration: none;
 }
@@ -72,8 +72,9 @@ ul.legend li {
 }
 div.legend {
 	display: inline-block;
-	width: 150px;
+	width: 190px;
 	height: 10px;
+	border-radius: 5px;
 }
 div.legend-main {
 	background-color: #999;
@@ -95,9 +96,21 @@ div.legend-unpaved {
 	background: repeating-linear-gradient(
 		90deg,
 		#999,
-		#999 10px,
-		#fff 10px,
-		#fff 20px
+		#999 30px,
+		#fff 30px,
+		#fff 40px
+	);
+}
+div.legend-steep {
+	height: 25px;
+	vertical-align: middle;
+	background: repeating-linear-gradient(
+		90deg,
+		transparent 0 5px,
+		#999 5px 6px,
+		transparent 6px 25px,
+		#999 25px 26px,
+		transparent 26px 40px
 	);
 }
 
