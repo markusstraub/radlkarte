@@ -376,6 +376,11 @@ function getOnewayArrowPatterns(zoom, properties, lineWeight) {
 function loadLeaflet() {
 	rkGlobal.leafletMap = L.map('map', { 'zoomControl' : false } );
 
+	// avoid troubles with min/maxZoom from our layer group, see https://github.com/Leaflet/Leaflet/issues/6557
+	var minMaxZoomLayer = L.gridLayer({
+		minZoom: 0,
+		maxZoom: 19
+	});
 	var cartodbPositronLowZoom = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
 		attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
 		subdomains: 'abcd',
@@ -387,7 +392,7 @@ function loadLeaflet() {
 		maxZoom: 19,
 		attribution: 'map data &amp; imagery &copy; <a href="https://openstreetmap.org" target="_blank">OpenStreetMap</a> contributors'
 	});
-	var mixed = L.layerGroup([cartodbPositronLowZoom, osmHiZoom]);
+	var mixed = L.layerGroup([minMaxZoomLayer, cartodbPositronLowZoom, osmHiZoom]);
 
 	var basemapAtOrthofoto = L.tileLayer('https://maps{s}.wien.gv.at/basemap/bmaporthofoto30cm/normal/google3857/{z}/{y}/{x}.{format}', {
 		maxZoom: 18, // up to 20 is possible
@@ -418,7 +423,6 @@ function loadLeaflet() {
 	};
 	var overlayMaps = {};
 
-	// TODO zoom level jumps: https://github.com/Leaflet/Leaflet/issues/6557
 	mixed.addTo(rkGlobal.leafletMap);
 	rkGlobal.leafletLayersControl = L.control.layers(baseMaps, overlayMaps, { 'position' : 'topright', 'collapsed' : true } ).addTo(rkGlobal.leafletMap);
 

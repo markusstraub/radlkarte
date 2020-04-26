@@ -52,13 +52,13 @@ Optional (omitting the attributes means 'no'):
 
 ## Notes
 
-### Pending Usability Improvements
+### Known Bugs
 - Arrows in wrong size on fast zoom (synchronization issue of rendering method that is called more than once I fear)
 - On Chrome/Android you need to double-tap on symbols to see the popup. Safari/iPhone works.
-- Describe layer-switching & opencyclemap legend? explicitly show cycleways somehow (user request hotjar)?
-- Make problem-POIs hidable in layer switcher
 
 ### Future Ideas
+- Describe layer-switching & opencyclemap legend? explicitly show cycleways somehow (user request hotjar)?
+- Make problem-POIs hidable in layer switcher
 - Optional overlays for cycling-POIs
   - bike sharing stations (Citybike + Nextbike),
   - bicycle shops
