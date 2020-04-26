@@ -70,9 +70,9 @@ ul.legend li {
 	list-style-type: none;
 	margin-bottom: 0.5em;
 }
+
 div.legend {
-	display: inline-block;
-	width: 200px;
+	width: 230px;
 	height: 10px;
 	border-radius: 5px;
 }
@@ -118,6 +118,15 @@ div.legend-steep {
 		#999 9px 11px,
 		transparent 11px 30px
 	);
+}
+div.legend-container {
+    display: grid;
+    align-items: center;
+}
+div.legend-container div {
+    grid-column: 1;
+    grid-row: 1;
+    display: flex;
 }
 
 ul.legend li img {
