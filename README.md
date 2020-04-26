@@ -9,29 +9,15 @@ Website for desktop, tablet & smartphone usage with the goal to provide useful (
   - Three quality types of route segments: calm, medium, stressful
   - Three importance levels of route segments: main, regional, local
     - Hide parts of the recommended routes when zooming out (for a better overview)
-  - Oneway arrow for route segments only usable in one direction
+  - Special properties of the routes
+    - Oneway (arrow)
+    - Steep (bristles)
+    - Unpaved (dotted lines)
+- Automatically switch to the bicycle routes of the currently viewed region
 - Show problematic points along the route where dismounting or usage of heavy/wide bicycles may not be possible
 - GPS localization (especially useful for mobile devices)
-- Geocoding with OSM (nominatim)
+- Geocoding (address search)
 
-### Pending Usability Improvements
-- Arrows in wrong size on fast zoom (synchronization issue of rendering method that is called more than once I fear)
-- On Chrome/Android you need to double-tap on symbols to see the popup. Safari/iPhone works.
-- Describe layer-switching & opencyclemap legend? explicitly show cycleways somehow (user request hotjar)?
-- Make problem-POIs hidable in layer switcher
-
-### Future Work
-- Highlighting properties of lines:
-  - very steep (e.g. double lines)
-  - unpaved paths (e.g. dotted lines)
-- Optional overlays for cycling-POIs
-  - bike sharing stations (Citybike + Nextbike),
-  - bicycle shops
-  - bicycle pumps / repair stations
-  - train and metro stations
-- Differentiate between a simple & an advanced UI.
-  - simple: auto-hides parts of the network based on zoom level, no layer switcher
-  - advanced: layer switcher, control opacity of overlay, freely choose network-parts to show
 
 ## Route Data
 
@@ -45,8 +31,8 @@ Mandatory:
 
 Optional (omitting the attributes means 'no'):
 - oneway: yes (route only legal in one direction)
-- steep: yes
-- unpaved: yes (dirt, gravel or extremely uneven surfaces paved surfaces)
+- steep: yes (very steep,
+- unpaved: yes (dirt, gravel or extremely uneven surfaces even though they are paved)
 
 ### Point Attributes
 
@@ -65,6 +51,22 @@ Optional (omitting the attributes means 'no'):
 
 
 ## Notes
+
+### Pending Usability Improvements
+- Arrows in wrong size on fast zoom (synchronization issue of rendering method that is called more than once I fear)
+- On Chrome/Android you need to double-tap on symbols to see the popup. Safari/iPhone works.
+- Describe layer-switching & opencyclemap legend? explicitly show cycleways somehow (user request hotjar)?
+- Make problem-POIs hidable in layer switcher
+
+### Future Ideas
+- Optional overlays for cycling-POIs
+  - bike sharing stations (Citybike + Nextbike),
+  - bicycle shops
+  - bicycle pumps / repair stations
+  - train and metro stations
+- Differentiate between a simple & an advanced UI.
+  - simple: auto-hides parts of the network based on zoom level, no layer switcher
+  - advanced: layer switcher, control opacity of overlay, freely choose network-parts to show
 
 linting:
     jshint radlkarte.js

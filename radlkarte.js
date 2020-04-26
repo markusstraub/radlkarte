@@ -227,7 +227,8 @@ function getSegmentKey(geojsonLinestring) {
 }
 
 /**
- * Updates the styles of all layers. Takes current zoom level into account
+ * Updates the styles of all layers. Takes current zoom level into account.
+ * Special styles for unpaved, steep, oneway arrows are matched, take care in future adapations
  */
 function updateStyles() {
 	var zoom = rkGlobal.leafletMap.getZoom();
@@ -251,10 +252,17 @@ function updateStyles() {
 			rkGlobal.leafletMap.removeLayer(lines);
 		}
 
+		// steep lines are drawn twice, once regular,
+		// a second time as bristles (that's what this copy is for)
 		var steepLines = rkGlobal.segments[key].steepLines;
 		if(steepLines !== undefined) {
 			if(showFull || showMinimal) {
-				var steepLineStyle = getSteepLineStyle(zoom, properties);
+				var steepLineStyle;
+				if(showFull) {
+					steepLineStyle = getSteepLineStyle(zoom, properties);
+				} else {
+					steepLineStyle = getSteepLineStyleMinimal(properties);
+				}
 				steepLines.setStyle(steepLineStyle);
 				rkGlobal.leafletMap.addLayer(steepLines);
 			} else {
@@ -263,7 +271,7 @@ function updateStyles() {
 		}
 
 		var decorators = rkGlobal.segments[key].decorators;
-		if(showFull && zoom >= rkGlobal.onewayIconThreshold && properties.oneway === 'yes') {
+		if((showFull || showMinimal) && zoom >= rkGlobal.onewayIconThreshold && properties.oneway === 'yes') {
 			decorators.setPatterns(getOnewayArrowPatterns(zoom, properties, lineStyle.weight));
 			rkGlobal.leafletMap.addLayer(decorators);
 		} else {
@@ -285,43 +293,51 @@ function updateStyles() {
 
 function getLineStyle(zoom, properties) {
 	var lineWeight = getLineWeight(zoom, properties.priority);
+	return _getLineStyle(lineWeight, properties);
+}
+
+function getLineStyleMinimal(properties) {
+	var lineWeight = 1;
+	return _getLineStyle(lineWeight, properties);
+}
+
+function _getLineStyle(lineWeight, properties) {
 	var style = {
 		color: rkGlobal.colors[properties.stress],
 		weight: lineWeight,
 		opacity: rkGlobal.opacity
 	}
 	if(properties.unpaved === 'yes') {
-		style.dashArray = getUnpavedDashStyle(lineWeight);
-	}
-	return style;
-}
-
-function getLineStyleMinimal(properties) {
-	var weight = 1;
-	var style = {
-		color: rkGlobal.colors[properties.stress],
-		weight: weight,
-		opacity: rkGlobal.opacity
-	};
-	if(properties.unpaved === 'yes') {
-		style.dashArray = getUnpavedDashStyle(weight);
+		style.dashArray = getUnpavedDashStyle(Math.max(2, lineWeight));
 	}
 	return style;
 }
 
 function getSteepLineStyle(zoom, properties) {
 	var lineWeight = getLineWeight(zoom, properties.priority);
-	var steepHairWeight = 2;
+	return _getSteepLineStyle(lineWeight, properties);
+}
+
+function getSteepLineStyleMinimal(properties) {
+	var lineWeight = 1;
+	return _getSteepLineStyle(lineWeight, properties);
+}
+
+function _getSteepLineStyle(lineWeight, properties) {
+	var steepBristleLength = 2;
 	return {
 		color: rkGlobal.colors[properties.stress],
 		weight: lineWeight * 2,
 		opacity: rkGlobal.opacity,
 		lineCap: 'butt',
-		dashArray: getSteepDashStyle(lineWeight, steepHairWeight),
-		dashOffset: lineWeight * -0.5 + steepHairWeight / 2
+		dashArray: getSteepDashStyle(Math.max(2, lineWeight), steepBristleLength),
+		dashOffset: Math.max(2, lineWeight) * -0.5 + steepBristleLength / 2
 	};
 }
 
+/**
+ * weight aka width of a line
+ */
 function getLineWeight(zoom, priority) {
 	var lineWeight = zoom - 10;
 	lineWeight = (lineWeight <= 0 ? 1 : lineWeight) * 1.4;
@@ -330,15 +346,11 @@ function getLineWeight(zoom, priority) {
 }
 
 function getUnpavedDashStyle(lineWeight) {
-	lineWeight = Math.max(2, lineWeight);
 	return lineWeight + " " + lineWeight * 1.5;
 }
 
-function getSteepDashStyle(lineWeight, steepHairWeight) {
-	return steepHairWeight + " " + (lineWeight * 2.5 - steepHairWeight);
-// 	var dashLength = 2;
-// 	var total = lineWeight * 2 - dashLength;
-// 	return dashLength + " " + total;
+function getSteepDashStyle(lineWeight, steepBristleLength) {
+	return steepBristleLength + " " + (lineWeight * 2.5 - steepBristleLength);
 }
 
 /**
@@ -346,10 +358,9 @@ function getSteepDashStyle(lineWeight, steepHairWeight) {
  */
 function getOnewayArrowPatterns(zoom, properties, lineWeight) {
 	var arrowWidth = Math.max(5, lineWeight * rkGlobal.arrowWidthFactor[properties.priority]);
-	return [
-	{
+	return [{
 		offset: arrowWidth-2,
-		repeat: lineWeight * 5,
+		repeat: Math.max(2, lineWeight) * 5,
 		symbol: L.Symbol.arrowHead({
 			pixelSize: arrowWidth,
 			headAngle: 90,
@@ -359,8 +370,7 @@ function getOnewayArrowPatterns(zoom, properties, lineWeight) {
 				weight: 0
 			}
 		})
-	}
-	];
+	}];
 }
 
 function loadLeaflet() {
