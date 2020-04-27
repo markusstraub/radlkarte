@@ -50,11 +50,12 @@ Optional (omitting the attributes means 'no'):
 6. Minify the .geojson with [minify_and_sort_geojson.py](data/minify_and_sort_geojson.py)
 
 
-## Notes
+## Development
+
+To test locally with Firefox go to `about:config` and set `privacy.file_unique_origin=false`, this allows local CORS requests.
 
 ### Known Bugs
 - Arrows in wrong size on fast zoom (synchronization issue of rendering method that is called more than once I fear)
-- On Chrome/Android you need to double-tap on symbols to see the popup. Safari/iPhone works.
 
 ### Future Ideas
 - Describe layer-switching & opencyclemap legend? explicitly show cycleways somehow (user request hotjar)?

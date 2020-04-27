@@ -496,25 +496,25 @@ function loadLeaflet() {
 function initializeIcons() {
 	rkGlobal.icons = {};
 	rkGlobal.icons.dismount = L.icon({
-		iconUrl: 'css/dismount.png',
+		iconUrl: 'css/dismount.svg',
 		iconSize: [33, 29],
 		iconAnchor: [16.5, 14.5],
 		popupAnchor: [0, -14.5]
 	});
 	rkGlobal.icons.noCargo = L.icon({
-		iconUrl: 'css/nocargo.png',
+		iconUrl: 'css/nocargo.svg',
 		iconSize: [29, 29],
 		iconAnchor: [14.5, 14.5],
 		popupAnchor: [0, -14.5]
 	});
 	rkGlobal.icons.noCargoAndDismount = L.icon({
-		iconUrl: 'css/nocargo+dismount.png',
+		iconUrl: 'css/nocargo+dismount.svg',
 		iconSize: [57.7, 29],
 		iconAnchor: [28.85, 14.5],
 		popupAnchor: [0, -14.5]
 	});
 	rkGlobal.icons.redDot = L.icon({
-		iconUrl: 'css/reddot.png',
+		iconUrl: 'css/reddot.svg',
 		iconSize: [10, 10],
 		iconAnchor: [5, 5],
 		popupAnchor: [0, -5]
