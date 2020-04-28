@@ -4,6 +4,7 @@ Website for desktop, tablet & smartphone usage with the goal to provide useful (
 
 ![radlkarte banner](css/radlkarte-banner.jpg)
 
+
 ## Features
 - Show recommended bicycle routes
   - Three quality types of route segments: calm, medium, stressful
@@ -54,6 +55,11 @@ Optional (omitting the attributes means 'no'):
 
 To test locally with Firefox go to `about:config` and set `privacy.file_unique_origin=false`, this allows local CORS requests.
 
+Linting:
+	sudo npm i -g jshint html5-lint
+	/usr/local/lib/node_modules/html5-lint/html5check.py index.html
+	jshint radlkarte.js
+
 ### Known Bugs
 - Arrows in wrong size on fast zoom (synchronization issue of rendering method that is called more than once I fear)
 
@@ -68,7 +74,3 @@ To test locally with Firefox go to `about:config` and set `privacy.file_unique_o
 - Differentiate between a simple & an advanced UI.
   - simple: auto-hides parts of the network based on zoom level, no layer switcher
   - advanced: layer switcher, control opacity of overlay, freely choose network-parts to show
-
-linting:
-    jshint radlkarte.js
-    /usr/local/lib/node_modules/html5-lint/html5check.py index.html

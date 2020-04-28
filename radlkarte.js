@@ -54,7 +54,7 @@ rkGlobal.configurations = {
 		geocodingBounds: '16.105,47.995,16.710,48.389', // min lon, min lat, max lon, max lat
 		geoJsonFile: 'data/radlkarte-wien.geojson'
 	}
-}
+};
 
 function debug(obj) {
 	if(rkGlobal.debug) {
@@ -90,7 +90,7 @@ function removeAllSegmentsAndMarkers() {
 		}
 		rkGlobal.leafletMap.removeLayer(rkGlobal.segments[key].decorators);
 	}
-	rkGlobal.segments = {}
+	rkGlobal.segments = {};
 
 	rkGlobal.leafletMap.removeLayer(rkGlobal.markerLayerLowZoom);
 	rkGlobal.markerLayerLowZoom.clearLayers();
@@ -157,10 +157,10 @@ function loadGeoJson(file) {
 		// and then put them in a leaflet layer
 		for(const key of Object.keys(categorizedLinestrings)) {
 			var multilinestringFeatures = turf.combine(turf.featureCollection(categorizedLinestrings[key]));
-			var properties = JSON.parse(key)
-			multilinestringFeatures['properties'] = properties;
+			var properties = JSON.parse(key);
+			multilinestringFeatures.properties = properties;
 
-			var decoratorCoordinates = []
+			var decoratorCoordinates = [];
 			for(const linestring of categorizedLinestrings[key]) {
 				decoratorCoordinates.push(turf.flip(linestring).geometry.coordinates);
 			}
@@ -172,9 +172,9 @@ function loadGeoJson(file) {
 			rkGlobal.leafletMap.getPane(key).style.zIndex = getSegmentZIndex(properties);
 			rkGlobal.segments[key] = {
 				'lines': L.geoJSON(multilinestringFeatures, {pane: key}),
-				'steepLines': properties['steep'] === 'yes' ? L.geoJSON(multilinestringFeatures, {pane: key}) : undefined,
+				'steepLines': properties.steep === 'yes' ? L.geoJSON(multilinestringFeatures, {pane: key}) : undefined,
 				'decorators': L.polylineDecorator(decoratorCoordinates)
-			}
+			};
 		}
 
 		// adds layers (if the zoom levels requires it)
@@ -216,7 +216,7 @@ function addSegmentToObject(object, geojsonLinestring) {
  * This object explicitly contains all values to be used in styling
  */
 function getSegmentKey(geojsonLinestring) {
-	var properties = geojsonLinestring.properties
+	var properties = geojsonLinestring.properties;
 	return {
 		"priority": properties.priority,
 		"stress": properties.stress,
@@ -306,7 +306,7 @@ function _getLineStyle(lineWeight, properties) {
 		color: rkGlobal.colors[properties.stress],
 		weight: lineWeight,
 		opacity: rkGlobal.opacity
-	}
+	};
 	if(properties.unpaved === 'yes') {
 		style.dashArray = getUnpavedDashStyle(Math.max(2, lineWeight));
 	}
