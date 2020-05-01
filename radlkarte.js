@@ -49,6 +49,11 @@ rkGlobal.configurations = {
 		geocodingBounds: '13.999,48.171,14.644,48.472',
 		geoJsonFile: 'data/radlkarte-linz.geojson'
 	},
+	'steyr' : {
+		centerLatLng: L.latLng(48.039, 14.42),
+		geocodingBounds: '14.319,47.997,14.551,48.227',
+		geoJsonFile: 'data/radlkarte-steyr.geojson'
+	},
 	'wien' : {
 		centerLatLng: L.latLng(48.208, 16.372),
 		geocodingBounds: '16.105,47.995,16.710,48.389', // min lon, min lat, max lon, max lat
