@@ -123,17 +123,20 @@
 		},
 
 		autoSwitchRegionIfCloseEnough: function() {
+			var minDistanceM = Number.MAX_VALUE;
+			var minRegion = undefined;
 			for(const key of Object.keys(rkGlobal.configurations)) {
-				if(key === this.region) {
-					continue;
-				}
 				var distanceM = this.map.getCenter().distanceTo(rkGlobal.configurations[key].centerLatLng);
-				if(distanceM < rkGlobal.autoSwitchDistanceMeters) {
-					updateRadlkarteRegion(key);
-					this.region = key;
-					console.log("auto-switching region to " + key + ", map center is only " + Math.round(distanceM) + "m away");
-					return;
+				if(distanceM < minDistanceM) {
+					minDistanceM = distanceM;
+					minRegion = key;
 				}
+			}
+			if(this.region != minRegion && minDistanceM < rkGlobal.autoSwitchDistanceMeters) {
+				updateRadlkarteRegion(minRegion);
+				this.region = minRegion;
+				console.log("auto-switching region to " + minRegion + ", map center is only " + Math.round(minDistanceM) + "m away");
+				return;
 			}
 		},
 
