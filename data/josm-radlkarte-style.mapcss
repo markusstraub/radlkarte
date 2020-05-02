@@ -58,3 +58,8 @@ node[nocargo=yes] {
     icon-image: "presets/vehicle/restriction/maxlength.svg";
     text: auto;
 }
+
+node[warning=yes] {
+    icon-image: "warning-small.png";
+    text: auto;
+}

@@ -506,6 +506,12 @@ function initializeIcons() {
 		iconAnchor: [16.5, 14.5],
 		popupAnchor: [0, -14.5]
 	});
+	rkGlobal.icons.warning = L.icon({
+		iconUrl: 'css/warning.svg',
+		iconSize: [33, 29],
+		iconAnchor: [16.5, 14.5],
+		popupAnchor: [0, -14.5]
+	});
 	rkGlobal.icons.noCargo = L.icon({
 		iconUrl: 'css/nocargo.svg',
 		iconSize: [29, 29],
@@ -565,11 +571,12 @@ function createMarkerLayersIncludingPopup(geojsonPoint) {
 
 /**
  * @param properties GeoJSON properties of a point
- * @return an matching icon or undefined if no icon should be used
+ * @return a matching icon or undefined if no icon should be used
  */
 function getIcon(properties) {
-	var dismount = properties.dismount == 'yes';
-	var nocargo = properties.nocargo == 'yes';
+	var dismount = properties.dismount === 'yes';
+	var nocargo = properties.nocargo === 'yes';
+	var warning = properties.warning === 'yes';
 
 	if(dismount && nocargo) {
 		return rkGlobal.icons.noCargoAndDismount;
@@ -577,6 +584,8 @@ function getIcon(properties) {
 		return rkGlobal.icons.dismount;
 	} else if(nocargo) {
 		return rkGlobal.icons.noCargo;
+	} else if(warning) {
+		return rkGlobal.icons.warning;
 	}
 	return undefined;
 }
@@ -586,8 +595,9 @@ function getIcon(properties) {
  * @return a description string
  */
 function getDescriptionText(properties) {
-	var dismount = properties.dismount == 'yes';
-	var nocargo = properties.nocargo == 'yes';
+	var dismount = properties.dismount === 'yes';
+	var nocargo = properties.nocargo === 'yes';
+	var warning = properties.warning === 'yes';
 	var description = properties.description;
 	if(description == null) {
 		description = '';
@@ -601,6 +611,8 @@ function getDescriptionText(properties) {
 		return '<span class="popup">Schiebestelle' + description+ '</span>';
 	} else if(nocargo) {
 		return '<span class="popup">Untauglich für Spezialräder' + description+ '</span>';
+	} else if(warning) {
+		return '<span class="popup">Achtung' + description+ '</span>';
 	}
 	return undefined;
 }
