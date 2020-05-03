@@ -40,14 +40,14 @@ Optional (omitting the attributes means 'no'):
 - dismount: yes (bicycle must or should be pushed (in at least one direction), either due to legal restrictions or because it's a very dangrous spot)
 - nocargo: yes (not feasible for heavy/extra-long/extra-wide bicycles, e.g. cargo bicycles or bikes with trailers due to e.g. stairs or chicanes)
 - warning: yes (problematic location, should be combined with the `description` attribute)
-- description: string explaining details (shown to to the users via popup)
+- description: string explaining details (shown to the users via popup)
 
 ### Edit Instructions
 
 1. [Download JOSM](https://josm.openstreetmap.de)
-2. Add the [josm-radlkarte-style.mapcss](data/josm-radlkarte-style.mapcss) in `edit > preferences > map settings (3rd buttom from the top) > map paint styles`
+2. Add [josm-radlkarte-style.mapcss](data/josm-radlkarte-style.mapcss) in `edit > preferences > map settings (3rd buttom from the top) > map paint styles`
 3. Load an existing radlkarte .geojson file, e.g. [radlkarte-example.geojson](data/radlkarte-example.geojson), or create a new layer.
-4. Edit the routes
+4. Edit routes
 5. Save the result as .geojson (not as .osm!)
 6. Minify the .geojson with [minify_and_sort_geojson.py](data/minify_and_sort_geojson.py)
 
@@ -57,6 +57,7 @@ Optional (omitting the attributes means 'no'):
 To test locally with Firefox go to `about:config` and set `privacy.file_unique_origin=false`, this allows local CORS requests.
 
 Linting:
+
 	sudo npm i -g jshint html5-lint
 	/usr/local/lib/node_modules/html5-lint/html5check.py index.html
 	jshint radlkarte.js
