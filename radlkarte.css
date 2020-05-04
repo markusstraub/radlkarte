@@ -106,17 +106,22 @@ div.legend-oneway {
 div.legend-unpaved {
 	background: repeating-linear-gradient(
 		90deg,
-		#999 0 20px,
-		#fff 20px 30px
+		#999 0,
+		#999 20px,
+		#fff 20px,
+		#fff 30px
 	);
 }
 div.legend-steep {
 	height: 25px;
 	background: repeating-linear-gradient(
 		90deg,
-		transparent 0 9px,
-		#999 9px 11px,
-		transparent 11px 30px
+		transparent 0,
+		transparent 9px,
+		#999 9px,
+		#999 11px,
+		transparent 11px,
+		transparent 30px
 	);
 }
 div.legend-container {
