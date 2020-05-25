@@ -530,21 +530,34 @@ function initializeIcons() {
 		iconAnchor: [5, 5],
 		popupAnchor: [0, -5]
 	});
+	rkGlobal.icons.swimming = L.icon({
+		iconUrl: 'css/swimming.svg',
+		iconSize: [29, 29],
+		iconAnchor: [14.5, 14.5],
+		popupAnchor: [0, -14.5]
+	});
+	rkGlobal.icons.swimmingSmall = L.icon({
+		iconUrl: 'css/swimming_small.svg',
+		iconSize: [10, 10],
+		iconAnchor: [5, 5],
+		popupAnchor: [0, -5]
+	});
 }
 
 function createMarkerLayersIncludingPopup(geojsonPoint) {
-	var icon = getIcon(geojsonPoint.properties);
-	if(icon == null)
+	var icons = getIcons(geojsonPoint.properties);
+	if(icons == null) {
 		return undefined;
+	}
 
 	var description = getDescriptionText(geojsonPoint.properties);
 	var markers = {
 		lowZoom: L.marker(L.geoJSON(geojsonPoint).getLayers()[0].getLatLng(), {
-			icon: rkGlobal.icons.redDot,
+			icon: icons.small,
 			alt: description
 		}),
 		highZoom: L.marker(L.geoJSON(geojsonPoint).getLayers()[0].getLatLng(), {
-			icon: icon,
+			icon: icons.large,
 			alt: description
 		})
 	};
@@ -571,23 +584,39 @@ function createMarkerLayersIncludingPopup(geojsonPoint) {
 
 /**
  * @param properties GeoJSON properties of a point
- * @return a matching icon or undefined if no icon should be used
+ * @return a small and a large icon or undefined if no icons should be used
  */
-function getIcon(properties) {
+function getIcons(properties) {
+	if(properties.leisure === 'swimming_pool') {
+		return {
+			small: rkGlobal.icons.swimmingSmall,
+			large: rkGlobal.icons.swimming
+		};
+	}
+
 	var dismount = properties.dismount === 'yes';
 	var nocargo = properties.nocargo === 'yes';
 	var warning = properties.warning === 'yes';
 
+	var problemIcon;
 	if(dismount && nocargo) {
-		return rkGlobal.icons.noCargoAndDismount;
+		problemIcon = rkGlobal.icons.noCargoAndDismount;
 	} else if(dismount) {
-		return rkGlobal.icons.dismount;
+		problemIcon = rkGlobal.icons.dismount;
 	} else if(nocargo) {
-		return rkGlobal.icons.noCargo;
+		problemIcon = rkGlobal.icons.noCargo;
 	} else if(warning) {
-		return rkGlobal.icons.warning;
+		problemIcon = rkGlobal.icons.warning;
 	}
-	return undefined;
+
+	if(problemIcon === undefined) {
+		return undefined;
+	} else {
+		return {
+			small: rkGlobal.icons.redDot,
+			large: problemIcon
+		};
+	}
 }
 
 /**
@@ -598,21 +627,22 @@ function getDescriptionText(properties) {
 	var dismount = properties.dismount === 'yes';
 	var nocargo = properties.nocargo === 'yes';
 	var warning = properties.warning === 'yes';
-	var description = properties.description;
-	if(description == null) {
-		description = '';
-	} else {
-		description = ':<br>' + description;
-	}
+
+	var descriptionParts = [];
 
 	if(dismount && nocargo) {
-		return '<span class="popup">Schiebestelle / untauglich für Spezialräder' + description + '</span>';
+		descriptionParts.push('Schiebestelle / untauglich für Spezialräder');
 	} else if(dismount) {
-		return '<span class="popup">Schiebestelle' + description+ '</span>';
+		descriptionParts.push('Schiebestelle');
 	} else if(nocargo) {
-		return '<span class="popup">Untauglich für Spezialräder' + description+ '</span>';
+		descriptionParts.push('Untauglich für Spezialräder');
 	} else if(warning) {
-		return '<span class="popup">Achtung' + description+ '</span>';
+		descriptionParts.push('Achtung');
 	}
-	return undefined;
+
+	if(properties.description !== undefined) {
+		descriptionParts.push(properties.description);
+	}
+
+	return '<span class="popup">' + descriptionParts.join(':<br>') + '</span>';
 }
