@@ -34,10 +34,15 @@ rkGlobal.configurations = {
 		geocodingBounds: '9.497,47.122,9.845,47.546',
 		geoJsonFile: 'data/radlkarte-rendertest.geojson'
 	},
-	'feldkirch' : {
+	'unteres-rheintal' : {
+		centerLatLng: L.latLng(47.414, 9.748),
+		geocodingBounds: '9.497,47.122,9.845,47.546',
+		geoJsonFile: 'data/radlkarte-unteres-rheintal.geojson'
+	},
+	'oberes-rheintal' : {
 		centerLatLng: L.latLng(47.237, 9.598),
 		geocodingBounds: '9.497,47.122,9.845,47.546',
-		geoJsonFile: 'data/radlkarte-feldkirch.geojson'
+		geoJsonFile: 'data/radlkarte-oberes-rheintal.geojson'
 	},
 	'klagenfurt' : {
 		centerLatLng: L.latLng(46.624, 14.308),
