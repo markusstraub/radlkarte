@@ -50,7 +50,7 @@ rkGlobal.configurations = {
 		geoJsonFile: 'data/radlkarte-linz.geojson'
 	},
 	'rheintal' : {
-		centerLatLng: L.latLng(47.414, 9.748),
+		centerLatLng: L.latLng(47.4102, 9.7211),
 		geocodingBounds: '9.497,47.122,9.845,47.546',
 		geoJsonFile: 'data/radlkarte-unteres-rheintal.geojson'
 	},
