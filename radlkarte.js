@@ -34,16 +34,11 @@ rkGlobal.configurations = {
 		geocodingBounds: '9.497,47.122,9.845,47.546',
 		geoJsonFile: 'data/radlkarte-rendertest.geojson'
 	},
-	'unteres-rheintal' : {
-		centerLatLng: L.latLng(47.414, 9.748),
-		geocodingBounds: '9.497,47.122,9.845,47.546',
-		geoJsonFile: 'data/radlkarte-unteres-rheintal.geojson'
-	},
-	'oberes-rheintal' : {
+	/*'oberes-rheintal' : {
 		centerLatLng: L.latLng(47.237, 9.598),
 		geocodingBounds: '9.497,47.122,9.845,47.546',
 		geoJsonFile: 'data/radlkarte-oberes-rheintal.geojson'
-	},
+	},*/
 	'klagenfurt' : {
 		centerLatLng: L.latLng(46.624, 14.308),
 		geocodingBounds: '13.978,46.477,14.624,46.778',
@@ -53,6 +48,11 @@ rkGlobal.configurations = {
 		centerLatLng: L.latLng(48.30, 14.285),
 		geocodingBounds: '13.999,48.171,14.644,48.472',
 		geoJsonFile: 'data/radlkarte-linz.geojson'
+	},
+	'rheintal' : {
+		centerLatLng: L.latLng(47.414, 9.748),
+		geocodingBounds: '9.497,47.122,9.845,47.546',
+		geoJsonFile: 'data/radlkarte-unteres-rheintal.geojson'
 	},
 	'steyr' : {
 		centerLatLng: L.latLng(48.039, 14.42),
