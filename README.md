@@ -4,6 +4,7 @@ Website for desktop, tablet & smartphone usage with the goal to provide useful (
 
 ![radlkarte banner](css/radlkarte-banner.jpg)
 
+> If you use the software and/or route data the preferred way to credit is: **© radlkarte.at - Radlobby Österreich**
 
 ## Features
 - Show recommended bicycle routes
