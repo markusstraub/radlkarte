@@ -409,7 +409,7 @@ export function loadLeaflet() {
 		maxZoom: 19
 	});
 	var cartodbPositronLowZoom = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-		attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+		attribution: '&copy; <a href="https://www.openstreetmap.org" target="_blank">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
 		subdomains: 'abcd',
 		minZoom: 0,
 		maxZoom: 15
@@ -433,6 +433,11 @@ export function loadLeaflet() {
 		maxZoom: 18,
 		attribution: 'map data &copy; <a href="https://openstreetmap.org" target="_blank">OpenStreetMap</a> contributors, imagery &copy; <a href="https://www.thunderforest.com" target="_blank">Thunderforest</a>'
 	});
+	var cyclosm = L.tileLayer('https://{s}.tile-cyclosm.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png', {
+		minZoom: 0,
+		maxZoom: 18,
+		attribution: 'map data &copy; <a href="https://openstreetmap.org" target="_blank">OpenStreetMap</a> contributors. Tiles style by <a href="https://www.cyclosm.org" target="_blank">CyclOSM</a> hosted by <a href="https://openstreetmap.fr/" target="_blank">OpenStreetMap France</a>.'
+	});
 	var empty = L.tileLayer('', {attribution: ''});
 
 	/*var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -444,6 +449,7 @@ export function loadLeaflet() {
 	var baseMaps = {
 		"Straßenkarte": mixed,
 		"Luftbild": basemapAtOrthofoto,
+		"CyclOSM": cyclosm,
 		"OpenCycleMap": ocm,
 		//"OpenStreetMap": osm,
 		"Weiß": empty,
