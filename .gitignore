@@ -4,3 +4,4 @@ gfx_dev
 __pycache__
 .pytest_cache
 test_output.geojson
+node_modules

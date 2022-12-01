@@ -1,5 +1,19 @@
 "use strict";
 
+import Geocoder from "leaflet-control-geocoder";
+import L from 'leaflet';
+import * as locate from 'leaflet.locatecontrol';
+import 'leaflet-sidebar-v2';
+import {$,jQuery} from 'jquery';
+import combine from '@turf/combine';
+import flip from '@turf/flip';
+import { featureCollection } from '@turf/helpers';
+import polylineDecorator from 'leaflet-polylinedecorator';
+
+window.$ = $;
+window.jQuery = jQuery;
+
+
 var rkGlobal = {}; // global variable for radlkarte properties / data storage
 rkGlobal.leafletMap = undefined; // the main leaflet map
 rkGlobal.hash = undefined; // leaflet-hash object, contains the currently active region
@@ -85,7 +99,7 @@ function updateRadlkarteRegion(region) {
 
 	removeAllSegmentsAndMarkers();
 	loadGeoJson(configuration.geoJsonFile);
-	rkGlobal.geocodingControl.options.geocoder.options.geocodingQueryParams.bounds = configuration.geocodingBounds;
+	//rkGlobal.geocodingControl.options.geocoder.options.geocodingQueryParams.bounds = configuration.geocodingBounds;
 
 	// virtual page hit in google analytics
 	ga('set', 'page', '/' + region);
@@ -95,7 +109,7 @@ function updateRadlkarteRegion(region) {
 function removeAllSegmentsAndMarkers() {
 	for(const key of Object.keys(rkGlobal.segments)) {
 		rkGlobal.leafletMap.removeLayer(rkGlobal.segments[key].lines);
-		if(rkGlobal.leafletMap.hasLayer(rkGlobal.segments[key].steepLines)) {
+		if(rkGlobal.segments[key].steepLines && rkGlobal.leafletMap.hasLayer(rkGlobal.segments[key].steepLines)) {
 			rkGlobal.leafletMap.removeLayer(rkGlobal.segments[key].steepLines);
 		}
 		rkGlobal.leafletMap.removeLayer(rkGlobal.segments[key].decorators);
@@ -110,14 +124,15 @@ function removeAllSegmentsAndMarkers() {
 
 function loadGeoJson(file) {
 	// get rid of "XML Parsing Error: not well-formed" during $.getJSON
-	$.ajaxSetup({
-		beforeSend: function (xhr) {
-			if (xhr.overrideMimeType) {
-				xhr.overrideMimeType("application/json");
-			}
-		}
-	});
-	$.getJSON(file, function(data) {
+	// $.ajaxSetup({
+	// 	beforeSend: function (xhr) {
+	// 		if (xhr.overrideMimeType) {
+	// 			xhr.overrideMimeType("application/json");
+	// 		}
+	// 	}
+	// });
+	// $.getJSON(file, function(data) {
+	fetch(file).then((response) => response.json()).then((data) => {	
 		if(data.type != "FeatureCollection") {
 			console.error("expected a GeoJSON FeatureCollection. no radlkarte network can be displayed.");
 			return;
@@ -166,13 +181,13 @@ function loadGeoJson(file) {
 		// with the same properties into a single multilinestring
 		// and then put them in a leaflet layer
 		for(const key of Object.keys(categorizedLinestrings)) {
-			var multilinestringFeatures = turf.combine(turf.featureCollection(categorizedLinestrings[key]));
+			var multilinestringFeatures = combine(featureCollection(categorizedLinestrings[key]));
 			var properties = JSON.parse(key);
 			multilinestringFeatures.properties = properties;
 
 			var decoratorCoordinates = [];
 			for(const linestring of categorizedLinestrings[key]) {
-				decoratorCoordinates.push(turf.flip(linestring).geometry.coordinates);
+				decoratorCoordinates.push(flip(linestring).geometry.coordinates);
 			}
 
 			// separate panes to allow setting zIndex, which is not possible on
@@ -192,10 +207,10 @@ function loadGeoJson(file) {
 
 		rkGlobal.leafletMap.on('zoomend', function(ev) {
 			//debug("zoom level changed to " + rkGlobal.leafletMap.getZoom() + ".. enqueueing style change");
-			$("#map").queue(function() {
+			//$("#map").queue(function() {
 				rkGlobal.styleFunction();
-				$(this).dequeue();
-			});
+			//	$(this).dequeue();
+			//});
 		});
 	});
 }
@@ -241,8 +256,10 @@ function getSegmentKey(geojsonLinestring) {
  * Special styles for unpaved, steep, oneway arrows are matched, take care in future adapations
  */
 function updateStyles() {
+	console.log('updateStyles');
 	var zoom = rkGlobal.leafletMap.getZoom();
 	for(const key of Object.keys(rkGlobal.segments)) {
+		console.log(key);
 		var properties = JSON.parse(key);
 		var showFull = zoom >= rkGlobal.priorityFullVisibleFromZoom[properties.priority];
 		var showMinimal = zoom < rkGlobal.priorityFullVisibleFromZoom[properties.priority] && zoom >= rkGlobal.priorityReducedVisibilityFromZoom[properties.priority];
@@ -383,8 +400,8 @@ function getOnewayArrowPatterns(zoom, properties, lineWeight) {
 	}];
 }
 
-function loadLeaflet() {
-	rkGlobal.leafletMap = L.map('map', { 'zoomControl' : false } );
+export function loadLeaflet() {
+	const leafletMap = L.map('map', { 'zoomControl' : false } );
 
 	// avoid troubles with min/maxZoom from our layer group, see https://github.com/Leaflet/Leaflet/issues/6557
 	var minMaxZoomLayer = L.gridLayer({
@@ -433,14 +450,15 @@ function loadLeaflet() {
 	};
 	var overlayMaps = {};
 
-	mixed.addTo(rkGlobal.leafletMap);
-	rkGlobal.leafletLayersControl = L.control.layers(baseMaps, overlayMaps, { 'position' : 'topright', 'collapsed' : true } ).addTo(rkGlobal.leafletMap);
+	leafletMap.addControl(mixed);
+	rkGlobal.leafletLayersControl = L.control.layers(baseMaps, overlayMaps, { 'position' : 'topright', 'collapsed' : true } )
+	leafletMap.addControl(rkGlobal.leafletLayersControl);
 
 	rkGlobal.geocodingControl = L.Control.geocoder({
 		position: 'topright',
 		placeholder: 'Adresssuche',
 		errorMessage: 'Leider nicht gefunden',
-		geocoder: L.Control.Geocoder.opencage("657bf10308f144c7a9cbb7675c9b0d36", {
+		geocoder: Geocoder.opencage("657bf10308f144c7a9cbb7675c9b0d36", {
 			geocodingQueryParams: {
 				countrycode: 'at',
 				language: 'de'
@@ -469,9 +487,11 @@ function loadLeaflet() {
 			closeOnClick: false,
 			closeButton: true
 		}).setLatLng(e.geocode.center).setContent(resultText).openOn(rkGlobal.leafletMap);
-	}).addTo(rkGlobal.leafletMap);
+	})
+	leafletMap.addControl(rkGlobal.geocodingControl);
 
-	var locateControl = L.control.locate({
+
+	var locateControl = new L.Control.Locate({
 		position: 'topright',
 		setView: 'untilPanOrZoom',
 		flyTo: true,
@@ -484,19 +504,26 @@ function loadLeaflet() {
 		strings: {
 			title: 'Verfolge Position'
 		}
-	}).addTo(rkGlobal.leafletMap);
+	})
+	leafletMap.addControl(locateControl);
 
-	L.control.zoom({position: 'topright'}).addTo(rkGlobal.leafletMap);
+	const zoomControl = L.control.zoom({position: 'topright'})
+	leafletMap.addControl(zoomControl);
 
-	var sidebar = L.control.sidebar({
+	var sidebar = new L.Control.Sidebar({
 		container: 'sidebar',
 		position: 'left'
-	}).addTo(rkGlobal.leafletMap);
+	})
+	leafletMap.addControl(sidebar);
 	if(window.innerWidth < rkGlobal.fullWidthThreshold) {
 		sidebar.close();
 	}
 
 	initializeIcons();
+
+	rkGlobal.leafletMap = leafletMap;
+
+	//updateRadlkarteRegion('linz');
 
 	// initialize hash, this causes loading of the default region
 	// and positioning of the map
@@ -651,3 +678,223 @@ function getDescriptionText(properties) {
 
 	return '<span class="popup">' + descriptionParts.join(':<br>') + '</span>';
 }
+
+(function(window) {
+	var HAS_HASHCHANGE = (function() {
+		var doc_mode = window.documentMode;
+		return ('onhashchange' in window) &&
+			(doc_mode === undefined || doc_mode > 7);
+	})();
+
+	L.Hash = function(map) {
+		this.onHashChange = L.Util.bind(this.onHashChange, this);
+
+		if (map) {
+			this.init(map);
+		}
+	};
+
+	/** adapted to additionally parse region info from the hash
+	 *  and to provide default values if parts of the hash are not present
+	 */
+	L.Hash.parseHash = function(hash) {
+		if(hash.indexOf('#') === 0) {
+			hash = hash.substr(1);
+		}
+
+		var parsed = {
+			region: rkGlobal.defaultRegion,
+			zoom: rkGlobal.defaultZoom,
+			center: undefined
+		}
+
+		var args = hash.split("/");
+
+		if(args.length >= 1) {
+			var region = args[0];
+			if(region in rkGlobal.configurations) {
+				parsed.region = region;
+			}
+		}
+
+		if(args.length >= 2) {
+			var zoom = (L.version >= '1.0.0') ? parseFloat(args[1]) : parseInt(args[1], 10);
+			if(!isNaN(zoom)) {
+				parsed.zoom = zoom
+			}
+		}
+
+		var lat = undefined;
+		var lon = undefined;
+		if (args.length >= 4) {
+			var lat = parseFloat(args[2]);
+			var lon = parseFloat(args[3]);
+		}
+
+		if (!isNaN(lat) && !isNaN(lon)) {
+			parsed.center = new L.LatLng(lat, lon);
+		} else {
+			var config = rkGlobal.configurations[parsed.region];
+			parsed.center = config.centerLatLng;
+		}
+
+		return parsed;
+	};
+
+	L.Hash.formatHash = function(map) {
+		var center = map.getCenter(),
+		    zoom = map.getZoom(),
+		    precision = Math.max(0, Math.ceil(Math.log(zoom) / Math.LN2));
+
+		return "#" + [this.region,
+			//(L.version >= '1.0.0') ? zoom.toFixed(precision) : zoom,
+			zoom,
+			center.lat.toFixed(precision),
+			center.lng.toFixed(precision)
+		].join("/");
+	};
+
+	L.Hash.prototype = {
+		map: null,
+		lastHash: null,
+		region: undefined,
+
+		parseHash: L.Hash.parseHash,
+		formatHash: L.Hash.formatHash,
+
+		init: function(map) {
+			this.map = map;
+
+			// reset the hash
+			this.lastHash = null;
+			this.onHashChange();
+
+			if (!this.isListening) {
+				this.startListening();
+			}
+		},
+
+		removeFrom: function(map) {
+			if (this.changeTimeout) {
+				clearTimeout(this.changeTimeout);
+			}
+
+			if (this.isListening) {
+				this.stopListening();
+			}
+
+			this.map = null;
+		},
+
+		onMapMove: function() {
+			// bail if we're moving the map (updating from a hash),
+			// or if the map is not yet loaded
+
+			if (this.movingMap || !this.map._loaded) {
+				return false;
+			}
+
+			this.autoSwitchRegionIfCloseEnough();
+
+			var hash = this.formatHash(this.map);
+			if (this.lastHash != hash) {
+				location.replace(hash);
+				this.lastHash = hash;
+			}
+		},
+
+		autoSwitchRegionIfCloseEnough: function() {
+			var minDistanceM = Number.MAX_VALUE;
+			var minRegion = undefined;
+			for(const key of Object.keys(rkGlobal.configurations)) {
+				var distanceM = this.map.getCenter().distanceTo(rkGlobal.configurations[key].centerLatLng);
+				if(distanceM < minDistanceM) {
+					minDistanceM = distanceM;
+					minRegion = key;
+				}
+			}
+			if(this.region != minRegion && minDistanceM < rkGlobal.autoSwitchDistanceMeters) {
+				updateRadlkarteRegion(minRegion);
+				this.region = minRegion;
+				console.log("auto-switching region to " + minRegion + ", map center is only " + Math.round(minDistanceM) + "m away");
+				return;
+			}
+		},
+
+		movingMap: false,
+		update: function() {
+			var hash = location.hash;
+			if (hash === this.lastHash) {
+				return;
+			}
+			var parsed = this.parseHash(hash);
+			this.movingMap = true;
+			if(this.region !== parsed.region) {
+				// console.log('hash update got a new region, change from ' + this.region + ' to ' + parsed.region);
+				updateRadlkarteRegion(parsed.region);
+				this.region = parsed.region;
+			}
+			this.map.setView(parsed.center, parsed.zoom);
+			this.movingMap = false;
+		},
+
+		// defer hash change updates every 100ms
+		changeDefer: 100,
+		changeTimeout: null,
+		onHashChange: function() {
+			// throttle calls to update() so that they only happen every
+			// `changeDefer` ms
+			if (!this.changeTimeout) {
+				var that = this;
+				this.changeTimeout = setTimeout(function() {
+					that.update();
+					that.changeTimeout = null;
+				}, this.changeDefer);
+			}
+		},
+
+		isListening: false,
+		hashChangeInterval: null,
+		startListening: function() {
+			this.map.on("moveend", this.onMapMove, this);
+
+			if (HAS_HASHCHANGE) {
+				L.DomEvent.addListener(window, "hashchange", this.onHashChange);
+			} else {
+				clearInterval(this.hashChangeInterval);
+				this.hashChangeInterval = setInterval(this.onHashChange, 50);
+			}
+			this.isListening = true;
+		},
+
+		stopListening: function() {
+			this.map.off("moveend", this.onMapMove, this);
+
+			if (HAS_HASHCHANGE) {
+				L.DomEvent.removeListener(window, "hashchange", this.onHashChange);
+			} else {
+				clearInterval(this.hashChangeInterval);
+			}
+			this.isListening = false;
+		}
+	};
+
+	L.hash = function(map) {
+		return new L.Hash(map);
+	};
+
+	L.Map.prototype.addHash = function() {
+		this._hash = L.hash(this);
+	};
+
+	L.Map.prototype.removeHash = function() {
+		this._hash.removeFrom();
+	};
+})(window);
+
+
+
+setTimeout(() => {
+
+loadLeaflet();
+}, 300);

@@ -1,0 +1,29 @@
+{
+  "name": "radlkarte",
+  "version": "1.0.0",
+  "description": "Handgepflegte Radrouten",
+  "main": "radlkarte.js",
+  "repository": "https://github.com/000panther/radlkarte.git",
+  "author": "Markus Straub ",
+  "license": "MIT",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@turf/turf": "^6.5.0",
+    "jquery": "^3.6.1",
+    "leaflet": "^1.9.3",
+    "leaflet-control-geocoder": "^2.4.0",
+    "leaflet-hash": "^0.2.1",
+    "leaflet-polylinedecorator": "^1.6.0",
+    "leaflet-sidebar-v2": "^3.2.3",
+    "leaflet.locatecontrol": "^0.79.0"
+  },
+  "devDependencies": {
+    "vite": "^3.2.4"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  }
+}

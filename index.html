@@ -30,32 +30,18 @@
 		})(window,document,'//static.hotjar.com/c/hotjar-','.js?sv='); */
 	</script>
 
-	<script src="js/leaflet-1.6.0/leaflet.js"></script>
-	<link rel="stylesheet" href="js/leaflet-1.6.0/leaflet.css" />
+	<!-- <script src="js/leaflet-1.6.0/leaflet.js"></script> -->
+	<link rel="stylesheet" href="node_modules/leaflet/dist/leaflet.css" />
+	<link rel="stylesheet" href="node_modules/leaflet-sidebar-v2/css/leaflet-sidebar.css"/>
+	<link rel="stylesheet" href="node_modules/leaflet.locatecontrol/dist/L.Control.Locate.css"/>
+	<link rel="stylesheet" href="node_modules/leaflet-control-geocoder/dist/Control.Geocoder.css"/>
 
-	<script src="js/leaflet-sidebar-v2-3.0.6/leaflet-sidebar.min.js"></script>
-	<link rel="stylesheet" href="js/leaflet-sidebar-v2-3.0.6/leaflet-sidebar.css"/>
-	<!-- font awesome is required by sidebar & leaflet-locatecontrol-->
-	<link rel="stylesheet" href="css/font-awesome-4.7.0/css/font-awesome.min.css"/>
 
-	<script src="js/leaflet-polylineDecorator-1.6.0/leaflet.polylineDecorator.js"></script>
-
-	<script src="js/leaflet-hash-1.0.1-customized/leaflet-hash.js"></script>
-
-	<script src="js/leaflet-locatecontrol-0.66.1/L.Control.Locate.min.js"></script>
-	<link rel="stylesheet" href="js/leaflet-locatecontrol-0.66.1/L.Control.Locate.css"/>
-
-	<script src="js/leaflet-control-geocoder-1.13.0/Control.Geocoder.js"></script>
-	<link rel="stylesheet" href="js/leaflet-control-geocoder-1.13.0/Control.Geocoder.css"/>
-
-	<script src="js/turf-2017-02-16/turf.min.js"></script>
-
-	<script src="js/jquery-3.3.1.min.js"></script>
 
 	<link href="css/museo-500/style.css" rel="stylesheet" type="text/css"/>
-	<link href='https://fonts.googleapis.com/css?family=Roboto:400,400italic,700' rel='stylesheet' type='text/css'/>
+	<link href='https://fonts.googleapis.com/css?family=Roboto:400,400italic,700' rel='stylesheet' type='text/css'/> -->
 
-	<script src="./radlkarte.js"></script>
+	<script type="module" src="./radlkarte.js"></script>
 	<link rel="stylesheet" href="./radlkarte.css" />
 	<link rel="icon" type="image/x-icon" href="css/favicon.ico" />
 </head>
@@ -303,9 +289,5 @@
 
 		</div>
 	</div>
-
-	<script>
-		loadLeaflet();
-	</script>
 </body>
 </html>
