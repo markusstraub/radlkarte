@@ -1326,6 +1326,20 @@
                     ]
                 ]
             }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "nocargo": "yes",
+                "dismount": "yes"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    15.86022793367,
+                    47.69256120407
+                ]
+            }
         }
     ]
 }
