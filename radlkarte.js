@@ -49,17 +49,16 @@ rkGlobal.configurations = {
 		geocodingBounds: '13.999,48.171,14.644,48.472',
 		geoJsonFile: 'data/radlkarte-linz.geojson'
 	},
-        'reichenau' : {
-                centerLatLng: L.latLng(47.6780, 15.8687),
-                geocodingBounds: '9.497,47.122,9.845,47.546',
-                geoJsonFile: 'data/radlkarte-reichenau.geojson'
-        },
-
 	'rheintal' : {
 		centerLatLng: L.latLng(47.4102, 9.7211),
 		geocodingBounds: '9.497,47.122,9.845,47.546',
 		geoJsonFile: 'data/radlkarte-unteres-rheintal.geojson'
 	},
+       'schwarzatal' : {
+                centerLatLng: L.latLng(47.6780, 15.8687),
+                geocodingBounds: '9.497,47.122,9.845,47.546',
+                geoJsonFile: 'data/radlkarte-schwarzatal.geojson'
+        },
 	'steyr' : {
 		centerLatLng: L.latLng(48.039, 14.42),
 		geocodingBounds: '14.319,47.997,14.551,48.227',
