@@ -55,7 +55,7 @@ rkGlobal.configurations = {
 		geoJsonFile: 'data/radlkarte-unteres-rheintal.geojson'
 	},
        'schwarzatal' : {
-                centerLatLng: L.latLng(47.6780, 15.8687),
+                centerLatLng: L.latLng(47.68, 15.94),
                 geocodingBounds: '9.497,47.122,9.845,47.546',
                 geoJsonFile: 'data/radlkarte-schwarzatal.geojson'
         },
