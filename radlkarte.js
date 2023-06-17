@@ -481,9 +481,9 @@ function loadLeaflet() {
 		}).setLatLng(e.geocode.center).setContent(resultText).openOn(rkGlobal.leafletMap);
 	}).addTo(rkGlobal.leafletMap);
 
-	var locateControl = L.control.locate({
+	L.control.locate({
 		position: 'topright',
-		setView: 'untilPanOrZoom',
+		setView: 'untilPan',
 		flyTo: true,
 		//markerStyle: { weight: 5 },
 		locateOptions: {
