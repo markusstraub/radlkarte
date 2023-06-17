@@ -90,6 +90,10 @@ function updateRadlkarteRegion(region) {
 	// virtual page hit in google analytics
 	ga('set', 'page', '/' + region);
 	ga('send', 'pageview');
+	// virtual page hit in matomo
+	_paq.push(['setCustomUrl', '/' + region]);
+	_paq.push(['setDocumentTitle', region]);
+	_paq.push(['trackPageView']);
 }
 
 function removeAllSegmentsAndMarkers() {
