@@ -99,7 +99,7 @@ function updateRadlkarteRegion(region) {
 function removeAllSegmentsAndMarkers() {
 	for(const key of Object.keys(rkGlobal.segments)) {
 		rkGlobal.leafletMap.removeLayer(rkGlobal.segments[key].lines);
-		if(rkGlobal.leafletMap.hasLayer(rkGlobal.segments[key].steepLines)) {
+		if (rkGlobal.segments[key].steepLines && rkGlobal.leafletMap.hasLayer(rkGlobal.segments[key].steepLines)) {
 			rkGlobal.leafletMap.removeLayer(rkGlobal.segments[key].steepLines);
 		}
 		rkGlobal.leafletMap.removeLayer(rkGlobal.segments[key].decorators);
