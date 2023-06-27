@@ -461,25 +461,20 @@ function loadLeaflet() {
 		defaultMarkGeocode: false
 	}).on('markgeocode', function(e) {
 		var result = e.geocode || e;
-// 		var bbox = result.bbox;
-// 		var poly = L.polygon([
-// 			bbox.getSouthEast(),
-// 			bbox.getNorthEast(),
-// 			bbox.getNorthWest(),
-// 			bbox.getSouthWest()
-// 		]);
-// 		rkGlobal.leafletMap.fitBounds(poly.getBounds(), {maxZoom: 17});
 		debug(result);
-		var resultCenter = L.latLng(result.center.lat, result.center.lng);
-		rkGlobal.leafletMap.panTo(resultCenter);
+
 		var resultText = result.name;
 		resultText = resultText.replace(/, Österreich$/, "").replace(/, /g, "<br/>");
-
-		var popup = L.popup({
+		L.popup({
 			autoClose: false,
 			closeOnClick: false,
 			closeButton: true
-		}).setLatLng(e.geocode.center).setContent(resultText).openOn(rkGlobal.leafletMap);
+		}).setLatLng(result.center).setContent(resultText).openOn(rkGlobal.leafletMap);
+
+		let roughlyHalfPopupWidth = 100; // TODO ideally get the real width of the popup
+		let topLeft = L.point(document.querySelector('#sidebar').offsetWidth + roughlyHalfPopupWidth, 0);
+		let bottomRight = L.point(document.querySelector('#radlobby-logo').offsetWidth + roughlyHalfPopupWidth, document.querySelector('#radlobby-logo').offsetHeight);
+		rkGlobal.leafletMap.panInside(result.center, { "paddingTopLeft": topLeft, "paddingBottomRight": bottomRight });
 	}).addTo(rkGlobal.leafletMap);
 
 	L.control.locate({
