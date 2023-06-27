@@ -450,7 +450,8 @@ function loadLeaflet() {
 		position: 'topright',
 		placeholder: 'Adresssuche',
 		errorMessage: 'Leider nicht gefunden',
-		geocoder: L.Control.Geocoder.opencage("657bf10308f144c7a9cbb7675c9b0d36", {
+		geocoder: L.Control.Geocoder.opencage({
+			apiKey: "657bf10308f144c7a9cbb7675c9b0d36",
 			geocodingQueryParams: {
 				countrycode: 'at',
 				language: 'de'
