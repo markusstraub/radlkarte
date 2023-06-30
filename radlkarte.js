@@ -87,10 +87,7 @@ function updateRadlkarteRegion(region) {
 	loadGeoJson(configuration.geoJsonFile);
 	rkGlobal.geocodingControl.options.geocoder.options.geocodingQueryParams.bounds = configuration.geocodingBounds;
 
-	// virtual page hit in google analytics
-	ga('set', 'page', '/' + region);
-	ga('send', 'pageview');
-	// virtual page hit in matomo
+	// virtual page hit in matomo analytics
 	_paq.push(['setCustomUrl', '/' + region]);
 	_paq.push(['setDocumentTitle', region]);
 	_paq.push(['trackPageView']);
