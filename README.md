@@ -46,7 +46,7 @@ Optional (omitting the attributes means 'no'):
 ### Edit Instructions
 
 1. [Download JOSM](https://josm.openstreetmap.de)
-2. Add [josm-radlkarte-style.mapcss](data/josm-radlkarte-style.mapcss) in `edit > preferences > map settings (3rd buttom from the top) > map paint styles`
+2. Add [josm-radlkarte-style.mapcss](data/josm-radlkarte-style.mapcss) in `edit > preferences > map paint styles`
 3. Load an existing radlkarte .geojson file, e.g. [radlkarte-example.geojson](data/radlkarte-example.geojson), or create a new layer.
 4. Edit routes
 5. Save the result as .geojson (not as .osm!)
