@@ -95,12 +95,16 @@ function updateRadlkarteRegion(region) {
 	// virtual page hit in google analytics
 	ga('set', 'page', '/' + region);
 	ga('send', 'pageview');
+	// virtual page hit in matomo
+	_paq.push(['setCustomUrl', '/' + region]);
+	_paq.push(['setDocumentTitle', region]);
+	_paq.push(['trackPageView']);
 }
 
 function removeAllSegmentsAndMarkers() {
 	for(const key of Object.keys(rkGlobal.segments)) {
 		rkGlobal.leafletMap.removeLayer(rkGlobal.segments[key].lines);
-		if(rkGlobal.leafletMap.hasLayer(rkGlobal.segments[key].steepLines)) {
+		if (rkGlobal.segments[key].steepLines && rkGlobal.leafletMap.hasLayer(rkGlobal.segments[key].steepLines)) {
 			rkGlobal.leafletMap.removeLayer(rkGlobal.segments[key].steepLines);
 		}
 		rkGlobal.leafletMap.removeLayer(rkGlobal.segments[key].decorators);
@@ -451,7 +455,8 @@ function loadLeaflet() {
 		position: 'topright',
 		placeholder: 'Adresssuche',
 		errorMessage: 'Leider nicht gefunden',
-		geocoder: L.Control.Geocoder.opencage("657bf10308f144c7a9cbb7675c9b0d36", {
+		geocoder: L.Control.Geocoder.opencage({
+			apiKey: "657bf10308f144c7a9cbb7675c9b0d36",
 			geocodingQueryParams: {
 				countrycode: 'at',
 				language: 'de'
@@ -461,30 +466,25 @@ function loadLeaflet() {
 		defaultMarkGeocode: false
 	}).on('markgeocode', function(e) {
 		var result = e.geocode || e;
-// 		var bbox = result.bbox;
-// 		var poly = L.polygon([
-// 			bbox.getSouthEast(),
-// 			bbox.getNorthEast(),
-// 			bbox.getNorthWest(),
-// 			bbox.getSouthWest()
-// 		]);
-// 		rkGlobal.leafletMap.fitBounds(poly.getBounds(), {maxZoom: 17});
 		debug(result);
-		var resultCenter = L.latLng(result.center.lat, result.center.lng);
-		rkGlobal.leafletMap.panTo(resultCenter);
+
 		var resultText = result.name;
 		resultText = resultText.replace(/, Österreich$/, "").replace(/, /g, "<br/>");
-
-		var popup = L.popup({
+		L.popup({
 			autoClose: false,
 			closeOnClick: false,
 			closeButton: true
-		}).setLatLng(e.geocode.center).setContent(resultText).openOn(rkGlobal.leafletMap);
+		}).setLatLng(result.center).setContent(resultText).openOn(rkGlobal.leafletMap);
+
+		let roughlyHalfPopupWidth = 100; // TODO ideally get the real width of the popup
+		let topLeft = L.point(document.querySelector('#sidebar').offsetWidth + roughlyHalfPopupWidth, 0);
+		let bottomRight = L.point(document.querySelector('#radlobby-logo').offsetWidth + roughlyHalfPopupWidth, document.querySelector('#radlobby-logo').offsetHeight);
+		rkGlobal.leafletMap.panInside(result.center, { "paddingTopLeft": topLeft, "paddingBottomRight": bottomRight });
 	}).addTo(rkGlobal.leafletMap);
 
-	var locateControl = L.control.locate({
+	L.control.locate({
 		position: 'topright',
-		setView: 'untilPanOrZoom',
+		setView: 'untilPan',
 		flyTo: true,
 		//markerStyle: { weight: 5 },
 		locateOptions: {

@@ -7,6 +7,7 @@ Website for desktop, tablet & smartphone usage with the goal to provide useful (
 > If you use the software and/or route data the preferred way to credit is: **© radlkarte.at - Radlobby Österreich**
 
 ## Features
+
 - Show recommended bicycle routes
   - Three quality types of route segments: calm, medium, stressful
   - Three importance levels of route segments: main, regional, local
@@ -23,25 +24,25 @@ Website for desktop, tablet & smartphone usage with the goal to provide useful (
 
 ## Route Data
 
-Route data is stored in .geojson format with the following attributes.
+Route data is stored in `GeoJSON` format with the following attributes.
 
 ### Line Attributes
 
-Mandatory:
-- priority: 0 (highest), 1 (medium), 2 (lowest)
-- stress: 0 (no stress), 1 (medium), 2 (a lot of stress)
+**Mandatory**:
+- `priority`=`0` (highest), `1` (medium), `2` (lowest)
+- `stress`=`0` (no stress), `1` (medium), `2` (a lot of stress)
 
-Optional (omitting the attributes means 'no'):
-- oneway: yes (route only legal in one direction)
-- steep: yes (very steep,
-- unpaved: yes (dirt, gravel or extremely uneven surfaces even though they are paved)
+**Optional** (omitting the attributes means 'no'):
+- `oneway`=`yes`: route only legal in one direction
+- `steep`=`yes`: very steep, e.g. more than  5-6%, but excluding short ramps
+- `unpaved`=`yes`: dirt, gravel or extremely uneven surfaces even though they are paved
 
 ### Point Attributes
 
-- dismount: yes (bicycle must or should be pushed (in at least one direction), either due to legal restrictions or because it's a very dangrous spot)
-- nocargo: yes (not feasible for heavy/extra-long/extra-wide bicycles, e.g. cargo bicycles or bikes with trailers due to e.g. stairs or chicanes)
-- warning: yes (problematic location, should be combined with the `description` attribute)
-- description: string explaining details (shown to the users via popup)
+- `dismount`=`yes`: bicycle must or should be pushed (in at least one direction), either due to legal restrictions or because it's a very dangrous spot
+- `nocargo`=`yes`: not feasible for heavy/extra-long/extra-wide bicycles, e.g. cargo bicycles or bikes with trailers due to e.g. stairs or chicanes
+- `warning`=`yes`: problematic location, should alwys be combined with the `description` attribute
+- `description`: string explaining details shown to the users in a popup
 
 ### Edit Instructions
 
@@ -64,9 +65,11 @@ Linting:
 	jshint radlkarte.js
 
 ### Known Bugs
+
 - Arrows in wrong size on fast zoom (synchronization issue of rendering method that is called more than once I fear)
 
 ### Future Ideas
+
 - Describe layer-switching & opencyclemap legend? explicitly show cycleways somehow (user request hotjar)?
 - Make problem-POIs hidable in layer switcher
 - Optional overlays for cycling-POIs
