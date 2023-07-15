@@ -83,7 +83,7 @@ function debug(obj) {
  */
 function updateRadlkarteRegion(region) {
 	rkGlobal.currentRegion = region;
-	var configuration = rkGlobal.configurations[region];
+	let configuration = rkGlobal.configurations[region];
 	if(configuration === undefined) {
 		console.warn('ignoring unknown region ' + region);
 		return;
@@ -137,15 +137,15 @@ function loadGeoJson(file) {
 		}
 
 		// collect geojson linestring features (and marker points)
-		var ignoreCount = 0;
-		var goodCount = 0;
-		var poiCount = 0;
-		var categorizedLinestrings = {};
-		for (var i=0; i<data.features.length; i++) {
-			var geojson = data.features[i];
+		let ignoreCount = 0;
+		let goodCount = 0;
+		let poiCount = 0;
+		let categorizedLinestrings = {};
+		for (let i = 0; i < data.features.length; i++) {
+			let geojson = data.features[i];
 			if(geojson.type != 'Feature' || geojson.properties == undefined || geojson.geometry == undefined || geojson.geometry.type != 'LineString' || geojson.geometry.coordinates.length < 2) {
 				if(geojson.geometry.type == 'Point') {
-					var markerLayers = createRadlkarteMarkerLayersIncludingPopup(geojson);
+					let markerLayers = createRadlkarteMarkerLayersIncludingPopup(geojson);
 					if(markerLayers != null) {
 						rkGlobal.markerLayerLowZoom.addLayer(markerLayers.lowZoom);
 						rkGlobal.markerLayerHighZoom.addLayer(markerLayers.highZoom);
@@ -160,8 +160,8 @@ function loadGeoJson(file) {
 				continue;
 			}
 
-			var priority = parseInt(geojson.properties.priority, 10);
-			var stress = parseInt(geojson.properties.stress, 10);
+			let priority = parseInt(geojson.properties.priority, 10);
+			let stress = parseInt(geojson.properties.stress, 10);
 			if(isNaN(priority) || isNaN(stress)) {
 				console.warn("ignoring invalid object (priority / stress not set): " + JSON.stringify(geojson));
 				++ignoreCount;
@@ -179,11 +179,11 @@ function loadGeoJson(file) {
 		// with the same properties into a single multilinestring
 		// and then put them in a leaflet layer
 		for(const key of Object.keys(categorizedLinestrings)) {
-			var multilinestringFeatures = turf.combine(turf.featureCollection(categorizedLinestrings[key]));
-			var properties = JSON.parse(key);
+			let multilinestringFeatures = turf.combine(turf.featureCollection(categorizedLinestrings[key]));
+			let properties = JSON.parse(key);
 			multilinestringFeatures.properties = properties;
 
-			var decoratorCoordinates = [];
+			let decoratorCoordinates = [];
 			for(const linestring of categorizedLinestrings[key]) {
 				decoratorCoordinates.push(turf.flip(linestring).geometry.coordinates);
 			}
@@ -230,7 +230,7 @@ function clearAndLoadNextbike(url) {
 			for (const city of country.cities) {
 				for (const place of city.places) {
 					// console.log(place.name);
-					var markerLayer = createNextbikeMarkerIncludingPopup(place);
+					let markerLayer = createNextbikeMarkerIncludingPopup(place);
 					if (markerLayer != null) {
 						rkGlobal.nextbikeLayer.addLayer(markerLayer);
 					}
@@ -242,14 +242,14 @@ function clearAndLoadNextbike(url) {
 
 /** place: JSON from nextbike API */
 function createNextbikeMarkerIncludingPopup(place) {
-	var description = '<b>' + place.name + '</b><br>';
+	let description = '<b>' + place.name + '</b><br>';
 	if (place.bikes === 1) {
 		description += "1 Rad verfügbar"
 	} else {
 		description += place.bikes + " Räder verfügbar";
 	}
 
-	var marker = L.marker(L.latLng(place.lat, place.lng), {
+	let marker = L.marker(L.latLng(place.lat, place.lng), {
 		icon: place.bikes !== 0 ? rkGlobal.icons.nextbike : rkGlobal.icons.nextbikeGray,
 		alt: place.name
 	});
@@ -267,15 +267,15 @@ function createNextbikeMarkerIncludingPopup(place) {
  */
 function getSegmentZIndex(properties) {
 	// 400 is the default zIndex for overlayPanes, stay slightly below this level
-	var index = 350;
+	let index = 350;
 	index += 10 * (rkGlobal.priorityStrings.length - properties.priority);
 	index += 1 * (rkGlobal.stressStrings.length - properties.stress);
 	return index;
 }
 
 function addSegmentToObject(object, geojsonLinestring) {
-	var key = getSegmentKey(geojsonLinestring);
-	var keyString = JSON.stringify(key);
+	let key = getSegmentKey(geojsonLinestring);
+	let keyString = JSON.stringify(key);
 	if(object[keyString] === undefined) {
 		object[keyString] = [];
 	}
@@ -287,7 +287,7 @@ function addSegmentToObject(object, geojsonLinestring) {
  * This object explicitly contains all values to be used in styling
  */
 function getSegmentKey(geojsonLinestring) {
-	var properties = geojsonLinestring.properties;
+	let properties = geojsonLinestring.properties;
 	return {
 		"priority": properties.priority,
 		"stress": properties.stress,
@@ -302,20 +302,20 @@ function getSegmentKey(geojsonLinestring) {
  * Special styles for unpaved, steep, oneway arrows are matched, take care in future adapations
  */
 function updateStyles() {
-	var zoom = rkGlobal.leafletMap.getZoom();
+	let zoom = rkGlobal.leafletMap.getZoom();
 	for(const key of Object.keys(rkGlobal.segments)) {
-		var properties = JSON.parse(key);
-		var showFull = zoom >= rkGlobal.priorityFullVisibleFromZoom[properties.priority];
-		var showMinimal = zoom < rkGlobal.priorityFullVisibleFromZoom[properties.priority] && zoom >= rkGlobal.priorityReducedVisibilityFromZoom[properties.priority];
+		let properties = JSON.parse(key);
+		let showFull = zoom >= rkGlobal.priorityFullVisibleFromZoom[properties.priority];
+		let showMinimal = zoom < rkGlobal.priorityFullVisibleFromZoom[properties.priority] && zoom >= rkGlobal.priorityReducedVisibilityFromZoom[properties.priority];
 
-		var lineStyle;
+		let lineStyle;
 		if(showFull) {
 			lineStyle = getLineStyle(zoom, properties);
 		} else if(showMinimal) {
 			lineStyle = getLineStyleMinimal(properties);
 		}
 
-		var lines = rkGlobal.segments[key].lines;
+		let lines = rkGlobal.segments[key].lines;
 		if(showFull || showMinimal) {
 			lines.setStyle(lineStyle);
 			rkGlobal.leafletMap.addLayer(lines);
@@ -325,10 +325,10 @@ function updateStyles() {
 
 		// steep lines are drawn twice, once regular,
 		// a second time as bristles (that's what this copy is for)
-		var steepLines = rkGlobal.segments[key].steepLines;
+		let steepLines = rkGlobal.segments[key].steepLines;
 		if(steepLines !== undefined) {
 			if(showFull || showMinimal) {
-				var steepLineStyle;
+				let steepLineStyle;
 				if(showFull) {
 					steepLineStyle = getSteepLineStyle(zoom, properties);
 				} else {
@@ -341,7 +341,7 @@ function updateStyles() {
 			}
 		}
 
-		var decorators = rkGlobal.segments[key].decorators;
+		let decorators = rkGlobal.segments[key].decorators;
 		if((showFull || showMinimal) && zoom >= rkGlobal.onewayIconThreshold && properties.oneway === 'yes') {
 			decorators.setPatterns(getOnewayArrowPatterns(zoom, properties, lineStyle.weight));
 			rkGlobal.leafletMap.addLayer(decorators);
@@ -363,17 +363,17 @@ function updateStyles() {
 }
 
 function getLineStyle(zoom, properties) {
-	var lineWeight = getLineWeight(zoom, properties.priority);
+	let lineWeight = getLineWeight(zoom, properties.priority);
 	return _getLineStyle(lineWeight, properties);
 }
 
 function getLineStyleMinimal(properties) {
-	var lineWeight = 1;
+	let lineWeight = 1;
 	return _getLineStyle(lineWeight, properties);
 }
 
 function _getLineStyle(lineWeight, properties) {
-	var style = {
+	let style = {
 		color: rkGlobal.colors[properties.stress],
 		weight: lineWeight,
 		opacity: rkGlobal.opacity
@@ -385,17 +385,17 @@ function _getLineStyle(lineWeight, properties) {
 }
 
 function getSteepLineStyle(zoom, properties) {
-	var lineWeight = getLineWeight(zoom, properties.priority);
+	let lineWeight = getLineWeight(zoom, properties.priority);
 	return _getSteepLineStyle(lineWeight, properties);
 }
 
 function getSteepLineStyleMinimal(properties) {
-	var lineWeight = 1;
+	let lineWeight = 1;
 	return _getSteepLineStyle(lineWeight, properties);
 }
 
 function _getSteepLineStyle(lineWeight, properties) {
-	var steepBristleLength = 2;
+	let steepBristleLength = 2;
 	return {
 		color: rkGlobal.colors[properties.stress],
 		weight: lineWeight * 2,
@@ -410,7 +410,7 @@ function _getSteepLineStyle(lineWeight, properties) {
  * weight aka width of a line
  */
 function getLineWeight(zoom, priority) {
-	var lineWeight = zoom - 10;
+	let lineWeight = zoom - 10;
 	lineWeight = (lineWeight <= 0 ? 1 : lineWeight) * 1.4;
 	lineWeight *= rkGlobal.lineWidthFactor[priority];
 	return lineWeight;
@@ -428,7 +428,7 @@ function getSteepDashStyle(lineWeight, steepBristleLength) {
  * @return an array of patterns as expected by L.PolylineDecorator.setPatterns
  */
 function getOnewayArrowPatterns(zoom, properties, lineWeight) {
-	var arrowWidth = Math.max(5, lineWeight * rkGlobal.arrowWidthFactor[properties.priority]);
+	let arrowWidth = Math.max(5, lineWeight * rkGlobal.arrowWidthFactor[properties.priority]);
 	return [{
 		offset: arrowWidth-2,
 		repeat: Math.max(2, lineWeight) * 5,
@@ -448,49 +448,49 @@ function loadLeaflet() {
 	rkGlobal.leafletMap = L.map('map', { 'zoomControl' : false } );
 
 	// avoid troubles with min/maxZoom from our layer group, see https://github.com/Leaflet/Leaflet/issues/6557
-	var minMaxZoomLayer = L.gridLayer({
+	let minMaxZoomLayer = L.gridLayer({
 		minZoom: 0,
 		maxZoom: 19
 	});
-	var cartodbPositronLowZoom = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+	let cartodbPositronLowZoom = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
 		attribution: '&copy; <a href="https://www.openstreetmap.org" target="_blank">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
 		subdomains: 'abcd',
 		minZoom: 0,
 		maxZoom: 15
 	});
-	var osmHiZoom = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+	let osmHiZoom = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 		minZoom: 16,
 		maxZoom: 19,
 		attribution: 'map data &amp; imagery &copy; <a href="https://openstreetmap.org" target="_blank">OpenStreetMap</a> contributors'
 	});
-	var mixed = L.layerGroup([minMaxZoomLayer, cartodbPositronLowZoom, osmHiZoom]);
+	let mixed = L.layerGroup([minMaxZoomLayer, cartodbPositronLowZoom, osmHiZoom]);
 
-	var basemapAtOrthofoto = L.tileLayer('https://maps{s}.wien.gv.at/basemap/bmaporthofoto30cm/normal/google3857/{z}/{y}/{x}.{format}', {
+	let basemapAtOrthofoto = L.tileLayer('https://maps{s}.wien.gv.at/basemap/bmaporthofoto30cm/normal/google3857/{z}/{y}/{x}.{format}', {
 		maxZoom: 18, // up to 20 is possible
 		attribution: 'Datenquelle: <a href="https://www.basemap.at">basemap.at</a>',
 		subdomains: ["", "1", "2", "3", "4"],
 		format: 'jpeg',
 		bounds: [[46.35877, 8.782379], [49.037872, 17.189532]]
 	});
-	var ocm = L.tileLayer('https://{s}.tile.thunderforest.com/cycle/{z}/{x}/{y}.png?apikey=ab5e4b2d24854fefb139c538ef5187a8', {
+	let ocm = L.tileLayer('https://{s}.tile.thunderforest.com/cycle/{z}/{x}/{y}.png?apikey=ab5e4b2d24854fefb139c538ef5187a8', {
 		minZoom: 0,
 		maxZoom: 18,
 		attribution: 'map data &copy; <a href="https://openstreetmap.org" target="_blank">OpenStreetMap</a> contributors, imagery &copy; <a href="https://www.thunderforest.com" target="_blank">Thunderforest</a>'
 	});
-	var cyclosm = L.tileLayer('https://{s}.tile-cyclosm.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png', {
+	let cyclosm = L.tileLayer('https://{s}.tile-cyclosm.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png', {
 		minZoom: 0,
 		maxZoom: 18,
 		attribution: 'map data &copy; <a href="https://openstreetmap.org" target="_blank">OpenStreetMap</a> contributors. Tiles style by <a href="https://www.cyclosm.org" target="_blank">CyclOSM</a> hosted by <a href="https://openstreetmap.fr/" target="_blank">OpenStreetMap France</a>.'
 	});
-	var empty = L.tileLayer('', {attribution: ''});
+	let empty = L.tileLayer('', { attribution: '' });
 
-	/*var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+	/*let osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 		minZoom: 0,
 		maxZoom: 18,
 		attribution: 'map data &amp; imagery &copy; <a href="https://openstreetmap.org" target="_blank">OpenStreetMap</a> contributors'
 	});*/
 
-	var baseMaps = {
+	let baseMaps = {
 		"Straßenkarte": mixed,
 		"Luftbild": basemapAtOrthofoto,
 		"CyclOSM": cyclosm,
@@ -498,7 +498,7 @@ function loadLeaflet() {
 		//"OpenStreetMap": osm,
 		"Weiß": empty,
 	};
-	var overlayMaps = {
+	let overlayMaps = {
 		"Leihräder": rkGlobal.nextbikeLayer
 	};
 
@@ -508,7 +508,7 @@ function loadLeaflet() {
 	rkGlobal.leafletMap.on({
 		overlayadd: function (e) {
 			console.log(e);
-			var configuration = rkGlobal.configurations[rkGlobal.currentRegion];
+			let configuration = rkGlobal.configurations[rkGlobal.currentRegion];
 			if (e.layer === rkGlobal.nextbikeLayer) {
 				clearAndLoadNextbike(configuration.nextbikeUrl);
 			}
@@ -529,10 +529,10 @@ function loadLeaflet() {
 		}),
 		defaultMarkGeocode: false
 	}).on('markgeocode', function(e) {
-		var result = e.geocode || e;
+		let result = e.geocode || e;
 		debug(result);
 
-		var resultText = result.name;
+		let resultText = result.name;
 		resultText = resultText.replace(/, Österreich$/, "").replace(/, /g, "<br/>");
 		L.popup({
 			autoClose: false,
@@ -563,7 +563,7 @@ function loadLeaflet() {
 
 	L.control.zoom({position: 'topright'}).addTo(rkGlobal.leafletMap);
 
-	var sidebar = L.control.sidebar({
+	let sidebar = L.control.sidebar({
 		container: 'sidebar',
 		position: 'left'
 	}).addTo(rkGlobal.leafletMap);
@@ -655,13 +655,13 @@ function initializeIcons() {
 }
 
 function createRadlkarteMarkerLayersIncludingPopup(geojsonPoint) {
-	var icons = getIcons(geojsonPoint.properties);
+	let icons = getIcons(geojsonPoint.properties);
 	if(icons == null) {
 		return undefined;
 	}
 
-	var description = getDescriptionText(geojsonPoint.properties);
-	var markers = {
+	let description = getDescriptionText(geojsonPoint.properties);
+	let markers = {
 		lowZoom: L.marker(L.geoJSON(geojsonPoint).getLayers()[0].getLatLng(), {
 			icon: icons.small,
 			alt: description
@@ -680,7 +680,7 @@ function createRadlkarteMarkerLayersIncludingPopup(geojsonPoint) {
 	markers.highZoom.on('mouseover', function() { markers.highZoom.openPopup(); });
 	markers.highZoom.on('mouseout', function() { markers.highZoom.closePopup(); });
 
-//	 var key, marker;
+//	 let key, marker;
 //	 for (key in markers) {
 //		 marker = markers[key];
 //		 marker.bindPopup(description, {closeButton: false});  //, offset: L.point(0, -10)});
@@ -704,11 +704,11 @@ function getIcons(properties) {
 		};
 	}
 
-	var dismount = properties.dismount === 'yes';
-	var nocargo = properties.nocargo === 'yes';
-	var warning = properties.warning === 'yes';
+	let dismount = properties.dismount === 'yes';
+	let nocargo = properties.nocargo === 'yes';
+	let warning = properties.warning === 'yes';
 
-	var problemIcon;
+	let problemIcon;
 	if(dismount && nocargo) {
 		problemIcon = rkGlobal.icons.noCargoAndDismount;
 	} else if(dismount) {
@@ -734,11 +734,11 @@ function getIcons(properties) {
  * @return a description string
  */
 function getDescriptionText(properties) {
-	var dismount = properties.dismount === 'yes';
-	var nocargo = properties.nocargo === 'yes';
-	var warning = properties.warning === 'yes';
+	let dismount = properties.dismount === 'yes';
+	let nocargo = properties.nocargo === 'yes';
+	let warning = properties.warning === 'yes';
 
-	var descriptionParts = [];
+	let descriptionParts = [];
 
 	if(dismount && nocargo) {
 		descriptionParts.push('Schiebestelle / untauglich für Spezialräder');
