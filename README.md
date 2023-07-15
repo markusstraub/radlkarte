@@ -72,10 +72,6 @@ Linting:
 
 - Describe layer-switching & opencyclemap legend? explicitly show cycleways somehow (user request hotjar)?
 - Make problem-POIs hidable in layer switcher
-- Optional overlays for cycling-POIs
-  - bicycle shops
-  - bicycle pumps / repair stations
-  - train and metro stations
 - Differentiate between a simple & an advanced UI.
   - simple: auto-hides parts of the network based on zoom level, no layer switcher
   - advanced: layer switcher, control opacity of overlay, freely choose network-parts to show

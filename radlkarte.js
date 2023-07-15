@@ -266,16 +266,14 @@ function createNextbikeMarkerIncludingPopup(domain, place) {
 		icon = place.bikes !== 0 ? rkGlobal.icons.citybikelinz : rkGlobal.icons.citybikelinzGray;
 	}
 
-	let defaultOpacity = 1;
 	let marker = L.marker(L.latLng(place.lat, place.lng), {
 		icon: icon,
 		alt: place.name,
-		opacity: defaultOpacity 
 	});
 
 	marker.bindPopup(description, { closeButton: false });
-	marker.on('mouseover', function () { marker.openPopup(); marker.setOpacity(0.7); });
-	marker.on('mouseout', function () { marker.closePopup(); marker.setOpacity(defaultOpacity); });
+	marker.on('mouseover', function () { marker.openPopup(); });
+	marker.on('mouseout', function () { marker.closePopup(); });
 
 	return marker;
 }
@@ -312,16 +310,14 @@ function clearAndLoadTransit(metroFile) {
 function createMetroMarkerIncludingPopup(element) {
 	let description = '<b>' + element.tags.name + '</b><br>';
 	let icon = rkGlobal.icons.ubahn;
-	let defaultOpacity = 1;
 	let marker = L.marker(L.latLng(element.lat, element.lon), {
 		icon: icon,
 		alt: element.tags.name,
-		opacity: defaultOpacity
 	});
 
 	marker.bindPopup(description, { closeButton: false });
-	marker.on('mouseover', function () { marker.openPopup(); marker.setOpacity(0.7); });
-	marker.on('mouseout', function () { marker.closePopup(); marker.setOpacity(defaultOpacity); });
+	marker.on('mouseover', function () { marker.openPopup(); });
+	marker.on('mouseout', function () { marker.closePopup(); });
 
 	return marker;
 }
@@ -713,8 +709,8 @@ function initializeIcons() {
 }
 
 function createNextbikeIcon(url) {
-	let nextbikeWidth = 100 / 5;
-	let nextbikeHeight = 150 / 5;
+	let nextbikeWidth = 100 / 6;
+	let nextbikeHeight = 150 / 6;
 	return L.icon({
 		iconUrl: url,
 		iconSize: [nextbikeWidth, nextbikeHeight],
@@ -823,5 +819,5 @@ function getDescriptionText(properties) {
 		descriptionParts.push(properties.description);
 	}
 
-	return '<span class="popup">' + descriptionParts.join(':<br>') + '</span>';
+	return '<span class="popup"><strong>' + descriptionParts.join('</strong><br>') + '</span>';
 }

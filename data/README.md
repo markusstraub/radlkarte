@@ -17,4 +17,18 @@ doc: https://dev.overpass-api.de/output_formats.html
 
   curl -o wien-ubahn.json -d @wien-ubahn.oql https://overpass.kumi.systems/api/interpreter
 
-> **TODO** can we auto-extract the bboxes of the geojson files?
+
+- nwr[railway~"^station$|^halt$"][station!=subway][station!=miniature];
+- shop=bicycle (name, website, phone (?))
+- amenity=bicycle_repair_station (operator)
+- amenity=compressed_air (operator)
+- vending=bicycle_tube (operator)
+
+
+## TODOs
+
+- auto-extract bboxes of geojson files for OSM downloads
+  - or: just make the minify-script write the bbox to the geojson!
+    > like: {"type": "FeatureCollection", "bbox": [ 14.30921, 47.94649, 14.50838, 48.22303 ], "features":
+- keep popups open a bit so that a link in the popup can be clicked (bicycle shops!)
+- script for cronjob that downloads osm data files for all radlkarte regions
