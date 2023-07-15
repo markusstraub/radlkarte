@@ -8,6 +8,7 @@ rkGlobal.geocodingControl = undefined;
 rkGlobal.segments = {}; // object holding all linestring and decorator layers (the key represents the properties)
 rkGlobal.markerLayerLowZoom = L.layerGroup(); // layer group holding all icons to be viewed at lower zoom levels
 rkGlobal.markerLayerHighZoom = L.layerGroup(); // layer group holding all icons to be viewed at higher zoom levels
+rkGlobal.nextbikeLayer = L.layerGroup();
 rkGlobal.priorityStrings = ["Überregional", "Regional", "Lokal"]; // names of all different levels of priorities (ordered descending by priority)
 rkGlobal.stressStrings = ["Ruhig", "Durchschnittlich", "Stressig"];
 rkGlobal.debug = true; // debug output will be logged if set to true
@@ -27,6 +28,7 @@ rkGlobal.colors = ['#004B67', '#51A4B6', '#FF6600']; // dark blue - light blue -
 
 rkGlobal.autoSwitchDistanceMeters = 55000;
 rkGlobal.defaultRegion = 'wien';
+rkGlobal.currentRegion = undefined;
 rkGlobal.defaultZoom = 14;
 rkGlobal.configurations = {
 	'rendertest' : {
@@ -42,12 +44,14 @@ rkGlobal.configurations = {
 	'klagenfurt' : {
 		centerLatLng: L.latLng(46.624, 14.308),
 		geocodingBounds: '13.978,46.477,14.624,46.778',
-		geoJsonFile: 'data/radlkarte-klagenfurt.geojson'
+		geoJsonFile: 'data/radlkarte-klagenfurt.geojson',
+		nextbikeUrl: 'https://maps.nextbike.net/maps/nextbike.json?domains=ka&bikes=false'
 	},
 	'linz' : {
 		centerLatLng: L.latLng(48.30, 14.285),
 		geocodingBounds: '13.999,48.171,14.644,48.472',
-		geoJsonFile: 'data/radlkarte-linz.geojson'
+		geoJsonFile: 'data/radlkarte-linz.geojson',
+		nextbikeUrl: 'https://maps.nextbike.net/maps/nextbike.json?domains=al&bikes=false'
 	},
 	'rheintal' : {
 		centerLatLng: L.latLng(47.4102, 9.7211),
@@ -62,7 +66,8 @@ rkGlobal.configurations = {
 	'wien' : {
 		centerLatLng: L.latLng(48.208, 16.372),
 		geocodingBounds: '16.105,47.995,16.710,48.389', // min lon, min lat, max lon, max lat
-		geoJsonFile: 'data/radlkarte-wien.geojson'
+		geoJsonFile: 'data/radlkarte-wien.geojson',
+		nextbikeUrl: 'https://maps.nextbike.net/maps/nextbike.json?domains=wr,la&bikes=false'
 	}
 };
 
@@ -77,6 +82,7 @@ function debug(obj) {
  * called from rkGlobal.hash (when region is changed e.g. via hyperlink or by changing the URL)
  */
 function updateRadlkarteRegion(region) {
+	rkGlobal.currentRegion = region;
 	var configuration = rkGlobal.configurations[region];
 	if(configuration === undefined) {
 		console.warn('ignoring unknown region ' + region);
@@ -85,6 +91,8 @@ function updateRadlkarteRegion(region) {
 
 	removeAllSegmentsAndMarkers();
 	loadGeoJson(configuration.geoJsonFile);
+	// don't load other layers (e.g. nextbike) here, they are only loaded on demand!
+
 	rkGlobal.geocodingControl.options.geocoder.options.geocodingQueryParams.bounds = configuration.geocodingBounds;
 
 	// virtual page hit in matomo analytics
@@ -94,6 +102,8 @@ function updateRadlkarteRegion(region) {
 }
 
 function removeAllSegmentsAndMarkers() {
+	// we can't simply delete all layers (otherwise the base layer is gone as well)
+
 	for(const key of Object.keys(rkGlobal.segments)) {
 		rkGlobal.leafletMap.removeLayer(rkGlobal.segments[key].lines);
 		if (rkGlobal.segments[key].steepLines && rkGlobal.leafletMap.hasLayer(rkGlobal.segments[key].steepLines)) {
@@ -107,6 +117,8 @@ function removeAllSegmentsAndMarkers() {
 	rkGlobal.markerLayerLowZoom.clearLayers();
 	rkGlobal.leafletMap.removeLayer(rkGlobal.markerLayerHighZoom);
 	rkGlobal.markerLayerHighZoom.clearLayers();
+
+	rkGlobal.nextbikeLayer.clearLayers();
 }
 
 function loadGeoJson(file) {
@@ -133,7 +145,7 @@ function loadGeoJson(file) {
 			var geojson = data.features[i];
 			if(geojson.type != 'Feature' || geojson.properties == undefined || geojson.geometry == undefined || geojson.geometry.type != 'LineString' || geojson.geometry.coordinates.length < 2) {
 				if(geojson.geometry.type == 'Point') {
-					var markerLayers = createMarkerLayersIncludingPopup(geojson);
+					var markerLayers = createRadlkarteMarkerLayersIncludingPopup(geojson);
 					if(markerLayers != null) {
 						rkGlobal.markerLayerLowZoom.addLayer(markerLayers.lowZoom);
 						rkGlobal.markerLayerHighZoom.addLayer(markerLayers.highZoom);
@@ -199,6 +211,54 @@ function loadGeoJson(file) {
 			});
 		});
 	});
+}
+
+function clearAndLoadNextbike(url) {
+	rkGlobal.nextbikeLayer.clearLayers();
+
+	// get rid of "XML Parsing Error: not well-formed" during $.getJSON
+	$.ajaxSetup({
+		beforeSend: function (xhr) {
+			if (xhr.overrideMimeType) {
+				xhr.overrideMimeType("application/json");
+			}
+		}
+	});
+	$.getJSON(url, function (data) {
+		for (const country of data.countries) {
+			console.log(country.name);
+			for (const city of country.cities) {
+				for (const place of city.places) {
+					// console.log(place.name);
+					var markerLayer = createNextbikeMarkerIncludingPopup(place);
+					if (markerLayer != null) {
+						rkGlobal.nextbikeLayer.addLayer(markerLayer);
+					}
+				}
+			}
+		}
+	});
+}
+
+/** place: JSON from nextbike API */
+function createNextbikeMarkerIncludingPopup(place) {
+	var description = '<b>' + place.name + '</b><br>';
+	if (place.bikes === 1) {
+		description += "1 Rad verfügbar"
+	} else {
+		description += place.bikes + " Räder verfügbar";
+	}
+
+	var marker = L.marker(L.latLng(place.lat, place.lng), {
+		icon: place.bikes !== 0 ? rkGlobal.icons.nextbike : rkGlobal.icons.nextbikeGray,
+		alt: place.name
+	});
+
+	marker.bindPopup(description, { closeButton: false });
+	marker.on('mouseover', function () { marker.openPopup(); });
+	marker.on('mouseout', function () { marker.closePopup(); });
+
+	return marker;
 }
 
 /**
@@ -438,10 +498,22 @@ function loadLeaflet() {
 		//"OpenStreetMap": osm,
 		"Weiß": empty,
 	};
-	var overlayMaps = {};
+	var overlayMaps = {
+		"Leihräder": rkGlobal.nextbikeLayer
+	};
 
 	mixed.addTo(rkGlobal.leafletMap);
 	rkGlobal.leafletLayersControl = L.control.layers(baseMaps, overlayMaps, { 'position' : 'topright', 'collapsed' : true } ).addTo(rkGlobal.leafletMap);
+
+	rkGlobal.leafletMap.on({
+		overlayadd: function (e) {
+			console.log(e);
+			var configuration = rkGlobal.configurations[rkGlobal.currentRegion];
+			if (e.layer === rkGlobal.nextbikeLayer) {
+				clearAndLoadNextbike(configuration.nextbikeUrl);
+			}
+		}
+	});
 
 	rkGlobal.geocodingControl = L.Control.geocoder({
 		position: 'topright',
@@ -550,9 +622,39 @@ function initializeIcons() {
 		iconAnchor: [5, 5],
 		popupAnchor: [0, -5]
 	});
+	rkGlobal.icons.ubahn = L.icon({
+		iconUrl: 'css/ubahn.svg',
+		iconSize: [29, 29],
+		iconAnchor: [14.5, 14.5],
+		popupAnchor: [0, -14.5]
+	});
+	rkGlobal.icons.sbahn = L.icon({
+		iconUrl: 'css/sbahn.svg',
+		iconSize: [29, 29],
+		iconAnchor: [14.5, 14.5],
+		popupAnchor: [0, -14.5]
+	});
+	rkGlobal.icons.bluedot = L.icon({
+		iconUrl: 'css/bluedot.svg',
+		iconSize: [10, 10],
+		iconAnchor: [5, 5],
+		popupAnchor: [0, -5]
+	});
+	rkGlobal.icons.nextbike = L.icon({
+		iconUrl: 'css/nextbike.svg',
+		iconSize: [25, 38.75],
+		iconAnchor: [12.5, 38.75],
+		popupAnchor: [0, -38.75]
+	});
+	rkGlobal.icons.nextbikeGray = L.icon({
+		iconUrl: 'css/nextbike-gray.svg',
+		iconSize: [25, 38.75],
+		iconAnchor: [12.5, 38.75],
+		popupAnchor: [0, -38.75]
+	});
 }
 
-function createMarkerLayersIncludingPopup(geojsonPoint) {
+function createRadlkarteMarkerLayersIncludingPopup(geojsonPoint) {
 	var icons = getIcons(geojsonPoint.properties);
 	if(icons == null) {
 		return undefined;

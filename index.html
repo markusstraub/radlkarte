@@ -71,7 +71,8 @@
 		<!-- Nav tabs -->
 		<div class="leaflet-sidebar-tabs">
 			<ul role="tablist">
-				<li class="active"><a href="#radlkarte_legend" role="tab"><i class="fa fa-align-justify"></i></a></li>
+				<li><a href="#radlkarte_legend" role="tab"><i class="fa fa-align-justify"></i></a></li>
+				<li class="active"><a href="#radlkarte_news" role="tab"><i class="fa fa-bullhorn"></i></a></li>
 				<li><a href="#radlkarte_description" role="tab"><i class="fa fa-info-circle"></i></a></li>
 				<li><a href="#radlkarte_download" role="tab"><i class="fa fa-download"></i></a></li>
 				<li><a href="#radlkarte_contact" role="tab"><i class="fa fa-envelope"></i></a></li>
@@ -81,7 +82,7 @@
 
 		<!-- Tab panes -->
 		<div class="leaflet-sidebar-content">
-			<div class="leaflet-sidebar-pane active" id="radlkarte_legend">
+			<div class="leaflet-sidebar-pane" id="radlkarte_legend">
 				<h1 class="leaflet-sidebar-header">
 					<span class="leaflet-sidebar-close"><i class="fa fa-caret-left"></i></span> Übersicht
 				</h1>
@@ -140,6 +141,25 @@
     						<div class="legend legend-steep"></div>
 						</div>
 					</li>
+				</ul>
+			</div>
+			<div class="leaflet-sidebar-pane active" id="radlkarte_news">
+				<h1 class="leaflet-sidebar-header">
+					<span class="leaflet-sidebar-close"><i class="fa fa-caret-left"></i></span> Neu!
+				</h1>
+				<h2>Leihradstationen</h2>
+				<p>
+					Ab sofort können Stationen von Leihrädern (Bikesharing) wie z.B.
+					<a href="https://www.wienerlinien.at/wienmobil/rad" target="_blank">WienMobil&nbsp;Rad</a> oder
+					<a href="https://www.citybikelinz.at" target"="_blank">city&nbsp;bike&nbsp;Linz</a>
+					eingeblendet werden!
+				</p>
+				<ul class="legend">
+					<li>
+						<img src="js/leaflet-1.9.4/images/layers-2x.png" width="60" alt="Symbol: Ebenenauswahl">Einfach rechts bei
+						den <strong>Kartenebenen</strong> die Leihräder aktivieren!
+					</li>
+			
 				</ul>
 			</div>
 
