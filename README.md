@@ -73,7 +73,6 @@ Linting:
 - Describe layer-switching & opencyclemap legend? explicitly show cycleways somehow (user request hotjar)?
 - Make problem-POIs hidable in layer switcher
 - Optional overlays for cycling-POIs
-  - bike sharing stations (Citybike + Nextbike),
   - bicycle shops
   - bicycle pumps / repair stations
   - train and metro stations

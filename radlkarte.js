@@ -8,7 +8,8 @@ rkGlobal.geocodingControl = undefined;
 rkGlobal.segments = {}; // object holding all linestring and decorator layers (the key represents the properties)
 rkGlobal.markerLayerLowZoom = L.layerGroup(); // layer group holding all icons to be viewed at lower zoom levels
 rkGlobal.markerLayerHighZoom = L.layerGroup(); // layer group holding all icons to be viewed at higher zoom levels
-rkGlobal.nextbikeLayer = L.layerGroup();
+rkGlobal.bikeShareLayer = L.layerGroup(); // symbols for bike sharing stations
+rkGlobal.transitLayer = L.layerGroup(); // symbols for high-ranking public transit stations
 rkGlobal.priorityStrings = ["Überregional", "Regional", "Lokal"]; // names of all different levels of priorities (ordered descending by priority)
 rkGlobal.stressStrings = ["Ruhig", "Durchschnittlich", "Stressig"];
 rkGlobal.debug = true; // debug output will be logged if set to true
@@ -67,7 +68,8 @@ rkGlobal.configurations = {
 		centerLatLng: L.latLng(48.208, 16.372),
 		geocodingBounds: '16.105,47.995,16.710,48.389', // min lon, min lat, max lon, max lat
 		geoJsonFile: 'data/radlkarte-wien.geojson',
-		nextbikeUrl: 'https://maps.nextbike.net/maps/nextbike.json?domains=wr,la&bikes=false'
+		nextbikeUrl: 'https://maps.nextbike.net/maps/nextbike.json?domains=wr,la&bikes=false',
+		metroFile: 'data/overpass/wien-ubahn.json'
 	}
 };
 
@@ -92,9 +94,13 @@ function updateRadlkarteRegion(region) {
 	removeAllSegmentsAndMarkers();
 	loadGeoJson(configuration.geoJsonFile);
 	// POI layers: only reload visible layers
-	if (rkGlobal.leafletMap.hasLayer(rkGlobal.nextbikeLayer)) {
+	if (rkGlobal.leafletMap.hasLayer(rkGlobal.bikeShareLayer)) {
 		clearAndLoadNextbike(configuration.nextbikeUrl);
 	}
+	if (rkGlobal.leafletMap.hasLayer(rkGlobal.transitLayer)) {
+		clearAndLoadTransit(configuration.metroFile);
+	}
+
 
 	rkGlobal.geocodingControl.options.geocoder.options.geocodingQueryParams.bounds = configuration.geocodingBounds;
 
@@ -121,7 +127,7 @@ function removeAllSegmentsAndMarkers() {
 	rkGlobal.leafletMap.removeLayer(rkGlobal.markerLayerHighZoom);
 	rkGlobal.markerLayerHighZoom.clearLayers();
 
-	rkGlobal.nextbikeLayer.clearLayers();
+	rkGlobal.bikeShareLayer.clearLayers();
 }
 
 function loadGeoJson(file) {
@@ -217,7 +223,7 @@ function loadGeoJson(file) {
 }
 
 function clearAndLoadNextbike(url) {
-	rkGlobal.nextbikeLayer.clearLayers();
+	rkGlobal.bikeShareLayer.clearLayers();
 
 	// get rid of "XML Parsing Error: not well-formed" during $.getJSON
 	$.ajaxSetup({
@@ -229,13 +235,11 @@ function clearAndLoadNextbike(url) {
 	});
 	$.getJSON(url, function (data) {
 		for (const country of data.countries) {
-			console.log(country.name);
 			for (const city of country.cities) {
 				for (const place of city.places) {
-					// console.log(place.name);
 					let markerLayer = createNextbikeMarkerIncludingPopup(country.domain, place);
 					if (markerLayer != null) {
-						rkGlobal.nextbikeLayer.addLayer(markerLayer);
+						rkGlobal.bikeShareLayer.addLayer(markerLayer);
 					}
 				}
 			}
@@ -243,7 +247,10 @@ function clearAndLoadNextbike(url) {
 	});
 }
 
-/** place: JSON from nextbike API */
+/** 
+ * @param domain 2-letter Nextbike domain for determining special icons (optional).
+ * @param place JSON from Nextbike API describing a bike-share station. 
+ */
 function createNextbikeMarkerIncludingPopup(domain, place) {
 	let description = '<b>' + place.name + '</b><br>';
 	if (place.bikes === 1) {
@@ -264,6 +271,52 @@ function createNextbikeMarkerIncludingPopup(domain, place) {
 		icon: icon,
 		alt: place.name,
 		opacity: defaultOpacity 
+	});
+
+	marker.bindPopup(description, { closeButton: false });
+	marker.on('mouseover', function () { marker.openPopup(); marker.setOpacity(0.7); });
+	marker.on('mouseout', function () { marker.closePopup(); marker.setOpacity(defaultOpacity); });
+
+	return marker;
+}
+
+function clearAndLoadTransit(metroFile) {
+	rkGlobal.transitLayer.clearLayers();
+
+	// get rid of "XML Parsing Error: not well-formed" during $.getJSON
+	$.ajaxSetup({
+		beforeSend: function (xhr) {
+			if (xhr.overrideMimeType) {
+				xhr.overrideMimeType("application/json");
+			}
+		}
+	});
+	$.getJSON(metroFile, function (data) {
+		// filter duplicate metro stations (happens when two lines cross)
+		const seen = new Set();
+		for (const element of data.elements) {
+			if (seen.has(element.tags.name)) {
+				continue;
+			}
+			const markerLayer = createMetroMarkerIncludingPopup(element);
+			if (markerLayer != null) {
+				seen.add(element.tags.name);
+				rkGlobal.transitLayer.addLayer(markerLayer);
+			}
+		}
+		console.log('created ' + seen.size + ' metro icons.');
+	});
+}
+
+/** @param element JSON from Overpass API representing a metro station. */
+function createMetroMarkerIncludingPopup(element) {
+	let description = '<b>' + element.tags.name + '</b><br>';
+	let icon = rkGlobal.icons.ubahn;
+	let defaultOpacity = 1;
+	let marker = L.marker(L.latLng(element.lat, element.lon), {
+		icon: icon,
+		alt: element.tags.name,
+		opacity: defaultOpacity
 	});
 
 	marker.bindPopup(description, { closeButton: false });
@@ -511,7 +564,8 @@ function loadLeaflet() {
 		"Weiß": empty,
 	};
 	let overlayMaps = {
-		"Leihräder": rkGlobal.nextbikeLayer
+		"Leihräder": rkGlobal.bikeShareLayer,
+		"ÖV": rkGlobal.transitLayer
 	};
 
 	mixed.addTo(rkGlobal.leafletMap);
@@ -519,10 +573,12 @@ function loadLeaflet() {
 
 	rkGlobal.leafletMap.on({
 		overlayadd: function (e) {
-			console.log(e);
 			let configuration = rkGlobal.configurations[rkGlobal.currentRegion];
-			if (e.layer === rkGlobal.nextbikeLayer) {
+			if (e.layer === rkGlobal.bikeShareLayer) {
 				clearAndLoadNextbike(configuration.nextbikeUrl);
+			}
+			if (e.layer === rkGlobal.transitLayer) {
+				clearAndLoadTransit(configuration.metroFile);
 			}
 		}
 	});
@@ -634,23 +690,18 @@ function initializeIcons() {
 		iconAnchor: [5, 5],
 		popupAnchor: [0, -5]
 	});
+	let transitSize = 15;
 	rkGlobal.icons.ubahn = L.icon({
 		iconUrl: 'css/ubahn.svg',
-		iconSize: [29, 29],
-		iconAnchor: [14.5, 14.5],
-		popupAnchor: [0, -14.5]
+		iconSize: [transitSize, transitSize],
+		iconAnchor: [transitSize / 2, transitSize / 2],
+		popupAnchor: [0, -transitSize / 2]
 	});
 	rkGlobal.icons.sbahn = L.icon({
 		iconUrl: 'css/sbahn.svg',
-		iconSize: [29, 29],
-		iconAnchor: [14.5, 14.5],
-		popupAnchor: [0, -14.5]
-	});
-	rkGlobal.icons.bluedot = L.icon({
-		iconUrl: 'css/bluedot.svg',
-		iconSize: [10, 10],
-		iconAnchor: [5, 5],
-		popupAnchor: [0, -5]
+		iconSize: [transitSize, transitSize],
+		iconAnchor: [transitSize / 2, transitSize / 2],
+		popupAnchor: [0, -transitSize / 2]
 	});
 
 	rkGlobal.icons.nextbike = createNextbikeIcon('css/nextbike.svg');

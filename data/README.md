@@ -11,17 +11,10 @@ API doc: https://github.com/nextbike/api-doc/blob/master/maps/nextbike-maps.open
 
 List of all cities (to easily get domain code): https://maps.nextbike.net/maps/nextbike.json?list_cities=1
 
-TODO lazy loading!
+## OpenStreetMap Queries
 
-## Ubahn Wien
+doc: https://dev.overpass-api.de/output_formats.html
 
-Overpass Query:
+  curl -o wien-ubahn.json -d @wien-ubahn.oql https://overpass.kumi.systems/api/interpreter
 
-  [out:json][timeout:30][bbox:{{bbox}}];
-  (
-    nwr[railway=station]["station"="subway"];
-  );
-  (._;>;);
-  out body;
-
-https://dev.overpass-api.de/output_formats.html
+> **TODO** can we auto-extract the bboxes of the geojson files?

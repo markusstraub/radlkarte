@@ -1,0 +1,5 @@
+[out:json][timeout:120][bbox:48.11,16.23,48.29,16.53];
+(
+  nwr["railway"="station"]["station"="subway"];
+);
+out center;
