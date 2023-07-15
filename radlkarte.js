@@ -131,14 +131,6 @@ function removeAllSegmentsAndMarkers() {
 }
 
 function loadGeoJson(file) {
-	// get rid of "XML Parsing Error: not well-formed" during $.getJSON
-	$.ajaxSetup({
-		beforeSend: function (xhr) {
-			if (xhr.overrideMimeType) {
-				xhr.overrideMimeType("application/json");
-			}
-		}
-	});
 	$.getJSON(file, function(data) {
 		if(data.type != "FeatureCollection") {
 			console.error("expected a GeoJSON FeatureCollection. no radlkarte network can be displayed.");
@@ -224,15 +216,6 @@ function loadGeoJson(file) {
 
 function clearAndLoadNextbike(url) {
 	rkGlobal.bikeShareLayer.clearLayers();
-
-	// get rid of "XML Parsing Error: not well-formed" during $.getJSON
-	$.ajaxSetup({
-		beforeSend: function (xhr) {
-			if (xhr.overrideMimeType) {
-				xhr.overrideMimeType("application/json");
-			}
-		}
-	});
 	$.getJSON(url, function (data) {
 		for (const country of data.countries) {
 			for (const city of country.cities) {
@@ -280,15 +263,6 @@ function createNextbikeMarkerIncludingPopup(domain, place) {
 
 function clearAndLoadTransit(metroFile) {
 	rkGlobal.transitLayer.clearLayers();
-
-	// get rid of "XML Parsing Error: not well-formed" during $.getJSON
-	$.ajaxSetup({
-		beforeSend: function (xhr) {
-			if (xhr.overrideMimeType) {
-				xhr.overrideMimeType("application/json");
-			}
-		}
-	});
 	$.getJSON(metroFile, function (data) {
 		// filter duplicate metro stations (happens when two lines cross)
 		const seen = new Set();
