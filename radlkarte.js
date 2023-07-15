@@ -91,7 +91,10 @@ function updateRadlkarteRegion(region) {
 
 	removeAllSegmentsAndMarkers();
 	loadGeoJson(configuration.geoJsonFile);
-	// don't load other layers (e.g. nextbike) here, they are only loaded on demand!
+	// POI layers: only reload visible layers
+	if (rkGlobal.leafletMap.hasLayer(rkGlobal.nextbikeLayer)) {
+		clearAndLoadNextbike(configuration.nextbikeUrl);
+	}
 
 	rkGlobal.geocodingControl.options.geocoder.options.geocodingQueryParams.bounds = configuration.geocodingBounds;
 
@@ -230,7 +233,7 @@ function clearAndLoadNextbike(url) {
 			for (const city of country.cities) {
 				for (const place of city.places) {
 					// console.log(place.name);
-					let markerLayer = createNextbikeMarkerIncludingPopup(place);
+					let markerLayer = createNextbikeMarkerIncludingPopup(country.domain, place);
 					if (markerLayer != null) {
 						rkGlobal.nextbikeLayer.addLayer(markerLayer);
 					}
@@ -241,7 +244,7 @@ function clearAndLoadNextbike(url) {
 }
 
 /** place: JSON from nextbike API */
-function createNextbikeMarkerIncludingPopup(place) {
+function createNextbikeMarkerIncludingPopup(domain, place) {
 	let description = '<b>' + place.name + '</b><br>';
 	if (place.bikes === 1) {
 		description += "1 Rad verfügbar"
@@ -249,14 +252,23 @@ function createNextbikeMarkerIncludingPopup(place) {
 		description += place.bikes + " Räder verfügbar";
 	}
 
+	let icon = place.bikes !== 0 ? rkGlobal.icons.nextbike : rkGlobal.icons.nextbikeGray;
+	if (domain === "wr") {
+		icon = place.bikes !== 0 ? rkGlobal.icons.wienmobilrad : rkGlobal.icons.wienmobilradGray;
+	} else if (domain === "al") {
+		icon = place.bikes !== 0 ? rkGlobal.icons.citybikelinz : rkGlobal.icons.citybikelinzGray;
+	}
+
+	let defaultOpacity = 1;
 	let marker = L.marker(L.latLng(place.lat, place.lng), {
-		icon: place.bikes !== 0 ? rkGlobal.icons.nextbike : rkGlobal.icons.nextbikeGray,
-		alt: place.name
+		icon: icon,
+		alt: place.name,
+		opacity: defaultOpacity 
 	});
 
 	marker.bindPopup(description, { closeButton: false });
-	marker.on('mouseover', function () { marker.openPopup(); });
-	marker.on('mouseout', function () { marker.closePopup(); });
+	marker.on('mouseover', function () { marker.openPopup(); marker.setOpacity(0.7); });
+	marker.on('mouseout', function () { marker.closePopup(); marker.setOpacity(defaultOpacity); });
 
 	return marker;
 }
@@ -640,17 +652,23 @@ function initializeIcons() {
 		iconAnchor: [5, 5],
 		popupAnchor: [0, -5]
 	});
-	rkGlobal.icons.nextbike = L.icon({
-		iconUrl: 'css/nextbike.svg',
-		iconSize: [25, 38.75],
-		iconAnchor: [12.5, 38.75],
-		popupAnchor: [0, -38.75]
-	});
-	rkGlobal.icons.nextbikeGray = L.icon({
-		iconUrl: 'css/nextbike-gray.svg',
-		iconSize: [25, 38.75],
-		iconAnchor: [12.5, 38.75],
-		popupAnchor: [0, -38.75]
+
+	rkGlobal.icons.nextbike = createNextbikeIcon('css/nextbike.svg');
+	rkGlobal.icons.nextbikeGray = createNextbikeIcon('css/nextbike-gray.svg');
+	rkGlobal.icons.wienmobilrad = createNextbikeIcon('css/wienmobilrad.svg');
+	rkGlobal.icons.wienmobilradGray = createNextbikeIcon('css/wienmobilrad-gray.svg');
+	rkGlobal.icons.citybikelinz = createNextbikeIcon('css/citybikelinz.svg');
+	rkGlobal.icons.citybikelinzGray = createNextbikeIcon('css/citybikelinz-gray.svg');
+}
+
+function createNextbikeIcon(url) {
+	let nextbikeWidth = 100 / 5;
+	let nextbikeHeight = 150 / 5;
+	return L.icon({
+		iconUrl: url,
+		iconSize: [nextbikeWidth, nextbikeHeight],
+		iconAnchor: [nextbikeWidth / 2, nextbikeHeight],
+		popupAnchor: [0, -nextbikeHeight]
 	});
 }
 
