@@ -2,15 +2,12 @@
 <svg version="1.1" id="Layer_1" x="0px" y="0px" viewBox="0 0 100 150" enable-background="new 0 0 365 560" xml:space="preserve" width="100" height="150"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:svg="http://www.w3.org/2000/svg">
-
    <defs id="defs9" />
-
    <g id="g833" transform="scale(0.28506271,0.28476943)">
       <g id="g4" transform="matrix(0.99028811,0,0,0.95747586,-5.7271643,-5.6549788)">
-         <path fill="#00AEEF" d="m 182.9,551.7 c 0,0.1 0.2,0.3 0.2,0.3 0,0 175.2,-269 175.2,-357.4 C 358.3,64.5 269.5,7.9 182.9,7.7 96.3,7.9 7.5,64.5 7.5,194.6 7.5,283 182.8,552 182.8,552 Z" id="path2" style="fill:#7e181c;fill-opacity:1;stroke:#4a0d10;stroke-width:3.50981;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+         <path fill="#00AEEF" d="m 182.9,551.7 c 0,0.1 0.2,0.3 0.2,0.3 0,0 175.2,-269 175.2,-357.4 C 358.3,64.5 269.5,7.9 182.9,7.7 96.3,7.9 7.5,64.5 7.5,194.6 7.5,283 182.8,552 182.8,552 Z" id="path2" style="fill:#c8001a;fill-opacity:1;stroke:#61000d;stroke-width:3.50981;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
       </g>
    </g>
-
    <g id="Gruppe_4608" data-name="Gruppe 4608" transform="matrix(1.1405775,0,0,1.1405775,-1075.7279,-322.48227)" style="fill:#ffffff;fill-opacity:1">
       <path id="Pfad_3056" data-name="Pfad 3056" d="M 7.035,14.07 A 12.078,12.078 0 0 1 -5.029,2.006 12.064,12.064 0 0 1 19.099,2.006 12.078,12.078 0 0 1 7.035,14.07 m 0,-20.77 a 8.7,8.7 0 1 0 8.7,8.706 8.714,8.714 0 0 0 -8.7,-8.706" transform="translate(954.363,323.43)" fill="#7e181c" style="fill:#ffffff;fill-opacity:1" />
       <path id="Pfad_3057" data-name="Pfad 3057" d="M 7.035,14.07 A 12.078,12.078 0 0 1 -5.029,2.006 12.064,12.064 0 0 1 19.099,2.006 12.078,12.078 0 0 1 7.035,14.07 m 0,-20.77 a 8.7,8.7 0 1 0 8.7,8.706 8.714,8.714 0 0 0 -8.7,-8.706" transform="translate(1000.717,323.43)" fill="#7e181c" style="fill:#ffffff;fill-opacity:1" />
