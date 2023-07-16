@@ -51,7 +51,7 @@ Route data is stored in `GeoJSON` format with the following attributes.
 3. Load an existing radlkarte .geojson file, e.g. [radlkarte-example.geojson](data/radlkarte-example.geojson), or create a new layer.
 4. Edit routes
 5. Save the result as .geojson (not as .osm!)
-6. Minify the .geojson with [minify_and_sort_geojson.py](data/minify_and_sort_geojson.py)
+6. Prepare the .geojson with <data/prepare_geojson.py> (minify, add bbox,..)
 
 
 ## Development
