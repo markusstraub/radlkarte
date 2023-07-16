@@ -14,11 +14,11 @@ html, body, #map {
 }
 #radlobby-logo img {
 	padding: 5px;
-	width: 150px;
+	width: 100px;
 }
 @media (max-width: 600px) {
 	#radlobby-logo img {
-		width: 75px;
+		width: 50px;
 	}
 }
 

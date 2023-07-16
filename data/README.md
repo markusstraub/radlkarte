@@ -27,6 +27,7 @@ doc: https://dev.overpass-api.de/output_formats.html
 
 ## TODOs
 
+- Make problem-POIs hidable in layer switcher
 - use bboxes of geojsons for OSM downloads
 - keep popups open a bit so that a link in the popup can be clicked (bicycle shops!)
 - script for cronjob that downloads osm data files for all radlkarte regions

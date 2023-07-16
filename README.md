@@ -48,10 +48,10 @@ Route data is stored in `GeoJSON` format with the following attributes.
 
 1. [Download JOSM](https://josm.openstreetmap.de)
 2. Add [josm-radlkarte-style.mapcss](data/josm-radlkarte-style.mapcss) in `edit > preferences > map settings (3rd buttom from the top) > map paint styles`
-3. Load an existing radlkarte .geojson file, e.g. [radlkarte-example.geojson](data/radlkarte-example.geojson), or create a new layer.
+3. Load an existing radlkarte `GeoJSON` file, e.g. [radlkarte-example.geojson](data/radlkarte-example.geojson), or create a new layer
 4. Edit routes
-5. Save the result as .geojson (not as .osm!)
-6. Prepare the .geojson with <data/prepare_geojson.py> (minify, add bbox,..)
+5. Save the result as `GeoJSON` (not as `.osm`!)
+6. Prepare (minify, add bbox,..) the .geojson with [prepare_geojson.py](data/prepare_geojson.py)
 
 
 ## Development
@@ -67,11 +67,3 @@ Linting:
 ### Known Bugs
 
 - Arrows in wrong size on fast zoom (synchronization issue of rendering method that is called more than once I fear)
-
-### Future Ideas
-
-- Describe layer-switching & opencyclemap legend? explicitly show cycleways somehow (user request hotjar)?
-- Make problem-POIs hidable in layer switcher
-- Differentiate between a simple & an advanced UI.
-  - simple: auto-hides parts of the network based on zoom level, no layer switcher
-  - advanced: layer switcher, control opacity of overlay, freely choose network-parts to show
