@@ -1,15 +1,17 @@
-"""Radlkarte GeoJSON Minify
+#!/usr/bin/env python3
+"""Radlkarte GeoJSON Preparation Script
 
 This script deals with GeoJSON files produced by JOSM,
-i.e. a FeatureCollection with Points and LineStrings, and serves two purposes:
+i.e. a FeatureCollection with Points and LineStrings,
+and serves these purposes:
 1) reduce file size (for faster download)
-2) stable feature order for minimum diffs after changes
+2) calculate the bbox
+3) stable feature order for minimum diffs after changes
    (JOSM unfortunately reorders the GeoJSON)
 
 For the latter point it adds unique ids to each feature and gracefully
 handles duplicate and invalid ids.
 """
-
 
 import json
 import logging
@@ -69,6 +71,44 @@ def set_new_ids(features, start_id):
         current_id += 1
 
 
+def calc_bbox(features):
+    """
+    Simple bbox calculation, returns a list of min_lon, min_lat, max_lon, max_lat.
+
+    Won't work for datasets crossing the 180th meridian.
+    """
+    min_lat = 90
+    max_lat = -90
+    min_lon = 180
+    max_lon = -180
+    for feature in features:
+        geometry = feature["geometry"]
+        tuples = None
+        if geometry["type"] == "LineString":
+            tuples = geometry["coordinates"]
+        elif geometry["type"] == "Point":
+            tuples = [geometry["coordinates"]]
+        else:
+            logging.warning("ignoring geometry type {}".format(geometry["type"]))
+            continue
+
+        lats = set()
+        lons = set()
+        for tuple in tuples:
+            lats.add(tuple[1])
+            lons.add(tuple[0])
+        if min(lats) < min_lat:
+            min_lat = min(lats)
+        if max(lats) > max_lat:
+            max_lat = max(lats)
+        if min(lons) < min_lon:
+            min_lon = min(lons)
+        if max(lons) > max_lon:
+            max_lon = max(lons)
+
+    return [min_lon, min_lat, max_lon, max_lat]
+
+
 def minimize(infile, outfile):
     data = None
     try:
@@ -96,9 +136,12 @@ def minimize(infile, outfile):
 
     id_to_feature = {feature["properties"]["id"]: feature for feature in features}
     sorted_ids = sorted(id_to_feature.keys())
+    bbox = calc_bbox(features)
 
     with open(outfile, "w") as json_file:
-        json_file.write('{"type": "FeatureCollection", "features": [\n')
+        json_file.write(
+            f'{{"type": "FeatureCollection", "bbox": {bbox}, "features": [\n'
+        )
         for id in sorted_ids[:-1]:
             json_file.write(json.dumps(id_to_feature[id], sort_keys=True, indent=None))
             json_file.write(",\n")
@@ -118,4 +161,4 @@ if __name__ == "__main__":
         for infile in sys.argv[1:]:
             minimize(infile, infile)
     else:
-        print("Usage: add one or more geojson files to be minimized as arguments")
+        print("Usage: one or more geojson files to be minimized in-place as arguments")
