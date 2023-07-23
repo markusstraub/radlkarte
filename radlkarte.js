@@ -101,7 +101,6 @@ function updateRadlkarteRegion(region) {
 			visibleOsmPois.push(k);
 		}
 	}
-	console.log("visible osm poi layers: " + visibleOsmPois);
 	clearAndLoadOsmPois(visibleOsmPois);
 
 	// TODO get bounds from gejson and remove them from the configuration
@@ -283,6 +282,9 @@ function clearAndLoadTransit(region) {
 	const seen = new Set();
 
 	for (const transitType of ["subway", "railway"]) {
+		if (transitType === "subway" && region != "wien") {
+			continue;
+		}
 		let transitFile = "data/osm-overpass/" + region + "-" + transitType + ".json";
 		$.getJSON(transitFile, function (data) {
 			// filter duplicate stations (happens when multiple lines cross)
@@ -290,7 +292,12 @@ function clearAndLoadTransit(region) {
 				if (seen.has(element.tags.name)) {
 					continue;
 				}
-				let latLng = L.latLng(element.lat, element.lon);
+				let latLng = "center" in element ? L.latLng(element.center.lat, element.center.lon) : L.latLng(element.lat, element.lon);
+				if (latLng == null) {
+					// L.latLng can return null/undefined for invalid lat/lon values, catch this here
+					console.warn("invalid lat/lon for " + type + " with OSM id " + element.id);
+					continue;
+				}
 				let description = '<b>' + element.tags.name + '</b><br>';
 				let icon = rkGlobal.icons[transitType];
 				let altText = element.tags.name;
@@ -300,7 +307,7 @@ function clearAndLoadTransit(region) {
 					rkGlobal.poiLayers.transit.addLayer(markerLayer);
 				}
 			}
-			console.log('created ' + seen.size + ' ' + transitType + ' icons.');
+			debug('created ' + seen.size + ' ' + transitType + ' icons.');
 		});
 	}
 }
@@ -309,8 +316,14 @@ function clearAndLoadBasicOsmPoi(type, region) {
 	rkGlobal.poiLayers[type].clearLayers();
 	let poiFile = "data/osm-overpass/" + region + "-" + type + ".json";
 	$.getJSON(poiFile, function (data) {
+		let count = 0
 		for (const element of data.elements) {
-			let latLng = L.latLng(element.lat, element.lon);
+			let latLng = "center" in element ? L.latLng(element.center.lat, element.center.lon) : L.latLng(element.lat, element.lon);
+			if (latLng == null) {
+				// L.latLng can return null/undefined for invalid lat/lon values, catch this here
+				console.warn("invalid lat/lon for " + type + " with OSM id " + element.id);
+				continue;
+			}
 			let description = '<b>' + rkGlobal.osmPoiTypes[type].name + '</b><br>';
 			if (element.tags.name != null) {
 				description += element.tags.name + "<br>";
@@ -336,9 +349,10 @@ function clearAndLoadBasicOsmPoi(type, region) {
 			const markerLayer = createMarkerIncludingPopup(latLng, icon, description, altText);
 			if (markerLayer != null) {
 				rkGlobal.poiLayers[type].addLayer(markerLayer);
+				count++;
 			}
 		}
-		console.log('created icons for ' + type);
+		debug('created ' + count + ' ' + type + ' icons');
 	});
 }
 
@@ -598,7 +612,6 @@ function loadLeaflet() {
 			}
 			for (const [k, v] of Object.entries(rkGlobal.osmPoiTypes)) {
 				if (e.layer === v.layer) {
-					console.log("click .. please show " + k);
 					clearAndLoadOsmPois([k]);
 				}
 			}
