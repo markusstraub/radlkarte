@@ -26,7 +26,6 @@ QUERY_TEMPLATE = """[out:json][timeout:120][bbox:{min_lat},{min_lon},{max_lat},{
 ({query});
 out center;"""
 
-# Schlauchomaten, Reparatursäulen, Luftpumpen & Radgeschäfte
 QUERIES = {
     "subway": 'nwr["railway"="station"]["station"="subway"];',
     "railway": 'nwr[railway~"^station$|^halt$"][station!=subway][station!=miniature];',

@@ -8,7 +8,17 @@ rkGlobal.poiLayers = {}
 rkGlobal.poiLayers.markerLayerLowZoom = L.layerGroup(); // layer group holding all icons to be viewed at lower zoom levels
 rkGlobal.poiLayers.markerLayerHighZoom = L.layerGroup(); // layer group holding all icons to be viewed at higher zoom levels
 rkGlobal.poiLayers.bikeShareLayer = L.layerGroup(); // symbols for bike sharing stations
-rkGlobal.poiLayers.transitLayer = L.layerGroup(); // symbols for high-ranking public transit stations
+rkGlobal.osmPoiTypes = {
+	"transit": { "name": "ÖV" },
+	"bicycleShop": { "name": "Fahrradgeschäft" },
+	"bicycleRepairStation": { "name": "Reparaturstation" },
+	"bicyclePump": { "name": "Luftpumpe" },
+	"bicycleTubeVending": { "name": "Schlauchomat" }
+}
+for (const [k, v] of Object.entries(rkGlobal.osmPoiTypes)) {
+	v["layer"] = L.layerGroup()
+	rkGlobal.poiLayers[k] = v["layer"];
+}
 rkGlobal.priorityStrings = ["Überregional", "Regional", "Lokal"]; // names of all different levels of priorities (ordered descending by priority)
 rkGlobal.stressStrings = ["Ruhig", "Durchschnittlich", "Stressig"];
 rkGlobal.debug = true; // debug output will be logged if set to true
@@ -85,11 +95,16 @@ function updateRadlkarteRegion(region) {
 	if (rkGlobal.leafletMap.hasLayer(rkGlobal.poiLayers.bikeShareLayer)) {
 		clearAndLoadNextbike(configuration.nextbikeUrl);
 	}
-	if (rkGlobal.leafletMap.hasLayer(rkGlobal.poiLayers.transitLayer)) {
-		clearAndLoadTransit(region);
+	let visibleOsmPois = []
+	for (const [k, v] of Object.entries(rkGlobal.osmPoiTypes)) {
+		if (rkGlobal.leafletMap.hasLayer(v.layer)) {
+			visibleOsmPois.push(k);
+		}
 	}
+	console.log("visible osm poi layers: " + visibleOsmPois);
+	clearAndLoadOsmPois(visibleOsmPois);
 
-
+	// TODO get bounds from gejson and remove them from the configuration
 	rkGlobal.geocodingControl.options.geocoder.options.geocodingQueryParams.bounds = configuration.geocodingBounds;
 
 	// virtual page hit in matomo analytics
@@ -113,8 +128,8 @@ function removeAllSegmentsAndMarkers() {
 	rkGlobal.leafletMap.removeLayer(rkGlobal.poiLayers.markerLayerLowZoom);
 	rkGlobal.leafletMap.removeLayer(rkGlobal.poiLayers.markerLayerHighZoom);
 
-	for (const [id, poiLayer] of Object.entries(rkGlobal.poiLayers)) {
-		poiLayer.clearLayers();
+	for (const [k, v] of Object.entries(rkGlobal.osmPoiTypes)) {
+		v.layer.clearLayers();
 	}
 }
 
@@ -237,52 +252,94 @@ function createNextbikeMarkerIncludingPopup(domain, place) {
 		icon = place.bikes !== 0 ? rkGlobal.icons.citybikelinz : rkGlobal.icons.citybikelinzGray;
 	}
 
-	let marker = L.marker(L.latLng(place.lat, place.lng), {
-		icon: icon,
-		alt: place.name,
-	});
+	return createMarkerIncludingPopup(L.latLng(place.lat, place.lng), icon, description, place.name);
+}
 
+function createMarkerIncludingPopup(latLng, icon, description, altText) {
+	let marker = L.marker(latLng, {
+		icon: icon,
+		alt: altText,
+	});
 	marker.bindPopup(description, { closeButton: false });
 	marker.on('mouseover', function () { marker.openPopup(); });
 	marker.on('mouseout', function () { marker.closePopup(); });
-
 	return marker;
 }
 
+/** expects a list of poi types */
+function clearAndLoadOsmPois(types) {
+	for (const type of types) {
+		if (type === "transit") {
+			clearAndLoadTransit(rkGlobal.currentRegion);
+		} else {
+			clearAndLoadBasicOsmPoi(type, rkGlobal.currentRegion);
+		}
+	}
+}
+
+/** special handling for transit because we need to merge subway and railway in one layer */
 function clearAndLoadTransit(region) {
-	rkGlobal.poiLayers.transitLayer.clearLayers();
-	let subwayFile = "data/osm-overpass/" + region + "-subway.json";
-	$.getJSON(subwayFile, function (data) {
-		// filter duplicate subway stations (happens when two lines cross)
-		const seen = new Set();
-		for (const element of data.elements) {
-			if (seen.has(element.tags.name)) {
-				continue;
+	rkGlobal.poiLayers.transit.clearLayers();
+	const seen = new Set();
+
+	for (const transitType of ["subway", "railway"]) {
+		let transitFile = "data/osm-overpass/" + region + "-" + transitType + ".json";
+		$.getJSON(transitFile, function (data) {
+			// filter duplicate stations (happens when multiple lines cross)
+			for (const element of data.elements) {
+				if (seen.has(element.tags.name)) {
+					continue;
+				}
+				let latLng = L.latLng(element.lat, element.lon);
+				let description = '<b>' + element.tags.name + '</b><br>';
+				let icon = rkGlobal.icons[transitType];
+				let altText = element.tags.name;
+				const markerLayer = createMarkerIncludingPopup(latLng, icon, description, altText);
+				if (markerLayer != null) {
+					seen.add(element.tags.name);
+					rkGlobal.poiLayers.transit.addLayer(markerLayer);
+				}
 			}
-			const markerLayer = createSubwayMarkerIncludingPopup(element);
+			console.log('created ' + seen.size + ' ' + transitType + ' icons.');
+		});
+	}
+}
+
+function clearAndLoadBasicOsmPoi(type, region) {
+	rkGlobal.poiLayers[type].clearLayers();
+	let poiFile = "data/osm-overpass/" + region + "-" + type + ".json";
+	$.getJSON(poiFile, function (data) {
+		for (const element of data.elements) {
+			let latLng = L.latLng(element.lat, element.lon);
+			let description = '<b>' + rkGlobal.osmPoiTypes[type].name + '</b><br>';
+			if (element.tags.name != null) {
+				description += element.tags.name + "<br>";
+			}
+			if (element.tags["addr:street"] != null) {
+				description += element.tags["addr:street"]
+				if (element.tags["addr:housenumber"] != null) {
+					description += " " + element.tags["addr:housenumber"]
+				}
+				if (element.tags["addr:postcode"] != null) {
+					description += ", " + element.tags["addr:postcode"]
+					if (element.tags["addr:city"] != null) {
+						description += " " + element.tags["addr:city"]
+					}
+				}
+				description += "<br>"
+			}
+			if (element.tags.operator != null) {
+				description += "Betreiber: " + element.tags.operator + "<br>";
+			}
+			let icon = rkGlobal.icons[type];
+			let altText = element.tags.name;
+			const markerLayer = createMarkerIncludingPopup(latLng, icon, description, altText);
 			if (markerLayer != null) {
-				seen.add(element.tags.name);
-				rkGlobal.poiLayers.transitLayer.addLayer(markerLayer);
+				rkGlobal.poiLayers[type].addLayer(markerLayer);
 			}
 		}
-		console.log('created ' + seen.size + ' subway icons.');
+		console.log('created icons for ' + type);
 	});
-}
-
-/** @param element JSON from Overpass API representing a subway station. */
-function createSubwayMarkerIncludingPopup(element) {
-	let description = '<b>' + element.tags.name + '</b><br>';
-	let icon = rkGlobal.icons.subway;
-	let marker = L.marker(L.latLng(element.lat, element.lon), {
-		icon: icon,
-		alt: element.tags.name,
-	});
-
-	marker.bindPopup(description, { closeButton: false });
-	marker.on('mouseover', function () { marker.openPopup(); });
-	marker.on('mouseout', function () { marker.closePopup(); });
-
-	return marker;
 }
 
 /**
@@ -523,10 +580,12 @@ function loadLeaflet() {
 		"Weiß": empty,
 	};
 	let overlayMaps = {
-		"Leihräder": rkGlobal.poiLayers.bikeShareLayer,
-		"ÖV": rkGlobal.poiLayers.transitLayer,
-		// "Fahrradgeschäft": rkGlobal.poiLayers.bicycleShopLayer
+		"Leihräder": rkGlobal.poiLayers.bikeShareLayer
 	};
+	for (const [k, v] of Object.entries(rkGlobal.osmPoiTypes)) {
+		overlayMaps[v.name] = v.layer;
+	}
+
 
 	mixed.addTo(rkGlobal.leafletMap);
 	L.control.layers(baseMaps, overlayMaps, { 'position': 'topright', 'collapsed': true }).addTo(rkGlobal.leafletMap);
@@ -537,8 +596,11 @@ function loadLeaflet() {
 			if (e.layer === rkGlobal.poiLayers.bikeShareLayer) {
 				clearAndLoadNextbike(configuration.nextbikeUrl);
 			}
-			if (e.layer === rkGlobal.poiLayers.transitLayer) {
-				clearAndLoadTransit(rkGlobal.currentRegion);
+			for (const [k, v] of Object.entries(rkGlobal.osmPoiTypes)) {
+				if (e.layer === v.layer) {
+					console.log("click .. please show " + k);
+					clearAndLoadOsmPois([k]);
+				}
 			}
 		}
 	});
@@ -664,22 +726,26 @@ function initializeIcons() {
 		popupAnchor: [0, -transitSize / 2]
 	});
 
-	rkGlobal.icons.nextbike = createNextbikeIcon('css/nextbike.svg');
-	rkGlobal.icons.nextbikeGray = createNextbikeIcon('css/nextbike-gray.svg');
-	rkGlobal.icons.wienmobilrad = createNextbikeIcon('css/wienmobilrad.svg');
-	rkGlobal.icons.wienmobilradGray = createNextbikeIcon('css/wienmobilrad-gray.svg');
-	rkGlobal.icons.citybikelinz = createNextbikeIcon('css/citybikelinz.svg');
-	rkGlobal.icons.citybikelinzGray = createNextbikeIcon('css/citybikelinz-gray.svg');
+	rkGlobal.icons.nextbike = createMarkerIcon('css/nextbike.svg');
+	rkGlobal.icons.nextbikeGray = createMarkerIcon('css/nextbike-gray.svg');
+	rkGlobal.icons.wienmobilrad = createMarkerIcon('css/wienmobilrad.svg');
+	rkGlobal.icons.wienmobilradGray = createMarkerIcon('css/wienmobilrad-gray.svg');
+	rkGlobal.icons.citybikelinz = createMarkerIcon('css/citybikelinz.svg');
+	rkGlobal.icons.citybikelinzGray = createMarkerIcon('css/citybikelinz-gray.svg');
+	rkGlobal.icons.bicycleShop = createMarkerIcon('css/bicycleShop.svg');
+	rkGlobal.icons.bicycleRepairStation = createMarkerIcon('css/bicycleRepairStation.svg');
+	rkGlobal.icons.bicyclePump = createMarkerIcon('css/bicyclePump.svg');
+	rkGlobal.icons.bicycleTubeVending = createMarkerIcon('css/bicycleTubeVending.svg');
 }
 
-function createNextbikeIcon(url) {
-	let nextbikeWidth = 100 / 6;
-	let nextbikeHeight = 150 / 6;
+function createMarkerIcon(url) {
+	let markerWidth = 100 / 6;
+	let markerHeight = 150 / 6;
 	return L.icon({
 		iconUrl: url,
-		iconSize: [nextbikeWidth, nextbikeHeight],
-		iconAnchor: [nextbikeWidth / 2, nextbikeHeight],
-		popupAnchor: [0, -nextbikeHeight]
+		iconSize: [markerWidth, markerHeight],
+		iconAnchor: [markerWidth / 2, markerHeight],
+		popupAnchor: [0, -markerHeight]
 	});
 }
 

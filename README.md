@@ -67,3 +67,14 @@ Linting:
 ### Known Bugs
 
 - Arrows in wrong size on fast zoom (synchronization issue of rendering method that is called more than once I fear)
+
+## License
+
+The license for all our code and data is [here](LICENSE).
+
+Obviously this excludes libraries (like leaflet, font-awesome or jquery) and the fonts.
+
+Other exceptions:
+- bicycle repair station icon based on icon taken from the [OpenStreetMap-carto](https://github.com/gravitystorm/openstreetmap-carto) style licensed under CC0 public domain
+- bicycle tube vending icon based on icon taken from https://github.com/cyclosm/cyclosm-cartocss-style licensed under BSD-3-Clause license
+- bicycle pump icon based on icon from https://github.com/osmandapp/OsmAnd-resources
