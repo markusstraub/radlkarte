@@ -96,6 +96,7 @@ def main(radlkarte_dir, out_dir):
     regions = get_regions_with_bboxes(radlkarte_dir)
     logging.info(f"found {len(regions)} regions: {sorted(list(regions.keys()))}")
     logging.info(f"all output will be written to '{out_dir}'")
+    out_dir.mkdir(parents=True, exist_ok=True)
 
     success_count = 0
     failed_datasets = []
