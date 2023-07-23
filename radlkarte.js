@@ -2,14 +2,13 @@
 
 var rkGlobal = {}; // global variable for radlkarte properties / data storage
 rkGlobal.leafletMap = undefined; // the main leaflet map
-rkGlobal.hash = undefined; // leaflet-hash object, contains the currently active region
-rkGlobal.leafletLayersControl = undefined; // leaflet layer-control
 rkGlobal.geocodingControl = undefined;
 rkGlobal.segments = {}; // object holding all linestring and decorator layers (the key represents the properties)
-rkGlobal.markerLayerLowZoom = L.layerGroup(); // layer group holding all icons to be viewed at lower zoom levels
-rkGlobal.markerLayerHighZoom = L.layerGroup(); // layer group holding all icons to be viewed at higher zoom levels
-rkGlobal.bikeShareLayer = L.layerGroup(); // symbols for bike sharing stations
-rkGlobal.transitLayer = L.layerGroup(); // symbols for high-ranking public transit stations
+rkGlobal.poiLayers = {}
+rkGlobal.poiLayers.markerLayerLowZoom = L.layerGroup(); // layer group holding all icons to be viewed at lower zoom levels
+rkGlobal.poiLayers.markerLayerHighZoom = L.layerGroup(); // layer group holding all icons to be viewed at higher zoom levels
+rkGlobal.poiLayers.bikeShareLayer = L.layerGroup(); // symbols for bike sharing stations
+rkGlobal.poiLayers.transitLayer = L.layerGroup(); // symbols for high-ranking public transit stations
 rkGlobal.priorityStrings = ["Überregional", "Regional", "Lokal"]; // names of all different levels of priorities (ordered descending by priority)
 rkGlobal.stressStrings = ["Ruhig", "Durchschnittlich", "Stressig"];
 rkGlobal.debug = true; // debug output will be logged if set to true
@@ -69,7 +68,8 @@ function debug(obj) {
 
 /**
  * set the currently active region.
- * called from rkGlobal.hash (when region is changed e.g. via hyperlink or by changing the URL)
+ * called from the CUSTOMIZED hash plugin
+ * (when region is changed e.g. via hyperlink or by changing the URL)
  */
 function updateRadlkarteRegion(region) {
 	rkGlobal.currentRegion = region;
@@ -82,10 +82,10 @@ function updateRadlkarteRegion(region) {
 	removeAllSegmentsAndMarkers();
 	loadGeoJson('data/radlkarte-' + region + '.geojson');
 	// POI layers: only reload visible layers
-	if (rkGlobal.leafletMap.hasLayer(rkGlobal.bikeShareLayer)) {
+	if (rkGlobal.leafletMap.hasLayer(rkGlobal.poiLayers.bikeShareLayer)) {
 		clearAndLoadNextbike(configuration.nextbikeUrl);
 	}
-	if (rkGlobal.leafletMap.hasLayer(rkGlobal.transitLayer)) {
+	if (rkGlobal.leafletMap.hasLayer(rkGlobal.poiLayers.transitLayer)) {
 		clearAndLoadTransit(region);
 	}
 
@@ -100,7 +100,7 @@ function updateRadlkarteRegion(region) {
 
 function removeAllSegmentsAndMarkers() {
 	// we can't simply delete all layers (otherwise the base layer is gone as well)
-
+	// TODO refactor?
 	for (const key of Object.keys(rkGlobal.segments)) {
 		rkGlobal.leafletMap.removeLayer(rkGlobal.segments[key].lines);
 		if (rkGlobal.segments[key].steepLines && rkGlobal.leafletMap.hasLayer(rkGlobal.segments[key].steepLines)) {
@@ -110,12 +110,12 @@ function removeAllSegmentsAndMarkers() {
 	}
 	rkGlobal.segments = {};
 
-	rkGlobal.leafletMap.removeLayer(rkGlobal.markerLayerLowZoom);
-	rkGlobal.markerLayerLowZoom.clearLayers();
-	rkGlobal.leafletMap.removeLayer(rkGlobal.markerLayerHighZoom);
-	rkGlobal.markerLayerHighZoom.clearLayers();
+	rkGlobal.leafletMap.removeLayer(rkGlobal.poiLayers.markerLayerLowZoom);
+	rkGlobal.leafletMap.removeLayer(rkGlobal.poiLayers.markerLayerHighZoom);
 
-	rkGlobal.bikeShareLayer.clearLayers();
+	for (const [id, poiLayer] of Object.entries(rkGlobal.poiLayers)) {
+		poiLayer.clearLayers();
+	}
 }
 
 function loadGeoJson(file) {
@@ -136,8 +136,8 @@ function loadGeoJson(file) {
 				if (geojson.geometry.type == 'Point') {
 					let markerLayers = createRadlkarteMarkerLayersIncludingPopup(geojson);
 					if (markerLayers != null) {
-						rkGlobal.markerLayerLowZoom.addLayer(markerLayers.lowZoom);
-						rkGlobal.markerLayerHighZoom.addLayer(markerLayers.highZoom);
+						rkGlobal.poiLayers.markerLayerLowZoom.addLayer(markerLayers.lowZoom);
+						rkGlobal.poiLayers.markerLayerHighZoom.addLayer(markerLayers.highZoom);
 						++poiCount;
 					} else {
 						++ignoreCount;
@@ -203,14 +203,14 @@ function loadGeoJson(file) {
 }
 
 function clearAndLoadNextbike(url) {
-	rkGlobal.bikeShareLayer.clearLayers();
+	rkGlobal.poiLayers.bikeShareLayer.clearLayers();
 	$.getJSON(url, function (data) {
 		for (const country of data.countries) {
 			for (const city of country.cities) {
 				for (const place of city.places) {
 					let markerLayer = createNextbikeMarkerIncludingPopup(country.domain, place);
 					if (markerLayer != null) {
-						rkGlobal.bikeShareLayer.addLayer(markerLayer);
+						rkGlobal.poiLayers.bikeShareLayer.addLayer(markerLayer);
 					}
 				}
 			}
@@ -250,7 +250,7 @@ function createNextbikeMarkerIncludingPopup(domain, place) {
 }
 
 function clearAndLoadTransit(region) {
-	rkGlobal.transitLayer.clearLayers();
+	rkGlobal.poiLayers.transitLayer.clearLayers();
 	let subwayFile = "data/osm-overpass/" + region + "-subway.json";
 	$.getJSON(subwayFile, function (data) {
 		// filter duplicate subway stations (happens when two lines cross)
@@ -262,7 +262,7 @@ function clearAndLoadTransit(region) {
 			const markerLayer = createSubwayMarkerIncludingPopup(element);
 			if (markerLayer != null) {
 				seen.add(element.tags.name);
-				rkGlobal.transitLayer.addLayer(markerLayer);
+				rkGlobal.poiLayers.transitLayer.addLayer(markerLayer);
 			}
 		}
 		console.log('created ' + seen.size + ' subway icons.');
@@ -375,14 +375,14 @@ function updateStyles() {
 	}
 
 	if (zoom >= rkGlobal.iconZoomThresholds[1]) {
-		rkGlobal.leafletMap.removeLayer(rkGlobal.markerLayerLowZoom);
-		rkGlobal.leafletMap.addLayer(rkGlobal.markerLayerHighZoom);
+		rkGlobal.leafletMap.removeLayer(rkGlobal.poiLayers.markerLayerLowZoom);
+		rkGlobal.leafletMap.addLayer(rkGlobal.poiLayers.markerLayerHighZoom);
 	} else if (zoom >= rkGlobal.iconZoomThresholds[0]) {
-		rkGlobal.leafletMap.removeLayer(rkGlobal.markerLayerHighZoom);
-		rkGlobal.leafletMap.addLayer(rkGlobal.markerLayerLowZoom);
+		rkGlobal.leafletMap.removeLayer(rkGlobal.poiLayers.markerLayerHighZoom);
+		rkGlobal.leafletMap.addLayer(rkGlobal.poiLayers.markerLayerLowZoom);
 	} else {
-		rkGlobal.leafletMap.removeLayer(rkGlobal.markerLayerHighZoom);
-		rkGlobal.leafletMap.removeLayer(rkGlobal.markerLayerLowZoom);
+		rkGlobal.leafletMap.removeLayer(rkGlobal.poiLayers.markerLayerHighZoom);
+		rkGlobal.leafletMap.removeLayer(rkGlobal.poiLayers.markerLayerLowZoom);
 	}
 }
 
@@ -523,20 +523,21 @@ function loadLeaflet() {
 		"Weiß": empty,
 	};
 	let overlayMaps = {
-		"Leihräder": rkGlobal.bikeShareLayer,
-		"ÖV": rkGlobal.transitLayer
+		"Leihräder": rkGlobal.poiLayers.bikeShareLayer,
+		"ÖV": rkGlobal.poiLayers.transitLayer,
+		// "Fahrradgeschäft": rkGlobal.poiLayers.bicycleShopLayer
 	};
 
 	mixed.addTo(rkGlobal.leafletMap);
-	rkGlobal.leafletLayersControl = L.control.layers(baseMaps, overlayMaps, { 'position': 'topright', 'collapsed': true }).addTo(rkGlobal.leafletMap);
+	L.control.layers(baseMaps, overlayMaps, { 'position': 'topright', 'collapsed': true }).addTo(rkGlobal.leafletMap);
 
 	rkGlobal.leafletMap.on({
 		overlayadd: function (e) {
 			let configuration = rkGlobal.configurations[rkGlobal.currentRegion];
-			if (e.layer === rkGlobal.bikeShareLayer) {
+			if (e.layer === rkGlobal.poiLayers.bikeShareLayer) {
 				clearAndLoadNextbike(configuration.nextbikeUrl);
 			}
-			if (e.layer === rkGlobal.transitLayer) {
+			if (e.layer === rkGlobal.poiLayers.transitLayer) {
 				clearAndLoadTransit(rkGlobal.currentRegion);
 			}
 		}
@@ -602,7 +603,7 @@ function loadLeaflet() {
 
 	// initialize hash, this causes loading of the default region
 	// and positioning of the map
-	rkGlobal.hash = new L.Hash(rkGlobal.leafletMap);
+	new L.Hash(rkGlobal.leafletMap);
 }
 
 function initializeIcons() {
