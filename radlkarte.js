@@ -32,7 +32,7 @@ rkGlobal.defaultRegion = 'wien';
 rkGlobal.currentRegion = undefined;
 rkGlobal.defaultZoom = 14;
 rkGlobal.configurations = {
-	'rendertest' : {
+	'rendertest': {
 		centerLatLng: L.latLng(50.088, 14.392),
 		geocodingBounds: '9.497,47.122,9.845,47.546',
 		geoJsonFile: 'data/radlkarte-rendertest.geojson'
@@ -42,29 +42,29 @@ rkGlobal.configurations = {
 		geocodingBounds: '9.497,47.122,9.845,47.546',
 		geoJsonFile: 'data/radlkarte-oberes-rheintal.geojson'
 	},*/
-	'klagenfurt' : {
+	'klagenfurt': {
 		centerLatLng: L.latLng(46.624, 14.308),
 		geocodingBounds: '13.978,46.477,14.624,46.778',
 		geoJsonFile: 'data/radlkarte-klagenfurt.geojson',
 		nextbikeUrl: 'https://maps.nextbike.net/maps/nextbike.json?domains=ka&bikes=false'
 	},
-	'linz' : {
+	'linz': {
 		centerLatLng: L.latLng(48.30, 14.285),
 		geocodingBounds: '13.999,48.171,14.644,48.472',
 		geoJsonFile: 'data/radlkarte-linz.geojson',
 		nextbikeUrl: 'https://maps.nextbike.net/maps/nextbike.json?domains=al&bikes=false'
 	},
-	'rheintal' : {
+	'rheintal': {
 		centerLatLng: L.latLng(47.4102, 9.7211),
 		geocodingBounds: '9.497,47.122,9.845,47.546',
 		geoJsonFile: 'data/radlkarte-unteres-rheintal.geojson'
 	},
-	'steyr' : {
+	'steyr': {
 		centerLatLng: L.latLng(48.039, 14.42),
 		geocodingBounds: '14.319,47.997,14.551,48.227',
 		geoJsonFile: 'data/radlkarte-steyr.geojson'
 	},
-	'wien' : {
+	'wien': {
 		centerLatLng: L.latLng(48.208, 16.372),
 		geocodingBounds: '16.105,47.995,16.710,48.389', // min lon, min lat, max lon, max lat
 		geoJsonFile: 'data/radlkarte-wien.geojson',
@@ -74,7 +74,7 @@ rkGlobal.configurations = {
 };
 
 function debug(obj) {
-	if(rkGlobal.debug) {
+	if (rkGlobal.debug) {
 		console.log(obj);
 	}
 }
@@ -86,7 +86,7 @@ function debug(obj) {
 function updateRadlkarteRegion(region) {
 	rkGlobal.currentRegion = region;
 	let configuration = rkGlobal.configurations[region];
-	if(configuration === undefined) {
+	if (configuration === undefined) {
 		console.warn('ignoring unknown region ' + region);
 		return;
 	}
@@ -113,7 +113,7 @@ function updateRadlkarteRegion(region) {
 function removeAllSegmentsAndMarkers() {
 	// we can't simply delete all layers (otherwise the base layer is gone as well)
 
-	for(const key of Object.keys(rkGlobal.segments)) {
+	for (const key of Object.keys(rkGlobal.segments)) {
 		rkGlobal.leafletMap.removeLayer(rkGlobal.segments[key].lines);
 		if (rkGlobal.segments[key].steepLines && rkGlobal.leafletMap.hasLayer(rkGlobal.segments[key].steepLines)) {
 			rkGlobal.leafletMap.removeLayer(rkGlobal.segments[key].steepLines);
@@ -131,8 +131,8 @@ function removeAllSegmentsAndMarkers() {
 }
 
 function loadGeoJson(file) {
-	$.getJSON(file, function(data) {
-		if(data.type != "FeatureCollection") {
+	$.getJSON(file, function (data) {
+		if (data.type != "FeatureCollection") {
 			console.error("expected a GeoJSON FeatureCollection. no radlkarte network can be displayed.");
 			return;
 		}
@@ -144,10 +144,10 @@ function loadGeoJson(file) {
 		let categorizedLinestrings = {};
 		for (let i = 0; i < data.features.length; i++) {
 			let geojson = data.features[i];
-			if(geojson.type != 'Feature' || geojson.properties == undefined || geojson.geometry == undefined || geojson.geometry.type != 'LineString' || geojson.geometry.coordinates.length < 2) {
-				if(geojson.geometry.type == 'Point') {
+			if (geojson.type != 'Feature' || geojson.properties == undefined || geojson.geometry == undefined || geojson.geometry.type != 'LineString' || geojson.geometry.coordinates.length < 2) {
+				if (geojson.geometry.type == 'Point') {
 					let markerLayers = createRadlkarteMarkerLayersIncludingPopup(geojson);
-					if(markerLayers != null) {
+					if (markerLayers != null) {
 						rkGlobal.markerLayerLowZoom.addLayer(markerLayers.lowZoom);
 						rkGlobal.markerLayerHighZoom.addLayer(markerLayers.highZoom);
 						++poiCount;
@@ -163,7 +163,7 @@ function loadGeoJson(file) {
 
 			let priority = parseInt(geojson.properties.priority, 10);
 			let stress = parseInt(geojson.properties.stress, 10);
-			if(isNaN(priority) || isNaN(stress)) {
+			if (isNaN(priority) || isNaN(stress)) {
 				console.warn("ignoring invalid object (priority / stress not set): " + JSON.stringify(geojson));
 				++ignoreCount;
 				continue;
@@ -179,13 +179,13 @@ function loadGeoJson(file) {
 		// merge geojson linestring features
 		// with the same properties into a single multilinestring
 		// and then put them in a leaflet layer
-		for(const key of Object.keys(categorizedLinestrings)) {
+		for (const key of Object.keys(categorizedLinestrings)) {
 			let multilinestringFeatures = turf.combine(turf.featureCollection(categorizedLinestrings[key]));
 			let properties = JSON.parse(key);
 			multilinestringFeatures.properties = properties;
 
 			let decoratorCoordinates = [];
-			for(const linestring of categorizedLinestrings[key]) {
+			for (const linestring of categorizedLinestrings[key]) {
 				decoratorCoordinates.push(turf.flip(linestring).geometry.coordinates);
 			}
 
@@ -195,8 +195,8 @@ function loadGeoJson(file) {
 			rkGlobal.leafletMap.createPane(key);
 			rkGlobal.leafletMap.getPane(key).style.zIndex = getSegmentZIndex(properties);
 			rkGlobal.segments[key] = {
-				'lines': L.geoJSON(multilinestringFeatures, {pane: key}),
-				'steepLines': properties.steep === 'yes' ? L.geoJSON(multilinestringFeatures, {pane: key}) : undefined,
+				'lines': L.geoJSON(multilinestringFeatures, { pane: key }),
+				'steepLines': properties.steep === 'yes' ? L.geoJSON(multilinestringFeatures, { pane: key }) : undefined,
 				'decorators': L.polylineDecorator(decoratorCoordinates)
 			};
 		}
@@ -204,9 +204,9 @@ function loadGeoJson(file) {
 		// adds layers (if the zoom levels requires it)
 		rkGlobal.styleFunction();
 
-		rkGlobal.leafletMap.on('zoomend', function(ev) {
+		rkGlobal.leafletMap.on('zoomend', function (ev) {
 			//debug("zoom level changed to " + rkGlobal.leafletMap.getZoom() + ".. enqueueing style change");
-			$("#map").queue(function() {
+			$("#map").queue(function () {
 				rkGlobal.styleFunction();
 				$(this).dequeue();
 			});
@@ -311,7 +311,7 @@ function getSegmentZIndex(properties) {
 function addSegmentToObject(object, geojsonLinestring) {
 	let key = getSegmentKey(geojsonLinestring);
 	let keyString = JSON.stringify(key);
-	if(object[keyString] === undefined) {
+	if (object[keyString] === undefined) {
 		object[keyString] = [];
 	}
 	object[keyString].push(geojsonLinestring);
@@ -338,20 +338,20 @@ function getSegmentKey(geojsonLinestring) {
  */
 function updateStyles() {
 	let zoom = rkGlobal.leafletMap.getZoom();
-	for(const key of Object.keys(rkGlobal.segments)) {
+	for (const key of Object.keys(rkGlobal.segments)) {
 		let properties = JSON.parse(key);
 		let showFull = zoom >= rkGlobal.priorityFullVisibleFromZoom[properties.priority];
 		let showMinimal = zoom < rkGlobal.priorityFullVisibleFromZoom[properties.priority] && zoom >= rkGlobal.priorityReducedVisibilityFromZoom[properties.priority];
 
 		let lineStyle;
-		if(showFull) {
+		if (showFull) {
 			lineStyle = getLineStyle(zoom, properties);
-		} else if(showMinimal) {
+		} else if (showMinimal) {
 			lineStyle = getLineStyleMinimal(properties);
 		}
 
 		let lines = rkGlobal.segments[key].lines;
-		if(showFull || showMinimal) {
+		if (showFull || showMinimal) {
 			lines.setStyle(lineStyle);
 			rkGlobal.leafletMap.addLayer(lines);
 		} else {
@@ -361,10 +361,10 @@ function updateStyles() {
 		// steep lines are drawn twice, once regular,
 		// a second time as bristles (that's what this copy is for)
 		let steepLines = rkGlobal.segments[key].steepLines;
-		if(steepLines !== undefined) {
-			if(showFull || showMinimal) {
+		if (steepLines !== undefined) {
+			if (showFull || showMinimal) {
 				let steepLineStyle;
-				if(showFull) {
+				if (showFull) {
 					steepLineStyle = getSteepLineStyle(zoom, properties);
 				} else {
 					steepLineStyle = getSteepLineStyleMinimal(properties);
@@ -377,7 +377,7 @@ function updateStyles() {
 		}
 
 		let decorators = rkGlobal.segments[key].decorators;
-		if((showFull || showMinimal) && zoom >= rkGlobal.onewayIconThreshold && properties.oneway === 'yes') {
+		if ((showFull || showMinimal) && zoom >= rkGlobal.onewayIconThreshold && properties.oneway === 'yes') {
 			decorators.setPatterns(getOnewayArrowPatterns(zoom, properties, lineStyle.weight));
 			rkGlobal.leafletMap.addLayer(decorators);
 		} else {
@@ -385,10 +385,10 @@ function updateStyles() {
 		}
 	}
 
-	if(zoom >= rkGlobal.iconZoomThresholds[1]) {
+	if (zoom >= rkGlobal.iconZoomThresholds[1]) {
 		rkGlobal.leafletMap.removeLayer(rkGlobal.markerLayerLowZoom);
 		rkGlobal.leafletMap.addLayer(rkGlobal.markerLayerHighZoom);
-	} else if(zoom >= rkGlobal.iconZoomThresholds[0]) {
+	} else if (zoom >= rkGlobal.iconZoomThresholds[0]) {
 		rkGlobal.leafletMap.removeLayer(rkGlobal.markerLayerHighZoom);
 		rkGlobal.leafletMap.addLayer(rkGlobal.markerLayerLowZoom);
 	} else {
@@ -413,7 +413,7 @@ function _getLineStyle(lineWeight, properties) {
 		weight: lineWeight,
 		opacity: rkGlobal.opacity
 	};
-	if(properties.unpaved === 'yes') {
+	if (properties.unpaved === 'yes') {
 		style.dashArray = getUnpavedDashStyle(Math.max(2, lineWeight));
 	}
 	return style;
@@ -465,7 +465,7 @@ function getSteepDashStyle(lineWeight, steepBristleLength) {
 function getOnewayArrowPatterns(zoom, properties, lineWeight) {
 	let arrowWidth = Math.max(5, lineWeight * rkGlobal.arrowWidthFactor[properties.priority]);
 	return [{
-		offset: arrowWidth-2,
+		offset: arrowWidth - 2,
 		repeat: Math.max(2, lineWeight) * 5,
 		symbol: L.Symbol.arrowHead({
 			pixelSize: arrowWidth,
@@ -480,7 +480,7 @@ function getOnewayArrowPatterns(zoom, properties, lineWeight) {
 }
 
 function loadLeaflet() {
-	rkGlobal.leafletMap = L.map('map', { 'zoomControl' : false } );
+	rkGlobal.leafletMap = L.map('map', { 'zoomControl': false });
 
 	// avoid troubles with min/maxZoom from our layer group, see https://github.com/Leaflet/Leaflet/issues/6557
 	let minMaxZoomLayer = L.gridLayer({
@@ -539,7 +539,7 @@ function loadLeaflet() {
 	};
 
 	mixed.addTo(rkGlobal.leafletMap);
-	rkGlobal.leafletLayersControl = L.control.layers(baseMaps, overlayMaps, { 'position' : 'topright', 'collapsed' : true } ).addTo(rkGlobal.leafletMap);
+	rkGlobal.leafletLayersControl = L.control.layers(baseMaps, overlayMaps, { 'position': 'topright', 'collapsed': true }).addTo(rkGlobal.leafletMap);
 
 	rkGlobal.leafletMap.on({
 		overlayadd: function (e) {
@@ -566,7 +566,7 @@ function loadLeaflet() {
 			}
 		}),
 		defaultMarkGeocode: false
-	}).on('markgeocode', function(e) {
+	}).on('markgeocode', function (e) {
 		let result = e.geocode || e;
 		debug(result);
 
@@ -599,13 +599,13 @@ function loadLeaflet() {
 		}
 	}).addTo(rkGlobal.leafletMap);
 
-	L.control.zoom({position: 'topright'}).addTo(rkGlobal.leafletMap);
+	L.control.zoom({ position: 'topright' }).addTo(rkGlobal.leafletMap);
 
 	let sidebar = L.control.sidebar({
 		container: 'sidebar',
 		position: 'left'
 	}).addTo(rkGlobal.leafletMap);
-	if(window.innerWidth < rkGlobal.fullWidthThreshold) {
+	if (window.innerWidth < rkGlobal.fullWidthThreshold) {
 		sidebar.close();
 	}
 
@@ -695,7 +695,7 @@ function createNextbikeIcon(url) {
 
 function createRadlkarteMarkerLayersIncludingPopup(geojsonPoint) {
 	let icons = getIcons(geojsonPoint.properties);
-	if(icons == null) {
+	if (icons == null) {
 		return undefined;
 	}
 
@@ -711,22 +711,22 @@ function createRadlkarteMarkerLayersIncludingPopup(geojsonPoint) {
 		})
 	};
 
-	markers.lowZoom.bindPopup(description, {closeButton: false});
-	markers.lowZoom.on('mouseover', function() { markers.lowZoom.openPopup(); });
-	markers.lowZoom.on('mouseout', function() { markers.lowZoom.closePopup(); });
+	markers.lowZoom.bindPopup(description, { closeButton: false });
+	markers.lowZoom.on('mouseover', function () { markers.lowZoom.openPopup(); });
+	markers.lowZoom.on('mouseout', function () { markers.lowZoom.closePopup(); });
 
-	markers.highZoom.bindPopup(description, {closeButton: false});
-	markers.highZoom.on('mouseover', function() { markers.highZoom.openPopup(); });
-	markers.highZoom.on('mouseout', function() { markers.highZoom.closePopup(); });
+	markers.highZoom.bindPopup(description, { closeButton: false });
+	markers.highZoom.on('mouseover', function () { markers.highZoom.openPopup(); });
+	markers.highZoom.on('mouseout', function () { markers.highZoom.closePopup(); });
 
-//	 let key, marker;
-//	 for (key in markers) {
-//		 marker = markers[key];
-//		 marker.bindPopup(description, {closeButton: false});  //, offset: L.point(0, -10)});
-//		 marker.on('mouseover', function() { marker.openPopup(); });
-//		 marker.on('mouseout', function() { marker.closePopup(); }); // FIXME why is mouseover/out not working for lowZoom?
-//		 break;
-//	 }
+	//	 let key, marker;
+	//	 for (key in markers) {
+	//		 marker = markers[key];
+	//		 marker.bindPopup(description, {closeButton: false});  //, offset: L.point(0, -10)});
+	//		 marker.on('mouseover', function() { marker.openPopup(); });
+	//		 marker.on('mouseout', function() { marker.closePopup(); }); // FIXME why is mouseover/out not working for lowZoom?
+	//		 break;
+	//	 }
 
 	return markers;
 }
@@ -736,7 +736,7 @@ function createRadlkarteMarkerLayersIncludingPopup(geojsonPoint) {
  * @return a small and a large icon or undefined if no icons should be used
  */
 function getIcons(properties) {
-	if(properties.leisure === 'swimming_pool') {
+	if (properties.leisure === 'swimming_pool') {
 		return {
 			small: rkGlobal.icons.swimmingSmall,
 			large: rkGlobal.icons.swimming
@@ -748,17 +748,17 @@ function getIcons(properties) {
 	let warning = properties.warning === 'yes';
 
 	let problemIcon;
-	if(dismount && nocargo) {
+	if (dismount && nocargo) {
 		problemIcon = rkGlobal.icons.noCargoAndDismount;
-	} else if(dismount) {
+	} else if (dismount) {
 		problemIcon = rkGlobal.icons.dismount;
-	} else if(nocargo) {
+	} else if (nocargo) {
 		problemIcon = rkGlobal.icons.noCargo;
-	} else if(warning) {
+	} else if (warning) {
 		problemIcon = rkGlobal.icons.warning;
 	}
 
-	if(problemIcon === undefined) {
+	if (problemIcon === undefined) {
 		return undefined;
 	} else {
 		return {
@@ -779,17 +779,17 @@ function getDescriptionText(properties) {
 
 	let descriptionParts = [];
 
-	if(dismount && nocargo) {
+	if (dismount && nocargo) {
 		descriptionParts.push('Schiebestelle / untauglich für Spezialräder');
-	} else if(dismount) {
+	} else if (dismount) {
 		descriptionParts.push('Schiebestelle');
-	} else if(nocargo) {
+	} else if (nocargo) {
 		descriptionParts.push('Untauglich für Spezialräder');
-	} else if(warning) {
+	} else if (warning) {
 		descriptionParts.push('Achtung');
 	}
 
-	if(properties.description !== undefined) {
+	if (properties.description !== undefined) {
 		descriptionParts.push(properties.description);
 	}
 

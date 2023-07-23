@@ -2,20 +2,26 @@ body {
 	padding: 0;
 	margin: 0;
 }
-html, body, #map {
+
+html,
+body,
+#map {
 	height: 100%;
 	width: 100%;
 }
+
 #radlobby-logo {
 	position: fixed;
 	right: 0px;
 	bottom: 10px;
 	z-index: 900;
 }
+
 #radlobby-logo img {
 	padding: 5px;
 	width: 100px;
 }
+
 @media (max-width: 600px) {
 	#radlobby-logo img {
 		width: 50px;
@@ -27,20 +33,28 @@ html, body, #map {
 	background-color: #fff;
 }
 
-p, h4, li {
+p,
+h4,
+li {
 	font-family: Roboto, arial, sans-serif;
 	color: #004B67;
 }
-h1, h2, h3 {
+
+h1,
+h2,
+h3 {
 	font-family: 'Museo 500 Regular', sans-serif;
 	color: #004B67;
 }
+
 h2 {
 	font-size: 115%;
 }
+
 h3 {
 	font-size: 110%;
 }
+
 strong {
 	font-weight: bold;
 }
@@ -48,17 +62,25 @@ strong {
 .leaflet-sidebar {
 	font-size: medium;
 }
-.leaflet-sidebar-header, .leaflet-sidebar-tabs > ul > li.active {
+
+.leaflet-sidebar-header,
+.leaflet-sidebar-tabs>ul>li.active {
 	background-color: #B8CC24;
 	color: #fff
 }
-.leaflet-sidebar-tabs > ul > li.active > a > i {
+
+.leaflet-sidebar-tabs>ul>li.active>a>i {
 	color: #fff;
 }
-.leaflet-sidebar-pane a, .leaflet-sidebar-pane a:visited, .leaflet-sidebar-pane a:active, .leaflet-control-attribution a {
+
+.leaflet-sidebar-pane a,
+.leaflet-sidebar-pane a:visited,
+.leaflet-sidebar-pane a:active,
+.leaflet-control-attribution a {
 	color: #AAB622;
 	text-decoration: none;
 }
+
 a:hover {
 	text-decoration: underline;
 }
@@ -66,6 +88,7 @@ a:hover {
 ul.legend-leftified {
 	padding-left: 0;
 }
+
 ul.legend li {
 	list-style-type: none;
 	margin-bottom: 0.5em;
@@ -76,23 +99,29 @@ div.legend {
 	height: 10px;
 	border-radius: 5px;
 }
+
 div.legend-main {
 	vertical-align: middle;
 	background-color: #999;
 }
+
 div.legend-regional {
 	background-color: #999;
 	height: 4px;
 }
+
 div.legend-calm {
 	background-color: #004B67;
 }
+
 div.legend-medium {
 	background-color: #51A4B6;
 }
+
 div.legend-stressful {
 	background-color: #FF6600;
 }
+
 div.legend-oneway {
 	width: 0;
 	height: 0;
@@ -103,35 +132,35 @@ div.legend-oneway {
 	margin-right: 35px;
 	border-radius: 0;
 }
+
 div.legend-unpaved {
-	background: repeating-linear-gradient(
-		90deg,
-		#999 0,
-		#999 20px,
-		#fff 20px,
-		#fff 30px
-	);
+	background: repeating-linear-gradient(90deg,
+			#999 0,
+			#999 20px,
+			#fff 20px,
+			#fff 30px);
 }
+
 div.legend-steep {
 	height: 25px;
-	background: repeating-linear-gradient(
-		90deg,
-		transparent 0,
-		transparent 9px,
-		#999 9px,
-		#999 11px,
-		transparent 11px,
-		transparent 30px
-	);
+	background: repeating-linear-gradient(90deg,
+			transparent 0,
+			transparent 9px,
+			#999 9px,
+			#999 11px,
+			transparent 11px,
+			transparent 30px);
 }
+
 div.legend-container {
-    display: grid;
-    align-items: center;
+	display: grid;
+	align-items: center;
 }
+
 div.legend-container div {
-    grid-column: 1;
-    grid-row: 1;
-    display: flex;
+	grid-column: 1;
+	grid-row: 1;
+	display: flex;
 }
 
 ul.legend li img {
