@@ -69,7 +69,7 @@ rkGlobal.configurations = {
 		geocodingBounds: '16.105,47.995,16.710,48.389', // min lon, min lat, max lon, max lat
 		geoJsonFile: 'data/radlkarte-wien.geojson',
 		nextbikeUrl: 'https://maps.nextbike.net/maps/nextbike.json?domains=wr,la&bikes=false',
-		metroFile: 'data/overpass/wien-ubahn.json'
+		subwayFile: 'data/osm-overpass/wien-subway.json'
 	}
 };
 
@@ -98,7 +98,7 @@ function updateRadlkarteRegion(region) {
 		clearAndLoadNextbike(configuration.nextbikeUrl);
 	}
 	if (rkGlobal.leafletMap.hasLayer(rkGlobal.transitLayer)) {
-		clearAndLoadTransit(configuration.metroFile);
+		clearAndLoadTransit(configuration.subwayFile);
 	}
 
 
@@ -261,29 +261,29 @@ function createNextbikeMarkerIncludingPopup(domain, place) {
 	return marker;
 }
 
-function clearAndLoadTransit(metroFile) {
+function clearAndLoadTransit(subwayFile) {
 	rkGlobal.transitLayer.clearLayers();
-	$.getJSON(metroFile, function (data) {
-		// filter duplicate metro stations (happens when two lines cross)
+	$.getJSON(subwayFile, function (data) {
+		// filter duplicate subway stations (happens when two lines cross)
 		const seen = new Set();
 		for (const element of data.elements) {
 			if (seen.has(element.tags.name)) {
 				continue;
 			}
-			const markerLayer = createMetroMarkerIncludingPopup(element);
+			const markerLayer = createSubwayMarkerIncludingPopup(element);
 			if (markerLayer != null) {
 				seen.add(element.tags.name);
 				rkGlobal.transitLayer.addLayer(markerLayer);
 			}
 		}
-		console.log('created ' + seen.size + ' metro icons.');
+		console.log('created ' + seen.size + ' subway icons.');
 	});
 }
 
-/** @param element JSON from Overpass API representing a metro station. */
-function createMetroMarkerIncludingPopup(element) {
+/** @param element JSON from Overpass API representing a subway station. */
+function createSubwayMarkerIncludingPopup(element) {
 	let description = '<b>' + element.tags.name + '</b><br>';
-	let icon = rkGlobal.icons.ubahn;
+	let icon = rkGlobal.icons.subway;
 	let marker = L.marker(L.latLng(element.lat, element.lon), {
 		icon: icon,
 		alt: element.tags.name,
@@ -548,7 +548,7 @@ function loadLeaflet() {
 				clearAndLoadNextbike(configuration.nextbikeUrl);
 			}
 			if (e.layer === rkGlobal.transitLayer) {
-				clearAndLoadTransit(configuration.metroFile);
+				clearAndLoadTransit(configuration.subwayFile);
 			}
 		}
 	});
@@ -661,14 +661,14 @@ function initializeIcons() {
 		popupAnchor: [0, -5]
 	});
 	let transitSize = 15;
-	rkGlobal.icons.ubahn = L.icon({
-		iconUrl: 'css/ubahn.svg',
+	rkGlobal.icons.subway = L.icon({
+		iconUrl: 'css/subway.svg',
 		iconSize: [transitSize, transitSize],
 		iconAnchor: [transitSize / 2, transitSize / 2],
 		popupAnchor: [0, -transitSize / 2]
 	});
-	rkGlobal.icons.sbahn = L.icon({
-		iconUrl: 'css/sbahn.svg',
+	rkGlobal.icons.railway = L.icon({
+		iconUrl: 'css/railway.svg',
 		iconSize: [transitSize, transitSize],
 		iconAnchor: [transitSize / 2, transitSize / 2],
 		popupAnchor: [0, -transitSize / 2]
