@@ -35,41 +35,29 @@ rkGlobal.configurations = {
 	'rendertest': {
 		centerLatLng: L.latLng(50.088, 14.392),
 		geocodingBounds: '9.497,47.122,9.845,47.546',
-		geoJsonFile: 'data/radlkarte-rendertest.geojson'
 	},
-	/*'oberes-rheintal' : {
-		centerLatLng: L.latLng(47.237, 9.598),
-		geocodingBounds: '9.497,47.122,9.845,47.546',
-		geoJsonFile: 'data/radlkarte-oberes-rheintal.geojson'
-	},*/
 	'klagenfurt': {
 		centerLatLng: L.latLng(46.624, 14.308),
 		geocodingBounds: '13.978,46.477,14.624,46.778',
-		geoJsonFile: 'data/radlkarte-klagenfurt.geojson',
 		nextbikeUrl: 'https://maps.nextbike.net/maps/nextbike.json?domains=ka&bikes=false'
 	},
 	'linz': {
 		centerLatLng: L.latLng(48.30, 14.285),
 		geocodingBounds: '13.999,48.171,14.644,48.472',
-		geoJsonFile: 'data/radlkarte-linz.geojson',
 		nextbikeUrl: 'https://maps.nextbike.net/maps/nextbike.json?domains=al&bikes=false'
 	},
 	'rheintal': {
 		centerLatLng: L.latLng(47.4102, 9.7211),
 		geocodingBounds: '9.497,47.122,9.845,47.546',
-		geoJsonFile: 'data/radlkarte-unteres-rheintal.geojson'
 	},
 	'steyr': {
 		centerLatLng: L.latLng(48.039, 14.42),
 		geocodingBounds: '14.319,47.997,14.551,48.227',
-		geoJsonFile: 'data/radlkarte-steyr.geojson'
 	},
 	'wien': {
 		centerLatLng: L.latLng(48.208, 16.372),
 		geocodingBounds: '16.105,47.995,16.710,48.389', // min lon, min lat, max lon, max lat
-		geoJsonFile: 'data/radlkarte-wien.geojson',
 		nextbikeUrl: 'https://maps.nextbike.net/maps/nextbike.json?domains=wr,la&bikes=false',
-		subwayFile: 'data/osm-overpass/wien-subway.json'
 	}
 };
 
@@ -92,13 +80,13 @@ function updateRadlkarteRegion(region) {
 	}
 
 	removeAllSegmentsAndMarkers();
-	loadGeoJson(configuration.geoJsonFile);
+	loadGeoJson('data/radlkarte-' + region + '.geojson');
 	// POI layers: only reload visible layers
 	if (rkGlobal.leafletMap.hasLayer(rkGlobal.bikeShareLayer)) {
 		clearAndLoadNextbike(configuration.nextbikeUrl);
 	}
 	if (rkGlobal.leafletMap.hasLayer(rkGlobal.transitLayer)) {
-		clearAndLoadTransit(configuration.subwayFile);
+		clearAndLoadTransit(region);
 	}
 
 
@@ -261,8 +249,9 @@ function createNextbikeMarkerIncludingPopup(domain, place) {
 	return marker;
 }
 
-function clearAndLoadTransit(subwayFile) {
+function clearAndLoadTransit(region) {
 	rkGlobal.transitLayer.clearLayers();
+	let subwayFile = "data/osm-overpass/" + region + "-subway.json";
 	$.getJSON(subwayFile, function (data) {
 		// filter duplicate subway stations (happens when two lines cross)
 		const seen = new Set();
@@ -548,7 +537,7 @@ function loadLeaflet() {
 				clearAndLoadNextbike(configuration.nextbikeUrl);
 			}
 			if (e.layer === rkGlobal.transitLayer) {
-				clearAndLoadTransit(configuration.subwayFile);
+				clearAndLoadTransit(rkGlobal.currentRegion);
 			}
 		}
 	});
