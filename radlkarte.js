@@ -1,13 +1,20 @@
 "use strict";
-
-var rkGlobal = {}; // global variable for radlkarte properties / data storage
-rkGlobal.leafletMap = undefined; // the main leaflet map
+/** global variable for radlkarte properties / data storage */
+var rkGlobal = {};
+/** the main leaflet map */
+rkGlobal.leafletMap = undefined;
 rkGlobal.geocodingControl = undefined;
-rkGlobal.segments = {}; // object holding all linestring and decorator layers (the key represents the properties)
+/** object holding all linestring and decorator layers (the key represents the properties) */
+rkGlobal.segments = {};
 rkGlobal.poiLayers = {}
-rkGlobal.poiLayers.markerLayerLowZoom = L.layerGroup(); // layer group holding all icons to be viewed at lower zoom levels
-rkGlobal.poiLayers.markerLayerHighZoom = L.layerGroup(); // layer group holding all icons to be viewed at higher zoom levels
-rkGlobal.poiLayers.bikeShareLayer = L.layerGroup(); // symbols for bike sharing stations
+/** layer group holding currently active variant of problem icons */
+rkGlobal.poiLayers.problemLayerActive = L.layerGroup();
+/** layer group holding problem icons for low zoom levels */
+rkGlobal.poiLayers.problemLayerLowZoom = L.layerGroup();
+/** layer group holding problem icons for high zoom levels */
+rkGlobal.poiLayers.problemLayerHighZoom = L.layerGroup();
+/** layer group holding bike sharing icons */
+rkGlobal.poiLayers.bikeShareLayer = L.layerGroup();
 rkGlobal.osmPoiTypes = {
 	"transit": { "name": "ÖV" },
 	"bicycleShop": { "name": "Fahrradgeschäft" },
@@ -19,9 +26,10 @@ for (const [k, v] of Object.entries(rkGlobal.osmPoiTypes)) {
 	v["layer"] = L.layerGroup()
 	rkGlobal.poiLayers[k] = v["layer"];
 }
-rkGlobal.priorityStrings = ["Überregional", "Regional", "Lokal"]; // names of all different levels of priorities (ordered descending by priority)
+/** names of all different levels of priorities (ordered descending by priority) */
+rkGlobal.priorityStrings = ["Überregional", "Regional", "Lokal"];
 rkGlobal.stressStrings = ["Ruhig", "Durchschnittlich", "Stressig"];
-rkGlobal.debug = true; // debug output will be logged if set to true
+rkGlobal.debug = true;
 rkGlobal.fullWidthThreshold = 768;
 
 // style: stress = color, priority = line width
@@ -30,7 +38,7 @@ rkGlobal.tileLayerOpacity = 1;
 rkGlobal.priorityFullVisibleFromZoom = [0, 14, 15];
 rkGlobal.priorityReducedVisibilityFromZoom = [0, 12, 14];
 rkGlobal.onewayIconThreshold = 12;
-rkGlobal.iconZoomThresholds = [12, 14];
+rkGlobal.problemIconThreshold = 14;
 rkGlobal.lineWidthFactor = [1.4, 0.5, 0.5];
 rkGlobal.arrowWidthFactor = [2, 3, 3];
 rkGlobal.opacity = 0.62;
@@ -113,9 +121,6 @@ function updateRadlkarteRegion(region) {
 }
 
 function removeAllSegmentsAndMarkers() {
-	// FIXME: the problem markers are never cleaned, they just grow..
-	// check out the debuggingconsole with rkGlobal.poiLayers.markerLayerLowZoom.getLayers()
-
 	// we can't simply delete all layers (otherwise the base layer is gone as well)
 	// TODO refactor?
 	for (const key of Object.keys(rkGlobal.segments)) {
@@ -127,15 +132,14 @@ function removeAllSegmentsAndMarkers() {
 	}
 	rkGlobal.segments = {};
 
-	rkGlobal.leafletMap.removeLayer(rkGlobal.poiLayers.markerLayerLowZoom);
-	rkGlobal.leafletMap.removeLayer(rkGlobal.poiLayers.markerLayerHighZoom);
-
 	for (const [k, v] of Object.entries(rkGlobal.osmPoiTypes)) {
 		v.layer.clearLayers();
 	}
 }
 
 function loadGeoJson(file) {
+	rkGlobal.poiLayers.problemLayerLowZoom.clearLayers();
+	rkGlobal.poiLayers.problemLayerHighZoom.clearLayers();
 	$.getJSON(file, function (data) {
 		if (data.type != "FeatureCollection") {
 			console.error("expected a GeoJSON FeatureCollection. no radlkarte network can be displayed.");
@@ -153,8 +157,8 @@ function loadGeoJson(file) {
 				if (geojson.geometry.type == 'Point') {
 					let markerLayers = createRadlkarteMarkerLayersIncludingPopup(geojson);
 					if (markerLayers != null) {
-						rkGlobal.poiLayers.markerLayerLowZoom.addLayer(markerLayers.lowZoom);
-						rkGlobal.poiLayers.markerLayerHighZoom.addLayer(markerLayers.highZoom);
+						rkGlobal.poiLayers.problemLayerLowZoom.addLayer(markerLayers.lowZoom);
+						rkGlobal.poiLayers.problemLayerHighZoom.addLayer(markerLayers.highZoom);
 						++poiCount;
 					} else {
 						++ignoreCount;
@@ -206,7 +210,7 @@ function loadGeoJson(file) {
 			};
 		}
 
-		// adds layers (if the zoom levels requires it)
+		// apply styles
 		rkGlobal.styleFunction();
 
 		rkGlobal.leafletMap.on('zoomend', function (ev) {
@@ -448,15 +452,12 @@ function updateStyles() {
 		}
 	}
 
-	if (zoom >= rkGlobal.iconZoomThresholds[1]) {
-		rkGlobal.leafletMap.removeLayer(rkGlobal.poiLayers.markerLayerLowZoom);
-		rkGlobal.leafletMap.addLayer(rkGlobal.poiLayers.markerLayerHighZoom);
-	} else if (zoom >= rkGlobal.iconZoomThresholds[0]) {
-		rkGlobal.leafletMap.removeLayer(rkGlobal.poiLayers.markerLayerHighZoom);
-		rkGlobal.leafletMap.addLayer(rkGlobal.poiLayers.markerLayerLowZoom);
+	if (zoom >= rkGlobal.problemIconThreshold) {
+		rkGlobal.poiLayers.problemLayerActive.clearLayers();
+		rkGlobal.poiLayers.problemLayerActive.addLayer(rkGlobal.poiLayers.problemLayerHighZoom);
 	} else {
-		rkGlobal.leafletMap.removeLayer(rkGlobal.poiLayers.markerLayerHighZoom);
-		rkGlobal.leafletMap.removeLayer(rkGlobal.poiLayers.markerLayerLowZoom);
+		rkGlobal.poiLayers.problemLayerActive.clearLayers();
+		rkGlobal.poiLayers.problemLayerActive.addLayer(rkGlobal.poiLayers.problemLayerLowZoom);
 	}
 }
 
@@ -597,15 +598,15 @@ function loadLeaflet() {
 		"Weiß": empty,
 	};
 	let overlayMaps = {
-		"Problemstellen": XX,
+		"Problemstellen": rkGlobal.poiLayers.problemLayerActive,
 		"Leihräder": rkGlobal.poiLayers.bikeShareLayer
 	};
 	for (const [k, v] of Object.entries(rkGlobal.osmPoiTypes)) {
 		overlayMaps[v.name] = v.layer;
 	}
 
-
 	mixed.addTo(rkGlobal.leafletMap);
+	rkGlobal.poiLayers.problemLayerActive.addTo(rkGlobal.leafletMap);
 	L.control.layers(baseMaps, overlayMaps, { 'position': 'topright', 'collapsed': true }).addTo(rkGlobal.leafletMap);
 
 	rkGlobal.leafletMap.on({

@@ -1,10 +1,3 @@
-# Additional Layers
-
-- Bike-Sharing -> Nextbike API
-- Ubahn + ÖBB Haltestellen (oder nur S-Bahn?) -> OSM? or GTFS?
-- Bicycle shops -> OSM
-- Bicycle repair -> OSM
-
 ## Nextbike
 
 API doc: https://github.com/nextbike/api-doc/blob/master/maps/nextbike-maps.openapi.yaml
@@ -27,7 +20,4 @@ doc: https://dev.overpass-api.de/output_formats.html
 
 ## TODOs
 
-- python script for cronjob that downloads osm data files for all radlkarte regions (using their bboxes)
-- icons for all amenities
-- Make problem-POIs hidable in layer switcher
 - keep popups open a bit so that a link in the popup can be clicked (bicycle shops!)
