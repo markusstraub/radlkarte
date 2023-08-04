@@ -113,6 +113,9 @@ function updateRadlkarteRegion(region) {
 }
 
 function removeAllSegmentsAndMarkers() {
+	// FIXME: the problem markers are never cleaned, they just grow..
+	// check out the debuggingconsole with rkGlobal.poiLayers.markerLayerLowZoom.getLayers()
+
 	// we can't simply delete all layers (otherwise the base layer is gone as well)
 	// TODO refactor?
 	for (const key of Object.keys(rkGlobal.segments)) {
@@ -594,6 +597,7 @@ function loadLeaflet() {
 		"Weiß": empty,
 	};
 	let overlayMaps = {
+		"Problemstellen": XX,
 		"Leihräder": rkGlobal.poiLayers.bikeShareLayer
 	};
 	for (const [k, v] of Object.entries(rkGlobal.osmPoiTypes)) {
