@@ -16,11 +16,11 @@ rkGlobal.poiLayers.problemLayerHighZoom = L.layerGroup();
 /** layer group holding bike sharing icons */
 rkGlobal.poiLayers.bikeShareLayer = L.layerGroup();
 rkGlobal.osmPoiTypes = {
-	"transit": { "name": "ÖV" },
-	"bicycleShop": { "name": "Fahrradgeschäft" },
-	"bicycleRepairStation": { "name": "Reparaturstation" },
-	"bicyclePump": { "name": "Luftpumpe" },
-	"bicycleTubeVending": { "name": "Schlauchomat" }
+	"transit": { "name": "Öffentlicher Verkehr" },
+	"bicycleShop": { "name": "Fahrradgeschäfte" },
+	"bicycleRepairStation": { "name": "Reparaturstationen" },
+	"bicyclePump": { "name": "Luftpumpen" },
+	"bicycleTubeVending": { "name": "Schlauchomaten" }
 }
 for (const [k, v] of Object.entries(rkGlobal.osmPoiTypes)) {
 	v["layer"] = L.layerGroup()
@@ -359,7 +359,7 @@ function clearAndLoadBasicOsmPoi(type, region) {
 				count++;
 			}
 		}
-		debug('created ' + count + ' ' + type + ' icons');
+		debug('created ' + count + ' ' + type + ' icons.');
 	});
 }
 
