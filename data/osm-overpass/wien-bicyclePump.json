@@ -1,0 +1,372 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.60.6 e2dc3e5b",
+  "osm3s": {
+    "timestamp_osm_base": "2023-08-06T13:07:42Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+{
+  "type": "node",
+  "id": 3387746830,
+  "lat": 48.2134698,
+  "lon": 16.3781069,
+  "tags": {
+    "amenity": "compressed_air",
+    "fixme": "Genaue Position unbekannt",
+    "opening_hours": "24/7"
+  }
+},
+{
+  "type": "node",
+  "id": 3702811174,
+  "lat": 48.2021636,
+  "lon": 16.3514122,
+  "tags": {
+    "amenity": "compressed_air",
+    "fee": "no",
+    "operator": "Stadt Wien/Mobilitätsagentur",
+    "service:bicycle:pump": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 3702826369,
+  "lat": 48.2182057,
+  "lon": 16.3901825,
+  "tags": {
+    "addr:city": "Wien",
+    "addr:country": "AT",
+    "addr:street": "Praterstern",
+    "amenity": "compressed_air",
+    "covered": "no",
+    "fee": "no",
+    "note": "Öffentliche Luftpumpe",
+    "operator": "Stadt Wien/Mobilitätsagentur",
+    "service:bicycle:pump": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 3702834404,
+  "lat": 48.1963314,
+  "lon": 16.3386484,
+  "tags": {
+    "addr:city": "Wien",
+    "addr:country": "AT",
+    "addr:street": "Westbahnhof",
+    "amenity": "compressed_air",
+    "name": "Öffentliche Luftpumpe",
+    "operator": "Stadt Wien/Mobilitätsagentur",
+    "service:bicycle:pump": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 3702838283,
+  "lat": 48.1844595,
+  "lon": 16.3340896,
+  "tags": {
+    "addr:city": "Wien",
+    "addr:country": "AT",
+    "addr:street": "Bruno-Pittermann-Platz",
+    "amenity": "compressed_air",
+    "name": "Öffentliche Luftpumpe",
+    "operator": "Stadt Wien/Mobilitätsagentur",
+    "service:bicycle:pump": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 3702839510,
+  "lat": 48.2017964,
+  "lon": 16.3375449,
+  "tags": {
+    "access": "yes",
+    "addr:city": "Wien",
+    "addr:country": "AT",
+    "addr:street": "Urban-Loritz-Platz",
+    "amenity": "compressed_air",
+    "fee": "no",
+    "name": "Öffentliche Luftpumpe",
+    "operator": "Stadt Wien/Mobilitätsagentur",
+    "service:bicycle:pump": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 3702844968,
+  "lat": 48.2203950,
+  "lon": 16.3559043,
+  "tags": {
+    "access": "yes",
+    "addr:city": "Wien",
+    "addr:country": "AT",
+    "addr:street": "Währinger Straße",
+    "amenity": "compressed_air",
+    "fee": "no",
+    "operator": "Stadt Wien/Mobilitätsagentur",
+    "service:bicycle:pump": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 3702849858,
+  "lat": 48.2410968,
+  "lon": 16.3842294,
+  "tags": {
+    "amenity": "compressed_air",
+    "operator": "Stadt Wien/Mobilitätsagentur",
+    "service:bicycle:pump": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 3907237863,
+  "lat": 48.1989985,
+  "lon": 16.3565766,
+  "tags": {
+    "amenity": "compressed_air",
+    "name": "Luftpumpe",
+    "operator": "Ciclopia",
+    "service:bicycle:pump": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 3907242729,
+  "lat": 48.1909462,
+  "lon": 16.3469394,
+  "tags": {
+    "amenity": "compressed_air",
+    "covered": "yes",
+    "fee": "no",
+    "manometer": "yes",
+    "name": "Luftpumpe",
+    "opening_hours": "24/7",
+    "operator": "Cooperative Fahrrad"
+  }
+},
+{
+  "type": "node",
+  "id": 3907274705,
+  "lat": 48.1948263,
+  "lon": 16.3859932,
+  "tags": {
+    "amenity": "compressed_air",
+    "bicycle_parking": "stands",
+    "capacity": "6",
+    "covered": "no",
+    "fee": "no",
+    "name": "Öffentliche Luftpumpe",
+    "operator": "Stadt Wien/Mobilitätsagentur",
+    "service:bicycle:pump": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 3928439375,
+  "lat": 48.1929620,
+  "lon": 16.3164375,
+  "tags": {
+    "amenity": "compressed_air",
+    "fee": "no",
+    "opening_hours": "24/7"
+  }
+},
+{
+  "type": "node",
+  "id": 3928439376,
+  "lat": 48.1981366,
+  "lon": 16.3659786,
+  "tags": {
+    "addr:city": "Wien",
+    "addr:country": "AT",
+    "addr:housenumber": "28",
+    "addr:postcode": "1040",
+    "addr:street": "Operngasse",
+    "amenity": "compressed_air",
+    "entrance": "yes",
+    "fee": "no",
+    "opening_hours": "24/7"
+  }
+},
+{
+  "type": "node",
+  "id": 3928439377,
+  "lat": 48.2058915,
+  "lon": 16.3531733,
+  "tags": {
+    "amenity": "compressed_air",
+    "fee": "no",
+    "opening_hours": "Mo-Sa 09:00-20:00"
+  }
+},
+{
+  "type": "node",
+  "id": 4052385255,
+  "lat": 48.2251615,
+  "lon": 16.5079340,
+  "tags": {
+    "amenity": "compressed_air",
+    "check_date": "2023-03-04",
+    "fee": "no",
+    "manometer": "yes",
+    "opening_hours": "24/7",
+    "operator": "Stadt Wien/Mobilitätsagentur",
+    "operator:type": "public",
+    "service:bicycle:pump": "yes",
+    "service:bicycle:tools": "no",
+    "valves": "sclaverand; dunlop; schrader"
+  }
+},
+{
+  "type": "node",
+  "id": 5954588829,
+  "lat": 48.1695823,
+  "lon": 16.4208241,
+  "tags": {
+    "amenity": "compressed_air",
+    "service:bicycle:pump": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 8366992171,
+  "lat": 48.1994540,
+  "lon": 16.3683387,
+  "tags": {
+    "access": "yes",
+    "amenity": "compressed_air",
+    "covered": "no",
+    "fee": "no",
+    "lit": "no",
+    "opening_hours": "24/7",
+    "opening_hours:covid19": "24/7",
+    "operator": "Mobilitätsagentur Wien",
+    "service:bicycle:pump": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 8482666985,
+  "lat": 48.2414468,
+  "lon": 16.4356078,
+  "tags": {
+    "amenity": "compressed_air",
+    "fee": "no",
+    "operator": "Donauzentrum"
+  }
+},
+{
+  "type": "node",
+  "id": 8488646462,
+  "lat": 48.2066276,
+  "lon": 16.3546685,
+  "tags": {
+    "access": "yes",
+    "amenity": "compressed_air",
+    "fee": "no",
+    "operator": "25hours Hotel"
+  }
+},
+{
+  "type": "node",
+  "id": 8489061402,
+  "lat": 48.1694929,
+  "lon": 16.4208578,
+  "tags": {
+    "access": "yes",
+    "amenity": "compressed_air",
+    "covered": "no",
+    "fee": "no",
+    "operator": "WienMobil/Wiener Linien"
+  }
+},
+{
+  "type": "node",
+  "id": 8489097381,
+  "lat": 48.2370361,
+  "lon": 16.3343598,
+  "tags": {
+    "access": "yes",
+    "amenity": "compressed_air",
+    "covered": "no",
+    "fee": "no",
+    "opening_hours": "24/7",
+    "operator": "Stadt Wien/Mobilitätsagentur"
+  }
+},
+{
+  "type": "node",
+  "id": 8503606505,
+  "lat": 48.2069398,
+  "lon": 16.3784021,
+  "tags": {
+    "access": "yes",
+    "addr:street": "Stubenbastei/Zedlitzgasse",
+    "amenity": "compressed_air",
+    "covered": "no",
+    "fee": "no",
+    "name": "Öffentliche Luftpumpe",
+    "opening_hours": "24/7",
+    "operator": "Bundesministerium für Klimaschutz"
+  }
+},
+{
+  "type": "node",
+  "id": 9079423854,
+  "lat": 48.1908664,
+  "lon": 16.3757417,
+  "tags": {
+    "access": "yes",
+    "amenity": "compressed_air",
+    "fee": "no",
+    "operator": "Stadt Wien - Straßenverwaltung und Straßenbau (MA 28)",
+    "service:bicycle:pump": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 9079465903,
+  "lat": 48.2028113,
+  "lon": 16.3901013,
+  "tags": {
+    "access": "yes",
+    "amenity": "compressed_air",
+    "fee": "no",
+    "operator": "Stadt Wien - Straßenverwaltung und Straßenbau (MA 28)",
+    "service:bicycle:pump": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 9969588283,
+  "lat": 48.2090563,
+  "lon": 16.2126188,
+  "tags": {
+    "access": "yes",
+    "amenity": "compressed_air",
+    "covered": "no",
+    "fee": "no",
+    "operator": "RLS Sport"
+  }
+},
+{
+  "type": "node",
+  "id": 10706292273,
+  "lat": 48.2553578,
+  "lon": 16.4008860,
+  "tags": {
+    "amenity": "compressed_air",
+    "fee": "no",
+    "opening_hours": "24/7",
+    "operator": "Stadt Wien Straßenverwaltung und Straßenbau",
+    "operator:type": "public",
+    "service:bicycle:pump": "yes"
+  }
+}
+
+  ]
+}

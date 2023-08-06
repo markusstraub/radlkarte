@@ -1,0 +1,782 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.60 f4c14d41",
+  "osm3s": {
+    "timestamp_osm_base": "2023-08-06T13:07:42Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+{
+  "type": "node",
+  "id": 29056748,
+  "lat": 48.2254340,
+  "lon": 14.2536855,
+  "tags": {
+    "name": "Traun",
+    "operator": "ÖBB-Infrastruktur AG",
+    "public_transport": "station",
+    "railway": "station",
+    "railway:ref": "T",
+    "uic_name": "Traun (A)",
+    "uic_ref": "8101690",
+    "wheelchair": "limited",
+    "wheelchair:description:de": "Bahnsteige 2 und 3 südlich über Lift und Rampe erreichbar, nördlich nur Stufen",
+    "wheelchair:description:en": "reach platform 2 and 3 south via an elevator or a ramp, on the north entrance there are only stairs"
+  }
+},
+{
+  "type": "node",
+  "id": 29056754,
+  "lat": 48.2364382,
+  "lon": 14.2646183,
+  "tags": {
+    "name": "St. Martin bei Traun",
+    "operator": "ÖBB-Infrastruktur AG",
+    "public_transport": "stop_position",
+    "railway": "halt",
+    "railway:ref": "Wd H1",
+    "train": "yes",
+    "uic_name": "St. Martin bei Traun",
+    "uic_ref": "8101560",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 29056763,
+  "lat": 48.2646820,
+  "lon": 14.2765495,
+  "tags": {
+    "name": "Linz Oed",
+    "operator": "ÖBB-Infrastruktur AG",
+    "public_transport": "station",
+    "railway": "halt",
+    "railway:ref": "Lz H1W",
+    "uic_name": "Linz/Donau Oed",
+    "uic_ref": "8101193",
+    "wheelchair": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 29056915,
+  "lat": 48.1659478,
+  "lon": 14.0265101,
+  "tags": {
+    "ele": "316",
+    "name": "Wels Hbf",
+    "operator": "ÖBB-Infrastruktur AG",
+    "platforms": "11",
+    "public_transport": "station",
+    "railway": "station",
+    "railway:position": "212.8 / 0.0",
+    "railway:position:exact": "212.815 / -0.047",
+    "railway:ref": "We",
+    "toilets:wheelchair": "yes",
+    "uic_name": "Wels Hbf",
+    "uic_ref": "8100014",
+    "wheelchair": "yes",
+    "wikidata": "Q872526",
+    "wikipedia": "de:Wels Hauptbahnhof"
+  }
+},
+{
+  "type": "node",
+  "id": 29056933,
+  "lat": 48.2009977,
+  "lon": 14.0994690,
+  "tags": {
+    "name": "Marchtrenk",
+    "operator": "ÖBB-Infrastruktur AG",
+    "public_transport": "station",
+    "railway": "station",
+    "railway:ref": "Mak",
+    "toilets:wheelchair": "no",
+    "uic_name": "Marchtrenk",
+    "uic_ref": "8101204",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 148901378,
+  "lat": 48.2711600,
+  "lon": 14.4509922,
+  "tags": {
+    "alt_name": "St. Georgen a. d. Gusen Haltestelle",
+    "name": "St. Georgen an der Gusen Ort",
+    "operator": "ÖBB-Infrastruktur AG",
+    "public_transport": "stop_position",
+    "railway": "halt",
+    "railway:ref": "Sge H1",
+    "ref": "1",
+    "train": "yes",
+    "uic_name": "St.Georgen a d Gusen Haltestelle",
+    "uic_ref": "8101502"
+  }
+},
+{
+  "type": "node",
+  "id": 158868668,
+  "lat": 48.2886625,
+  "lon": 14.4783408,
+  "tags": {
+    "name": "Lungitz",
+    "operator": "ÖBB-Infrastruktur AG",
+    "public_transport": "station",
+    "railway": "station",
+    "railway:ref": "Lu",
+    "uic_name": "Lungitz/Gusen",
+    "uic_ref": "8101185"
+  }
+},
+{
+  "type": "node",
+  "id": 215682892,
+  "lat": 48.2902408,
+  "lon": 14.2918619,
+  "tags": {
+    "name": "Linz Hauptbahnhof",
+    "name:en": "Linz main station",
+    "operator": "ÖBB-Infrastruktur AG",
+    "public_transport": "station",
+    "railway": "station",
+    "railway:name:DB": "Linz Hbf",
+    "railway:position": "188.4 / 0.0",
+    "railway:position:exact": "188.440 / 0.000",
+    "railway:ref": "Lz",
+    "railway:ref:DB": "XAL",
+    "short_name": "Linz Hbf",
+    "toilets:wheelchair": "yes",
+    "uic_name": "Linz Hbf",
+    "uic_ref": "8100013",
+    "wheelchair": "yes",
+    "wikidata": "Q763157",
+    "wikipedia": "de:Linz Hauptbahnhof"
+  }
+},
+{
+  "type": "node",
+  "id": 254037081,
+  "lat": 48.3116427,
+  "lon": 14.2385636,
+  "tags": {
+    "name": "Puchenau",
+    "operator": "ÖBB",
+    "public_transport": "stop_position",
+    "railway": "halt",
+    "railway:ref": "Uf H1",
+    "toilets:wheelchair": "no",
+    "uic_ref": "8101402",
+    "wheelchair": "limited"
+  }
+},
+{
+  "type": "node",
+  "id": 259455509,
+  "lat": 48.2732572,
+  "lon": 14.2195606,
+  "tags": {
+    "name": "Rufling",
+    "operator": "StH",
+    "public_transport": "stop_position",
+    "railway": "halt",
+    "train": "yes",
+    "uic_ref": "8101458"
+  }
+},
+{
+  "type": "node",
+  "id": 262051039,
+  "lat": 48.3314354,
+  "lon": 14.1924777,
+  "tags": {
+    "name": "Dürnberg bei Ottensheim",
+    "operator": "ÖBB",
+    "public_transport": "stop_position",
+    "railway": "halt",
+    "railway:ref": "Puw H1",
+    "uic_ref": "8100734"
+  }
+},
+{
+  "type": "node",
+  "id": 276624996,
+  "lat": 48.3378225,
+  "lon": 14.1771405,
+  "tags": {
+    "name": "Ottensheim",
+    "operator": "ÖBB-Infrastruktur AG",
+    "public_transport": "stop_position",
+    "railway": "station",
+    "railway:ref": "Ott",
+    "uic_ref": "8100513"
+  }
+},
+{
+  "type": "node",
+  "id": 276625040,
+  "lat": 48.3484331,
+  "lon": 14.1535605,
+  "tags": {
+    "name": "Walding",
+    "operator": "ÖBB",
+    "public_transport": "stop_position",
+    "railway": "halt",
+    "railway:ref": "Ott H1",
+    "train": "yes",
+    "uic_name": "Walding",
+    "uic_ref": "8101747"
+  }
+},
+{
+  "type": "node",
+  "id": 282294550,
+  "lat": 48.3125132,
+  "lon": 14.2224349,
+  "tags": {
+    "name": "Puchenau West",
+    "operator": "ÖBB-Infrastruktur AG",
+    "public_transport": "station",
+    "railway": "station",
+    "railway:ref": "Puw",
+    "uic_ref": "8101409",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 282298795,
+  "lat": 48.3600561,
+  "lon": 14.1376745,
+  "tags": {
+    "name": "Rottenegg",
+    "operator": "ÖBB-Infrastruktur AG",
+    "public_transport": "stop_position",
+    "railway": "station",
+    "railway:ref": "Rog",
+    "uic_ref": "8100476"
+  }
+},
+{
+  "type": "node",
+  "id": 286868518,
+  "lat": 48.3215733,
+  "lon": 14.2055842,
+  "tags": {
+    "name": "Achleitnersiedlung",
+    "operator": "ÖBB",
+    "public_transport": "stop_position",
+    "railway": "halt",
+    "railway:ref": "Puw H1A",
+    "uic_ref": "8101955"
+  }
+},
+{
+  "type": "node",
+  "id": 317367609,
+  "lat": 48.2715821,
+  "lon": 14.2019995,
+  "tags": {
+    "name": "Dörnbach-Hitzing",
+    "operator": "StH",
+    "public_transport": "stop_position",
+    "railway": "station",
+    "train": "yes",
+    "uic_ref": "8100717"
+  }
+},
+{
+  "type": "node",
+  "id": 317986663,
+  "lat": 48.2746472,
+  "lon": 14.2457931,
+  "tags": {
+    "alt_name": "Leonding Strassfeld",
+    "name": "Leonding Straßfeld",
+    "operator": "StH",
+    "public_transport": "stop_position",
+    "railway": "halt",
+    "train": "yes",
+    "uic_name": "Straßfeld",
+    "uic_ref": "8101499",
+    "wikidata": "Q115526267"
+  }
+},
+{
+  "type": "node",
+  "id": 317986664,
+  "lat": 48.2742750,
+  "lon": 14.2412928,
+  "tags": {
+    "name": "Bergham",
+    "operator": "StH",
+    "public_transport": "stop_position",
+    "railway": "halt",
+    "train": "yes",
+    "uic_ref": "8100565"
+  }
+},
+{
+  "type": "node",
+  "id": 334427618,
+  "lat": 48.2835600,
+  "lon": 14.1481703,
+  "tags": {
+    "alt_name": "Strassham-Schönering",
+    "name": "Straßham-Schönering",
+    "operator": "StH",
+    "public_transport": "stop_position",
+    "railway": "halt",
+    "train": "yes",
+    "uic_ref": "8101594"
+  }
+},
+{
+  "type": "node",
+  "id": 334493057,
+  "lat": 48.2878546,
+  "lon": 14.0819808,
+  "tags": {
+    "alt_name": "Strass-Emling",
+    "name": "Straß-Emling",
+    "note": "H-Lst",
+    "operator": "StH",
+    "public_transport": "stop_position",
+    "railway": "halt",
+    "train": "yes",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 334493115,
+  "lat": 48.2889112,
+  "lon": 14.1439458,
+  "tags": {
+    "alt_name": "Strassham Wehrgasse",
+    "name": "Straßham Wehrgasse",
+    "operator": "StH",
+    "public_transport": "stop_position",
+    "railway": "halt",
+    "train": "yes",
+    "uic_name": "Wehrgasse"
+  }
+},
+{
+  "type": "node",
+  "id": 616023441,
+  "lat": 48.2783475,
+  "lon": 14.3935665,
+  "tags": {
+    "name": "Pulgarn",
+    "operator": "ÖBB-Infrastruktur AG",
+    "public_transport": "stop_position",
+    "railway": "halt",
+    "railway:ref": "Sy H1",
+    "train": "yes",
+    "uic_name": "Pulgarn",
+    "uic_ref": "8101405"
+  }
+},
+{
+  "type": "node",
+  "id": 904384909,
+  "lat": 48.3249812,
+  "lon": 14.2588776,
+  "tags": {
+    "name": "Pöstlingberg",
+    "public_transport": "stop_position",
+    "railway": "halt",
+    "tram": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 1014035376,
+  "lat": 48.3119791,
+  "lon": 14.2796016,
+  "tags": {
+    "name": "Linz Urfahr",
+    "operator": "ÖBB-Infrastruktur AG",
+    "public_transport": "stop_position",
+    "railway": "station",
+    "railway:ref": "Uf",
+    "train": "yes",
+    "uic_ref": "8100396",
+    "wheelchair": "limited",
+    "wikidata": "Q801101"
+  }
+},
+{
+  "type": "node",
+  "id": 1028451086,
+  "lat": 48.2862580,
+  "lon": 14.1034595,
+  "tags": {
+    "name": "Alkoven Schule",
+    "operator": "StH",
+    "public_transport": "stop_position",
+    "railway": "halt",
+    "train": "yes",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 1090636485,
+  "lat": 48.2931485,
+  "lon": 14.0280391,
+  "tags": {
+    "name": "Unterhillinglah",
+    "operator": "StH",
+    "public_transport": "stop_position",
+    "railway": "halt",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 1275124058,
+  "lat": 48.2495854,
+  "lon": 14.2755504,
+  "tags": {
+    "name": "Linz Wegscheid",
+    "operator": "ÖBB-Infrastruktur AG",
+    "public_transport": "station",
+    "railway": "station",
+    "railway:ref": "Wd",
+    "train": "yes",
+    "wheelchair": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 1344787995,
+  "lat": 48.2090233,
+  "lon": 14.2611098,
+  "tags": {
+    "name": "Ansfelden",
+    "note": "H-Lst",
+    "operator": "ÖBB-Infrastruktur AG",
+    "public_transport": "station",
+    "railway": "halt",
+    "railway:position": "10.3",
+    "railway:ref": "T K1",
+    "uic_name": "Ansfelden",
+    "uic_ref": "8100626"
+  }
+},
+{
+  "type": "node",
+  "id": 1349442912,
+  "lat": 48.1896436,
+  "lon": 14.2584900,
+  "tags": {
+    "name": "Nettingsdorf",
+    "operator": "ÖBB-Infrastruktur AG",
+    "public_transport": "station",
+    "railway": "station",
+    "railway:ref": "Net"
+  }
+},
+{
+  "type": "node",
+  "id": 1365572139,
+  "lat": 48.2693614,
+  "lon": 14.1859017,
+  "tags": {
+    "name": "Thurnharting",
+    "operator": "StH",
+    "public_transport": "stop_position",
+    "railway": "halt",
+    "train": "yes",
+    "uic_ref": "8101666"
+  }
+},
+{
+  "type": "node",
+  "id": 1565970424,
+  "lat": 48.2745343,
+  "lon": 14.2291733,
+  "tags": {
+    "ele": "287",
+    "name": "Bergham Am Dürrweg",
+    "operator": "StH",
+    "public_transport": "stop_position",
+    "railway": "halt",
+    "railway:position": "5.8",
+    "ref": "1",
+    "train": "yes",
+    "uic_id": "Bergham b. Linz Am Dürrweg",
+    "uic_ref": "8100606"
+  }
+},
+{
+  "type": "node",
+  "id": 2653731026,
+  "lat": 48.2744821,
+  "lon": 14.2545774,
+  "tags": {
+    "name": "Leonding Lokalbahn",
+    "operator": "StH",
+    "platforms": "2",
+    "public_transport": "station",
+    "railway": "station"
+  }
+},
+{
+  "type": "node",
+  "id": 2924440839,
+  "lat": 48.2881465,
+  "lon": 14.1150144,
+  "tags": {
+    "name": "Alkoven",
+    "operator": "StH",
+    "railway": "station"
+  }
+},
+{
+  "type": "node",
+  "id": 2924440860,
+  "lat": 48.2751919,
+  "lon": 14.1657490,
+  "tags": {
+    "name": "Kirchberg-Thürnau",
+    "operator": "StH",
+    "railway": "station"
+  }
+},
+{
+  "type": "node",
+  "id": 3019870741,
+  "lat": 48.2874746,
+  "lon": 14.0396503,
+  "tags": {
+    "name": "Fraham",
+    "operator": "Linzer Lokalbahn",
+    "public_transport": "station",
+    "railway": "halt"
+  }
+},
+{
+  "type": "node",
+  "id": 3392518308,
+  "lat": 48.2455277,
+  "lon": 14.1859464,
+  "tags": {
+    "name": "Hörsching",
+    "operator": "ÖBB-Infrastruktur AG",
+    "platforms": "3",
+    "railway": "station",
+    "railway:ref": "Hoe",
+    "uic_name": "Hörsching",
+    "uic_ref": "8100974"
+  }
+},
+{
+  "type": "node",
+  "id": 3393217427,
+  "lat": 48.2571822,
+  "lon": 14.2087957,
+  "tags": {
+    "name": "Pasching",
+    "operator": "ÖBB-Infrastruktur AG",
+    "platforms": "2",
+    "railway": "halt",
+    "railway:position": "195.9",
+    "railway:position:exact": "195.902",
+    "railway:ref": "Lz H2",
+    "uic_name": "Pasching",
+    "uic_ref": "8101389",
+    "wikidata": "Q111167776",
+    "wikimedia_commons": "Category:Bahnhof Pasching"
+  }
+},
+{
+  "type": "node",
+  "id": 3393246606,
+  "lat": 48.2740325,
+  "lon": 14.2538545,
+  "tags": {
+    "name": "Leonding",
+    "operator": "ÖBB-Infrastruktur AG",
+    "platforms": "2",
+    "public_transport": "station",
+    "railway": "halt",
+    "railway:position": "192.0",
+    "railway:position:exact": "192.020",
+    "railway:ref": "Lz H1",
+    "uic_name": "Leonding",
+    "uic_ref": "8101165",
+    "wheelchair": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 3774599640,
+  "lat": 48.2858987,
+  "lon": 14.3236868,
+  "tags": {
+    "name": "Linz Franckstraße",
+    "operator": "ÖBB-Infrastruktur AG",
+    "public_transport": "station",
+    "railway": "station",
+    "railway:position": "3.3",
+    "railway:position:exact": "3.323",
+    "railway:ref": "Lfs",
+    "uic_name": "Linz/Donau Franckstraße",
+    "uic_ref": "8100807",
+    "wheelchair": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 3774633561,
+  "lat": 48.2211993,
+  "lon": 14.4666717,
+  "tags": {
+    "name": "Enns",
+    "operator": "ÖBB-Infrastruktur AG",
+    "railway": "station",
+    "railway:ref": "Ens",
+    "uic_name": "Enns",
+    "uic_ref": "8100011",
+    "wheelchair": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 3775210750,
+  "lat": 48.2272475,
+  "lon": 14.4276963,
+  "tags": {
+    "name": "Asten-Fisching",
+    "operator": "ÖBB-Infrastruktur AG",
+    "public_transport": "station",
+    "railway": "halt",
+    "railway:ref": "Ens H1",
+    "uic_name": "Asten-Fisching",
+    "uic_ref": "8102046"
+  }
+},
+{
+  "type": "node",
+  "id": 3775225775,
+  "lat": 48.2428496,
+  "lon": 14.3792971,
+  "tags": {
+    "name": "Linz Pichling",
+    "operator": "ÖBB-Infrastruktur AG",
+    "railway": "halt",
+    "railway:position": "178.0",
+    "railway:position:exact": "178.030",
+    "railway:ref": "Ast H1",
+    "uic_name": "Linz/Donau Pichling",
+    "uic_ref": "8101358",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 3775522627,
+  "lat": 48.2519744,
+  "lon": 14.3471044,
+  "tags": {
+    "name": "Linz Ebelsberg",
+    "note": "bitte unterschiedliche Schreibweise name/uic_name beibehalten!",
+    "operator": "ÖBB-Infrastruktur AG",
+    "public_transport": "station",
+    "railway": "halt",
+    "railway:position": "180.7",
+    "railway:position:exact": "180.655",
+    "railway:ref": "Ast H2",
+    "uic_name": "Linz/Donau Ebelsberg",
+    "uic_ref": "8101127"
+  }
+},
+{
+  "type": "node",
+  "id": 7645724300,
+  "lat": 48.2845436,
+  "lon": 14.3616928,
+  "tags": {
+    "name": "Steyregg",
+    "operator": "ÖBB-Infrastruktur AG",
+    "public_transport": "station",
+    "railway": "station",
+    "railway:ref": "Sy",
+    "toilets:wheelchair": "no",
+    "uic_name": "Steyregg",
+    "uic_ref": "8101614",
+    "wheelchair": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 7966423352,
+  "lat": 48.2277134,
+  "lon": 14.1513408,
+  "tags": {
+    "name": "Oftering",
+    "operator": "ÖBB-Infrastruktur AG",
+    "railway": "halt",
+    "railway:position": "201.3",
+    "railway:position:exact": "201.347",
+    "railway:ref": "Hoe H1",
+    "uic_name": "Oftering",
+    "uic_ref": "8101308"
+  }
+},
+{
+  "type": "node",
+  "id": 8785660932,
+  "lat": 48.2800051,
+  "lon": 14.2799833,
+  "tags": {
+    "name": "Linz Untergaumberg",
+    "operator": "StH",
+    "public_transport": "stop_position",
+    "railway": "halt",
+    "railway:ref": "Lz H1S",
+    "train": "yes",
+    "uic_name": "Untergaumberg",
+    "uic_ref": "8101699",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 8860482291,
+  "lat": 48.1640361,
+  "lon": 14.2464603,
+  "tags": {
+    "name": "Nöstlbach-St. Marien",
+    "operator": "ÖBB-Infrastruktur AG",
+    "public_transport": "station",
+    "railway": "halt",
+    "railway:ref": "Net H1",
+    "uic_name": "Nöstlbach-St.Marien",
+    "uic_ref": "8101283"
+  }
+},
+{
+  "type": "node",
+  "id": 10812748470,
+  "lat": 48.2652125,
+  "lon": 14.4407447,
+  "tags": {
+    "operator": "ÖBB-Infrastruktur AG",
+    "public_transport": "station",
+    "railway": "station",
+    "railway:ref": "Sge",
+    "train": "yes",
+    "uic_name": "St.Georgen/Gusen",
+    "uic_ref": "8101501",
+    "wheelchair": "yes"
+  }
+}
+
+  ]
+}

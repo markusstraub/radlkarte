@@ -1,0 +1,91 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.59 e21c39fe",
+  "osm3s": {
+    "timestamp_osm_base": "2023-08-06T12:55:16Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+{
+  "type": "node",
+  "id": 2333594772,
+  "lat": 47.3723184,
+  "lon": 9.6802106,
+  "tags": {
+    "amenity": "vending_machine",
+    "brand": "Schwalbe",
+    "brand:wikidata": "Q1312213",
+    "check_date": "2022-08-16",
+    "currency:EUR": "yes",
+    "name": "Schwalbe",
+    "operator": "Sport Mathis",
+    "payment:coins": "yes",
+    "ref": "51232",
+    "vending": "bicycle_tube"
+  }
+},
+{
+  "type": "node",
+  "id": 3894083274,
+  "lat": 47.4927091,
+  "lon": 9.6888751,
+  "tags": {
+    "amenity": "vending_machine",
+    "brand": "Schwalbe",
+    "brand:wikidata": "Q1312213",
+    "currency:EUR": "yes",
+    "name": "Schwalbe",
+    "operator": "DJ's Bikeshop",
+    "payment:coins": "yes",
+    "vending": "bicycle_tube"
+  }
+},
+{
+  "type": "node",
+  "id": 3919326956,
+  "lat": 47.4008661,
+  "lon": 9.6596593,
+  "tags": {
+    "amenity": "vending_machine",
+    "brand": "Continental",
+    "brand:wikidata": "Q64739247",
+    "currency:EUR": "yes",
+    "fixme": "Steht dieser wirklich hier?",
+    "name": "Continental",
+    "operator": "Marktgemeinde Lustenau",
+    "payment:coins": "yes",
+    "vending": "bicycle_tube"
+  }
+},
+{
+  "type": "node",
+  "id": 6762217763,
+  "lat": 47.3730687,
+  "lon": 9.6763241,
+  "tags": {
+    "amenity": "vending_machine",
+    "brand": "Continental",
+    "brand:wikidata": "Q64739247",
+    "brand:wikipedia": "de:Continental Reifen GmbH",
+    "name": "Continental",
+    "operator": "Sports Direct",
+    "vending": "bicycle_tube"
+  }
+},
+{
+  "type": "node",
+  "id": 6811960726,
+  "lat": 47.4732999,
+  "lon": 9.7518527,
+  "tags": {
+    "amenity": "vending_machine",
+    "currency:EUR": "yes",
+    "opening_hours": "24/7",
+    "payment:coins": "yes",
+    "vending": "bicycle_tube"
+  }
+}
+
+  ]
+}

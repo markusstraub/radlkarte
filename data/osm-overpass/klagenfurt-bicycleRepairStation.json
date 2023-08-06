@@ -1,0 +1,177 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.60.6 e2dc3e5b",
+  "osm3s": {
+    "timestamp_osm_base": "2023-08-06T13:07:42Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+{
+  "type": "node",
+  "id": 6629903626,
+  "lat": 46.5349173,
+  "lon": 14.0879918,
+  "tags": {
+    "amenity": "bicycle_repair_station",
+    "description": "not in a good shape",
+    "fee": "no",
+    "operator": "ARBÖ",
+    "service:bicycle:diy": "yes",
+    "service:bicycle:pump": "yes",
+    "service:bicycle:tools": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 7546048055,
+  "lat": 46.6019657,
+  "lon": 14.2972572,
+  "tags": {
+    "amenity": "bicycle_repair_station",
+    "fee": "no",
+    "service:bicycle:pump": "yes",
+    "service:bicycle:repair": "yes",
+    "service:bicycle:tools": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 7840458770,
+  "lat": 46.6127812,
+  "lon": 14.0427166,
+  "tags": {
+    "amenity": "bicycle_repair_station",
+    "fee": "no",
+    "service:bicycle:diy": "yes",
+    "service:bicycle:pump": "yes",
+    "service:bicycle:tools": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 8628654102,
+  "lat": 46.6505758,
+  "lon": 14.3144376,
+  "tags": {
+    "amenity": "bicycle_repair_station"
+  }
+},
+{
+  "type": "node",
+  "id": 8807224312,
+  "lat": 46.6109525,
+  "lon": 14.2603089,
+  "tags": {
+    "amenity": "bicycle_repair_station",
+    "fee": "no",
+    "service:bicycle:pump": "yes",
+    "service:bicycle:repair": "yes",
+    "service:bicycle:tools": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 8911317565,
+  "lat": 46.6463709,
+  "lon": 14.2869646,
+  "tags": {
+    "amenity": "bicycle_repair_station"
+  }
+},
+{
+  "type": "node",
+  "id": 8952189240,
+  "lat": 46.6161308,
+  "lon": 14.2659344,
+  "tags": {
+    "amenity": "bicycle_repair_station",
+    "covered": "yes",
+    "fee": "no",
+    "indoor": "no",
+    "opening_hours:covid19": "open",
+    "service:bicycle:pump": "yes",
+    "service:bicycle:screwdriver": "yes",
+    "service:bicycle:tools": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 9724748385,
+  "lat": 46.6121936,
+  "lon": 14.3171738,
+  "tags": {
+    "amenity": "bicycle_repair_station"
+  }
+},
+{
+  "type": "node",
+  "id": 9823422547,
+  "lat": 46.6296611,
+  "lon": 14.3034174,
+  "tags": {
+    "amenity": "bicycle_repair_station",
+    "service:bicycle:pump": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 10021674351,
+  "lat": 46.6228081,
+  "lon": 14.2671238,
+  "tags": {
+    "amenity": "bicycle_repair_station",
+    "service:bicycle:pump": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 10228043908,
+  "lat": 46.6133950,
+  "lon": 14.2644234,
+  "tags": {
+    "amenity": "bicycle_repair_station",
+    "opening_hours": "24/7",
+    "service:bicycle:pump": "yes",
+    "service:bicycle:tools": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 10228043909,
+  "lat": 46.6151596,
+  "lon": 14.2631514,
+  "tags": {
+    "amenity": "bicycle_repair_station",
+    "covered": "yes",
+    "fee": "no",
+    "indoor": "no",
+    "opening_hours": "24/7",
+    "operator": "Lakeside Park",
+    "service:bicycle:pump": "yes",
+    "service:bicycle:tools": "yes",
+    "source": "survey"
+  }
+},
+{
+  "type": "node",
+  "id": 10995384266,
+  "lat": 46.7212250,
+  "lon": 14.1898131,
+  "tags": {
+    "amenity": "bicycle_repair_station"
+  }
+},
+{
+  "type": "node",
+  "id": 11028255028,
+  "lat": 46.7519075,
+  "lon": 14.3357022,
+  "tags": {
+    "amenity": "bicycle_repair_station",
+    "service:bicycle:pump": "yes"
+  }
+}
+
+  ]
+}

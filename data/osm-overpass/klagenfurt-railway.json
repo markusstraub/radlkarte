@@ -1,0 +1,477 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.60.6 e2dc3e5b",
+  "osm3s": {
+    "timestamp_osm_base": "2023-08-06T13:07:42Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+{
+  "type": "node",
+  "id": 247633413,
+  "lat": 46.6331922,
+  "lon": 14.1111546,
+  "tags": {
+    "name": "Töschling",
+    "operator": "ÖBB-Infrastruktur AG",
+    "public_transport": "stop_position",
+    "railway": "halt",
+    "railway:platform_height": "55",
+    "railway:platform_length": "160",
+    "railway:ref": "Pow H1",
+    "ref": "2",
+    "train": "yes",
+    "uic_ref": "8101676"
+  }
+},
+{
+  "type": "node",
+  "id": 299082161,
+  "lat": 46.7014707,
+  "lon": 14.0602251,
+  "tags": {
+    "name": "Tiffen",
+    "operator": "ÖBB-Infrastruktur AG",
+    "public_transport": "stop_position",
+    "railway": "halt",
+    "railway:platform_height": "25",
+    "railway:platform_length": "130",
+    "railway:ref": "Fel H1",
+    "ref": "1",
+    "train": "yes",
+    "uic_ref": "8101669"
+  }
+},
+{
+  "type": "node",
+  "id": 303394583,
+  "lat": 46.6361990,
+  "lon": 14.1463439,
+  "tags": {
+    "name": "Pörtschach am Wörthersee",
+    "operator": "ÖBB-Infrastruktur AG",
+    "public_transport": "station",
+    "railway": "station",
+    "railway:ref": "Pow",
+    "uic_name": "Pörtschach/Wörther See",
+    "uic_ref": "8100080",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 312399806,
+  "lat": 46.7215879,
+  "lon": 14.1890144,
+  "tags": {
+    "name": "Mautbrücken",
+    "operator": "ÖBB-Infrastruktur AG",
+    "public_transport": "stop_position",
+    "railway": "halt",
+    "railway:platform_height": "38",
+    "railway:platform_length": "115",
+    "railway:ref": "Gla H1",
+    "ref": "1",
+    "train": "yes",
+    "uic_ref": "8101205"
+  }
+},
+{
+  "type": "node",
+  "id": 312399877,
+  "lat": 46.7284027,
+  "lon": 14.2368831,
+  "tags": {
+    "name": "Tauchendorf-Haidensee",
+    "operator": "ÖBB-Infrastruktur AG",
+    "public_transport": "stop_position",
+    "railway": "halt",
+    "railway:platform_height": "38",
+    "railway:platform_length": "150",
+    "railway:ref": "Lif H1",
+    "ref": "1",
+    "train": "yes",
+    "uic_ref": "8101652"
+  }
+},
+{
+  "type": "node",
+  "id": 315517798,
+  "lat": 46.6109032,
+  "lon": 14.3022568,
+  "tags": {
+    "name": "Klagenfurt Süd",
+    "operator": "ÖBB-Infrastruktur AG",
+    "public_transport": "stop_position",
+    "railway": "halt",
+    "railway:platform_height": "55",
+    "railway:platform_length": "100",
+    "railway:position": "19.2",
+    "railway:position:exact": "19.218",
+    "railway:ref": "Kt H1A",
+    "ref": "1",
+    "train": "yes",
+    "uic_ref": "8103842"
+  }
+},
+{
+  "type": "node",
+  "id": 317379347,
+  "lat": 46.5800532,
+  "lon": 14.2828271,
+  "tags": {
+    "name": "Köttmannsdorf Lambichl",
+    "network": "S-Bahn Kärnten",
+    "operator": "ÖBB-Infrastruktur AG",
+    "public_transport": "stop_position",
+    "railway": "halt",
+    "railway:platform_height": "55",
+    "railway:platform_length": "160",
+    "ref": "1",
+    "start_date": "2022-12",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 2508340060,
+  "lat": 46.7358943,
+  "lon": 14.2923403,
+  "tags": {
+    "name": "Liebenfels",
+    "operator": "ÖBB-Infrastruktur AG",
+    "public_transport": "stop_position",
+    "railway": "halt",
+    "railway:platform_height": "38",
+    "railway:platform_length": "150",
+    "railway:ref": "Vs H2",
+    "ref": "1",
+    "train": "yes",
+    "uic_name": "Liebenfels Hst",
+    "uic_ref": "8100305"
+  }
+},
+{
+  "type": "node",
+  "id": 3221717512,
+  "lat": 46.7618558,
+  "lon": 14.4233074,
+  "tags": {
+    "name": "St. Georgen am Längsee",
+    "operator": "ÖBB-Infrastruktur AG",
+    "platforms": "2",
+    "railway": "halt",
+    "railway:ref": "Lad H1",
+    "uic_ref": "8101505"
+  }
+},
+{
+  "type": "node",
+  "id": 3221803919,
+  "lat": 46.7625806,
+  "lon": 14.3620511,
+  "tags": {
+    "name": "St. Veit a. d. Glan West",
+    "operator": "ÖBB-Infrastruktur AG",
+    "public_transport": "station",
+    "railway": "station",
+    "railway:ref": "Vs",
+    "uic_name": "St. Veit an der Glan Westbf",
+    "uic_ref": "8101624"
+  }
+},
+{
+  "type": "node",
+  "id": 3221874540,
+  "lat": 46.7504834,
+  "lon": 14.3812040,
+  "tags": {
+    "name": "Glandorf",
+    "operator": "ÖBB-Infrastruktur AG",
+    "public_transport": "stop_position",
+    "railway": "halt",
+    "railway:ref": "Vps H1",
+    "uic_ref": "8100849"
+  }
+},
+{
+  "type": "node",
+  "id": 3223127800,
+  "lat": 46.6827769,
+  "lon": 14.3393508,
+  "tags": {
+    "name": "Maria Saal",
+    "operator": "ÖBB-Infrastruktur AG",
+    "platforms": "3",
+    "public_transport": "station",
+    "railway": "station",
+    "railway:ref": "Mal",
+    "uic_ref": "8101239",
+    "wheelchair": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 3223199172,
+  "lat": 46.6500410,
+  "lon": 14.3151426,
+  "tags": {
+    "name": "Klagenfurt Annabichl",
+    "operator": "ÖBB-Infrastruktur AG",
+    "platforms": "2",
+    "railway": "halt",
+    "railway:ref": "Mal H1",
+    "uic_name": "Klagenfurt Annabichl",
+    "uic_ref": "8101090"
+  }
+},
+{
+  "type": "node",
+  "id": 3225806968,
+  "lat": 46.6216389,
+  "lon": 14.3219869,
+  "tags": {
+    "name": "Klagenfurt Ostbahnhof",
+    "operator": "ÖBB-Infrastruktur AG",
+    "platforms": "2",
+    "public_transport": "station",
+    "railway": "station",
+    "railway:ref": "Kto",
+    "short_name": "Klagenfurt Ostbf",
+    "uic_name": "Klagenfurt Ostbf",
+    "uic_ref": "8101094"
+  }
+},
+{
+  "type": "node",
+  "id": 3225806984,
+  "lat": 46.6156856,
+  "lon": 14.3137028,
+  "tags": {
+    "ele": "440",
+    "name": "Klagenfurt Hauptbahnhof",
+    "operator": "ÖBB-Infrastruktur AG",
+    "platforms": "6",
+    "public_transport": "station",
+    "railway": "station",
+    "railway:position": "125.9 / 18.0",
+    "railway:position:exact": "125.881 / 17.960",
+    "railway:ref": "Kt",
+    "short_name": "Klagenfurt Hbf",
+    "train": "yes",
+    "uic_name": "Klagenfurt Hbf",
+    "uic_ref": "8100085",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 3225839866,
+  "lat": 46.6166298,
+  "lon": 14.3338850,
+  "tags": {
+    "ele": "441",
+    "name": "Klagenfurt Ebenthal",
+    "operator": "ÖBB-Infrastruktur AG",
+    "platforms": "2",
+    "railway": "halt",
+    "railway:position": "124.3",
+    "railway:position:exact": "124.322",
+    "railway:ref": "Gra H1",
+    "uic_ref": "8101091",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 3227895237,
+  "lat": 46.6190209,
+  "lon": 14.4594768,
+  "tags": {
+    "ele": "418",
+    "name": "Grafenstein",
+    "operator": "ÖBB-Infrastruktur AG",
+    "platforms": "2",
+    "public_transport": "station",
+    "railway": "station",
+    "railway:position": "114.7",
+    "railway:position:exact": "114.657",
+    "railway:ref": "Gra",
+    "uic_ref": "8100256",
+    "wheelchair": "yes",
+    "wikidata": "Q38078295"
+  }
+},
+{
+  "type": "node",
+  "id": 3238848462,
+  "lat": 46.6215490,
+  "lon": 14.2839165,
+  "tags": {
+    "name": "Klagenfurt Lend",
+    "operator": "ÖBB-Infrastruktur AG",
+    "platforms": "2",
+    "railway": "halt",
+    "railway:ref": "Kt H1",
+    "uic_ref": "8101093"
+  }
+},
+{
+  "type": "node",
+  "id": 3238848466,
+  "lat": 46.6229408,
+  "lon": 14.2668494,
+  "tags": {
+    "name": "Klagenfurt West",
+    "operator": "ÖBB-Infrastruktur AG",
+    "platforms": "2",
+    "railway": "halt",
+    "railway:ref": "Kt H2",
+    "start_date": "2014-12-14",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 4146224546,
+  "lat": 46.5395221,
+  "lon": 14.2428742,
+  "tags": {
+    "ele": "432",
+    "name": "Weizelsdorf",
+    "note": "kein Ticketverkauf / no ticket sales",
+    "operator": "ÖBB-Infrastruktur AG",
+    "public_transport": "station",
+    "public_transport_tickets": "no",
+    "railway": "station",
+    "railway:position": "30.1 / 0.0",
+    "railway:position:exact": "30.079 / 0.000",
+    "railway:ref": "Wef",
+    "uic_ref": "8100347"
+  }
+},
+{
+  "type": "node",
+  "id": 4160744273,
+  "lat": 46.6200854,
+  "lon": 14.0448482,
+  "tags": {
+    "name": "Velden am Wörther See",
+    "operator": "ÖBB-Infrastruktur AG",
+    "public_transport": "station",
+    "railway": "station",
+    "railway:ref": "Vel",
+    "uic_name": "Velden/Wörther See",
+    "uic_ref": "8100081"
+  }
+},
+{
+  "type": "node",
+  "id": 4162608870,
+  "lat": 46.7175909,
+  "lon": 14.2113734,
+  "tags": {
+    "name": "Glanegg",
+    "operator": "ÖBB-Infrastruktur AG",
+    "railway": "station",
+    "railway:ref": "Gla",
+    "uic_ref": "8100850"
+  }
+},
+{
+  "type": "node",
+  "id": 4162613856,
+  "lat": 46.7322174,
+  "lon": 14.1526232,
+  "tags": {
+    "name": "St. Martin-Sittich",
+    "operator": "ÖBB-Infrastruktur AG",
+    "public_transport": "station",
+    "railway": "station",
+    "railway:ref": "Sms",
+    "uic_ref": "8100502"
+  }
+},
+{
+  "type": "node",
+  "id": 5844914040,
+  "lat": 46.5305379,
+  "lon": 14.0350915,
+  "tags": {
+    "name": "Rosenbach",
+    "operator": "ÖBB-Infrastruktur AG",
+    "public_transport": "station",
+    "railway": "station",
+    "railway:position": "47.8",
+    "railway:position:exact": "47.791",
+    "railway:ref": "Rn",
+    "uic_name": "Rosenbach bei Villach",
+    "uic_ref": "8100083",
+    "wikidata": "Q19938283"
+  }
+},
+{
+  "type": "node",
+  "id": 5844914043,
+  "lat": 46.6264499,
+  "lon": 14.2218498,
+  "tags": {
+    "name": "Krumpendorf",
+    "operator": "ÖBB-Infrastruktur AG",
+    "public_transport": "station",
+    "railway": "station",
+    "railway:ref": "Krd",
+    "ref": "1",
+    "uic_ref": "8100079"
+  }
+},
+{
+  "type": "node",
+  "id": 9942880769,
+  "lat": 46.7215127,
+  "lon": 14.0995186,
+  "tags": {
+    "name": "Feldkirchen in Kärnten",
+    "operator": "ÖBB",
+    "public_transport": "station",
+    "railway": "station",
+    "railway:ref": "Fel",
+    "train": "yes",
+    "wikidata": "Q9258462"
+  }
+},
+{
+  "type": "node",
+  "id": 10246468685,
+  "lat": 46.5636203,
+  "lon": 14.2843569,
+  "tags": {
+    "ele": "521",
+    "name": "Maria Rain",
+    "operator": "ÖBB-Infrastruktur AG",
+    "railway": "station",
+    "railway:position": "25.0",
+    "railway:position:exact": "25.046",
+    "start_date": "2022-12",
+    "uic_ref": "8100470"
+  }
+},
+{
+  "type": "node",
+  "id": 10612845214,
+  "lat": 46.6279526,
+  "lon": 14.1708413,
+  "tags": {
+    "name": "Pritschitz",
+    "operator": "ÖBB-Infrastruktur AG",
+    "public_transport": "station",
+    "railway": "halt",
+    "railway:ref": "Krd H1",
+    "train": "yes",
+    "uic_ref": "8101395"
+  }
+}
+
+  ]
+}

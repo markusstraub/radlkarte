@@ -1,0 +1,455 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.60 f4c14d41",
+  "osm3s": {
+    "timestamp_osm_base": "2023-08-06T13:08:46Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+{
+  "type": "node",
+  "id": 185525285,
+  "lat": 47.4175843,
+  "lon": 9.7386692,
+  "tags": {
+    "name": "Dornbirn",
+    "operator": "ÖBB-Infrastruktur AG",
+    "public_transport": "station",
+    "railway": "station",
+    "railway:position": "22.2",
+    "railway:position:exact": "22.233",
+    "railway:ref": "Do",
+    "uic_ref": "8100122",
+    "wheelchair": "yes",
+    "wikidata": "Q24817320",
+    "wikipedia": "de:Bahnhof Dornbirn"
+  }
+},
+{
+  "type": "node",
+  "id": 279108098,
+  "lat": 47.3366509,
+  "lon": 9.6366867,
+  "tags": {
+    "name": "Götzis",
+    "name:de": "Götzis",
+    "name:hu": "Götzis",
+    "name:ru": "Гётцис",
+    "name:uk": "Ґьотціс",
+    "name:zh": "格齐斯",
+    "operator": "ÖBB-Infrastruktur AG",
+    "public_transport": "station",
+    "railway": "station",
+    "railway:position": "34.8",
+    "railway:position:exact": "34.760",
+    "railway:ref": "Got",
+    "uic_ref": "8100120",
+    "wheelchair": "yes",
+    "wikidata": "Q56887327"
+  }
+},
+{
+  "type": "node",
+  "id": 279108102,
+  "lat": 47.4132022,
+  "lon": 9.7267426,
+  "tags": {
+    "name": "Dornbirn Schoren",
+    "operator": "ÖBB-Infrastruktur AG",
+    "railway": "halt",
+    "railway:position": "23.3",
+    "railway:position:exact": "23.320",
+    "railway:ref": "Hos H2",
+    "uic_name": "Dornbirn Schoren",
+    "uic_ref": "8100728",
+    "wikidata": "Q56887343"
+  }
+},
+{
+  "type": "node",
+  "id": 279108103,
+  "lat": 47.4327786,
+  "lon": 9.7492612,
+  "tags": {
+    "name": "Haselstauden (Dornbirn)",
+    "operator": "ÖBB-Infrastruktur AG",
+    "railway": "halt",
+    "railway:position": "20.2",
+    "railway:position:exact": "20.248",
+    "railway:ref": "Do H1",
+    "uic_name": "Haselstauden (Dornbirn)",
+    "uic_ref": "8100981",
+    "wheelchair": "no",
+    "wikidata": "Q56887349"
+  }
+},
+{
+  "type": "node",
+  "id": 281519668,
+  "lat": 47.4570856,
+  "lon": 9.7411198,
+  "tags": {
+    "name": "Wolfurt",
+    "operator": "ÖBB-Infrastruktur AG",
+    "platforms": "2",
+    "public_transport": "station",
+    "railway": "station",
+    "railway:position": "17.0",
+    "railway:position:exact": "16.980",
+    "railway:ref": "Wo",
+    "railway:ref:DB": "XAWT",
+    "uic_ref": "8100389",
+    "wheelchair": "limited",
+    "wikidata": "Q56887352"
+  }
+},
+{
+  "type": "node",
+  "id": 281519683,
+  "lat": 47.3085927,
+  "lon": 9.6244667,
+  "tags": {
+    "name": "Klaus in Vorarlberg",
+    "name:de": "Klaus in Vorarlberg",
+    "name:ru": "Клаус (Форарльберг)",
+    "name:uk": "Кляус (Форарльберг)",
+    "name:zh": "克劳斯 (福拉尔贝格州)",
+    "note": "H-Lst",
+    "operator": "ÖBB-Infrastruktur AG",
+    "public_transport": "station",
+    "railway": "halt",
+    "railway:position": "38.1",
+    "railway:position:exact": "38.145",
+    "railway:ref": "Rk K1",
+    "uic_name": "Klaus in Vorarlberg",
+    "uic_ref": "8101100",
+    "wikidata": "Q111267153"
+  }
+},
+{
+  "type": "node",
+  "id": 778622355,
+  "lat": 47.4083275,
+  "lon": 9.6493567,
+  "tags": {
+    "name": "Widnau Habsburg",
+    "railway": "halt",
+    "usage": "tourism"
+  }
+},
+{
+  "type": "node",
+  "id": 1365243196,
+  "lat": 47.4361144,
+  "lon": 9.6412928,
+  "tags": {
+    "ele": "405",
+    "name": "Au SG",
+    "network": "Ostwind",
+    "operator": "SBB",
+    "public_transport": "station",
+    "railway": "station",
+    "railway:ref": "AUSG",
+    "uic_name": "Au SG",
+    "uic_ref": "8506316",
+    "wikidata": "Q15964071"
+  }
+},
+{
+  "type": "node",
+  "id": 1365382704,
+  "lat": 47.4103149,
+  "lon": 9.6274140,
+  "tags": {
+    "check_date:wheelchair": "2023-06-15",
+    "ele": "406",
+    "internet_access": "wlan",
+    "internet_access:fee": "no",
+    "internet_access:ssid": "AVEC",
+    "name": "Heerbrugg",
+    "network": "Ostwind",
+    "operator": "SBB",
+    "public_transport": "station",
+    "railway": "station",
+    "railway:ref": "HEBG",
+    "toilets:wheelchair": "yes",
+    "uic_name": "Heerbrugg",
+    "uic_ref": "8506317",
+    "wheelchair": "yes",
+    "wikidata": "Q15964147"
+  }
+},
+{
+  "type": "node",
+  "id": 2459480034,
+  "lat": 47.5030195,
+  "lon": 9.7397629,
+  "tags": {
+    "name": "Bregenz",
+    "operator": "ÖBB-Infrastruktur AG",
+    "platforms": "5",
+    "public_transport": "station",
+    "railway": "station",
+    "railway:position": "10.4",
+    "railway:position:exact": "10.405",
+    "railway:ref": "Bg",
+    "railway:ref:DB": "XAB",
+    "uic_name": "Bregenz",
+    "uic_ref": "8100090",
+    "wheelchair": "yes",
+    "wheelchair:description": "Aufzüge an den Bahnsteigen sind vorhanden. Beim Übergang in Richtung See gibt es leider nur ein \"Rondell\" mit Pflastersteinen.",
+    "wikidata": "Q15282663",
+    "wikipedia": "de:Bahnhof Bregenz"
+  }
+},
+{
+  "type": "node",
+  "id": 3005434096,
+  "lat": 47.4934726,
+  "lon": 9.7212401,
+  "tags": {
+    "name": "Riedenburg",
+    "operator": "ÖBB-Infrastruktur AG",
+    "railway": "halt",
+    "railway:position": "12.4",
+    "railway:position:exact": "12.390",
+    "railway:ref": "Lna H1",
+    "ref_name": "Bregenz Riedenburg",
+    "uic_name": "Bregenz Riedenburg",
+    "uic_ref": "8100473",
+    "wheelchair": "yes",
+    "wikidata": "Q56887354"
+  }
+},
+{
+  "type": "node",
+  "id": 3005481020,
+  "lat": 47.4506290,
+  "lon": 9.6672940,
+  "tags": {
+    "name": "Lustenau",
+    "operator": "ÖBB-Infrastruktur AG",
+    "public_transport": "station",
+    "railway": "station",
+    "railway:position": "2.6",
+    "railway:position:exact": "2.620",
+    "railway:ref": "Us",
+    "railway:ref:DB": "XALUU",
+    "uic_ref": "8100123",
+    "wheelchair": "yes",
+    "wikidata": "Q43305542",
+    "wikipedia": "de:Bahnhof Lustenau"
+  }
+},
+{
+  "type": "node",
+  "id": 3011405305,
+  "lat": 47.4460719,
+  "lon": 9.7544216,
+  "tags": {
+    "name": "Schwarzach in Vorarlberg",
+    "operator": "ÖBB-Infrastruktur AG",
+    "railway": "halt",
+    "railway:position": "18.6",
+    "railway:position:exact": "18.620",
+    "railway:ref": "Do H2",
+    "uic_ref": "8101634",
+    "wikidata": "Q56887350"
+  }
+},
+{
+  "type": "node",
+  "id": 3011462709,
+  "lat": 47.4776696,
+  "lon": 9.7243267,
+  "tags": {
+    "name": "Lauterach",
+    "note": "old railway:ref was Lsa H1",
+    "operator": "ÖBB-Infrastruktur AG",
+    "railway": "halt",
+    "railway:position": "14.2",
+    "railway:position:exact": "14.196",
+    "railway:ref": "Lat",
+    "railway:ref:DB": "XALAH",
+    "uic_name": "Lauterach",
+    "uic_ref": "8100302",
+    "wheelchair": "yes",
+    "wikidata": "Q56887353"
+  }
+},
+{
+  "type": "node",
+  "id": 3015407481,
+  "lat": 47.3986679,
+  "lon": 9.7248973,
+  "tags": {
+    "name": "Hatlerdorf",
+    "operator": "ÖBB-Infrastruktur AG",
+    "railway": "halt",
+    "railway:position": "25.1",
+    "railway:position:exact": "25.138",
+    "railway:ref": "Hos H1",
+    "uic_name": "Hatlerdorf (Dornbirn)",
+    "uic_ref": "8100921",
+    "wikidata": "Q56887337"
+  }
+},
+{
+  "type": "node",
+  "id": 3015432275,
+  "lat": 47.3649309,
+  "lon": 9.6813135,
+  "tags": {
+    "alt_name:uk": "Хоенемс",
+    "name": "Hohenems",
+    "name:de": "Hohenems",
+    "name:ru": "Хоэнемс",
+    "name:uk": "Гогенемс",
+    "name:zh": "霍恩埃姆斯",
+    "operator": "ÖBB-Infrastruktur AG",
+    "platforms": "3",
+    "public_transport": "station",
+    "railway": "station",
+    "railway:position": "30.1",
+    "railway:position:exact": "30.121",
+    "railway:ref": "Hos",
+    "toilets:wheelchair": "yes",
+    "uic_ref": "8100121",
+    "wheelchair": "yes",
+    "wikidata": "Q31338289",
+    "wikipedia": "de:Bahnhof Hohenems"
+  }
+},
+{
+  "type": "node",
+  "id": 3015483004,
+  "lat": 47.3523730,
+  "lon": 9.6616872,
+  "tags": {
+    "name": "Altach",
+    "operator": "ÖBB-Infrastruktur AG",
+    "platforms": "2",
+    "railway": "halt",
+    "railway:position": "32.2",
+    "railway:position:exact": "32.214",
+    "railway:ref": "Got H1",
+    "toilets:wheelchair": "no",
+    "uic_ref": "8100630",
+    "wheelchair": "limited",
+    "wikidata": "Q56887330"
+  }
+},
+{
+  "type": "node",
+  "id": 4571408201,
+  "lat": 47.4866316,
+  "lon": 9.6717171,
+  "tags": {
+    "name": "Schleienlöcher",
+    "railway": "halt",
+    "usage": "tourism"
+  }
+},
+{
+  "type": "node",
+  "id": 4571409664,
+  "lat": 47.4478829,
+  "lon": 9.6604073,
+  "tags": {
+    "name": "Lustenau Museum",
+    "railway": "halt",
+    "usage": "tourism"
+  }
+},
+{
+  "type": "node",
+  "id": 4571409879,
+  "lat": 47.4076326,
+  "lon": 9.6545874,
+  "tags": {
+    "name": "Wiesenrain",
+    "railway": "halt",
+    "usage": "tourism"
+  }
+},
+{
+  "type": "node",
+  "id": 4571413583,
+  "lat": 47.3980925,
+  "lon": 9.6475231,
+  "tags": {
+    "name": "Rheinunternehmen Widnau",
+    "railway": "halt",
+    "usage": "tourism"
+  }
+},
+{
+  "type": "node",
+  "id": 4571414563,
+  "lat": 47.3591650,
+  "lon": 9.6107795,
+  "tags": {
+    "name": "Kriessern",
+    "railway": "halt",
+    "usage": "tourism"
+  }
+},
+{
+  "type": "node",
+  "id": 4886725252,
+  "lat": 47.4533149,
+  "lon": 9.6383035,
+  "tags": {
+    "ele": "402",
+    "name": "St. Margrethen SG",
+    "network": "Ostwind;VVV",
+    "operator": "SBB",
+    "public_transport": "station",
+    "railway": "station",
+    "railway:position": "53.8 / 0.0",
+    "railway:position:exact": "53.819 / 0.000",
+    "railway:ref": "SMG",
+    "railway:ref:DB": "XSSM",
+    "railway:ref:ÖBB": "Mt",
+    "uic_name": "St. Margrethen SG",
+    "uic_ref": "8506314",
+    "wheelchair": "yes",
+    "wikidata": "Q15639432"
+  }
+},
+{
+  "type": "node",
+  "id": 10002117439,
+  "lat": 47.4808090,
+  "lon": 9.7157201,
+  "tags": {
+    "name": "Lauterach Unterfeld",
+    "operator": "ÖBB-Infrastruktur AG",
+    "platforms": "2",
+    "railway": "halt",
+    "railway:position": "8.5",
+    "railway:position:exact": "8.500",
+    "railway:ref": "Lwa",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 10042765172,
+  "lat": 47.4798780,
+  "lon": 9.6896356,
+  "tags": {
+    "name": "Hard-Fussach",
+    "operator": "ÖBB-Infrastruktur AG",
+    "public_transport": "station",
+    "railway": "halt",
+    "railway:position": "6.6",
+    "railway:position:exact": "6.620",
+    "railway:ref": "Hfu",
+    "wikidata": "Q56900441"
+  }
+}
+
+  ]
+}

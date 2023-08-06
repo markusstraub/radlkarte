@@ -1,0 +1,487 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.59 e21c39fe",
+  "osm3s": {
+    "timestamp_osm_base": "2023-08-06T13:04:34Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+{
+  "type": "node",
+  "id": 1013900007,
+  "lat": 48.3049728,
+  "lon": 14.2906596,
+  "tags": {
+    "contact:email": "alfred@brueckl.cc",
+    "contact:fax": "+43 732 795511",
+    "contact:phone": "+43 732 777276",
+    "contact:website": "http://www.brueckl.cc",
+    "name": "Radsport Brückl",
+    "opening_hours": "Mo-Fr 09:00-18:00; Sa 09:00-12:00",
+    "shop": "bicycle"
+  }
+},
+{
+  "type": "node",
+  "id": 1378456740,
+  "lat": 48.2544224,
+  "lon": 14.2802194,
+  "tags": {
+    "contact:phone": "+43 732 318800",
+    "name": "Walter Aichlseder",
+    "opening_hours": "Mo-Fr 08:00-12:00, 14:00-18:00; Sa 08:00-12:00",
+    "shop": "bicycle"
+  }
+},
+{
+  "type": "node",
+  "id": 1560353447,
+  "lat": 48.3093921,
+  "lon": 14.0232453,
+  "tags": {
+    "name": "Zweiradcenter Mörtenbäck",
+    "service:bicycle:repair": "yes",
+    "service:bicycle:retail": "yes",
+    "shop": "bicycle",
+    "toilets:wheelchair": "no",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 1589573265,
+  "lat": 48.3041650,
+  "lon": 14.2986064,
+  "tags": {
+    "contact:phone": "+43 732 779085",
+    "name": "Zweirad Etzlstorfer",
+    "opening_hours": "Mo-Fr 08:00-12:00,13:00-17:00",
+    "service:bicycle:pump": "no",
+    "service:bicycle:repair": "yes",
+    "shop": "bicycle"
+  }
+},
+{
+  "type": "node",
+  "id": 2473308376,
+  "lat": 48.3006628,
+  "lon": 14.2819635,
+  "tags": {
+    "name": "Bikekitchen Linz",
+    "note": "DiY bicycle repair workshop",
+    "opening_hours": "Th 15:00-24:00+",
+    "service:bicycle:diy": "yes",
+    "service:bicycle:repair": "no",
+    "shop": "bicycle"
+  }
+},
+{
+  "type": "node",
+  "id": 2588967258,
+  "lat": 48.3621603,
+  "lon": 14.0316732,
+  "tags": {
+    "name": "Kary",
+    "service:bicycle:repair": "yes",
+    "service:bicycle:retail": "yes",
+    "shop": "bicycle"
+  }
+},
+{
+  "type": "node",
+  "id": 3632885660,
+  "lat": 48.3046973,
+  "lon": 14.2844534,
+  "tags": {
+    "brand": "Electrolyte;Butchers & Bicycles;Schindlhauer;Velo Lab;Bicicapace;Pedalpower;Erenpreiss;AddBike",
+    "contact:email": "gerrad@gerrad.at",
+    "contact:phone": "+43 664 7501 4924",
+    "contact:website": "http://gerrad.at",
+    "name": "GerRad",
+    "opening_hours": "Th,Fr 14:00-18:00",
+    "operator": "Gerhard Dehmer",
+    "service:bicycle:pump": "yes",
+    "shop": "bicycle",
+    "wheelchair": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 4291274916,
+  "lat": 48.2249493,
+  "lon": 14.2948203,
+  "tags": {
+    "name": "Zweirad Pirklbauer",
+    "shop": "bicycle"
+  }
+},
+{
+  "type": "node",
+  "id": 5090933248,
+  "lat": 48.2552133,
+  "lon": 14.2827327,
+  "tags": {
+    "addr:city": "Linz",
+    "addr:country": "AT",
+    "addr:housenumber": "3",
+    "addr:postcode": "4020",
+    "addr:street": "Melissenweg",
+    "email": "beratung@ebike-city.at",
+    "name": "eBike City",
+    "opening_hours": "Mo-Fr 09:00-17:00",
+    "phone": "+43-732-371145",
+    "shop": "bicycle",
+    "website": "http://ebike-city.at"
+  }
+},
+{
+  "type": "node",
+  "id": 5419735131,
+  "lat": 48.1608735,
+  "lon": 14.0608847,
+  "tags": {
+    "addr:housenumber": "8",
+    "addr:street": "Karl-Wurmb-Straße",
+    "name": "Bikerei",
+    "opening_hours": "Mo-We 09:00-12:00,15:00-18:00; Th 13:00-19:00; Fr 09:00-12:00,15:00-18:00; PH off",
+    "shop": "bicycle",
+    "website": "https://www.bikerei.eu/"
+  }
+},
+{
+  "type": "node",
+  "id": 5898546885,
+  "lat": 48.3119382,
+  "lon": 14.2996658,
+  "tags": {
+    "addr:housenumber": "9",
+    "addr:street": "Peter-Behrens-Platz",
+    "email": "info@b7fahrradzentrum.at",
+    "name": "B7 Fahrradzentrum",
+    "opening_hours": "Tu-Fr 09:00-18:00; Sa 09:00-12:00",
+    "phone": "+43732681880",
+    "shop": "bicycle",
+    "website": "https://www.b7fahrradzentrum.at",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 6111418112,
+  "lat": 48.1582022,
+  "lon": 14.0263959,
+  "tags": {
+    "addr:city": "Wels",
+    "addr:country": "AT",
+    "addr:housenumber": "30",
+    "addr:postcode": "4600",
+    "addr:street": "Pfarrgasse",
+    "name": "Bikedoc",
+    "shop": "bicycle",
+    "website": "http://www.bikedoc.at/",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 6657644207,
+  "lat": 48.2972464,
+  "lon": 14.2879893,
+  "tags": {
+    "name": "Passione Bici Linz",
+    "shop": "bicycle",
+    "website": "http://www.passione-bici.at/"
+  }
+},
+{
+  "type": "node",
+  "id": 7005985089,
+  "lat": 48.2979909,
+  "lon": 14.2994785,
+  "tags": {
+    "addr:city": "Linz",
+    "addr:country": "AT",
+    "addr:housenumber": "52",
+    "addr:postcode": "4020",
+    "addr:street": "Goethestraße",
+    "name": "Bike Discounter",
+    "opening_hours": "Mo-Fr 09:00-18:30; Sa 10:00-16:00",
+    "phone": "+43 660 1453660",
+    "service:bicycle:rental": "yes",
+    "service:bicycle:repair": "yes",
+    "service:bicycle:retail": "yes",
+    "service:bicycle:second_hand": "yes",
+    "shop": "bicycle",
+    "website": "https://www.bike-discounter.at/"
+  }
+},
+{
+  "type": "node",
+  "id": 7103158130,
+  "lat": 48.3063277,
+  "lon": 14.2955650,
+  "tags": {
+    "addr:city": "Linz",
+    "addr:housenumber": "22",
+    "addr:postcode": "4020",
+    "addr:street": "Museumsstraße",
+    "alt_name:de": "Rostiger Esel",
+    "contact:email": "kontakt@rostigeresel.at",
+    "contact:phone": "+43 732 774 940",
+    "name": "Zum Rostigen Esel",
+    "opening_hours": "Mo-Fr 10:00-13:00, 14:00-18:00",
+    "operator": "Zum Rostigen Esel OG",
+    "payment:cash": "yes",
+    "phone": "+43 732 77 49 40",
+    "service:bicycle:Bicycle_Sales_and_Service": "yes",
+    "service:bicycle:pump": "yes",
+    "service:bicycle:repair": "yes",
+    "service:bicycle:second_hand": "yes",
+    "service:bicycle:tools": "yes",
+    "shop": "bicycle",
+    "website": "https://www.rostigeresel.at/"
+  }
+},
+{
+  "type": "node",
+  "id": 7194123887,
+  "lat": 48.3321619,
+  "lon": 14.1772788,
+  "tags": {
+    "addr:city": "Ottensheim",
+    "addr:country": "AT",
+    "addr:housenumber": "13",
+    "addr:postcode": "4100",
+    "addr:street": "Linzer Straße",
+    "email": "hallo@deinrad.at",
+    "name": "DEINRAD",
+    "opening_hours": "Mo-Fr 09:00-18:00",
+    "payment:cash": "yes",
+    "phone": "+43 (0) 7234 21 502",
+    "service:bicycle:repair": "yes",
+    "service:bicycle:retail": "yes",
+    "shop": "bicycle",
+    "website": "http://www.deinrad.at/",
+    "wheelchair": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 7764988424,
+  "lat": 48.3186756,
+  "lon": 14.2834480,
+  "tags": {
+    "addr:city": "Linz",
+    "addr:housenumber": "10",
+    "addr:postcode": "4040",
+    "addr:street": "Leonfeldner Straße",
+    "name": "Bikepalast",
+    "opening_hours": "Mo-Fr 09:00-18:00; Sa 08:30-12:30",
+    "service:bicycle:repair": "yes",
+    "service:bicycle:retail": "yes",
+    "shop": "bicycle"
+  }
+},
+{
+  "type": "node",
+  "id": 9101866966,
+  "lat": 48.3138683,
+  "lon": 14.2830627,
+  "tags": {
+    "addr:city": "Linz",
+    "addr:country": "AT",
+    "addr:housenumber": "14",
+    "addr:postcode": "4040",
+    "addr:street": "Blütenstraße",
+    "name": "Avanti Linz Bike Repair",
+    "service:bicycle:repair": "yes",
+    "service:bicycle:retail": "no",
+    "shop": "bicycle"
+  }
+},
+{
+  "type": "node",
+  "id": 9791802672,
+  "lat": 48.3082784,
+  "lon": 14.2952809,
+  "tags": {
+    "addr:city": "Linz",
+    "addr:housenumber": "25",
+    "addr:postcode": "4020",
+    "addr:street": "Kaisergasse",
+    "name": "Constantinbike",
+    "shop": "bicycle",
+    "website": "https://constantinbike.at"
+  }
+},
+{
+  "type": "node",
+  "id": 9983622003,
+  "lat": 48.3299004,
+  "lon": 14.3160070,
+  "tags": {
+    "addr:city": "Linz",
+    "addr:country": "AT",
+    "addr:housenumber": "297",
+    "addr:postcode": "4040",
+    "addr:street": "Freistädter Straße",
+    "contact:email": "info@radsport-kiesl.at",
+    "contact:phone": "+43732 750450",
+    "contact:website": "http://radsport-kiesl.at/",
+    "name": "Radsport Kiesl",
+    "opening_hours": "Mo-Th 08:00-12:00,14:00-18:00; Fr 08:00-18:00; Sa 08:00-13:00",
+    "service:bicycle:pump": "no",
+    "service:bicycle:repair": "yes",
+    "service:bicycle:retail": "yes",
+    "service:bicycle:second_hand": "no",
+    "shop": "bicycle"
+  }
+},
+{
+  "type": "node",
+  "id": 10093314994,
+  "lat": 48.2716196,
+  "lon": 14.4488203,
+  "tags": {
+    "check_date": "2022-10-11",
+    "name": "Fahrrad Zaki",
+    "shop": "bicycle",
+    "website": "https://fahrrad-zaki.at"
+  }
+},
+{
+  "type": "way",
+  "id": 85892423,
+  "center": {
+    "lat": 48.3094841,
+    "lon": 14.2781640
+  },
+  "nodes": [
+    996954948,
+    1573427334,
+    1573427331,
+    996955108,
+    1438524316,
+    996955439,
+    996955385,
+    996954826,
+    1438524292,
+    1438524279,
+    1438524284,
+    996954948
+  ],
+  "tags": {
+    "addr:city": "Linz",
+    "addr:country": "AT",
+    "addr:housenumber": "37",
+    "addr:postcode": "4040",
+    "addr:street": "Rudolfstraße",
+    "building": "apartments",
+    "name": "Hrinkow",
+    "opening_hours": "Mo-Th 09:00-12:00,14:00-18:00; Fr 09:00-18:00; Sa 09:00-12:00",
+    "service:bicycle:rental": "yes",
+    "service:bicycle:repair": "yes",
+    "service:bicycle:second_hand": "yes",
+    "shop": "bicycle",
+    "website": "http://www.hrinkow-bikes.at"
+  }
+},
+{
+  "type": "way",
+  "id": 89085112,
+  "center": {
+    "lat": 48.2816778,
+    "lon": 14.1142214
+  },
+  "nodes": [
+    1033613826,
+    2292184524,
+    1033614019,
+    1033613910,
+    1033613799,
+    1033613074,
+    1033612823,
+    1033613988,
+    1033613849,
+    1033613172,
+    2292184519,
+    1033612921,
+    1033613826
+  ],
+  "tags": {
+    "addr:city": "Alkoven",
+    "addr:country": "AT",
+    "addr:housenumber": "2",
+    "addr:postcode": "4072",
+    "addr:street": "Dorfstraße",
+    "building": "yes",
+    "name": "Rad & Tat (Institut Hartheim)",
+    "service:bicycle:repair": "yes",
+    "shop": "bicycle"
+  }
+},
+{
+  "type": "way",
+  "id": 228350495,
+  "center": {
+    "lat": 48.2217545,
+    "lon": 14.2429001
+  },
+  "nodes": [
+    2370321393,
+    3088019965,
+    3088019963,
+    3438414161,
+    3438414284,
+    2370321395,
+    3088019966,
+    2370321396,
+    2370321393
+  ],
+  "tags": {
+    "addr:city": "Traun",
+    "addr:country": "AT",
+    "addr:housenumber": "20a",
+    "addr:postcode": "4050",
+    "addr:street": "Christlgasse",
+    "building": "yes",
+    "name": "Popaflo",
+    "shop": "bicycle",
+    "source": "basemap.at",
+    "website": "http://www.popaflo.at"
+  }
+},
+{
+  "type": "way",
+  "id": 228350497,
+  "center": {
+    "lat": 48.2217961,
+    "lon": 14.2427166
+  },
+  "nodes": [
+    2522742232,
+    3438414170,
+    3438414284,
+    2370321395,
+    2370321399,
+    2370321400,
+    2370321401,
+    2522742232
+  ],
+  "tags": {
+    "addr:city": "Traun",
+    "addr:country": "AT",
+    "addr:housenumber": "20",
+    "addr:postcode": "4050",
+    "addr:street": "Christlgasse",
+    "building": "yes",
+    "name": "Popaflo",
+    "shop": "bicycle",
+    "source": "basemap.at",
+    "website": "http://www.popaflo.at"
+  }
+}
+
+  ]
+}
