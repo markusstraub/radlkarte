@@ -223,6 +223,11 @@ function loadGeoJson(file) {
 	});
 }
 
+/**
+ * use nextbike API to get stations and current nr of bikes.
+ * API doc: https://github.com/nextbike/api-doc/blob/master/maps/nextbike-maps.openapi.yaml
+ * List of all cities (to easily get domain code): https://maps.nextbike.net/maps/nextbike.json?list_cities=1
+ */
 function clearAndLoadNextbike(url) {
 	rkGlobal.poiLayers.bikeShareLayer.clearLayers();
 	$.getJSON(url, function (data) {

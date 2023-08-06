@@ -54,20 +54,6 @@ Route data is stored in `GeoJSON` format with the following attributes.
 6. Prepare (minify, add bbox,..) the .geojson with [prepare_geojson.py](data/prepare_geojson.py)
 
 
-## Development
-
-To test locally with Firefox go to `about:config` and set `privacy.file_unique_origin=false`, this allows local CORS requests.
-
-Linting:
-
-	sudo npm i -g jshint html5-lint
-	/usr/local/lib/node_modules/html5-lint/html5check.py index.html
-	jshint radlkarte.js
-
-### Known Bugs
-
-- Arrows in wrong size on fast zoom (synchronization issue of rendering method that is called more than once I fear)
-
 ## License
 
 The license for all our code and data is [here](LICENSE).
