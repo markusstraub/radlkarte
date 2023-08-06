@@ -18,6 +18,7 @@ Website for desktop, tablet & smartphone usage with the goal to provide useful (
     - Unpaved (dotted lines)
 - Automatically switch to the bicycle routes of the currently viewed region
 - Show problematic points along the route where dismounting or usage of heavy/wide bicycles may not be possible
+- Show POIs relevant for cycling (bike-sharing stations, bicycle shops,..)
 - GPS localization (especially useful for mobile devices)
 - Geocoding (address search)
 

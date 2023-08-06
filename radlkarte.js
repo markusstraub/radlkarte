@@ -676,6 +676,8 @@ function loadLeaflet() {
 
 	L.control.zoom({ position: 'topright' }).addTo(rkGlobal.leafletMap);
 
+	L.control.scale({ imperial: false, maxWidth: 200 }).addTo(rkGlobal.leafletMap);
+
 	let sidebar = L.control.sidebar({
 		container: 'sidebar',
 		position: 'left'
