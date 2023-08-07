@@ -16,11 +16,11 @@ rkGlobal.poiLayers.problemLayerHighZoom = L.layerGroup();
 /** layer group holding bike sharing icons */
 rkGlobal.poiLayers.bikeShareLayer = L.layerGroup();
 rkGlobal.osmPoiTypes = {
-	"transit": { "name": "Öffentlicher Verkehr" },
-	"bicycleShop": { "name": "Fahrradgeschäfte" },
-	"bicycleRepairStation": { "name": "Reparaturstationen" },
-	"bicyclePump": { "name": "Luftpumpen" },
-	"bicycleTubeVending": { "name": "Schlauchomaten" }
+	transit: { name: "ÖV-Station", layerName: "Öffentlicher Verkehr" },
+	bicycleShop: { name: "Fahrradgeschäft", layerName: "Fahrradgeschäfte" },
+	bicycleRepairStation: { name: "Reparaturstation", layerName: "Reparaturstationen" },
+	bicyclePump: { name: "Luftpumpe", layerName: "Luftpumpen" },
+	bicycleTubeVending: { name: "Schlauchomat", layerName: "Schlauchomaten" }
 }
 for (const [k, v] of Object.entries(rkGlobal.osmPoiTypes)) {
 	v["layer"] = L.layerGroup()
@@ -329,37 +329,32 @@ function clearAndLoadBasicOsmPoi(type, region) {
 	$.getJSON(poiFile, function (data) {
 		let count = 0
 		for (const element of data.elements) {
-			let latLng = "center" in element ? L.latLng(element.center.lat, element.center.lon) : L.latLng(element.lat, element.lon);
+			const latLng = "center" in element ? L.latLng(element.center.lat, element.center.lon) : L.latLng(element.lat, element.lon);
 			if (latLng == null) {
 				// L.latLng can return null/undefined for invalid lat/lon values, catch this here
 				console.warn("invalid lat/lon for " + type + " with OSM id " + element.id);
 				continue;
 			}
-			let description = '<b>' + rkGlobal.osmPoiTypes[type].name + '</b><br>';
-			if (element.tags.name != null) {
-				if (element.tags.website != null) {
-					description += `<a href="${element.tags.website}" target="_blank">${element.tags.name}</a><br>`;
-				}
+			const tags = element.tags;
+
+			const name = tags.name;
+			const address = extractAddressFromTagSoup(tags);
+			const website = extractWebsiteFromTagSoup(tags);
+			const operator = tags.operator;
+			const osmLink = `<a href="https://www.osm.org/${element.type}/${element.id}" target="_blank">mehr Informationen</a>`;
+			let heading = name != null ? name : rkGlobal.osmPoiTypes[type].name;
+			if (website != null) {
+				heading = `<a href="${website}" target="_blank">${heading}</a>`;
 			}
-			if (element.tags["addr:street"] != null) {
-				description += element.tags["addr:street"]
-				if (element.tags["addr:housenumber"] != null) {
-					description += " " + element.tags["addr:housenumber"]
-				}
-				if (element.tags["addr:postcode"] != null) {
-					description += ", " + element.tags["addr:postcode"]
-					if (element.tags["addr:city"] != null) {
-						description += " " + element.tags["addr:city"]
-					}
-				}
-				description += "<br>"
+			let description = `<b>${heading}</b><br>`;
+			if (address) {
+				description += `${address}<br>`;
 			}
-			if (element.tags.operator != null) {
-				description += `Betreiber: ${element.tags.operator}<br>`;
+			if (operator) {
+				description += `Betreiber: ${operator}<br>`;
 			}
-			if (element.tags.name == null && element.tags.website != null) {
-				description += `<a href="${element.tags.website}" target="_blank">${element.tags.website}</a><br>`;
-			}
+			description += `${osmLink}<br>`;
+
 			let icon = rkGlobal.icons[type];
 			let altText = element.tags.name;
 			const markerLayer = createMarkerIncludingPopup(latLng, icon, description, altText);
@@ -370,6 +365,37 @@ function clearAndLoadBasicOsmPoi(type, region) {
 		}
 		debug('created ' + count + ' ' + type + ' icons.');
 	});
+}
+
+function extractAddressFromTagSoup(tags) {
+	if (tags["addr:street"] != null) {
+		let address = "";
+		address += tags["addr:street"]
+		if (tags["addr:housenumber"] != null) {
+			address += " " + tags["addr:housenumber"]
+		}
+		if (tags["addr:postcode"] != null) {
+			address += ", " + tags["addr:postcode"]
+			if (tags["addr:city"] != null) {
+				address += " " + tags["addr:city"]
+			}
+		} else if (tags["addr:city"] != null) {
+			address += ", " + tags["addr:city"]
+		}
+		return address;
+	}
+	return undefined;
+}
+
+function extractWebsiteFromTagSoup(tags) {
+	let website = tags.website != null ? tags.website : tags["contact:website"];
+	if (website == null) {
+		return website;
+	}
+	if (!website.startsWith("http")) {
+		website = `http://${website}`;
+	}
+	return website;
 }
 
 /**
@@ -611,7 +637,7 @@ function loadLeaflet() {
 		"Leihräder": rkGlobal.poiLayers.bikeShareLayer
 	};
 	for (const [k, v] of Object.entries(rkGlobal.osmPoiTypes)) {
-		overlayMaps[v.name] = v.layer;
+		overlayMaps[v.layerName] = v.layer;
 	}
 
 	mixed.addTo(rkGlobal.leafletMap);
