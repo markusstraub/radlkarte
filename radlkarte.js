@@ -271,9 +271,8 @@ function createMarkerIncludingPopup(latLng, icon, description, altText) {
 		icon: icon,
 		alt: altText,
 	});
-	marker.bindPopup(description, { closeButton: false });
+	marker.bindPopup(description, { closeButton: true });
 	marker.on('mouseover', function () { marker.openPopup(); });
-	marker.on('mouseout', function () { marker.closePopup(); });
 	return marker;
 }
 
@@ -338,7 +337,9 @@ function clearAndLoadBasicOsmPoi(type, region) {
 			}
 			let description = '<b>' + rkGlobal.osmPoiTypes[type].name + '</b><br>';
 			if (element.tags.name != null) {
-				description += element.tags.name + "<br>";
+				if (element.tags.website != null) {
+					description += `<a href="${element.tags.website}" target="_blank">${element.tags.name}</a><br>`;
+				}
 			}
 			if (element.tags["addr:street"] != null) {
 				description += element.tags["addr:street"]
@@ -354,7 +355,10 @@ function clearAndLoadBasicOsmPoi(type, region) {
 				description += "<br>"
 			}
 			if (element.tags.operator != null) {
-				description += "Betreiber: " + element.tags.operator + "<br>";
+				description += `Betreiber: ${element.tags.operator}<br>`;
+			}
+			if (element.tags.name == null && element.tags.website != null) {
+				description += `<a href="${element.tags.website}" target="_blank">${element.tags.website}</a><br>`;
 			}
 			let icon = rkGlobal.icons[type];
 			let altText = element.tags.name;
@@ -792,22 +796,11 @@ function createRadlkarteMarkerLayersIncludingPopup(geojsonPoint) {
 		})
 	};
 
-	markers.lowZoom.bindPopup(description, { closeButton: false });
-	markers.lowZoom.on('mouseover', function () { markers.lowZoom.openPopup(); });
-	markers.lowZoom.on('mouseout', function () { markers.lowZoom.closePopup(); });
-
-	markers.highZoom.bindPopup(description, { closeButton: false });
-	markers.highZoom.on('mouseover', function () { markers.highZoom.openPopup(); });
-	markers.highZoom.on('mouseout', function () { markers.highZoom.closePopup(); });
-
-	//	 let key, marker;
-	//	 for (key in markers) {
-	//		 marker = markers[key];
-	//		 marker.bindPopup(description, {closeButton: false});  //, offset: L.point(0, -10)});
-	//		 marker.on('mouseover', function() { marker.openPopup(); });
-	//		 marker.on('mouseout', function() { marker.closePopup(); }); // FIXME why is mouseover/out not working for lowZoom?
-	//		 break;
-	//	 }
+	for (const key in markers) {
+		const marker = markers[key];
+		marker.bindPopup(description, { closeButton: true });
+		marker.on('mouseover', function () { marker.openPopup(); });
+	}
 
 	return markers;
 }
