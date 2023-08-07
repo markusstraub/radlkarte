@@ -591,7 +591,7 @@ function loadLeaflet() {
 		maxZoom: 19
 	});
 	let cartodbPositronLowZoom = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-		attribution: '&copy; <a href="https://www.openstreetmap.org" target="_blank">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+		attribution: '&copy; <a href="https://www.openstreetmap.org" target="_blank">OpenStreetMap</a> contributors | &copy; <a href="https://carto.com/attributions" target="_blank">CARTO</a>',
 		subdomains: 'abcd',
 		minZoom: 0,
 		maxZoom: 15
@@ -599,13 +599,14 @@ function loadLeaflet() {
 	let osmHiZoom = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 		minZoom: 16,
 		maxZoom: 19,
-		attribution: 'map data &amp; imagery &copy; <a href="https://openstreetmap.org" target="_blank">OpenStreetMap</a> contributors'
+		// low and high zoom layer contributions are combined, so skip it here
+		//attribution: 'map data &amp; imagery &copy; <a href="https://openstreetmap.org" target="_blank">OpenStreetMap</a> contributors'
 	});
 	let mixed = L.layerGroup([minMaxZoomLayer, cartodbPositronLowZoom, osmHiZoom]);
 
 	let basemapAtOrthofoto = L.tileLayer('https://maps{s}.wien.gv.at/basemap/bmaporthofoto30cm/normal/google3857/{z}/{y}/{x}.{format}', {
 		maxZoom: 18, // up to 20 is possible
-		attribution: 'Datenquelle: <a href="https://www.basemap.at">basemap.at</a>',
+		attribution: '<a href="https://www.basemap.at" target="_blank">basemap.at</a>',
 		subdomains: ["", "1", "2", "3", "4"],
 		format: 'jpeg',
 		bounds: [[46.35877, 8.782379], [49.037872, 17.189532]]
@@ -613,12 +614,12 @@ function loadLeaflet() {
 	let ocm = L.tileLayer('https://{s}.tile.thunderforest.com/cycle/{z}/{x}/{y}.png?apikey=ab5e4b2d24854fefb139c538ef5187a8', {
 		minZoom: 0,
 		maxZoom: 18,
-		attribution: 'map data &copy; <a href="https://openstreetmap.org" target="_blank">OpenStreetMap</a> contributors, imagery &copy; <a href="https://www.thunderforest.com" target="_blank">Thunderforest</a>'
+		attribution: '&copy; <a href="https://openstreetmap.org" target="_blank">OpenStreetMap</a> contributors | &copy; <a href="https://www.thunderforest.com" target="_blank">Thunderforest</a>'
 	});
 	let cyclosm = L.tileLayer('https://{s}.tile-cyclosm.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png', {
 		minZoom: 0,
 		maxZoom: 18,
-		attribution: 'map data &copy; <a href="https://openstreetmap.org" target="_blank">OpenStreetMap</a> contributors. Tiles style by <a href="https://www.cyclosm.org" target="_blank">CyclOSM</a> hosted by <a href="https://openstreetmap.fr/" target="_blank">OpenStreetMap France</a>.'
+		attribution: '&copy; <a href="https://openstreetmap.org" target="_blank">OpenStreetMap</a> contributors | <a href="https://www.cyclosm.org" target="_blank">CyclOSM</a> | <a href="https://openstreetmap.fr/" target="_blank">OpenStreetMap Frankreich</a>.'
 	});
 	let empty = L.tileLayer('', { attribution: '' });
 
@@ -710,7 +711,7 @@ function loadLeaflet() {
 
 	L.control.zoom({ position: 'topright' }).addTo(rkGlobal.leafletMap);
 
-	L.control.scale({ imperial: false, maxWidth: 200 }).addTo(rkGlobal.leafletMap);
+	L.control.scale({ position: 'topleft', imperial: false, maxWidth: 200 }).addTo(rkGlobal.leafletMap);
 
 	let sidebar = L.control.sidebar({
 		container: 'sidebar',
