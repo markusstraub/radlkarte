@@ -339,6 +339,7 @@ function clearAndLoadBasicOsmPoi(type, region) {
 
 			const name = tags.name;
 			const address = extractAddressFromTagSoup(tags);
+			const phone = tags.phone != null ? tags.phone : tags["contact:phone"];
 			const website = extractWebsiteFromTagSoup(tags);
 			const operator = tags.operator;
 			const osmLink = `<a href="https://www.osm.org/${element.type}/${element.id}" target="_blank">mehr Informationen</a>`;
@@ -349,6 +350,9 @@ function clearAndLoadBasicOsmPoi(type, region) {
 			let description = `<b>${heading}</b><br>`;
 			if (address) {
 				description += `${address}<br>`;
+			}
+			if (phone) {
+				description += `${phone}<br>`;
 			}
 			if (operator) {
 				description += `Betreiber: ${operator}<br>`;
