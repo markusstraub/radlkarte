@@ -1,4 +1,4 @@
-{"type": "FeatureCollection", "features": [
+{"type": "FeatureCollection", "bbox": [14.42138, 50.06376, 14.49918, 50.09116], "features": [
 {"geometry": {"coordinates": [[14.44224, 50.08196], [14.43977, 50.08192], [14.43705, 50.08261], [14.43078, 50.08347], [14.4261, 50.0838]], "type": "LineString"}, "properties": {"id": 2, "oneway": "yes", "priority": "2", "stress": "1"}, "type": "Feature"},
 {"geometry": {"coordinates": [[14.44188, 50.08107], [14.43941, 50.08103], [14.43668, 50.08172], [14.43042, 50.08257], [14.42574, 50.0829]], "type": "LineString"}, "properties": {"id": 3, "oneway": "yes", "priority": "2", "stress": "2"}, "type": "Feature"},
 {"geometry": {"coordinates": [[14.43883, 50.07126], [14.43637, 50.07122], [14.43364, 50.0719], [14.42738, 50.07276], [14.4227, 50.07309]], "type": "LineString"}, "properties": {"id": 4, "oneway": "yes", "priority": "2", "steep": "yes", "stress": "2", "unpaved": "yes"}, "type": "Feature"},

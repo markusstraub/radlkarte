@@ -1,4 +1,4 @@
-{"type": "FeatureCollection", "features": [
+{"type": "FeatureCollection", "bbox": [14.30921, 47.94649, 14.50838, 48.22303], "features": [
 {"geometry": {"coordinates": [[14.44144, 48.05926], [14.44126, 48.05867], [14.44136, 48.05819], [14.4422, 48.05736], [14.44348, 48.056], [14.44444, 48.0549]], "type": "LineString"}, "properties": {"id": 3, "priority": "1", "stress": "0"}, "type": "Feature"},
 {"geometry": {"coordinates": [[14.41957, 48.2141], [14.41949, 48.21361]], "type": "LineString"}, "properties": {"id": 4, "priority": "0", "stress": "1"}, "type": "Feature"},
 {"geometry": {"coordinates": [[14.35593, 47.95405], [14.35647, 47.95223], [14.35656, 47.94995], [14.35576, 47.94755], [14.35462, 47.94649]], "type": "LineString"}, "properties": {"id": 5, "priority": "0", "stress": "1"}, "type": "Feature"},

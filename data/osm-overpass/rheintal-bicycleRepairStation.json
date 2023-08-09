@@ -1,0 +1,296 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.60.6 e2dc3e5b",
+  "osm3s": {
+    "timestamp_osm_base": "2023-08-06T13:07:42Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+{
+  "type": "node",
+  "id": 5536163755,
+  "lat": 47.4713922,
+  "lon": 9.7128723,
+  "tags": {
+    "amenity": "bicycle_repair_station",
+    "service:bicycle:chain_tool": "no",
+    "service:bicycle:pump": "yes",
+    "service:bicycle:stand": "no",
+    "service:bicycle:tools": "yes",
+    "source": "survey 04.2018 and Vogis 2015"
+  }
+},
+{
+  "type": "node",
+  "id": 6346622318,
+  "lat": 47.4862005,
+  "lon": 9.7234736,
+  "tags": {
+    "amenity": "bicycle_repair_station",
+    "fee": "no",
+    "opening_hours": "24/7",
+    "operator": "Gemeinde Lauterach",
+    "service:bicycle:pump": "yes",
+    "service:bicycle:screwdriver": "yes",
+    "service:bicycle:tools": "yes",
+    "source": "survey 04.2019 and Vogis 2018"
+  }
+},
+{
+  "type": "node",
+  "id": 6865578038,
+  "lat": 47.4600263,
+  "lon": 9.7225731,
+  "tags": {
+    "amenity": "bicycle_repair_station",
+    "fee": "no",
+    "opening_hours": "24/7"
+  }
+},
+{
+  "type": "node",
+  "id": 6865590389,
+  "lat": 47.5022937,
+  "lon": 9.7467707,
+  "tags": {
+    "amenity": "bicycle_repair_station",
+    "fee": "no",
+    "opening_hours": "24/7",
+    "service:bicycle:pump": "yes",
+    "service:bicycle:tools": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 6865594041,
+  "lat": 47.4629630,
+  "lon": 9.7302203,
+  "tags": {
+    "amenity": "bicycle_repair_station",
+    "fee": "no",
+    "opening_hours": "24/7"
+  }
+},
+{
+  "type": "node",
+  "id": 8341410201,
+  "lat": 47.4733025,
+  "lon": 9.7518440,
+  "tags": {
+    "amenity": "bicycle_repair_station",
+    "opening_hours": "24/7",
+    "operator": "Radcult",
+    "service:bicycle:pump": "yes",
+    "service:bicycle:tools": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 8841679451,
+  "lat": 47.3977342,
+  "lon": 9.6475605,
+  "tags": {
+    "amenity": "bicycle_repair_station",
+    "name": "Fahrrad Servicestation",
+    "opening_hours": "24/7",
+    "operator": "Rhesi",
+    "service:bicycle:pump": "yes",
+    "service:bicycle:tools": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 8841679455,
+  "lat": 47.4520622,
+  "lon": 9.6611103,
+  "tags": {
+    "amenity": "bicycle_repair_station",
+    "name": "Fahrrad Servicestation",
+    "opening_hours": "24/7",
+    "operator": "Rhesi",
+    "service:bicycle:pump": "yes",
+    "service:bicycle:tools": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 8841697076,
+  "lat": 47.5054171,
+  "lon": 9.7486721,
+  "tags": {
+    "amenity": "bicycle_repair_station",
+    "name": "Öffentlich nutzbare Druckluftstation",
+    "opening_hours": "24/7",
+    "operator": "Pro Cycle Radshop Pauger Bregenz",
+    "service:bicycle:pump": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 8841750255,
+  "lat": 47.4660191,
+  "lon": 9.6488654,
+  "tags": {
+    "amenity": "bicycle_repair_station",
+    "fee": "no",
+    "opening_hours": "24/7",
+    "operator": "TechnoPlast",
+    "service:bicycle:pump": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 8844305034,
+  "lat": 47.5046352,
+  "lon": 9.7012303,
+  "tags": {
+    "amenity": "bicycle_repair_station",
+    "opening_hours": "24/7",
+    "service:bicycle:pump": "yes",
+    "service:bicycle:stand": "yes",
+    "service:bicycle:tools": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 8900331546,
+  "lat": 47.3656931,
+  "lon": 9.6541302,
+  "tags": {
+    "amenity": "bicycle_repair_station",
+    "lastcheck": "2021-07-06",
+    "opening_hours": "24/7",
+    "operator": "ÖAMTC",
+    "service:bicycle:pump": "yes",
+    "service:bicycle:stand": "yes",
+    "service:bicycle:tools": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 8917390854,
+  "lat": 47.5060951,
+  "lon": 9.7255147,
+  "tags": {
+    "amenity": "bicycle_repair_station",
+    "lastcheck:status": "2021-07-13",
+    "opening_hours": "24/7",
+    "service:bicycle:pump": "yes",
+    "service:bicycle:stand": "yes",
+    "service:bicycle:tools": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 8995822583,
+  "lat": 47.4008796,
+  "lon": 9.6596526,
+  "tags": {
+    "amenity": "bicycle_repair_station",
+    "opening_hours": "24/7",
+    "service:bicycle:pump": "yes",
+    "service:bicycle:tools": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 9087870520,
+  "lat": 47.4968324,
+  "lon": 9.7006135,
+  "tags": {
+    "amenity": "bicycle_repair_station",
+    "brand": "ÖAMTC",
+    "operator": "ÖAMTC",
+    "service:bicycle:pump": "yes",
+    "service:bicycle:stand": "yes",
+    "service:bicycle:tools": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 9214450858,
+  "lat": 47.3085121,
+  "lon": 9.6452299,
+  "tags": {
+    "access": "yes",
+    "amenity": "bicycle_repair_station",
+    "covered": "no",
+    "fee": "no",
+    "indoor": "no",
+    "manometer": "yes",
+    "manual": "yes",
+    "opening_hours": "24/7",
+    "service:bicycle:chain_tool": "no",
+    "service:bicycle:pump": "yes",
+    "service:bicycle:pump:operational_status": "no",
+    "service:bicycle:stand": "no",
+    "service:bicycle:tools": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 9570974971,
+  "lat": 47.3368942,
+  "lon": 9.6374149,
+  "tags": {
+    "amenity": "bicycle_repair_station",
+    "note": "Druckluft Pumpe und Werkzeug",
+    "opening_hours": "24/7",
+    "service:bicycle:pump": "yes",
+    "service:bicycle:tools": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 9917092791,
+  "lat": 47.3499271,
+  "lon": 9.6216097,
+  "tags": {
+    "amenity": "bicycle_repair_station"
+  }
+},
+{
+  "type": "node",
+  "id": 10013968145,
+  "lat": 47.4146736,
+  "lon": 9.7443642,
+  "tags": {
+    "amenity": "bicycle_repair_station",
+    "fee": "no",
+    "opening_hours": "24/7",
+    "service:bicycle:pump": "yes",
+    "service:bicycle:tools": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 10989051512,
+  "lat": 47.4010676,
+  "lon": 9.6107631,
+  "tags": {
+    "amenity": "bicycle_repair_station",
+    "fee": "no",
+    "opening_hours": "24/7",
+    "service:bicycle:diy": "yes",
+    "service:bicycle:pump": "yes",
+    "service:bicycle:screwdriver": "yes",
+    "service:bicycle:tools": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 11088781033,
+  "lat": 47.4748752,
+  "lon": 9.7302649,
+  "tags": {
+    "amenity": "bicycle_repair_station",
+    "service:bicycle:chain_tool": "no",
+    "service:bicycle:pump": "yes",
+    "service:bicycle:stand": "no",
+    "service:bicycle:tools": "no"
+  }
+}
+
+  ]
+}

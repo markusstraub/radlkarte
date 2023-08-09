@@ -1,0 +1,714 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.60.6 e2dc3e5b",
+  "osm3s": {
+    "timestamp_osm_base": "2023-08-06T13:07:42Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+{
+  "type": "node",
+  "id": 465246688,
+  "lat": 47.4791462,
+  "lon": 9.6641447,
+  "tags": {
+    "name": "DJ",
+    "shop": "bicycle"
+  }
+},
+{
+  "type": "node",
+  "id": 687985471,
+  "lat": 47.4179862,
+  "lon": 9.7367383,
+  "tags": {
+    "name": "Fahrrad Pur",
+    "opening_hours": "Mo-Fr 09:00-12:00, 15:00-19:00; Sa 9:00-12:00",
+    "shop": "bicycle",
+    "website": "https://www.fahrradpur.com",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 762823324,
+  "lat": 47.4280352,
+  "lon": 9.6580810,
+  "tags": {
+    "contact:email": "lustenau@cic-sport.com",
+    "contact:phone": "+43 650 7877015",
+    "contact:website": "http://www.cic-sport.com",
+    "name": "CIC Sport GmbH & Co. KG",
+    "opening_hours": "Mo,We,Fr 09:00-12:00,14:00-18:00; Tu,Th,Sa,Su,PH off",
+    "service:bicycle:retail": "yes",
+    "shop": "bicycle",
+    "website": "http://www.cic-sport.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 776411157,
+  "lat": 47.4887033,
+  "lon": 9.6892582,
+  "tags": {
+    "addr:city": "Hard",
+    "addr:country": "AT",
+    "addr:housenumber": "9",
+    "addr:postcode": "6971",
+    "addr:street": "Landstraße",
+    "atm": "yes",
+    "name": "RadWelt Hard",
+    "opening_hours": "Mo-We,Fr 09:00-12:00,14:00-18:00; Th,Sa 09:00-12:00",
+    "operator": "Daniel Malang",
+    "service:bicycle:rental": "yes",
+    "service:bicycle:repair": "yes",
+    "service:bicycle:second_hand": "yes",
+    "shop": "bicycle",
+    "website": "https://www.radwelt-hard.at"
+  }
+},
+{
+  "type": "node",
+  "id": 1142205965,
+  "lat": 47.4370527,
+  "lon": 9.6384069,
+  "tags": {
+    "addr:city": "Au SG",
+    "addr:housenumber": "40",
+    "addr:postcode": "9434",
+    "addr:street": "Hauptstrasse",
+    "name": "Radsport Frei",
+    "opening_hours": "Mar-Sep: Tu-Fr 09:00-12:00,13:30-18:30; Sa 08:00-14:00; Oct-Feb: Tu-Fr 09:00-12:00,13:30-18:00; Sa 09:00-14:00",
+    "service:bicycle:repair": "yes",
+    "service:bicycle:retail": "yes",
+    "shop": "bicycle",
+    "website": "http://www.radsportfrei.ch"
+  }
+},
+{
+  "type": "node",
+  "id": 1328631115,
+  "lat": 47.3872071,
+  "lon": 9.6597001,
+  "tags": {
+    "name": "W&W Bikes",
+    "service:bicycle:repair": "yes",
+    "service:bicycle:retail": "yes",
+    "service:bicycle:second_hand": "yes",
+    "shop": "bicycle"
+  }
+},
+{
+  "type": "node",
+  "id": 1437390577,
+  "lat": 47.4707442,
+  "lon": 9.7289955,
+  "tags": {
+    "addr:country": "AT",
+    "addr:housenumber": "95",
+    "addr:street": "Bundesstraße",
+    "contact:email": "fahrrad@loitz.at",
+    "contact:phone": "+43 5574 72156 5443",
+    "contact:website": "http://www.loitz.at/fahrraeder.html",
+    "name": "Zweirad Loitz",
+    "opening_hours": "Mo-Fr 09:00-12:00,14:00-18:00; Sa 08:30-12:00",
+    "shop": "bicycle"
+  }
+},
+{
+  "type": "node",
+  "id": 1637028174,
+  "lat": 47.4307073,
+  "lon": 9.6598608,
+  "tags": {
+    "alt_name": "2rad Holly",
+    "contact:email": "info@2radholly.at",
+    "contact:facebook": "https://www.facebook.com/2RadHollyMarcBoesch/",
+    "contact:phone": "+43 5577 82471",
+    "contact:website": "http://www.2radholly.at/",
+    "name": "2radholly",
+    "opening_hours": "Mo off; Tu-Fr 08:00-12:00; Sa 08:00-13:00; Su,PH off",
+    "operator": "Marc Bösch",
+    "service:bicycle:repair": "yes",
+    "service:bicycle:retail": "yes",
+    "service:bicycle:second_hand": "yes",
+    "shop": "bicycle"
+  }
+},
+{
+  "type": "node",
+  "id": 1727002927,
+  "lat": 47.4017044,
+  "lon": 9.7376622,
+  "tags": {
+    "addr:city": "Dornbirn",
+    "addr:country": "AT",
+    "addr:housenumber": "27",
+    "addr:postcode": "6850",
+    "addr:street": "Hatlerstraße",
+    "name": "Fahrradhaus Winder",
+    "opening_hours": "Mo-Fr 08:00-12:00,14:00-18:00; Sa 09:00-12:00",
+    "operator": "Winder Gerhard GmbH",
+    "service:bicycle:Bicycle_Sales_and_Service": "yes",
+    "service:bicycle:pump": "no",
+    "service:bicycle:repair": "yes",
+    "shop": "bicycle"
+  }
+},
+{
+  "type": "node",
+  "id": 2385375267,
+  "lat": 47.3314158,
+  "lon": 9.6370585,
+  "tags": {
+    "contact:email": "info@ritschisbike.at",
+    "contact:phone": "+43 5523 52400",
+    "contact:website": "http://www.ritschisbike.at",
+    "name": "Ritschis Bike",
+    "opening_hours": "Mo off; Tu-We 09:00-12:00,14:00-18:00; Th 09:00-12:00; Fr 09:00-12:00,14:00-18:00; Sa 09:00-12:00; PH off",
+    "operator": "Richard Hartmann",
+    "service:bicycle:retail": "yes",
+    "shop": "bicycle"
+  }
+},
+{
+  "type": "node",
+  "id": 2435472732,
+  "lat": 47.4152324,
+  "lon": 9.7437755,
+  "tags": {
+    "addr:city": "Dornbirn",
+    "addr:housenumber": "11",
+    "addr:postcode": "6850",
+    "addr:street": "Eisengasse",
+    "contact:email": "office@kraftstoff-bikes.com",
+    "contact:phone": "+43 5572 372018",
+    "contact:website": "http://www.kraftstoff-bikes.com",
+    "name": "Kraftstoff Bike + Sport",
+    "opening_hours": "Mo off; Tu-Fr 09:00-12:00,13:30-18:00; Sa 09:00-12:00; Su,PH off",
+    "operator": "Oliver Mösslang",
+    "service:bicycle:repair": "yes",
+    "service:bicycle:retail": "yes",
+    "shop": "bicycle"
+  }
+},
+{
+  "type": "node",
+  "id": 2821898605,
+  "lat": 47.4724865,
+  "lon": 9.7500912,
+  "tags": {
+    "UID": "ATU 67846977",
+    "addr:city": "Wolfurt",
+    "addr:country": "AT",
+    "addr:housenumber": "25",
+    "addr:postcode": "6922",
+    "addr:street": "Unterlinden",
+    "contact:email": "office@puchmayr.at",
+    "contact:fax": "+43 5574 64557",
+    "contact:phone": "+43 5574 64557",
+    "name": "BIKE Puchmayr",
+    "opening_hours": "Mo-Fr 08:00-12:00,14:00-18:15; Sa 08:00-12:00",
+    "shop": "bicycle",
+    "website": "http://www.puchmayr.at/"
+  }
+},
+{
+  "type": "node",
+  "id": 3608623837,
+  "lat": 47.5053978,
+  "lon": 9.7486545,
+  "tags": {
+    "name": "Procycle",
+    "opening_hours": "Mo-Fr 09:00-12:00,14:30-18:00",
+    "phone": "+43 5574 42477",
+    "service:bicycle:pump": "no",
+    "shop": "bicycle",
+    "website": "https://www.pro-cycle.at/"
+  }
+},
+{
+  "type": "node",
+  "id": 3666333741,
+  "lat": 47.3112484,
+  "lon": 9.6488883,
+  "tags": {
+    "addr:city": "Klaus",
+    "addr:country": "AT",
+    "addr:housenumber": "7",
+    "addr:postcode": "6833",
+    "addr:street": "Kirchmannsgasse",
+    "check_date": "2023-06-18",
+    "contact:email": "office@fahrrad-laengle.at",
+    "contact:phone": "+43 5523 55873",
+    "contact:website": "http://www.fahrrad-laengle.at/index.shtml",
+    "internet_access": "no",
+    "level": "0",
+    "name": "Fahrrad Längle",
+    "opening_hours": "Tu, Fr 14:00-19:00",
+    "service:bicycle:cleaning": "no",
+    "service:bicycle:diy": "no",
+    "service:bicycle:pump": "no",
+    "service:bicycle:rental": "no",
+    "service:bicycle:repair": "only_sold",
+    "service:bicycle:retail": "yes",
+    "service:bicycle:second_hand": "no",
+    "shop": "bicycle",
+    "wheelchair": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 4210670157,
+  "lat": 47.4193898,
+  "lon": 9.7468342,
+  "tags": {
+    "addr:city": "Dornbirn",
+    "addr:country": "AT",
+    "addr:housenumber": "45",
+    "addr:postcode": "6850",
+    "addr:street": "Eisengasse",
+    "name": "Zweirad Fink",
+    "opening_hours": "Tu-Fr 08:30-12:00,13:00-18:00; Sa 08:30-13:00; Mo off",
+    "shop": "bicycle",
+    "website": "http://www.finkrad.com"
+  }
+},
+{
+  "type": "node",
+  "id": 4264702856,
+  "lat": 47.5010891,
+  "lon": 9.7366020,
+  "tags": {
+    "addr:city": "Bregenz",
+    "addr:country": "AT",
+    "addr:housenumber": "53",
+    "addr:postcode": "6900",
+    "addr:street": "Bahnhofstraße",
+    "contact:email": "egon.raid@aon.at",
+    "contact:phone": "+43 5574 53060",
+    "name": "Egger Zweirad",
+    "old_name": "Raider Fahrradladen",
+    "opening_hours": "Mo-Fr 08:30-12:00,13:45-18:00; PH off; Sa 08:30-12:00",
+    "shop": "bicycle",
+    "source": "survey 10.2020 and Vogis 2018",
+    "website": "http://www.zweirad-egger.at/"
+  }
+},
+{
+  "type": "node",
+  "id": 4387276101,
+  "lat": 47.3543127,
+  "lon": 9.6564277,
+  "tags": {
+    "addr:city": "Altach",
+    "addr:country": "AT",
+    "addr:housenumber": "27",
+    "addr:postcode": "6844",
+    "addr:street": "Achstraße",
+    "contact:email": "office@fahrrad-waeger.at",
+    "contact:phone": "+43 5576 7235",
+    "contact:website": "http://www.fahrrad-waeger.at/",
+    "name": "Fahrrad Wäger",
+    "opening_hours": "Mo-We,Fr 08:30-12:00,13:30-18:00; Th,Sa 08:30-12:00",
+    "operator": "Stefan Wäger",
+    "service:bicycle:repair": "yes",
+    "service:bicycle:retail": "yes",
+    "shop": "bicycle",
+    "wheelchair": "limited"
+  }
+},
+{
+  "type": "node",
+  "id": 5518238471,
+  "lat": 47.4174342,
+  "lon": 9.7445071,
+  "tags": {
+    "UID": "ATU36171307",
+    "addr:city": "Dornbirn",
+    "addr:country": "AT",
+    "addr:housenumber": "2a",
+    "addr:postcode": "6850",
+    "addr:street": "Batloggstraße",
+    "contact:email": "info@2radschertler.at",
+    "contact:phone": "+43 5572 28382",
+    "name": "2rad Schertler",
+    "opening_hours": "Mo-Fr 08:00-12:00,14:00-18:00; Sa 08:00-12:00",
+    "shop": "bicycle",
+    "source": "Survey 03.2018",
+    "website": "http://www.2radschertler.at"
+  }
+},
+{
+  "type": "node",
+  "id": 7222726632,
+  "lat": 47.4148783,
+  "lon": 9.7433988,
+  "tags": {
+    "addr:city": "Dornbirn",
+    "addr:housenumber": "7",
+    "addr:postcode": "6850",
+    "addr:street": "Eisengasse",
+    "name": "VORRADELN",
+    "opening_hours": "Tu-Fr 10:00-12:00, Sa 10:00-13:00, Tu-Fr 14:00-18:00",
+    "operator": "Vorradeln Eric Poscher-Mika",
+    "payment:cash": "yes",
+    "payment:credit_card": "yes",
+    "phone": "+43557240204",
+    "service:bicycle:Bicycle_Sales_and_Service": "yes",
+    "service:bicycle:cargobike": "yes",
+    "service:bicycle:charging": "yes",
+    "service:bicycle:dealer": "yes",
+    "service:bicycle:diy": "yes",
+    "service:bicycle:ebike": "yes",
+    "service:bicycle:pump": "yes",
+    "service:bicycle:repair": "yes",
+    "service:bicycle:retail": "yes",
+    "service:bicycle:second_hand": "yes",
+    "service:bicycle:service": "yes",
+    "service:bicycle:tools": "yes",
+    "shop": "bicycle",
+    "website": "https://vorradeln.at"
+  }
+},
+{
+  "type": "node",
+  "id": 8967895568,
+  "lat": 47.4957001,
+  "lon": 9.7377368,
+  "tags": {
+    "addr:city": "Bregenz",
+    "addr:housenumber": "21",
+    "addr:postcode": "6900",
+    "addr:street": "Josef-Huter-Straße",
+    "name": "radikal werkstatt",
+    "opening_hours": "Mo 09:00-12:00,14:00-18:00; Tu-Th off; Fr 09:00-12:00,14:00-18:00; Sa,Su,PH off",
+    "operator": "Christoph Nagele",
+    "phone": "+43 677 61447947",
+    "service:bicycle:repair": "yes",
+    "service:bicycle:retail": "yes",
+    "shop": "bicycle",
+    "website": "https://www.radikalwerkstatt.at/"
+  }
+},
+{
+  "type": "node",
+  "id": 9491484202,
+  "lat": 47.3857406,
+  "lon": 9.6562777,
+  "tags": {
+    "name": "Veloinsel",
+    "shop": "bicycle"
+  }
+},
+{
+  "type": "node",
+  "id": 9497232233,
+  "lat": 47.4238189,
+  "lon": 9.6163553,
+  "tags": {
+    "name": "Zweirad Huber",
+    "shop": "bicycle"
+  }
+},
+{
+  "type": "node",
+  "id": 9540234544,
+  "lat": 47.4227696,
+  "lon": 9.7383842,
+  "tags": {
+    "addr:city": "Dornbirn",
+    "addr:country": "AT",
+    "addr:housename": "Haus B",
+    "addr:housenumber": "15",
+    "addr:postcode": "6850",
+    "addr:street": "Färbergasse",
+    "contact:email": "shop@vonbike.com",
+    "contact:phone": "+43 670 4048305",
+    "contact:website": "https://www.vonbike.com/",
+    "name": "vonbike - die freie Fahrradwerkstatt",
+    "opening_hours": "Mo-Fr 14:00-18:30; Sa 09:00-12:00",
+    "service:bicycle:repair": "yes",
+    "shop": "bicycle"
+  }
+},
+{
+  "type": "node",
+  "id": 9817901578,
+  "lat": 47.4251816,
+  "lon": 9.6546858,
+  "tags": {
+    "addr:city": "Lustenau",
+    "addr:country": "AT",
+    "addr:housenumber": "17a",
+    "addr:postcode": "6890",
+    "addr:street": "Jahnstraße",
+    "at_bev:addr_date": "2022-04-01",
+    "brand": "Canyon",
+    "email": "info@pedalpiraten.at",
+    "name": "Pedal Piraten",
+    "opening_hours": "Mo off; Tu-Fr 08:30-12:30,14:00-18:30; Sa 09:00-13:30; PH off",
+    "phone": "+43 5577 83651",
+    "service:bicycle:repair": "yes",
+    "service:bicycle:retail": "yes",
+    "shop": "bicycle",
+    "website": "https://www.pedalpiraten.at/"
+  }
+},
+{
+  "type": "way",
+  "id": 66325543,
+  "center": {
+    "lat": 47.4927901,
+    "lon": 9.6889101
+  },
+  "nodes": [
+    803945474,
+    6514658143,
+    803945566,
+    979614622,
+    979614624,
+    979614616,
+    979614614,
+    803945637,
+    803945599,
+    803945474
+  ],
+  "tags": {
+    "addr:city": "Hard",
+    "addr:country": "AT",
+    "addr:housenumber": "2a",
+    "addr:postcode": "6971",
+    "addr:street": "Kohlplatzstraße",
+    "building": "apartments",
+    "building:levels": "2",
+    "contact:facebook": "https://www.facebook.com/people/DJs-Bikeshop-Hard/100042942833877/",
+    "contact:instagram": "https://www.instagram.com/djsbikeshop/",
+    "contact:phone": "+43 5574 63601",
+    "contact:website": "http://www.djs.bike",
+    "name": "DJ's Bikeshop",
+    "opening_hours": "Mo-Tu 09:00-12:00,14:00-18:00; Fr 09:00-12:00,14:00-19:00; We-Th,Sa,Su,PH off",
+    "operator": "Herbert Wurm",
+    "roof:levels": "1",
+    "roof:shape": "gabled",
+    "service:bicycle:repair": "yes",
+    "service:bicycle:retail": "yes",
+    "shop": "bicycle"
+  }
+},
+{
+  "type": "way",
+  "id": 86222741,
+  "center": {
+    "lat": 47.4591858,
+    "lon": 9.6365283
+  },
+  "nodes": [
+    1000946014,
+    1000945595,
+    1000945646,
+    1000945445,
+    1000945119,
+    1000945927,
+    1000945570,
+    1000945333,
+    1000946069,
+    1000945806,
+    1000945068,
+    1000945844,
+    1000945512,
+    1000945278,
+    1000946003,
+    1000945745,
+    1000946014
+  ],
+  "tags": {
+    "addr:city": "Höchst",
+    "addr:country": "AT",
+    "addr:housename": "CIC Sport GmbH & Co. KG",
+    "addr:housenumber": "1",
+    "addr:postcode": "6971",
+    "addr:street": "Schlossergasse",
+    "building": "retail",
+    "contact:email": "lustenau@cic-sport.com",
+    "contact:phone": "+43 650 7877015",
+    "contact:website": "http://www.cic-sport.com",
+    "name": "CIC Sport GmbH & Co. KG",
+    "opening_hours": "Mo,We,Fr 09:00-12:00,14:00-18:00; Tu,Th,Sa,Su,PH off",
+    "service:bicycle:retail": "yes",
+    "shop": "bicycle"
+  }
+},
+{
+  "type": "way",
+  "id": 119625704,
+  "center": {
+    "lat": 47.4963133,
+    "lon": 9.7188629
+  },
+  "nodes": [
+    1343506403,
+    1343506039,
+    1343506540,
+    1343506314,
+    1343506403
+  ],
+  "tags": {
+    "addr:city": "Bregenz",
+    "addr:country": "AT",
+    "addr:housenumber": "64",
+    "addr:postcode": "6900",
+    "addr:street": "Rheinstraße",
+    "building": "apartments",
+    "building:levels": "3",
+    "contact:email": "info@radsportdrissner.at",
+    "contact:phone": "+43 5574 66022",
+    "contact:website": "https://www.radsportdrissner.at/",
+    "name": "Radsport Drissner",
+    "opening_hours": "Mo,Tu,We,Fr 09:00-12:00, 14:00-18:00; Th 09:00-12:00; Sa,Su,PH off",
+    "roof:shape": "flat",
+    "service:bicycle:repair": "yes",
+    "service:bicycle:retail": "yes",
+    "shop": "bicycle"
+  }
+},
+{
+  "type": "way",
+  "id": 127874950,
+  "center": {
+    "lat": 47.3702808,
+    "lon": 9.7087863
+  },
+  "nodes": [
+    6541925878,
+    1414389298,
+    1414389287,
+    1414389286,
+    1414389247,
+    1414389241,
+    1414389263,
+    1414389262,
+    6541925878
+  ],
+  "tags": {
+    "addr:city": "Hohenems",
+    "addr:country": "AT",
+    "addr:housenumber": "9;11",
+    "addr:postcode": "6845",
+    "addr:street": "Lehrer-Albrich-Weg",
+    "building": "yes",
+    "name": "ebike-factory",
+    "opening_hours": "\"nach Vereinbarung\"",
+    "phone": "+43 664 3969 081",
+    "service:bicycle:repair": "yes",
+    "service:bicycle:retail": "yes",
+    "shop": "bicycle",
+    "source": "geoimage.at",
+    "website": "http://www.ebike-factory.com"
+  }
+},
+{
+  "type": "way",
+  "id": 135405180,
+  "center": {
+    "lat": 47.3641339,
+    "lon": 9.6894250
+  },
+  "nodes": [
+    1487086054,
+    1487086024,
+    9799466925,
+    1487086013,
+    9799466926,
+    9799466927,
+    9799466928,
+    9799466929,
+    9799466930,
+    9799466931,
+    9799466932,
+    9799466933,
+    1487086049,
+    1487086054
+  ],
+  "tags": {
+    "addr:city": "Hohenems",
+    "addr:country": "AT",
+    "addr:housenumber": "3",
+    "addr:postcode": "6845",
+    "addr:street": "Marktstraße",
+    "building": "yes",
+    "email": "office@mariosbike.com",
+    "name": "Mario’s Bike",
+    "opening_hours": "Mo,Tu,We,Fr 09:00-12:00,14:00-18:00; Th,Sa 09:00-12:00",
+    "phone": "+43 5576 77187",
+    "service:bicycle:repair": "yes",
+    "service:bicycle:retail": "yes",
+    "service:bicycle:second_hand": "no",
+    "shop": "bicycle",
+    "source": "geoimage.at",
+    "sport": "cycling",
+    "website": "https://www.marios-bike.at/"
+  }
+},
+{
+  "type": "way",
+  "id": 153582926,
+  "center": {
+    "lat": 47.4732836,
+    "lon": 9.7521129
+  },
+  "nodes": [
+    769419745,
+    1662353514,
+    1662353504,
+    1662353519,
+    769419745
+  ],
+  "tags": {
+    "addr:city": "Wolfurt",
+    "addr:country": "AT",
+    "addr:housenumber": "6",
+    "addr:postcode": "6922",
+    "addr:street": "Kellhofstraße",
+    "at_bev:addr_date": "2017-10-01",
+    "building": "yes",
+    "contact:email": "wolfurt@radcult.at",
+    "contact:phone": "+43 5574 71342",
+    "name": "Radcult",
+    "opening_hours": "Apr-Sep Mo-Fr 08:00-12:00,14:00-18:00; Sa 08:00-12:00; Oct-Mar, Apr-Sep Mo-Fr 09:00-12:00,14:00-18:00; Sa 09:00-12:00",
+    "operator": "Radcult GmbH & Co KG",
+    "shop": "bicycle",
+    "source": "Geoimage.at",
+    "website": "http://radcult.eu"
+  }
+},
+{
+  "type": "way",
+  "id": 156593134,
+  "center": {
+    "lat": 47.3371954,
+    "lon": 9.6400551
+  },
+  "nodes": [
+    1688211953,
+    1688211951,
+    1688211936,
+    1688211708,
+    1688211953
+  ],
+  "tags": {
+    "addr:city": "Götzis",
+    "addr:country": "AT",
+    "addr:housenumber": "44",
+    "addr:postcode": "6840",
+    "addr:street": "Bahnhofstraße",
+    "building": "yes",
+    "name": "Zweirad Fleisch",
+    "opening_hours": "Mo-Sa 09:00-12:00, Mo-We,Fr 14:30-18:00; PH,Su off",
+    "shop": "bicycle"
+  }
+}
+
+  ]
+}

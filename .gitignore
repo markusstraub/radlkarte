@@ -1,6 +1,7 @@
-data/*.osm
-gfx_dev
+/non_vcs
+/data/osm-overpass
 
+.vscode
 __pycache__
 .pytest_cache
 test_output.geojson
