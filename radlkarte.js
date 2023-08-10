@@ -51,29 +51,23 @@ rkGlobal.defaultZoom = 14;
 rkGlobal.configurations = {
 	'rendertest': {
 		centerLatLng: L.latLng(50.088, 14.392),
-		geocodingBounds: '9.497,47.122,9.845,47.546',
 	},
 	'klagenfurt': {
 		centerLatLng: L.latLng(46.624, 14.308),
-		geocodingBounds: '13.978,46.477,14.624,46.778',
 		nextbikeUrl: 'https://maps.nextbike.net/maps/nextbike.json?domains=ka&bikes=false'
 	},
 	'linz': {
 		centerLatLng: L.latLng(48.30, 14.285),
-		geocodingBounds: '13.999,48.171,14.644,48.472',
 		nextbikeUrl: 'https://maps.nextbike.net/maps/nextbike.json?domains=al&bikes=false'
 	},
 	'rheintal': {
 		centerLatLng: L.latLng(47.4102, 9.7211),
-		geocodingBounds: '9.497,47.122,9.845,47.546',
 	},
 	'steyr': {
 		centerLatLng: L.latLng(48.039, 14.42),
-		geocodingBounds: '14.319,47.997,14.551,48.227',
 	},
 	'wien': {
 		centerLatLng: L.latLng(48.208, 16.372),
-		geocodingBounds: '16.105,47.995,16.710,48.389', // min lon, min lat, max lon, max lat
 		nextbikeUrl: 'https://maps.nextbike.net/maps/nextbike.json?domains=wr,la&bikes=false',
 	}
 };
@@ -111,8 +105,6 @@ function updateRadlkarteRegion(region) {
 	}
 	clearAndLoadOsmPois(visibleOsmPois);
 
-	// TODO get bounds from gejson and remove them from the configuration
-	rkGlobal.geocodingControl.options.geocoder.options.geocodingQueryParams.bounds = configuration.geocodingBounds;
 
 	// virtual page hit in matomo analytics
 	_paq.push(['setCustomUrl', '/' + region]);
@@ -144,6 +136,13 @@ function loadGeoJson(file) {
 		if (data.type != "FeatureCollection") {
 			console.error("expected a GeoJSON FeatureCollection. no radlkarte network can be displayed.");
 			return;
+		}
+
+		if (!data.bbox) {
+			console.warn("no bbox defined in GeoJSON - can not configure geocoding");
+			rkGlobal.geocodingControl.options.geocoder.options.geocodingQueryParams.bounds = null;
+		} else {
+			rkGlobal.geocodingControl.options.geocoder.options.geocodingQueryParams.bounds = data.bbox.join(",");
 		}
 
 		// collect geojson linestring features (and marker points)
@@ -719,7 +718,7 @@ function loadLeaflet() {
 			geocodingQueryParams: {
 				countrycode: 'at',
 				language: 'de'
-				// bounds are set later via updateRadlkarteRegion (min lon, min lat, max lon, max lat)
+				// bounds are set whenever a JSON is read (min lon, min lat, max lon, max lat)
 			}
 		}),
 		defaultMarkGeocode: false
@@ -857,11 +856,11 @@ function createMarkerIcon(url) {
 }
 
 function createProblemMarkersIncludingPopup(geojsonPoint) {
-	let icons = getIcons(geojsonPoint.properties);
+	let icons = getProblemIcons(geojsonPoint.properties);
 	if (icons == null) {
 		return undefined;
 	}
-	let description = getDescriptionText(geojsonPoint.properties);
+	let description = getProblemDescriptionText(geojsonPoint.properties);
 	let latLng = L.geoJSON(geojsonPoint).getLayers()[0].getLatLng();
 	let markers = {
 		lowZoom: createMarkerIncludingPopup(latLng, icons.small, description, 'Problemstelle'),
@@ -875,7 +874,7 @@ function createProblemMarkersIncludingPopup(geojsonPoint) {
  * @param properties GeoJSON properties of a point
  * @return a small and a large icon or undefined if no icons should be used
  */
-function getIcons(properties) {
+function getProblemIcons(properties) {
 	if (properties.leisure === 'swimming_pool') {
 		return {
 			small: rkGlobal.icons.swimmingSmall,
@@ -912,7 +911,7 @@ function getIcons(properties) {
  * @param properties GeoJSON properties of a point
  * @return a description string
  */
-function getDescriptionText(properties) {
+function getProblemDescriptionText(properties) {
 	let dismount = properties.dismount === 'yes';
 	let nocargo = properties.nocargo === 'yes';
 	let warning = properties.warning === 'yes';
