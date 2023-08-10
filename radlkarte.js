@@ -16,11 +16,11 @@ rkGlobal.poiLayers.problemLayerHighZoom = L.layerGroup();
 /** layer group holding bike sharing icons */
 rkGlobal.poiLayers.bikeShareLayer = L.layerGroup();
 rkGlobal.osmPoiTypes = {
-	transit: { name: "ÖV-Station", layerName: "Öffentlicher Verkehr" },
-	bicycleShop: { name: "Fahrradgeschäft", layerName: "Fahrradgeschäfte" },
-	bicycleRepairStation: { name: "Reparaturstation", layerName: "Reparaturstationen" },
-	bicyclePump: { name: "Luftpumpe", layerName: "Luftpumpen" },
-	bicycleTubeVending: { name: "Schlauchomat", layerName: "Schlauchomaten" }
+	transit: { urlKey: "o", name: "ÖV-Station", layerName: "Öffentlicher Verkehr" },
+	bicycleShop: { urlKey: "f", name: "Fahrradgeschäft", layerName: "Fahrradgeschäfte" },
+	bicycleRepairStation: { urlKey: "r", name: "Reparaturstation", layerName: "Reparaturstationen" },
+	bicyclePump: { urlKey: "l", name: "Luftpumpe", layerName: "Luftpumpen" },
+	bicycleTubeVending: { urlKey: "s", name: "Schlauchomat", layerName: "Schlauchomaten" }
 }
 for (const [k, v] of Object.entries(rkGlobal.osmPoiTypes)) {
 	v["layer"] = L.layerGroup()
@@ -221,6 +221,48 @@ function loadGeoJson(file) {
 			});
 		});
 	});
+}
+
+/**
+ * @returns a key representing activated layers with one char each. x means no active layer.
+ */
+function getSelectedPoiLayerKey() {
+	let selected = "";
+	if (rkGlobal.leafletMap.hasLayer(rkGlobal.poiLayers.problemLayerActive)) {
+		selected += 'p';
+	}
+	if (rkGlobal.leafletMap.hasLayer(rkGlobal.poiLayers.bikeShareLayer)) {
+		selected += 'b';
+	}
+	for (const type in rkGlobal.osmPoiTypes) {
+		if (rkGlobal.leafletMap.hasLayer(rkGlobal.poiLayers[type])) {
+			selected += rkGlobal.osmPoiTypes[type].urlKey;
+		}
+	}
+	if (selected.length == 0) {
+		selected = "x";
+	}
+	return selected;
+}
+
+function selectPoiLayersForKey(key) {
+	if (key.includes("p")) {
+		rkGlobal.leafletMap.addLayer(rkGlobal.poiLayers.problemLayerActive);
+	} else {
+		rkGlobal.leafletMap.removeLayer(rkGlobal.poiLayers.problemLayerActive);
+	}
+	if (key.includes("b")) {
+		rkGlobal.leafletMap.addLayer(rkGlobal.poiLayers.bikeShareLayer);
+	} else {
+		rkGlobal.leafletMap.removeLayer(rkGlobal.poiLayers.bikeShareLayer);
+	}
+	for (const type in rkGlobal.osmPoiTypes) {
+		if (key.includes(rkGlobal.osmPoiTypes[type].urlKey)) {
+			rkGlobal.leafletMap.addLayer(rkGlobal.poiLayers[type]);
+		} else {
+			rkGlobal.leafletMap.removeLayer(rkGlobal.poiLayers[type]);
+		}
+	}
 }
 
 /**
@@ -650,7 +692,8 @@ function loadLeaflet() {
 	}
 
 	mixed.addTo(rkGlobal.leafletMap);
-	rkGlobal.poiLayers.problemLayerActive.addTo(rkGlobal.leafletMap);
+	// default overlays are added via the customized leaflet-hash (see L.Hash.parseHash)
+	// rkGlobal.poiLayers.problemLayerActive.addTo(rkGlobal.leafletMap);
 	L.control.layers(baseMaps, overlayMaps, { 'position': 'topright', 'collapsed': true }).addTo(rkGlobal.leafletMap);
 
 	rkGlobal.leafletMap.on({

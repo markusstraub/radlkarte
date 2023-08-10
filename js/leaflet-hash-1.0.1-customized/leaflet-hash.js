@@ -23,6 +23,7 @@
 
 		var parsed = {
 			region: rkGlobal.defaultRegion,
+			poiLayers: 'p',
 			zoom: rkGlobal.defaultZoom,
 			center: undefined
 		}
@@ -37,7 +38,11 @@
 		}
 
 		if(args.length >= 2) {
-			var zoom = (L.version >= '1.0.0') ? parseFloat(args[1]) : parseInt(args[1], 10);
+			parsed.poiLayers = args[1];
+		}
+
+		if(args.length >= 3) {
+			var zoom = (L.version >= '1.0.0') ? parseFloat(args[2]) : parseInt(args[2], 10);
 			if(!isNaN(zoom)) {
 				parsed.zoom = zoom
 			}
@@ -45,9 +50,9 @@
 
 		var lat = undefined;
 		var lon = undefined;
-		if (args.length >= 4) {
-			var lat = parseFloat(args[2]);
-			var lon = parseFloat(args[3]);
+		if (args.length >= 5) {
+			var lat = parseFloat(args[3]);
+			var lon = parseFloat(args[4]);
 		}
 
 		if (!isNaN(lat) && !isNaN(lon)) {
@@ -66,6 +71,7 @@
 		    precision = Math.max(0, Math.ceil(Math.log(zoom) / Math.LN2));
 
 		return "#" + [this.region,
+			getSelectedPoiLayerKey(),
 			//(L.version >= '1.0.0') ? zoom.toFixed(precision) : zoom,
 			zoom,
 			center.lat.toFixed(precision),
@@ -153,6 +159,7 @@
 				updateRadlkarteRegion(parsed.region);
 				this.region = parsed.region;
 			}
+			selectPoiLayersForKey(parsed.poiLayers);
 			this.map.setView(parsed.center, parsed.zoom);
 			this.movingMap = false;
 		},
@@ -176,6 +183,8 @@
 		hashChangeInterval: null,
 		startListening: function() {
 			this.map.on("moveend", this.onMapMove, this);
+			rkGlobal.leafletMap.on("overlayadd", this.onMapMove, this);
+			rkGlobal.leafletMap.on("overlayremove", this.onMapMove, this);
 
 			if (HAS_HASHCHANGE) {
 				L.DomEvent.addListener(window, "hashchange", this.onHashChange);
