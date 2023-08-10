@@ -155,10 +155,10 @@ function loadGeoJson(file) {
 			let geojson = data.features[i];
 			if (geojson.type != 'Feature' || geojson.properties == undefined || geojson.geometry == undefined || geojson.geometry.type != 'LineString' || geojson.geometry.coordinates.length < 2) {
 				if (geojson.geometry.type == 'Point') {
-					let markerLayers = createRadlkarteMarkerLayersIncludingPopup(geojson);
-					if (markerLayers != null) {
-						rkGlobal.poiLayers.problemLayerLowZoom.addLayer(markerLayers.lowZoom);
-						rkGlobal.poiLayers.problemLayerHighZoom.addLayer(markerLayers.highZoom);
+					let problemMarkers = createProblemMarkersIncludingPopup(geojson);
+					if (problemMarkers != null) {
+						rkGlobal.poiLayers.problemLayerLowZoom.addLayer(problemMarkers.lowZoom);
+						rkGlobal.poiLayers.problemLayerHighZoom.addLayer(problemMarkers.highZoom);
 						++poiCount;
 					} else {
 						++ignoreCount;
@@ -273,6 +273,10 @@ function createMarkerIncludingPopup(latLng, icon, description, altText) {
 	});
 	marker.bindPopup(description, { closeButton: true });
 	marker.on('mouseover', function () { marker.openPopup(); });
+	// adding a mouseover event listener causes a problem with touch browsers:
+	// then two taps are required to show the marker.
+	// explicitly adding the click event listener here solves the issue
+	marker.on('click', function () { marker.openPopup(); });
 	return marker;
 }
 
@@ -809,32 +813,20 @@ function createMarkerIcon(url) {
 	});
 }
 
-function createRadlkarteMarkerLayersIncludingPopup(geojsonPoint) {
+function createProblemMarkersIncludingPopup(geojsonPoint) {
 	let icons = getIcons(geojsonPoint.properties);
 	if (icons == null) {
 		return undefined;
 	}
-
 	let description = getDescriptionText(geojsonPoint.properties);
+	let latLng = L.geoJSON(geojsonPoint).getLayers()[0].getLatLng();
 	let markers = {
-		lowZoom: L.marker(L.geoJSON(geojsonPoint).getLayers()[0].getLatLng(), {
-			icon: icons.small,
-			alt: description
-		}),
-		highZoom: L.marker(L.geoJSON(geojsonPoint).getLayers()[0].getLatLng(), {
-			icon: icons.large,
-			alt: description
-		})
+		lowZoom: createMarkerIncludingPopup(latLng, icons.small, description, 'Problemstelle'),
+		highZoom: createMarkerIncludingPopup(latLng, icons.large, description, 'Problemstelle')
 	};
-
-	for (const key in markers) {
-		const marker = markers[key];
-		marker.bindPopup(description, { closeButton: true });
-		marker.on('mouseover', function () { marker.openPopup(); });
-	}
-
 	return markers;
 }
+
 
 /**
  * @param properties GeoJSON properties of a point
