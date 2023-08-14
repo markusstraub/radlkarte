@@ -386,6 +386,11 @@ function clearAndLoadBasicOsmPoi(type, region) {
 			}
 			const tags = element.tags;
 
+			const access = tags.access;
+			if (["no", "private", "permit"].includes(access)) {
+				continue;
+			}
+
 			const name = tags.name;
 			const address = extractAddressFromTagSoup(tags);
 			const phone = tags.phone != null ? tags.phone : tags["contact:phone"];
