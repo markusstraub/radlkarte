@@ -2,10 +2,12 @@
 """Download latest points of interest for each Radlkarte region from the OpenStreetMap Overpass API"""
 import json
 import logging
+import shutil
 import sys
 from pathlib import Path
-
-import requests
+from urllib.error import URLError
+from urllib.parse import urlencode
+from urllib.request import Request, urlopen
 
 logFormatter = "%(asctime)s - %(levelname)s - %(message)s"
 logging.basicConfig(format=logFormatter, level=logging.INFO)
@@ -57,37 +59,42 @@ def download(query, filename):
 
     :returns http status code"""
     response = _download_from_endpoints(query)
-    if not isinstance(response, requests.Response):
+    if response is None:
         return -1
 
-    if response.status_code == 200:
-        # write content as-is to disk (without parsing it to json first)
-        with open(filename, "wb") as fd:
-            for chunk in response.iter_content(chunk_size=128):
-                fd.write(chunk)
-
-    return response.status_code
+    with open(filename, "wb") as fd:
+        shutil.copyfileobj(response, fd)
+    return response.code
 
 
 def _download_from_endpoints(query):
     """try to download until we are successful (or we run out of endpoints)
 
-    :returns a requests.Response object (or None)"""
+    :returns an urllib.response.Response object with http status code 200 (or None)"""
     for endpoint in OVERPASS_ENDPOINTS:
+        data = urlencode({"data": query})
+        data = data.encode("ascii")
+        request = Request(endpoint, data)
+
         try:
-            response = requests.get(endpoint, params={"data": query})
-        except requests.exceptions.RequestException as e:
-            logging.warning(f"exception {repr(e)} from {endpoint}")
-            response = e.response
+            response = urlopen(request)
+        except URLError as e:
+            if hasattr(e, "reason"):
+                logging.warning(f"could not reach {endpoint}: {e.reason}")
+            elif hasattr(e, "code"):
+                logging.warning(
+                    f"expected HTTP status code 200 but got {e.code} from {endpoint}"
+                )
             continue
 
-        if response.status_code == 200:
-            return response
-        logging.warning(
-            f"expected HTTP status code 200 but got {response.status_code} from {endpoint}"
-        )
+        if response.code != 200:
+            logging.warning(
+                f"expected HTTP status code 200 but got {e.code} from {endpoint}"
+            )
+            continue
+        return response
 
-    return response
+    return None
 
 
 def main(radlkarte_dir, out_dir):
