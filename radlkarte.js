@@ -274,8 +274,9 @@ function clearAndLoadNextbike(url) {
 	$.getJSON(url, function (data) {
 		for (const country of data.countries) {
 			for (const city of country.cities) {
+				let cityUrl = `<a href="${city.website}" target="_blank">Nextbike ${city.name}</a>`;
 				for (const place of city.places) {
-					let markerLayer = createNextbikeMarkerIncludingPopup(country.domain, place);
+					let markerLayer = createNextbikeMarkerIncludingPopup(country.domain, place, cityUrl);
 					if (markerLayer != null) {
 						rkGlobal.poiLayers.bikeShareLayer.addLayer(markerLayer);
 					}
@@ -289,13 +290,14 @@ function clearAndLoadNextbike(url) {
  * @param domain 2-letter Nextbike domain for determining special icons (optional).
  * @param place JSON from Nextbike API describing a bike-share station. 
  */
-function createNextbikeMarkerIncludingPopup(domain, place) {
+function createNextbikeMarkerIncludingPopup(domain, place, cityUrl) {
 	let description = '<b>' + place.name + '</b><br>';
 	if (place.bikes === 1) {
-		description += "1 Rad verfügbar"
+		description += "1 Rad verfügbar<br>"
 	} else {
-		description += place.bikes + " Räder verfügbar";
+		description += place.bikes + " Räder verfügbar<br>";
 	}
+	description += "Mehr Informationen: " + cityUrl;
 
 	let icon = place.bikes !== 0 ? rkGlobal.icons.nextbike : rkGlobal.icons.nextbikeGray;
 	if (domain === "wr") {
