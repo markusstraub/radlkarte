@@ -375,6 +375,8 @@ function clearAndLoadBasicOsmPoi(type, region) {
 	let poiFile = "data/osm-overpass/" + region + "-" + type + ".json";
 	$.getJSON(poiFile, function (data) {
 		let count = 0
+		let dataDate = extractDateFromOverpassResponse(data);
+		let osmLinkTitle = dataDate ? `title="Datenstand ${dataDate}"` : '';
 		for (const element of data.elements) {
 			const latLng = "center" in element ? L.latLng(element.center.lat, element.center.lon) : L.latLng(element.lat, element.lon);
 			if (latLng == null) {
@@ -389,7 +391,7 @@ function clearAndLoadBasicOsmPoi(type, region) {
 			const phone = tags.phone != null ? tags.phone : tags["contact:phone"];
 			const website = extractWebsiteFromTagSoup(tags);
 			const operator = tags.operator;
-			const osmLink = `<a href="https://www.osm.org/${element.type}/${element.id}" target="_blank">mehr Informationen</a>`;
+			const osmLink = `<a href="https://www.osm.org/${element.type}/${element.id}" ${osmLinkTitle} target="_blank">mehr Informationen</a>`;
 			let heading = name != null ? name : rkGlobal.osmPoiTypes[type].name;
 			if (website != null) {
 				heading = `<a href="${website}" target="_blank">${heading}</a>`;
@@ -416,6 +418,15 @@ function clearAndLoadBasicOsmPoi(type, region) {
 		}
 		debug('created ' + count + ' ' + type + ' icons.');
 	});
+}
+
+function extractDateFromOverpassResponse(data) {
+	if (data.osm3s && data.osm3s.timestamp_osm_base) {
+		if (typeof data.osm3s.timestamp_osm_base === 'string') {
+			return data.osm3s.timestamp_osm_base.split("T")[0]
+		}
+	}
+	return null;
 }
 
 function extractAddressFromTagSoup(tags) {
