@@ -59,7 +59,7 @@ Route data is stored in `GeoJSON` format with the following attributes.
 
 The license for all our code and data is [here](LICENSE).
 
-Obviously this excludes libraries (like leaflet, font-awesome or jquery) and the fonts.
+Obviously this excludes the libraries [leaflet (BSD 2-Clause)](https://leafletjs.com), font-awesome, [opening_hours.js (GPLv3)](https://github.com/opening-hours/opening_hours.js) or jquery) and the fonts.
 
 Other exceptions:
 - bicycle repair station icon based on icon taken from the [OpenStreetMap-carto](https://github.com/gravitystorm/openstreetmap-carto) style licensed under CC0 public domain

@@ -291,13 +291,13 @@ function clearAndLoadNextbike(url) {
  * @param place JSON from Nextbike API describing a bike-share station. 
  */
 function createNextbikeMarkerIncludingPopup(domain, place, cityUrl) {
-	let description = '<b>' + place.name + '</b><br>';
+	let description = '<h1>' + place.name + '</h1>';
 	if (place.bikes === 1) {
-		description += "1 Rad verfügbar<br>"
+		description += "<p>1 Rad verfügbar</p>"
 	} else {
-		description += place.bikes + " Räder verfügbar<br>";
+		description += `<p>${place.bikes} Räder verfügbar</p>`;
 	}
-	description += "Mehr Informationen: " + cityUrl;
+	description += `<p class="sidenote">Mehr Informationen: ${cityUrl}</p>`;
 
 	let icon = place.bikes !== 0 ? rkGlobal.icons.nextbike : rkGlobal.icons.nextbikeGray;
 	if (domain === "wr") {
@@ -356,7 +356,7 @@ function clearAndLoadTransit(region) {
 					console.warn("invalid lat/lon for " + type + " with OSM id " + element.id);
 					continue;
 				}
-				let description = '<b>' + element.tags.name + '</b><br>';
+				let description = '<h1>' + element.tags.name + '</h1>';
 				let icon = rkGlobal.icons[transitType];
 				let altText = element.tags.name;
 				const markerLayer = createMarkerIncludingPopup(latLng, icon, description, altText);
@@ -392,26 +392,55 @@ function clearAndLoadBasicOsmPoi(type, region) {
 			}
 
 			const name = tags.name;
-			const address = extractAddressFromTagSoup(tags);
-			const phone = tags.phone != null ? tags.phone : tags["contact:phone"];
 			const website = extractWebsiteFromTagSoup(tags);
-			const operator = tags.operator;
-			const osmLink = `<a href="https://www.osm.org/${element.type}/${element.id}" ${osmLinkTitle} target="_blank">mehr Informationen</a>`;
 			let heading = name != null ? name : rkGlobal.osmPoiTypes[type].name;
 			if (website != null) {
 				heading = `<a href="${website}" target="_blank">${heading}</a>`;
 			}
-			let description = `<b>${heading}</b><br>`;
+			let description = `<h1>${heading}</h1>`;
+
+			const address = extractAddressFromTagSoup(tags);
 			if (address) {
-				description += `${address}<br>`;
+				description += `<p>${address}</p>`;
 			}
+
+			let opening_hours_value = tags.opening_hours;
+			if (opening_hours_value) {
+				// TODO set proper state,
+				if (type === "bicycleShop" && !opening_hours_value.includes("PH")) {
+					// bicycle shops are usually closed on holidays but this is rarely mapped
+					opening_hours_value += ";PH off";
+				}
+				const oh = new opening_hours(opening_hours_value, { lat: latLng.lat, lon: latLng.lng, address: { country_code: "at", state: "Wien" } });
+				const openText = oh.getState() ? "jetzt geöffnet" : "derzeit geschlossen";
+				let items = oh.prettifyValue({ conf: { locale: 'de' }, }).split(";");
+
+				for (let i = 0; i < items.length; i++) {
+					items[i] = items[i].trim();
+					console.log(`x${items[i]}x`);
+					if (type === "bicycleShop" && items[i] === "Feiertags geschlossen") {
+						// avoid redundant info
+						items[i] = "";
+					} else {
+						items[i] = `<li>${items[i]}</li>`
+					}
+				}
+				const itemList = "<ul>" + items.join("\n") + "</ul>";
+				description += `<p>Öffnungszeiten (${openText}):</p>${itemList}`
+			}
+
+			const phone = tags.phone != null ? tags.phone : tags["contact:phone"];
 			if (phone) {
-				description += `${phone}<br>`;
+				description += `<p>${phone}</p>`;
 			}
+
+			const operator = tags.operator;
 			if (operator) {
-				description += `Betreiber: ${operator}<br>`;
+				description += `<p class="sidenote">Betreiber: ${operator}</p>`;
 			}
-			description += `${osmLink}<br>`;
+
+			const osmLink = `<p><a href="https://www.osm.org/${element.type}/${element.id}" ${osmLinkTitle} target="_blank" class="sidenote">Mehr Informationen</a></p>`;
+			description += `${osmLink}`;
 
 			let icon = rkGlobal.icons[type];
 			let altText = element.tags.name;
@@ -934,21 +963,18 @@ function getProblemDescriptionText(properties) {
 	let nocargo = properties.nocargo === 'yes';
 	let warning = properties.warning === 'yes';
 
-	let descriptionParts = [];
-
+	let title = "";
 	if (dismount && nocargo) {
-		descriptionParts.push('Schiebestelle / untauglich für Spezialräder');
+		title = 'Schiebestelle / untauglich für Spezialräder'
 	} else if (dismount) {
-		descriptionParts.push('Schiebestelle');
+		title = 'Schiebestelle';
 	} else if (nocargo) {
-		descriptionParts.push('Untauglich für Spezialräder');
+		title = 'Untauglich für Spezialräder';
 	} else if (warning) {
-		descriptionParts.push('Achtung');
+		title = 'Achtung';
 	}
 
-	if (properties.description !== undefined) {
-		descriptionParts.push(properties.description);
-	}
+	const description = properties.description ? `<p>${properties.description}</p>` : "";
 
-	return '<span class="popup"><strong>' + descriptionParts.join('</strong><br>') + '</span>';
+	return `<h1>${title}</h1>${description}`;
 }
