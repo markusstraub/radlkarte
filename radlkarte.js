@@ -811,7 +811,7 @@ function loadLeaflet() {
 		position: 'left'
 	}).addTo(rkGlobal.leafletMap);
 	if (window.innerWidth < rkGlobal.fullWidthThreshold) {
-		sidebar.close();
+		// sidebar.close(); TODO disabled to show news for mobile users, re-enable in the future
 	}
 
 	initializeIcons();
