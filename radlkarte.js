@@ -404,6 +404,7 @@ function clearAndLoadBasicOsmPoi(type, region) {
 				description += `<p>${address}</p>`;
 			}
 
+			let currentlyOpen = true;
 			let opening_hours_value = tags.opening_hours;
 			if (opening_hours_value) {
 				// TODO set proper state,
@@ -412,12 +413,12 @@ function clearAndLoadBasicOsmPoi(type, region) {
 					opening_hours_value += ";PH off";
 				}
 				const oh = new opening_hours(opening_hours_value, { lat: latLng.lat, lon: latLng.lng, address: { country_code: "at", state: "Wien" } });
-				const openText = oh.getState() ? "jetzt geöffnet" : "derzeit geschlossen";
+				currentlyOpen = oh.getState();
+				const openText = currentlyOpen ? "jetzt geöffnet" : "derzeit geschlossen";
 				let items = oh.prettifyValue({ conf: { locale: 'de' }, }).split(";");
 
 				for (let i = 0; i < items.length; i++) {
 					items[i] = items[i].trim();
-					console.log(`x${items[i]}x`);
 					if (type === "bicycleShop" && items[i] === "Feiertags geschlossen") {
 						// avoid redundant info
 						items[i] = "";
@@ -442,7 +443,7 @@ function clearAndLoadBasicOsmPoi(type, region) {
 			const osmLink = `<p><a href="https://www.osm.org/${element.type}/${element.id}" ${osmLinkTitle} target="_blank" class="sidenote">Mehr Informationen</a></p>`;
 			description += `${osmLink}`;
 
-			let icon = rkGlobal.icons[type];
+			let icon = rkGlobal.icons[`${type}${currentlyOpen ? "" : "Gray"}`];
 			let altText = element.tags.name;
 			const markerLayer = createMarkerIncludingPopup(latLng, icon, description, altText);
 			if (markerLayer != null) {
@@ -886,9 +887,13 @@ function initializeIcons() {
 	rkGlobal.icons.citybikelinz = createMarkerIcon('css/citybikelinz.svg');
 	rkGlobal.icons.citybikelinzGray = createMarkerIcon('css/citybikelinz-gray.svg');
 	rkGlobal.icons.bicycleShop = createMarkerIcon('css/bicycleShop.svg');
+	rkGlobal.icons.bicycleShopGray = createMarkerIcon('css/bicycleShop-gray.svg');
 	rkGlobal.icons.bicycleRepairStation = createMarkerIcon('css/bicycleRepairStation.svg');
+	rkGlobal.icons.bicycleRepairStationGray = createMarkerIcon('css/bicycleRepairStation-gray.svg');
 	rkGlobal.icons.bicyclePump = createMarkerIcon('css/bicyclePump.svg');
+	rkGlobal.icons.bicyclePumpGray = createMarkerIcon('css/bicyclePump-gray.svg');
 	rkGlobal.icons.bicycleTubeVending = createMarkerIcon('css/bicycleTubeVending.svg');
+	rkGlobal.icons.bicycleTubeVendingGray = createMarkerIcon('css/bicycleTubeVending-gray.svg');
 }
 
 function createMarkerIcon(url) {
