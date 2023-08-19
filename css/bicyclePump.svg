@@ -1,21 +1,92 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg version="1.1" id="Layer_1" x="0px" y="0px" viewBox="0 0 100 150" enable-background="new 0 0 365 560" xml:space="preserve" width="100" height="150"
+<svg
+   version="1.1"
+   id="Layer_1"
+   x="0px"
+   y="0px"
+   viewBox="0 0 100 150"
+   enable-background="new 0 0 365 560"
+   xml:space="preserve"
+   width="100"
+   height="150"
    xmlns="http://www.w3.org/2000/svg"
-   xmlns:svg="http://www.w3.org/2000/svg">
-   <defs id="defs9" />
-
-   <g id="g833" transform="scale(0.28506271,0.28476943)">
-      <g id="g4" transform="matrix(0.99028811,0,0,0.95747586,-5.7271643,-5.6549788)">
-         <path fill="#00AEEF" d="m 182.9,551.7 c 0,0.1 0.2,0.3 0.2,0.3 0,0 175.2,-269 175.2,-357.4 C 358.3,64.5 269.5,7.9 182.9,7.7 96.3,7.9 7.5,64.5 7.5,194.6 7.5,283 182.8,552 182.8,552 Z" id="path2" style="fill:#b8cc24;fill-opacity:1;stroke:#839617;stroke-width:3.50981;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
-      </g>
-   </g>
-
-   <g id="g841" transform="matrix(6.0925943,0,0,6.0925943,5.672216,11.630798)" style="fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-opacity:1">
-      <path d="M 3.732,13.513 H 8.235" fill="none" stroke="#444444" stroke-linecap="round" stroke-width="0.96118" id="path2-36" style="fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-opacity:1" />
-      <rect x="4.4879999" y="3.425" width="2.987" height="10.392" rx="0.79699999" ry="0.79699999" clip-rule="evenodd" color="#000000" color-rendering="auto" fill="#444444" fill-rule="evenodd" image-rendering="auto" shape-rendering="auto" solid-color="#000000" style="isolation:auto;mix-blend-mode:normal;fill:#ffffff;fill-opacity:1;stroke:none;stroke-opacity:1" id="rect4" />
-      <path d="M 5.983,3.598 V 0.481" color="#000000" color-rendering="auto" fill="none" image-rendering="auto" shape-rendering="auto" solid-color="#000000" stroke="#444444" stroke-linecap="round" stroke-width="0.96118" style="isolation:auto;mix-blend-mode:normal;fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-opacity:1" id="path6" />
-      <path d="M 3.779,0.437 H 8.187" color="#000000" color-rendering="auto" fill="none" image-rendering="auto" shape-rendering="auto" solid-color="#000000" stroke="#444444" stroke-linecap="round" stroke-width="0.8788" style="isolation:auto;mix-blend-mode:normal;fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-opacity:1" id="path8" />
-      <path d="m 6.84,10.83 c 0,0 0.582,-2.266 3.032,-1.745 2.449,0.52 3.643,-0.613 3.643,-0.613" color="#000000" color-rendering="auto" fill="none" image-rendering="auto" shape-rendering="auto" solid-color="#000000" stroke="#444444" stroke-linecap="round" stroke-width="0.8788" style="isolation:auto;mix-blend-mode:normal;fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-opacity:1" id="path10" />
-      <path d="M 11.678,8.84 13.361,7.982" color="#000000" color-rendering="auto" fill="none" image-rendering="auto" shape-rendering="auto" solid-color="#000000" stroke="#444444" stroke-linecap="round" stroke-width="0.8788" style="isolation:auto;mix-blend-mode:normal;fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-opacity:1" id="path12" />
-   </g>
-</svg>
+   xmlns:svg="http://www.w3.org/2000/svg">&#10;   <defs
+   id="defs9" />&#10;&#10;   &#10;&#10;   <path
+   fill="#00AEEF"
+   d="m 49.97743,143.84567 c 0,0 46.61771,-69.37694 46.61771,-92.176262 C 96.59514,18.11523 72.96088,3.4795706 49.97743,3.4279886 26.993989,3.4795686 3.4279799,18.072975 3.4279799,51.627157 c 0,22.799313 46.5494501,92.218513 46.5494501,92.218513 z"
+   id="path2"
+   style="fill:#b8cc24;fill-opacity:1;stroke:#839617;stroke-width:6.85596;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" /><g
+   id="g841"
+   transform="matrix(5.1734539,0,0,5.1734539,19.291858,15.077436)"
+   style="fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-opacity:1">&#10;      <path
+   d="M 3.732,13.513 H 8.235"
+   fill="none"
+   stroke="#444444"
+   stroke-linecap="round"
+   stroke-width="0.96118"
+   id="path2-36"
+   style="fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-opacity:1" />&#10;      <rect
+   x="4.4879999"
+   y="3.425"
+   width="2.987"
+   height="10.392"
+   rx="0.79699999"
+   ry="0.79699999"
+   clip-rule="evenodd"
+   color="#000000"
+   color-rendering="auto"
+   fill="#444444"
+   fill-rule="evenodd"
+   image-rendering="auto"
+   shape-rendering="auto"
+   solid-color="#000000"
+   style="isolation:auto;mix-blend-mode:normal;fill:#ffffff;fill-opacity:1;stroke:none;stroke-opacity:1"
+   id="rect4" />&#10;      <path
+   d="M 5.983,3.598 V 0.481"
+   color="#000000"
+   color-rendering="auto"
+   fill="none"
+   image-rendering="auto"
+   shape-rendering="auto"
+   solid-color="#000000"
+   stroke="#444444"
+   stroke-linecap="round"
+   stroke-width="0.96118"
+   style="isolation:auto;mix-blend-mode:normal;fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-opacity:1"
+   id="path6" />&#10;      <path
+   d="M 3.779,0.437 H 8.187"
+   color="#000000"
+   color-rendering="auto"
+   fill="none"
+   image-rendering="auto"
+   shape-rendering="auto"
+   solid-color="#000000"
+   stroke="#444444"
+   stroke-linecap="round"
+   stroke-width="0.8788"
+   style="isolation:auto;mix-blend-mode:normal;fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-opacity:1"
+   id="path8" />&#10;      <path
+   d="m 6.84,10.83 c 0,0 0.582,-2.266 3.032,-1.745 2.449,0.52 3.643,-0.613 3.643,-0.613"
+   color="#000000"
+   color-rendering="auto"
+   fill="none"
+   image-rendering="auto"
+   shape-rendering="auto"
+   solid-color="#000000"
+   stroke="#444444"
+   stroke-linecap="round"
+   stroke-width="0.8788"
+   style="isolation:auto;mix-blend-mode:normal;fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-opacity:1"
+   id="path10" />&#10;      <path
+   d="M 11.678,8.84 13.361,7.982"
+   color="#000000"
+   color-rendering="auto"
+   fill="none"
+   image-rendering="auto"
+   shape-rendering="auto"
+   solid-color="#000000"
+   stroke="#444444"
+   stroke-linecap="round"
+   stroke-width="0.8788"
+   style="isolation:auto;mix-blend-mode:normal;fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-opacity:1"
+   id="path12" />&#10;   </g>&#10;</svg>

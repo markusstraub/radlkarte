@@ -892,8 +892,8 @@ function initializeIcons() {
 }
 
 function createMarkerIcon(url) {
-	let markerWidth = 100 / 6;
-	let markerHeight = 150 / 6;
+	let markerWidth = 100 / 5;
+	let markerHeight = 150 / 5;
 	return L.icon({
 		iconUrl: url,
 		iconSize: [markerWidth, markerHeight],
