@@ -29,12 +29,12 @@ QUERY_TEMPLATE = """[out:json][timeout:120][bbox:{min_lat},{min_lon},{max_lat},{
 out center;"""
 
 QUERIES = {
-    "subway": 'nwr["railway"="station"]["station"="subway"];',
+    "subway": "nwr[railway=station][station=subway];",
     "railway": 'nwr[railway~"^station$|^halt$"][station!=subway][station!=miniature];',
-    "bicycleShop": 'nwr["shop"="bicycle"];',
-    "bicycleRepairStation": 'nwr["amenity"="bicycle_repair_station"];',
-    "bicyclePump": 'nwr["amenity"="compressed_air"];',
-    "bicycleTubeVending": 'nwr["vending"="bicycle_tube"];',
+    "bicycleShop": "nwr[shop=bicycle];",
+    "bicycleRepairStation": "nwr[amenity=bicycle_repair_station];",
+    "bicyclePump": '(nwr[amenity=compressed_air]; nwr["service:bicycle:pump"=yes]; );',
+    "bicycleTubeVending": "nwr[vending=bicycle_tube];",
 }
 
 

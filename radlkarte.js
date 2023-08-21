@@ -439,8 +439,8 @@ function clearAndLoadBasicOsmPoi(type, region) {
 				description += `<p class="sidenote">Betreiber: ${operator}</p>`;
 			}
 
-			const osmLink = `<a href="https://www.osm.org/${element.type}/${element.id}" target="_blank">Mehr Informationen</a>`;
-			description += `<p class="sidenote">${osmLink}. Datenstand: ${dataDate}</p>`;
+			const osmLink = `<a href="https://www.osm.org/${element.type}/${element.id}" target="_blank">Quelle: OpenStreetMap</a>`;
+			description += `<p class="sidenote">${osmLink} (Stand: ${dataDate})</p>`;
 
 			let icon = rkGlobal.icons[`${type}${currentlyOpen ? "" : "Gray"}`];
 			let altText = element.tags.name;
