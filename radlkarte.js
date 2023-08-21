@@ -376,7 +376,6 @@ function clearAndLoadBasicOsmPoi(type, region) {
 	$.getJSON(poiFile, function (data) {
 		let count = 0
 		let dataDate = extractDateFromOverpassResponse(data);
-		let osmLinkTitle = dataDate ? `title="Datenstand ${dataDate}"` : '';
 		for (const element of data.elements) {
 			const latLng = "center" in element ? L.latLng(element.center.lat, element.center.lon) : L.latLng(element.lat, element.lon);
 			if (latLng == null) {
@@ -440,8 +439,8 @@ function clearAndLoadBasicOsmPoi(type, region) {
 				description += `<p class="sidenote">Betreiber: ${operator}</p>`;
 			}
 
-			const osmLink = `<p><a href="https://www.osm.org/${element.type}/${element.id}" ${osmLinkTitle} target="_blank" class="sidenote">Mehr Informationen</a></p>`;
-			description += `${osmLink}`;
+			const osmLink = `<a href="https://www.osm.org/${element.type}/${element.id}" target="_blank">Mehr Informationen</a>`;
+			description += `<p class="sidenote">${osmLink}. Datenstand: ${dataDate}</p>`;
 
 			let icon = rkGlobal.icons[`${type}${currentlyOpen ? "" : "Gray"}`];
 			let altText = element.tags.name;
