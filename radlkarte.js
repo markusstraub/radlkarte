@@ -406,12 +406,12 @@ function clearAndLoadBasicOsmPoi(type, region) {
 			let currentlyOpen = type === 'bicycleShop' ? false : true;
 			let opening_hours_value = tags.opening_hours;
 			if (opening_hours_value) {
-				// TODO set proper state,
 				if (type === "bicycleShop" && !opening_hours_value.includes("PH")) {
 					// bicycle shops are usually closed on holidays but this is rarely mapped
 					opening_hours_value += ";PH off";
 				}
-				const oh = new opening_hours(opening_hours_value, { lat: latLng.lat, lon: latLng.lng, address: { country_code: "at", state: "Wien" } });
+				// NOTE: state left empty because school holidays are likely not relevant (not a single mapped instance in our data set)
+				const oh = new opening_hours(opening_hours_value, { lat: latLng.lat, lon: latLng.lng, address: { country_code: "at", state: "" } });
 				currentlyOpen = oh.getState();
 				const openText = currentlyOpen ? "jetzt geöffnet" : "derzeit geschlossen";
 				let items = oh.prettifyValue({ conf: { locale: 'de' }, }).split(";");
