@@ -404,7 +404,7 @@ function clearAndLoadBasicOsmPoi(type, region) {
 				description += `<p>${address}</p>`;
 			}
 
-			let currentlyOpen = true;
+			let currentlyOpen = type === 'bicycleShop' ? false : true;
 			let opening_hours_value = tags.opening_hours;
 			if (opening_hours_value) {
 				// TODO set proper state,
