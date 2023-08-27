@@ -865,18 +865,19 @@ function initializeIcons() {
 		iconAnchor: [5, 5],
 		popupAnchor: [0, -5]
 	});
-	let transitSize = 15;
+	let subwaySize = 15;
 	rkGlobal.icons.subway = L.icon({
 		iconUrl: 'css/subway.svg',
-		iconSize: [transitSize, transitSize],
-		iconAnchor: [transitSize / 2, transitSize / 2],
-		popupAnchor: [0, -transitSize / 2]
+		iconSize: [subwaySize, subwaySize],
+		iconAnchor: [subwaySize / 2, subwaySize / 2],
+		popupAnchor: [0, -subwaySize / 2]
 	});
+	let railwaySize = 20;
 	rkGlobal.icons.railway = L.icon({
-		iconUrl: 'css/railway.svg',
-		iconSize: [transitSize, transitSize],
-		iconAnchor: [transitSize / 2, transitSize / 2],
-		popupAnchor: [0, -transitSize / 2]
+		iconUrl: 'css/railway2.svg',
+		iconSize: [railwaySize, railwaySize],
+		iconAnchor: [railwaySize / 2, railwaySize / 2],
+		popupAnchor: [0, -railwaySize / 2]
 	});
 
 	rkGlobal.icons.nextbike = createMarkerIcon('css/nextbike.svg');

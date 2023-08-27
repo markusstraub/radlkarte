@@ -62,6 +62,7 @@ The license for all our code and data is [here](LICENSE).
 Obviously this excludes the libraries [leaflet (BSD 2-Clause)](https://leafletjs.com), font-awesome, [opening_hours.js (GPLv3)](https://github.com/opening-hours/opening_hours.js) or jquery) and the fonts.
 
 Other exceptions:
+- railway icon based on https://de.m.wikipedia.org/wiki/Datei:Train_Austria.svg
 - bicycle shop icon based on cart by Alfa Design from <a href="https://thenounproject.com/browse/icons/term/cart/" target="_blank" title="cart Icons">Noun Project</a> (CC BY 3.0)
 - bicycle repair station icon based on icon taken from the [OpenStreetMap-carto](https://github.com/gravitystorm/openstreetmap-carto) style licensed under CC0 public domain
 - bicycle tube vending icon based on icon taken from https://github.com/cyclosm/cyclosm-cartocss-style licensed under BSD-3-Clause license
