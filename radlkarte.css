@@ -170,6 +170,28 @@ ul.legend li img {
 	margin-bottom: 1em;
 }
 
+.leaflet-popup-content p,
+.leaflet-popup-content ul {
+	margin-top: 0;
+	margin-bottom: 0.2em;
+}
+
+.leaflet-popup-content h1 {
+	font-size: 100%;
+	margin-top: 0;
+	margin-bottom: 0.2em;
+}
+
+.leaflet-popup-content .sidenote {
+	color: dimgray;
+	font-size: 85%;
+	margin-bottom: 0;
+}
+
+.leaflet-popup-content .sidenote a {
+	color: dimgray;
+}
+
 
 /*
 - #AAB622 Grün für Schrift

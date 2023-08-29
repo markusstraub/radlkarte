@@ -16,11 +16,11 @@ rkGlobal.poiLayers.problemLayerHighZoom = L.layerGroup();
 /** layer group holding bike sharing icons */
 rkGlobal.poiLayers.bikeShareLayer = L.layerGroup();
 rkGlobal.osmPoiTypes = {
-	"transit": { "name": "Öffentlicher Verkehr" },
-	"bicycleShop": { "name": "Fahrradgeschäfte" },
-	"bicycleRepairStation": { "name": "Reparaturstationen" },
-	"bicyclePump": { "name": "Luftpumpen" },
-	"bicycleTubeVending": { "name": "Schlauchomaten" }
+	transit: { urlKey: "o", name: "ÖV-Station", layerName: "Öffentlicher Verkehr" },
+	bicycleShop: { urlKey: "f", name: "Fahrradgeschäft", layerName: "Fahrradgeschäfte" },
+	bicycleRepairStation: { urlKey: "r", name: "Reparaturstation", layerName: "Reparaturstationen" },
+	bicyclePump: { urlKey: "l", name: "Luftpumpe", layerName: "Luftpumpen" },
+	bicycleTubeVending: { urlKey: "s", name: "Schlauchomat", layerName: "Schlauchomaten" }
 }
 for (const [k, v] of Object.entries(rkGlobal.osmPoiTypes)) {
 	v["layer"] = L.layerGroup()
@@ -51,21 +51,17 @@ rkGlobal.defaultZoom = 14;
 rkGlobal.configurations = {
 	'rendertest': {
 		centerLatLng: L.latLng(50.088, 14.392),
-		geocodingBounds: '9.497,47.122,9.845,47.546',
 	},
 	'klagenfurt': {
 		centerLatLng: L.latLng(46.624, 14.308),
-		geocodingBounds: '13.978,46.477,14.624,46.778',
 		nextbikeUrl: 'https://maps.nextbike.net/maps/nextbike.json?domains=ka&bikes=false'
 	},
 	'linz': {
 		centerLatLng: L.latLng(48.30, 14.285),
-		geocodingBounds: '13.999,48.171,14.644,48.472',
 		nextbikeUrl: 'https://maps.nextbike.net/maps/nextbike.json?domains=al&bikes=false'
 	},
 	'rheintal': {
 		centerLatLng: L.latLng(47.4102, 9.7211),
-		geocodingBounds: '9.497,47.122,9.845,47.546',
 	},
        'schwarzatal': {
                 centerLatLng: L.latLng(47.70, 16.00),
@@ -74,11 +70,9 @@ rkGlobal.configurations = {
         },
 	'steyr': {
 		centerLatLng: L.latLng(48.039, 14.42),
-		geocodingBounds: '14.319,47.997,14.551,48.227',
 	},
 	'wien': {
 		centerLatLng: L.latLng(48.208, 16.372),
-		geocodingBounds: '16.105,47.995,16.710,48.389', // min lon, min lat, max lon, max lat
 		nextbikeUrl: 'https://maps.nextbike.net/maps/nextbike.json?domains=wr,la&bikes=false',
 	}
 };
@@ -116,8 +110,6 @@ function updateRadlkarteRegion(region) {
 	}
 	clearAndLoadOsmPois(visibleOsmPois);
 
-	// TODO get bounds from gejson and remove them from the configuration
-	rkGlobal.geocodingControl.options.geocoder.options.geocodingQueryParams.bounds = configuration.geocodingBounds;
 
 	// virtual page hit in matomo analytics
 	_paq.push(['setCustomUrl', '/' + region]);
@@ -151,6 +143,13 @@ function loadGeoJson(file) {
 			return;
 		}
 
+		if (!data.bbox) {
+			console.warn("no bbox defined in GeoJSON - can not configure geocoding");
+			rkGlobal.geocodingControl.options.geocoder.options.geocodingQueryParams.bounds = null;
+		} else {
+			rkGlobal.geocodingControl.options.geocoder.options.geocodingQueryParams.bounds = data.bbox.join(",");
+		}
+
 		// collect geojson linestring features (and marker points)
 		let ignoreCount = 0;
 		let goodCount = 0;
@@ -160,10 +159,10 @@ function loadGeoJson(file) {
 			let geojson = data.features[i];
 			if (geojson.type != 'Feature' || geojson.properties == undefined || geojson.geometry == undefined || geojson.geometry.type != 'LineString' || geojson.geometry.coordinates.length < 2) {
 				if (geojson.geometry.type == 'Point') {
-					let markerLayers = createRadlkarteMarkerLayersIncludingPopup(geojson);
-					if (markerLayers != null) {
-						rkGlobal.poiLayers.problemLayerLowZoom.addLayer(markerLayers.lowZoom);
-						rkGlobal.poiLayers.problemLayerHighZoom.addLayer(markerLayers.highZoom);
+					let problemMarkers = createProblemMarkersIncludingPopup(geojson);
+					if (problemMarkers != null) {
+						rkGlobal.poiLayers.problemLayerLowZoom.addLayer(problemMarkers.lowZoom);
+						rkGlobal.poiLayers.problemLayerHighZoom.addLayer(problemMarkers.highZoom);
 						++poiCount;
 					} else {
 						++ignoreCount;
@@ -228,13 +227,61 @@ function loadGeoJson(file) {
 	});
 }
 
+/**
+ * @returns a key representing activated layers with one char each. x means no active layer.
+ */
+function getSelectedPoiLayerKey() {
+	let selected = "";
+	if (rkGlobal.leafletMap.hasLayer(rkGlobal.poiLayers.problemLayerActive)) {
+		selected += 'p';
+	}
+	if (rkGlobal.leafletMap.hasLayer(rkGlobal.poiLayers.bikeShareLayer)) {
+		selected += 'b';
+	}
+	for (const type in rkGlobal.osmPoiTypes) {
+		if (rkGlobal.leafletMap.hasLayer(rkGlobal.poiLayers[type])) {
+			selected += rkGlobal.osmPoiTypes[type].urlKey;
+		}
+	}
+	if (selected.length == 0) {
+		selected = "x";
+	}
+	return selected;
+}
+
+function selectPoiLayersForKey(key) {
+	if (key.includes("p")) {
+		rkGlobal.leafletMap.addLayer(rkGlobal.poiLayers.problemLayerActive);
+	} else {
+		rkGlobal.leafletMap.removeLayer(rkGlobal.poiLayers.problemLayerActive);
+	}
+	if (key.includes("b")) {
+		rkGlobal.leafletMap.addLayer(rkGlobal.poiLayers.bikeShareLayer);
+	} else {
+		rkGlobal.leafletMap.removeLayer(rkGlobal.poiLayers.bikeShareLayer);
+	}
+	for (const type in rkGlobal.osmPoiTypes) {
+		if (key.includes(rkGlobal.osmPoiTypes[type].urlKey)) {
+			rkGlobal.leafletMap.addLayer(rkGlobal.poiLayers[type]);
+		} else {
+			rkGlobal.leafletMap.removeLayer(rkGlobal.poiLayers[type]);
+		}
+	}
+}
+
+/**
+ * use nextbike API to get stations and current nr of bikes.
+ * API doc: https://github.com/nextbike/api-doc/blob/master/maps/nextbike-maps.openapi.yaml
+ * List of all cities (to easily get domain code): https://maps.nextbike.net/maps/nextbike.json?list_cities=1
+ */
 function clearAndLoadNextbike(url) {
 	rkGlobal.poiLayers.bikeShareLayer.clearLayers();
 	$.getJSON(url, function (data) {
 		for (const country of data.countries) {
 			for (const city of country.cities) {
+				let cityUrl = `<a href="${city.website}" target="_blank">Nextbike ${city.name}</a>`;
 				for (const place of city.places) {
-					let markerLayer = createNextbikeMarkerIncludingPopup(country.domain, place);
+					let markerLayer = createNextbikeMarkerIncludingPopup(country.domain, place, cityUrl);
 					if (markerLayer != null) {
 						rkGlobal.poiLayers.bikeShareLayer.addLayer(markerLayer);
 					}
@@ -248,13 +295,14 @@ function clearAndLoadNextbike(url) {
  * @param domain 2-letter Nextbike domain for determining special icons (optional).
  * @param place JSON from Nextbike API describing a bike-share station. 
  */
-function createNextbikeMarkerIncludingPopup(domain, place) {
-	let description = '<b>' + place.name + '</b><br>';
+function createNextbikeMarkerIncludingPopup(domain, place, cityUrl) {
+	let description = '<h1>' + place.name + '</h1>';
 	if (place.bikes === 1) {
-		description += "1 Rad verfügbar"
+		description += "<p>1 Rad verfügbar</p>"
 	} else {
-		description += place.bikes + " Räder verfügbar";
+		description += `<p>${place.bikes} Räder verfügbar</p>`;
 	}
+	description += `<p class="sidenote">Mehr Informationen: ${cityUrl}</p>`;
 
 	let icon = place.bikes !== 0 ? rkGlobal.icons.nextbike : rkGlobal.icons.nextbikeGray;
 	if (domain === "wr") {
@@ -271,9 +319,12 @@ function createMarkerIncludingPopup(latLng, icon, description, altText) {
 		icon: icon,
 		alt: altText,
 	});
-	marker.bindPopup(description, { closeButton: false });
+	marker.bindPopup(description, { closeButton: true });
 	marker.on('mouseover', function () { marker.openPopup(); });
-	marker.on('mouseout', function () { marker.closePopup(); });
+	// adding a mouseover event listener causes a problem with touch browsers:
+	// then two taps are required to show the marker.
+	// explicitly adding the click event listener here solves the issue
+	marker.on('click', function () { marker.openPopup(); });
 	return marker;
 }
 
@@ -310,7 +361,7 @@ function clearAndLoadTransit(region) {
 					console.warn("invalid lat/lon for " + type + " with OSM id " + element.id);
 					continue;
 				}
-				let description = '<b>' + element.tags.name + '</b><br>';
+				let description = '<h1>' + element.tags.name + '</h1>';
 				let icon = rkGlobal.icons[transitType];
 				let altText = element.tags.name;
 				const markerLayer = createMarkerIncludingPopup(latLng, icon, description, altText);
@@ -329,33 +380,73 @@ function clearAndLoadBasicOsmPoi(type, region) {
 	let poiFile = "data/osm-overpass/" + region + "-" + type + ".json";
 	$.getJSON(poiFile, function (data) {
 		let count = 0
+		let dataDate = extractDateFromOverpassResponse(data);
+		let osmLinkTitle = dataDate ? `title="Datenstand ${dataDate}"` : '';
 		for (const element of data.elements) {
-			let latLng = "center" in element ? L.latLng(element.center.lat, element.center.lon) : L.latLng(element.lat, element.lon);
+			const latLng = "center" in element ? L.latLng(element.center.lat, element.center.lon) : L.latLng(element.lat, element.lon);
 			if (latLng == null) {
 				// L.latLng can return null/undefined for invalid lat/lon values, catch this here
 				console.warn("invalid lat/lon for " + type + " with OSM id " + element.id);
 				continue;
 			}
-			let description = '<b>' + rkGlobal.osmPoiTypes[type].name + '</b><br>';
-			if (element.tags.name != null) {
-				description += element.tags.name + "<br>";
+			const tags = element.tags;
+
+			const access = tags.access;
+			if (["no", "private", "permit"].includes(access)) {
+				continue;
 			}
-			if (element.tags["addr:street"] != null) {
-				description += element.tags["addr:street"]
-				if (element.tags["addr:housenumber"] != null) {
-					description += " " + element.tags["addr:housenumber"]
+
+			const name = tags.name;
+			const website = extractWebsiteFromTagSoup(tags);
+			let heading = name != null ? name : rkGlobal.osmPoiTypes[type].name;
+			if (website != null) {
+				heading = `<a href="${website}" target="_blank">${heading}</a>`;
+			}
+			let description = `<h1>${heading}</h1>`;
+
+			const address = extractAddressFromTagSoup(tags);
+			if (address) {
+				description += `<p>${address}</p>`;
+			}
+
+			let opening_hours_value = tags.opening_hours;
+			if (opening_hours_value) {
+				// TODO set proper state,
+				if (type === "bicycleShop" && !opening_hours_value.includes("PH")) {
+					// bicycle shops are usually closed on holidays but this is rarely mapped
+					opening_hours_value += ";PH off";
 				}
-				if (element.tags["addr:postcode"] != null) {
-					description += ", " + element.tags["addr:postcode"]
-					if (element.tags["addr:city"] != null) {
-						description += " " + element.tags["addr:city"]
+				const oh = new opening_hours(opening_hours_value, { lat: latLng.lat, lon: latLng.lng, address: { country_code: "at", state: "Wien" } });
+				const openText = oh.getState() ? "jetzt geöffnet" : "derzeit geschlossen";
+				let items = oh.prettifyValue({ conf: { locale: 'de' }, }).split(";");
+
+				for (let i = 0; i < items.length; i++) {
+					items[i] = items[i].trim();
+					console.log(`x${items[i]}x`);
+					if (type === "bicycleShop" && items[i] === "Feiertags geschlossen") {
+						// avoid redundant info
+						items[i] = "";
+					} else {
+						items[i] = `<li>${items[i]}</li>`
 					}
 				}
-				description += "<br>"
+				const itemList = "<ul>" + items.join("\n") + "</ul>";
+				description += `<p>Öffnungszeiten (${openText}):</p>${itemList}`
 			}
-			if (element.tags.operator != null) {
-				description += "Betreiber: " + element.tags.operator + "<br>";
+
+			const phone = tags.phone != null ? tags.phone : tags["contact:phone"];
+			if (phone) {
+				description += `<p>${phone}</p>`;
 			}
+
+			const operator = tags.operator;
+			if (operator) {
+				description += `<p class="sidenote">Betreiber: ${operator}</p>`;
+			}
+
+			const osmLink = `<p><a href="https://www.osm.org/${element.type}/${element.id}" ${osmLinkTitle} target="_blank" class="sidenote">Mehr Informationen</a></p>`;
+			description += `${osmLink}`;
+
 			let icon = rkGlobal.icons[type];
 			let altText = element.tags.name;
 			const markerLayer = createMarkerIncludingPopup(latLng, icon, description, altText);
@@ -366,6 +457,46 @@ function clearAndLoadBasicOsmPoi(type, region) {
 		}
 		debug('created ' + count + ' ' + type + ' icons.');
 	});
+}
+
+function extractDateFromOverpassResponse(data) {
+	if (data.osm3s && data.osm3s.timestamp_osm_base) {
+		if (typeof data.osm3s.timestamp_osm_base === 'string') {
+			return data.osm3s.timestamp_osm_base.split("T")[0]
+		}
+	}
+	return null;
+}
+
+function extractAddressFromTagSoup(tags) {
+	if (tags["addr:street"] != null) {
+		let address = "";
+		address += tags["addr:street"]
+		if (tags["addr:housenumber"] != null) {
+			address += " " + tags["addr:housenumber"]
+		}
+		if (tags["addr:postcode"] != null) {
+			address += ", " + tags["addr:postcode"]
+			if (tags["addr:city"] != null) {
+				address += " " + tags["addr:city"]
+			}
+		} else if (tags["addr:city"] != null) {
+			address += ", " + tags["addr:city"]
+		}
+		return address;
+	}
+	return undefined;
+}
+
+function extractWebsiteFromTagSoup(tags) {
+	let website = tags.website != null ? tags.website : tags["contact:website"];
+	if (website == null) {
+		return website;
+	}
+	if (!website.startsWith("http")) {
+		website = `http://${website}`;
+	}
+	return website;
 }
 
 /**
@@ -557,7 +688,7 @@ function loadLeaflet() {
 		maxZoom: 19
 	});
 	let cartodbPositronLowZoom = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-		attribution: '&copy; <a href="https://www.openstreetmap.org" target="_blank">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+		attribution: '&copy; <a href="https://www.openstreetmap.org" target="_blank">OpenStreetMap</a> contributors | &copy; <a href="https://carto.com/attributions" target="_blank">CARTO</a>',
 		subdomains: 'abcd',
 		minZoom: 0,
 		maxZoom: 15
@@ -565,13 +696,14 @@ function loadLeaflet() {
 	let osmHiZoom = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 		minZoom: 16,
 		maxZoom: 19,
-		attribution: 'map data &amp; imagery &copy; <a href="https://openstreetmap.org" target="_blank">OpenStreetMap</a> contributors'
+		// low and high zoom layer contributions are combined, so skip it here
+		//attribution: 'map data &amp; imagery &copy; <a href="https://openstreetmap.org" target="_blank">OpenStreetMap</a> contributors'
 	});
 	let mixed = L.layerGroup([minMaxZoomLayer, cartodbPositronLowZoom, osmHiZoom]);
 
 	let basemapAtOrthofoto = L.tileLayer('https://maps{s}.wien.gv.at/basemap/bmaporthofoto30cm/normal/google3857/{z}/{y}/{x}.{format}', {
 		maxZoom: 18, // up to 20 is possible
-		attribution: 'Datenquelle: <a href="https://www.basemap.at">basemap.at</a>',
+		attribution: '<a href="https://www.basemap.at" target="_blank">basemap.at</a>',
 		subdomains: ["", "1", "2", "3", "4"],
 		format: 'jpeg',
 		bounds: [[46.35877, 8.782379], [49.037872, 17.189532]]
@@ -579,12 +711,12 @@ function loadLeaflet() {
 	let ocm = L.tileLayer('https://{s}.tile.thunderforest.com/cycle/{z}/{x}/{y}.png?apikey=ab5e4b2d24854fefb139c538ef5187a8', {
 		minZoom: 0,
 		maxZoom: 18,
-		attribution: 'map data &copy; <a href="https://openstreetmap.org" target="_blank">OpenStreetMap</a> contributors, imagery &copy; <a href="https://www.thunderforest.com" target="_blank">Thunderforest</a>'
+		attribution: '&copy; <a href="https://openstreetmap.org" target="_blank">OpenStreetMap</a> contributors | &copy; <a href="https://www.thunderforest.com" target="_blank">Thunderforest</a>'
 	});
 	let cyclosm = L.tileLayer('https://{s}.tile-cyclosm.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png', {
 		minZoom: 0,
 		maxZoom: 18,
-		attribution: 'map data &copy; <a href="https://openstreetmap.org" target="_blank">OpenStreetMap</a> contributors. Tiles style by <a href="https://www.cyclosm.org" target="_blank">CyclOSM</a> hosted by <a href="https://openstreetmap.fr/" target="_blank">OpenStreetMap France</a>.'
+		attribution: '&copy; <a href="https://openstreetmap.org" target="_blank">OpenStreetMap</a> contributors | <a href="https://www.cyclosm.org" target="_blank">CyclOSM</a> | <a href="https://openstreetmap.fr/" target="_blank">OpenStreetMap Frankreich</a>.'
 	});
 	let empty = L.tileLayer('', { attribution: '' });
 
@@ -607,11 +739,12 @@ function loadLeaflet() {
 		"Leihräder": rkGlobal.poiLayers.bikeShareLayer
 	};
 	for (const [k, v] of Object.entries(rkGlobal.osmPoiTypes)) {
-		overlayMaps[v.name] = v.layer;
+		overlayMaps[v.layerName] = v.layer;
 	}
 
 	mixed.addTo(rkGlobal.leafletMap);
-	rkGlobal.poiLayers.problemLayerActive.addTo(rkGlobal.leafletMap);
+	// default overlays are added via the customized leaflet-hash (see L.Hash.parseHash)
+	// rkGlobal.poiLayers.problemLayerActive.addTo(rkGlobal.leafletMap);
 	L.control.layers(baseMaps, overlayMaps, { 'position': 'topright', 'collapsed': true }).addTo(rkGlobal.leafletMap);
 
 	rkGlobal.leafletMap.on({
@@ -637,7 +770,7 @@ function loadLeaflet() {
 			geocodingQueryParams: {
 				countrycode: 'at',
 				language: 'de'
-				// bounds are set later via updateRadlkarteRegion (min lon, min lat, max lon, max lat)
+				// bounds are set whenever a JSON is read (min lon, min lat, max lon, max lat)
 			}
 		}),
 		defaultMarkGeocode: false
@@ -675,6 +808,8 @@ function loadLeaflet() {
 	}).addTo(rkGlobal.leafletMap);
 
 	L.control.zoom({ position: 'topright' }).addTo(rkGlobal.leafletMap);
+
+	L.control.scale({ position: 'topleft', imperial: false, maxWidth: 200 }).addTo(rkGlobal.leafletMap);
 
 	let sidebar = L.control.sidebar({
 		container: 'sidebar',
@@ -772,49 +907,26 @@ function createMarkerIcon(url) {
 	});
 }
 
-function createRadlkarteMarkerLayersIncludingPopup(geojsonPoint) {
-	let icons = getIcons(geojsonPoint.properties);
+function createProblemMarkersIncludingPopup(geojsonPoint) {
+	let icons = getProblemIcons(geojsonPoint.properties);
 	if (icons == null) {
 		return undefined;
 	}
-
-	let description = getDescriptionText(geojsonPoint.properties);
+	let description = getProblemDescriptionText(geojsonPoint.properties);
+	let latLng = L.geoJSON(geojsonPoint).getLayers()[0].getLatLng();
 	let markers = {
-		lowZoom: L.marker(L.geoJSON(geojsonPoint).getLayers()[0].getLatLng(), {
-			icon: icons.small,
-			alt: description
-		}),
-		highZoom: L.marker(L.geoJSON(geojsonPoint).getLayers()[0].getLatLng(), {
-			icon: icons.large,
-			alt: description
-		})
+		lowZoom: createMarkerIncludingPopup(latLng, icons.small, description, 'Problemstelle'),
+		highZoom: createMarkerIncludingPopup(latLng, icons.large, description, 'Problemstelle')
 	};
-
-	markers.lowZoom.bindPopup(description, { closeButton: false });
-	markers.lowZoom.on('mouseover', function () { markers.lowZoom.openPopup(); });
-	markers.lowZoom.on('mouseout', function () { markers.lowZoom.closePopup(); });
-
-	markers.highZoom.bindPopup(description, { closeButton: false });
-	markers.highZoom.on('mouseover', function () { markers.highZoom.openPopup(); });
-	markers.highZoom.on('mouseout', function () { markers.highZoom.closePopup(); });
-
-	//	 let key, marker;
-	//	 for (key in markers) {
-	//		 marker = markers[key];
-	//		 marker.bindPopup(description, {closeButton: false});  //, offset: L.point(0, -10)});
-	//		 marker.on('mouseover', function() { marker.openPopup(); });
-	//		 marker.on('mouseout', function() { marker.closePopup(); }); // FIXME why is mouseover/out not working for lowZoom?
-	//		 break;
-	//	 }
-
 	return markers;
 }
+
 
 /**
  * @param properties GeoJSON properties of a point
  * @return a small and a large icon or undefined if no icons should be used
  */
-function getIcons(properties) {
+function getProblemIcons(properties) {
 	if (properties.leisure === 'swimming_pool') {
 		return {
 			small: rkGlobal.icons.swimmingSmall,
@@ -851,26 +963,23 @@ function getIcons(properties) {
  * @param properties GeoJSON properties of a point
  * @return a description string
  */
-function getDescriptionText(properties) {
+function getProblemDescriptionText(properties) {
 	let dismount = properties.dismount === 'yes';
 	let nocargo = properties.nocargo === 'yes';
 	let warning = properties.warning === 'yes';
 
-	let descriptionParts = [];
-
+	let title = "";
 	if (dismount && nocargo) {
-		descriptionParts.push('Schiebestelle / untauglich für Spezialräder');
+		title = 'Schiebestelle / untauglich für Spezialräder'
 	} else if (dismount) {
-		descriptionParts.push('Schiebestelle');
+		title = 'Schiebestelle';
 	} else if (nocargo) {
-		descriptionParts.push('Untauglich für Spezialräder');
+		title = 'Untauglich für Spezialräder';
 	} else if (warning) {
-		descriptionParts.push('Achtung');
+		title = 'Achtung';
 	}
 
-	if (properties.description !== undefined) {
-		descriptionParts.push(properties.description);
-	}
+	const description = properties.description ? `<p>${properties.description}</p>` : "";
 
-	return '<span class="popup"><strong>' + descriptionParts.join('</strong><br>') + '</span>';
+	return `<h1>${title}</h1>${description}`;
 }

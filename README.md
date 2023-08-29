@@ -18,6 +18,7 @@ Website for desktop, tablet & smartphone usage with the goal to provide useful (
     - Unpaved (dotted lines)
 - Automatically switch to the bicycle routes of the currently viewed region
 - Show problematic points along the route where dismounting or usage of heavy/wide bicycles may not be possible
+- Show POIs relevant for cycling (bike-sharing stations, bicycle shops,..)
 - GPS localization (especially useful for mobile devices)
 - Geocoding (address search)
 
@@ -54,25 +55,11 @@ Route data is stored in `GeoJSON` format with the following attributes.
 6. Prepare (minify, add bbox,..) the .geojson with [prepare_geojson.py](data/prepare_geojson.py)
 
 
-## Development
-
-To test locally with Firefox go to `about:config` and set `privacy.file_unique_origin=false`, this allows local CORS requests.
-
-Linting:
-
-	sudo npm i -g jshint html5-lint
-	/usr/local/lib/node_modules/html5-lint/html5check.py index.html
-	jshint radlkarte.js
-
-### Known Bugs
-
-- Arrows in wrong size on fast zoom (synchronization issue of rendering method that is called more than once I fear)
-
 ## License
 
 The license for all our code and data is [here](LICENSE).
 
-Obviously this excludes libraries (like leaflet, font-awesome or jquery) and the fonts.
+Obviously this excludes the libraries [leaflet (BSD 2-Clause)](https://leafletjs.com), font-awesome, [opening_hours.js (GPLv3)](https://github.com/opening-hours/opening_hours.js) or jquery) and the fonts.
 
 Other exceptions:
 - bicycle repair station icon based on icon taken from the [OpenStreetMap-carto](https://github.com/gravitystorm/openstreetmap-carto) style licensed under CC0 public domain
