@@ -192,6 +192,11 @@ ul.legend li img {
 	color: dimgray;
 }
 
+span.subway {
+	color: #fff;
+	font-weight: bold;
+	padding: 0.2em;
+}
 
 /*
 - #AAB622 Grün für Schrift

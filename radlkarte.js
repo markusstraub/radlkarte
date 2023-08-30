@@ -335,9 +335,10 @@ function clearAndLoadOsmPois(types) {
 }
 
 /** special handling for transit because we need to merge subway and railway in one layer */
-function clearAndLoadTransit(region) {
+async function clearAndLoadTransit(region) {
 	rkGlobal.poiLayers.transit.clearLayers();
 	const seen = new Set();
+	const subwayStation2Line2Colour = await loadSubwayStation2Line2Colour(region);
 
 	for (const transitType of ["subway", "railway"]) {
 		if (transitType === "subway" && region != "wien") {
@@ -356,7 +357,13 @@ function clearAndLoadTransit(region) {
 					console.warn("invalid lat/lon for " + type + " with OSM id " + element.id);
 					continue;
 				}
-				let description = '<h1>' + element.tags.name + '</h1>';
+				let description = `<h1>${element.tags.name}</h1>`;
+				if (transitType === "subway" && subwayStation2Line2Colour[element.tags.name] != null) {
+					let refs = Array.from(Object.keys(subwayStation2Line2Colour[element.tags.name])).sort();
+					for (const ref of refs) {
+						description += `<span class="subway" style="background-color:${subwayStation2Line2Colour[element.tags.name][ref]};">${ref}</span>\n`;
+					}
+				}
 				let icon = rkGlobal.icons[transitType];
 				let altText = element.tags.name;
 				const markerLayer = createMarkerIncludingPopup(latLng, icon, description, altText);
@@ -368,6 +375,19 @@ function clearAndLoadTransit(region) {
 			debug('created ' + seen.size + ' ' + transitType + ' icons.');
 		});
 	}
+}
+
+async function loadSubwayStation2Line2Colour(region) {
+	const subwayStation2Line2Colour = {};
+	$.getJSON("data/osm-overpass/" + region + "-subwayLines.json", function (data) {
+		for (const element of data.elements) {
+			if (subwayStation2Line2Colour[element.tags.name] == null) {
+				subwayStation2Line2Colour[element.tags.name] = {}
+			}
+			subwayStation2Line2Colour[element.tags.name][element.tags.ref] = element.tags.colour;
+		}
+	});
+	return subwayStation2Line2Colour
 }
 
 function clearAndLoadBasicOsmPoi(type, region) {
