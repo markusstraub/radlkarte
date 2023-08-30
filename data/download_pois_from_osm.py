@@ -25,16 +25,29 @@ OVERPASS_ENDPOINTS = [
 ]
 
 QUERY_TEMPLATE = """[out:json][timeout:120][bbox:{min_lat},{min_lon},{max_lat},{max_lon}];
-({query});
-out center;"""
+{query}"""
 
 QUERIES = {
-    "subway": "nwr[railway=station][station=subway];",
-    "railway": 'nwr[railway~"^station$|^halt$"][station!=subway][station!=miniature];',
-    "bicycleShop": "nwr[shop=bicycle];",
-    "bicycleRepairStation": "nwr[amenity=bicycle_repair_station];",
-    "bicyclePump": '(nwr[amenity=compressed_air]; nwr["service:bicycle:pump"=yes]; );',
-    "bicycleTubeVending": "nwr[vending=bicycle_tube];",
+    "subway": "nwr[railway=station][station=subway];out center;",
+    "subwayLines": """relation[type=route][route=subway] -> .subway_routes;
+foreach .subway_routes -> .subway_route {
+  node(r.subway_route:"stop") -> .stops;
+  foreach .stops {
+  	convert node
+    	::id = id(),
+        //::geom = center(geom()),
+    	name = u(t["name"]),
+        ref = subway_route.u(t["ref"]),
+        colour = subway_route.u(t["colour"]);
+        //:: = ::;
+    out meta;
+  }
+}""",
+    "railway": 'nwr[railway~"^station$|^halt$"][station!=subway][station!=miniature];out center;',
+    "bicycleShop": "nwr[shop=bicycle];out center;",
+    "bicycleRepairStation": "nwr[amenity=bicycle_repair_station];out center;",
+    "bicyclePump": '(nwr[amenity=compressed_air]; nwr["service:bicycle:pump"=yes]; );out center;',
+    "bicycleTubeVending": "nwr[vending=bicycle_tube];out center;",
 }
 
 
@@ -108,7 +121,7 @@ def main(radlkarte_dir, out_dir):
     failed_datasets = []
     for region_name, bbox in regions.items():
         for data_name, query in QUERIES.items():
-            if data_name == "subway" and region_name != "wien":
+            if data_name.startswith("subway") and region_name != "wien":
                 continue
 
             logging.info(f"downloading {data_name} data for {region_name}..")
