@@ -338,17 +338,17 @@ function clearAndLoadOsmPois(types) {
 async function clearAndLoadTransit(region) {
 	rkGlobal.poiLayers.transit.clearLayers();
 	const seen = new Set();
-	const subwayStation2Line2Colour = await loadSubwayStation2Line2Colour(region);
 
 	for (const transitType of ["subway", "railway"]) {
 		if (transitType === "subway" && region != "wien") {
 			continue;
 		}
-		let transitFile = "data/osm-overpass/" + region + "-" + transitType + ".json";
+		const stationName2Line2Colour = await loadStationName2Line2Colour(region, `data/osm-overpass/${region}-${transitType}Lines.json`);
+		let transitFile = `data/osm-overpass/${region}-${transitType}.json`;
 		$.getJSON(transitFile, function (data) {
-			// filter duplicate stations (happens when multiple lines cross)
 			for (const element of data.elements) {
 				if (seen.has(element.tags.name)) {
+					// filter duplicate stations (happens when multiple lines cross)
 					continue;
 				}
 				let latLng = "center" in element ? L.latLng(element.center.lat, element.center.lon) : L.latLng(element.lat, element.lon);
@@ -358,13 +358,17 @@ async function clearAndLoadTransit(region) {
 					continue;
 				}
 				let description = `<h1>${element.tags.name}</h1>`;
-				if (transitType === "subway" && subwayStation2Line2Colour[element.tags.name] != null) {
-					let refs = Array.from(Object.keys(subwayStation2Line2Colour[element.tags.name])).sort();
+				let icon = rkGlobal.icons[transitType];
+				if (stationName2Line2Colour[element.tags.name] != null) {
+					let refs = Array.from(Object.keys(stationName2Line2Colour[element.tags.name])).sort();
 					for (const ref of refs) {
-						description += `<span class="subway" style="background-color:${subwayStation2Line2Colour[element.tags.name][ref]};">${ref}</span>\n`;
+						description += `<span class="transitLine" style="background-color:${stationName2Line2Colour[element.tags.name][ref]};">${ref}</span>\n`;
+					}
+
+					if (transitType === "railway") {
+						icon = rkGlobal.icons["sbahn"];
 					}
 				}
-				let icon = rkGlobal.icons[transitType];
 				let altText = element.tags.name;
 				const markerLayer = createMarkerIncludingPopup(latLng, icon, description, altText);
 				if (markerLayer != null) {
@@ -377,17 +381,17 @@ async function clearAndLoadTransit(region) {
 	}
 }
 
-async function loadSubwayStation2Line2Colour(region) {
-	const subwayStation2Line2Colour = {};
-	$.getJSON("data/osm-overpass/" + region + "-subwayLines.json", function (data) {
+async function loadStationName2Line2Colour(region, fileName) {
+	const stationName2Line2Colour = {};
+	$.getJSON(fileName, function (data) {
 		for (const element of data.elements) {
-			if (subwayStation2Line2Colour[element.tags.name] == null) {
-				subwayStation2Line2Colour[element.tags.name] = {}
+			if (stationName2Line2Colour[element.tags.name] == null) {
+				stationName2Line2Colour[element.tags.name] = {}
 			}
-			subwayStation2Line2Colour[element.tags.name][element.tags.ref] = element.tags.colour;
+			stationName2Line2Colour[element.tags.name][element.tags.ref] = element.tags.colour;
 		}
 	});
-	return subwayStation2Line2Colour
+	return stationName2Line2Colour
 }
 
 function clearAndLoadBasicOsmPoi(type, region) {
@@ -892,9 +896,15 @@ function initializeIcons() {
 		iconAnchor: [subwaySize / 2, subwaySize / 2],
 		popupAnchor: [0, -subwaySize / 2]
 	});
+	rkGlobal.icons.sbahn = L.icon({
+		iconUrl: 'css/sbahn.svg',
+		iconSize: [subwaySize, subwaySize],
+		iconAnchor: [subwaySize / 2, subwaySize / 2],
+		popupAnchor: [0, -subwaySize / 2]
+	});
 	let railwaySize = 20;
 	rkGlobal.icons.railway = L.icon({
-		iconUrl: 'css/railway2.svg',
+		iconUrl: 'css/railway.svg',
 		iconSize: [railwaySize, railwaySize],
 		iconAnchor: [railwaySize / 2, railwaySize / 2],
 		popupAnchor: [0, -railwaySize / 2]
