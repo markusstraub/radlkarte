@@ -28,7 +28,7 @@ QUERY_TEMPLATE = """[out:json][timeout:120][bbox:{min_lat},{min_lon},{max_lat},{
 {query}"""
 
 QUERIES = {
-    "subway": "nwr[railway=station][station=subway];out center;",
+    "subway": "nwr[railway=station][station=subway]; out center;",
     "subwayLines": """relation[type=route][route=subway] -> .subway_routes;
 foreach .subway_routes -> .subway_route {
   node(r.subway_route:"stop") -> .stops;
@@ -43,11 +43,23 @@ foreach .subway_routes -> .subway_route {
     out meta;
   }
 }""",
-    "railway": 'nwr[railway~"^station$|^halt$"][station!=subway][station!=miniature];out center;',
-    "bicycleShop": "nwr[shop=bicycle];out center;",
-    "bicycleRepairStation": "nwr[amenity=bicycle_repair_station];out center;",
-    "bicyclePump": '(nwr[amenity=compressed_air]; nwr["service:bicycle:pump"=yes]; );out center;',
-    "bicycleTubeVending": "nwr[vending=bicycle_tube];out center;",
+    "railway": 'nwr[railway~"^station$|^halt$"][station!=subway][station!=miniature]; out center;',
+    "railwayLines": """relation[type=route][route=train][ref~"^S"] -> .sbahn_routes;
+foreach .sbahn_routes -> .sbahn_route {
+  node(r.sbahn_route:"stop") -> .stops;
+  foreach .stops {
+  	convert node
+    	::id = id(),
+    	name = u(t["name"]),
+        ref = sbahn_route.u(t["ref"]),
+        colour = sbahn_route.u(t["colour"]);
+    out meta;
+  }
+}""",
+    "bicycleShop": "nwr[shop=bicycle]; out center;",
+    "bicycleRepairStation": "nwr[amenity=bicycle_repair_station]; out center;",
+    "bicyclePump": '(nwr[amenity=compressed_air]; nwr["service:bicycle:pump"=yes]; ); out center;',
+    "bicycleTubeVending": "nwr[vending=bicycle_tube]; out center;",
 }
 
 
