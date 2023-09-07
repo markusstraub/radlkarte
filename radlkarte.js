@@ -65,8 +65,7 @@ rkGlobal.configurations = {
 	},
        'schwarzatal': {
                 centerLatLng: L.latLng(47.70, 16.00),
-                geocodingBounds: '15.76,47.67,47.122,16.23,47.81',
-                geoJsonFile: 'data/radlkarte-schwarzatal.geojson'
+                nextbikeUrl: 'https://maps.nextbike.net/maps/nextbike.json?domains=la&bikes=false'
         },
 	'steyr': {
 		centerLatLng: L.latLng(48.039, 14.42),
