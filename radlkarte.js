@@ -340,7 +340,7 @@ function clearAndLoadOsmPois(types) {
 }
 
 /** special handling for transit because we need to merge subway and railway in one layer */
-function clearAndLoadTransit(region) {
+async function clearAndLoadTransit(region) {
 	rkGlobal.poiLayers.transit.clearLayers();
 	const seen = new Set();
 
@@ -348,11 +348,12 @@ function clearAndLoadTransit(region) {
 		if (transitType === "subway" && region != "wien") {
 			continue;
 		}
-		let transitFile = "data/osm-overpass/" + region + "-" + transitType + ".json";
+		const stationName2Line2Colour = await loadStationName2Line2Colour(region, `data/osm-overpass/${region}-${transitType}Lines.json`);
+		let transitFile = `data/osm-overpass/${region}-${transitType}.json`;
 		$.getJSON(transitFile, function (data) {
-			// filter duplicate stations (happens when multiple lines cross)
 			for (const element of data.elements) {
 				if (seen.has(element.tags.name)) {
+					// filter duplicate stations (happens when multiple lines cross)
 					continue;
 				}
 				let latLng = "center" in element ? L.latLng(element.center.lat, element.center.lon) : L.latLng(element.lat, element.lon);
@@ -361,8 +362,18 @@ function clearAndLoadTransit(region) {
 					console.warn("invalid lat/lon for " + type + " with OSM id " + element.id);
 					continue;
 				}
-				let description = '<h1>' + element.tags.name + '</h1>';
+				let description = `<h1>${element.tags.name}</h1>`;
 				let icon = rkGlobal.icons[transitType];
+				if (stationName2Line2Colour[element.tags.name] != null) {
+					let refs = Array.from(Object.keys(stationName2Line2Colour[element.tags.name])).sort();
+					for (const ref of refs) {
+						description += `<span class="transitLine" style="background-color:${stationName2Line2Colour[element.tags.name][ref]};">${ref}</span>\n`;
+					}
+
+					if (transitType === "railway") {
+						icon = rkGlobal.icons["sbahn"];
+					}
+				}
 				let altText = element.tags.name;
 				const markerLayer = createMarkerIncludingPopup(latLng, icon, description, altText);
 				if (markerLayer != null) {
@@ -375,13 +386,25 @@ function clearAndLoadTransit(region) {
 	}
 }
 
+async function loadStationName2Line2Colour(region, fileName) {
+	const stationName2Line2Colour = {};
+	$.getJSON(fileName, function (data) {
+		for (const element of data.elements) {
+			if (stationName2Line2Colour[element.tags.name] == null) {
+				stationName2Line2Colour[element.tags.name] = {}
+			}
+			stationName2Line2Colour[element.tags.name][element.tags.ref] = element.tags.colour;
+		}
+	});
+	return stationName2Line2Colour
+}
+
 function clearAndLoadBasicOsmPoi(type, region) {
 	rkGlobal.poiLayers[type].clearLayers();
 	let poiFile = "data/osm-overpass/" + region + "-" + type + ".json";
 	$.getJSON(poiFile, function (data) {
 		let count = 0
 		let dataDate = extractDateFromOverpassResponse(data);
-		let osmLinkTitle = dataDate ? `title="Datenstand ${dataDate}"` : '';
 		for (const element of data.elements) {
 			const latLng = "center" in element ? L.latLng(element.center.lat, element.center.lon) : L.latLng(element.lat, element.lon);
 			if (latLng == null) {
@@ -409,20 +432,21 @@ function clearAndLoadBasicOsmPoi(type, region) {
 				description += `<p>${address}</p>`;
 			}
 
+			let currentlyOpen = type === 'bicycleShop' ? false : true;
 			let opening_hours_value = tags.opening_hours;
 			if (opening_hours_value) {
-				// TODO set proper state,
 				if (type === "bicycleShop" && !opening_hours_value.includes("PH")) {
 					// bicycle shops are usually closed on holidays but this is rarely mapped
 					opening_hours_value += ";PH off";
 				}
-				const oh = new opening_hours(opening_hours_value, { lat: latLng.lat, lon: latLng.lng, address: { country_code: "at", state: "Wien" } });
-				const openText = oh.getState() ? "jetzt geöffnet" : "derzeit geschlossen";
+				// NOTE: state left empty because school holidays are likely not relevant (not a single mapped instance in our data set)
+				const oh = new opening_hours(opening_hours_value, { lat: latLng.lat, lon: latLng.lng, address: { country_code: "at", state: "" } });
+				currentlyOpen = oh.getState();
+				const openText = currentlyOpen ? "jetzt geöffnet" : "derzeit geschlossen";
 				let items = oh.prettifyValue({ conf: { locale: 'de' }, }).split(";");
 
 				for (let i = 0; i < items.length; i++) {
 					items[i] = items[i].trim();
-					console.log(`x${items[i]}x`);
 					if (type === "bicycleShop" && items[i] === "Feiertags geschlossen") {
 						// avoid redundant info
 						items[i] = "";
@@ -444,10 +468,10 @@ function clearAndLoadBasicOsmPoi(type, region) {
 				description += `<p class="sidenote">Betreiber: ${operator}</p>`;
 			}
 
-			const osmLink = `<p><a href="https://www.osm.org/${element.type}/${element.id}" ${osmLinkTitle} target="_blank" class="sidenote">Mehr Informationen</a></p>`;
-			description += `${osmLink}`;
+			const osmLink = `<a href="https://www.osm.org/${element.type}/${element.id}" target="_blank">Quelle: OpenStreetMap</a>`;
+			description += `<p class="sidenote">${osmLink} (Stand: ${dataDate})</p>`;
 
-			let icon = rkGlobal.icons[type];
+			let icon = rkGlobal.icons[`${type}${currentlyOpen ? "" : "Gray"}`];
 			let altText = element.tags.name;
 			const markerLayer = createMarkerIncludingPopup(latLng, icon, description, altText);
 			if (markerLayer != null) {
@@ -816,7 +840,7 @@ function loadLeaflet() {
 		position: 'left'
 	}).addTo(rkGlobal.leafletMap);
 	if (window.innerWidth < rkGlobal.fullWidthThreshold) {
-		sidebar.close();
+		// sidebar.close(); TODO disabled to show news for mobile users, re-enable in the future
 	}
 
 	initializeIcons();
@@ -870,18 +894,25 @@ function initializeIcons() {
 		iconAnchor: [5, 5],
 		popupAnchor: [0, -5]
 	});
-	let transitSize = 15;
+	let subwaySize = 15;
 	rkGlobal.icons.subway = L.icon({
 		iconUrl: 'css/subway.svg',
-		iconSize: [transitSize, transitSize],
-		iconAnchor: [transitSize / 2, transitSize / 2],
-		popupAnchor: [0, -transitSize / 2]
+		iconSize: [subwaySize, subwaySize],
+		iconAnchor: [subwaySize / 2, subwaySize / 2],
+		popupAnchor: [0, -subwaySize / 2]
 	});
+	rkGlobal.icons.sbahn = L.icon({
+		iconUrl: 'css/sbahn.svg',
+		iconSize: [subwaySize, subwaySize],
+		iconAnchor: [subwaySize / 2, subwaySize / 2],
+		popupAnchor: [0, -subwaySize / 2]
+	});
+	let railwaySize = 20;
 	rkGlobal.icons.railway = L.icon({
 		iconUrl: 'css/railway.svg',
-		iconSize: [transitSize, transitSize],
-		iconAnchor: [transitSize / 2, transitSize / 2],
-		popupAnchor: [0, -transitSize / 2]
+		iconSize: [railwaySize, railwaySize],
+		iconAnchor: [railwaySize / 2, railwaySize / 2],
+		popupAnchor: [0, -railwaySize / 2]
 	});
 
 	rkGlobal.icons.nextbike = createMarkerIcon('css/nextbike.svg');
@@ -891,14 +922,18 @@ function initializeIcons() {
 	rkGlobal.icons.citybikelinz = createMarkerIcon('css/citybikelinz.svg');
 	rkGlobal.icons.citybikelinzGray = createMarkerIcon('css/citybikelinz-gray.svg');
 	rkGlobal.icons.bicycleShop = createMarkerIcon('css/bicycleShop.svg');
+	rkGlobal.icons.bicycleShopGray = createMarkerIcon('css/bicycleShop-gray.svg');
 	rkGlobal.icons.bicycleRepairStation = createMarkerIcon('css/bicycleRepairStation.svg');
+	rkGlobal.icons.bicycleRepairStationGray = createMarkerIcon('css/bicycleRepairStation-gray.svg');
 	rkGlobal.icons.bicyclePump = createMarkerIcon('css/bicyclePump.svg');
+	rkGlobal.icons.bicyclePumpGray = createMarkerIcon('css/bicyclePump-gray.svg');
 	rkGlobal.icons.bicycleTubeVending = createMarkerIcon('css/bicycleTubeVending.svg');
+	rkGlobal.icons.bicycleTubeVendingGray = createMarkerIcon('css/bicycleTubeVending-gray.svg');
 }
 
 function createMarkerIcon(url) {
-	let markerWidth = 100 / 6;
-	let markerHeight = 150 / 6;
+	let markerWidth = 100 / 5;
+	let markerHeight = 150 / 5;
 	return L.icon({
 		iconUrl: url,
 		iconSize: [markerWidth, markerHeight],
