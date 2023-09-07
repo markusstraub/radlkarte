@@ -67,3 +67,4 @@ Other exceptions:
 - bicycle repair station icon based on icon taken from the [OpenStreetMap-carto](https://github.com/gravitystorm/openstreetmap-carto) style licensed under CC0 public domain
 - bicycle tube vending icon based on icon taken from https://github.com/cyclosm/cyclosm-cartocss-style licensed under BSD-3-Clause license
 - bicycle pump icon based on icon from https://github.com/osmandapp/OsmAnd-resources
+- drinking water icon based on Drinking Water by Dmitry Baranovskiy from <a href="https://thenounproject.com/browse/icons/term/drinking-water/" target="_blank" title="Drinking Water Icons">Noun Project</a> (CC BY 3.0)

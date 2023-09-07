@@ -60,6 +60,7 @@ foreach .sbahn_routes -> .sbahn_route {
     "bicycleRepairStation": "nwr[amenity=bicycle_repair_station]; out center;",
     "bicyclePump": '(nwr[amenity=compressed_air]; nwr["service:bicycle:pump"=yes]; ); out center;',
     "bicycleTubeVending": "nwr[vending=bicycle_tube]; out center;",
+    "drinkingWater": "(node[amenity=drinking_water]; nwr[drinking_water=yes];); out center;",
 }
 
 

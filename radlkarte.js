@@ -20,7 +20,8 @@ rkGlobal.osmPoiTypes = {
 	bicycleShop: { urlKey: "f", name: "Fahrradgeschäft", layerName: "Fahrradgeschäfte" },
 	bicycleRepairStation: { urlKey: "r", name: "Reparaturstation", layerName: "Reparaturstationen" },
 	bicyclePump: { urlKey: "l", name: "Luftpumpe", layerName: "Luftpumpen" },
-	bicycleTubeVending: { urlKey: "s", name: "Schlauchomat", layerName: "Schlauchomaten" }
+	bicycleTubeVending: { urlKey: "s", name: "Schlauchomat", layerName: "Schlauchomaten" },
+	drinkingWater: { urlKey: "w", name: "Trinkwasser", layerName: "Trinkwasser" }
 }
 for (const [k, v] of Object.entries(rkGlobal.osmPoiTypes)) {
 	v["layer"] = L.layerGroup()
@@ -924,6 +925,8 @@ function initializeIcons() {
 	rkGlobal.icons.bicyclePumpGray = createMarkerIcon('css/bicyclePump-gray.svg');
 	rkGlobal.icons.bicycleTubeVending = createMarkerIcon('css/bicycleTubeVending.svg');
 	rkGlobal.icons.bicycleTubeVendingGray = createMarkerIcon('css/bicycleTubeVending-gray.svg');
+	rkGlobal.icons.drinkingWater = createMarkerIcon('css/drinkingWater.svg');
+	rkGlobal.icons.drinkingWaterGray = createMarkerIcon('css/drinkingWater-gray.svg');
 }
 
 function createMarkerIcon(url) {
