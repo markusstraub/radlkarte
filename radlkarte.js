@@ -64,6 +64,10 @@ rkGlobal.configurations = {
 	'rheintal': {
 		centerLatLng: L.latLng(47.4102, 9.7211),
 	},
+       'schwarzatal': {
+                centerLatLng: L.latLng(47.70, 16.00),
+                nextbikeUrl: 'https://maps.nextbike.net/maps/nextbike.json?domains=la&bikes=false'
+        },
 	'steyr': {
 		centerLatLng: L.latLng(48.039, 14.42),
 	},
