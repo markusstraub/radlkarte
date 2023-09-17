@@ -165,9 +165,8 @@ div.legend-container div {
 
 ul.legend li img {
 	float: right;
-	margin-left: 1em;
-	margin-right: 1em;
-	margin-bottom: 1em;
+	margin-left: 0.5em;
+	margin-bottom: 0.5em;
 }
 
 .leaflet-popup-content p,
