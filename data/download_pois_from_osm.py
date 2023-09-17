@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Download latest points of interest for each Radlkarte region from the OpenStreetMap Overpass API"""
+import argparse
 import json
 import logging
 import shutil
-import sys
 from pathlib import Path
 from urllib.error import URLError
 from urllib.parse import urlencode
@@ -12,11 +12,6 @@ from urllib.request import Request, urlopen
 logFormatter = "%(asctime)s - %(levelname)s - %(message)s"
 logging.basicConfig(format=logFormatter, level=logging.INFO)
 
-USAGE = f"""{__doc__}
-
-Usage: requires exactly two arguments:
-(1) input directory with radlkarte .geojson files
-(2) output directory for the downloaded .json files"""
 
 # see https://wiki.openstreetmap.org/wiki/Overpass_API#Public_Overpass_API_instances
 OVERPASS_ENDPOINTS = [
@@ -123,7 +118,7 @@ def _download_from_endpoints(query):
     return None
 
 
-def main(radlkarte_dir, out_dir):
+def main(radlkarte_dir, out_dir, only_region, only_query):
     logging.info(f"loading regions from '{radlkarte_dir}'")
     regions = get_regions_with_bboxes(radlkarte_dir)
     logging.info(f"found {len(regions)} regions: {sorted(list(regions.keys()))}")
@@ -133,7 +128,11 @@ def main(radlkarte_dir, out_dir):
     success_count = 0
     failed_datasets = []
     for region_name, bbox in regions.items():
+        if only_region != None and only_region != region_name:
+            continue
         for data_name, query in QUERIES.items():
+            if only_query != None and only_query != data_name:
+                continue
             if data_name.startswith("subway") and region_name != "wien":
                 continue
 
@@ -156,8 +155,28 @@ def main(radlkarte_dir, out_dir):
 
 
 if __name__ == "__main__":
-    args = sys.argv[1:]
-    if len(args) == 2:
-        main(Path(args[0]).absolute(), Path(args[1]).absolute())
-    else:
-        print(USAGE)
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "in",
+        type=Path,
+        help="directory containing radlkarte GeoJSON files",
+    )
+    parser.add_argument(
+        "out",
+        type=Path,
+        help="directory for storage of downloaded OpenStreetMap JSON files",
+    )
+    parser.add_argument(
+        "--only-region",
+        metavar="NAME",
+        type=str,
+        help="only download data for a specific region",
+    )
+    parser.add_argument(
+        "--only-query",
+        metavar="NAME",
+        type=str,
+        help="only download data for a specific query",
+    )
+    args = vars(parser.parse_args())
+    main(args["in"], args["out"], args["only_region"], args["only_query"])
