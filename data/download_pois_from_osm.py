@@ -51,7 +51,12 @@ foreach .sbahn_routes -> .sbahn_route {
     out meta;
   }
 }""",
-    "bicycleShop": "nwr[shop=bicycle]; out center;",
+    "bicycleShop": """(
+  nwr[shop=bicycle];
+  nwr[shop=sports]["service:bicycle:retail"=yes];
+  nwr[shop=sports]["service:bicycle:repair"=yes];
+);
+out center;""",
     "bicycleRepairStation": "nwr[amenity=bicycle_repair_station]; out center;",
     "bicyclePump": '(nwr[amenity=compressed_air]; nwr["service:bicycle:pump"=yes]; ); out center;',
     "bicycleTubeVending": "nwr[vending=bicycle_tube]; out center;",
