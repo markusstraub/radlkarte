@@ -64,10 +64,10 @@ rkGlobal.configurations = {
 	'rheintal': {
 		centerLatLng: L.latLng(47.4102, 9.7211),
 	},
-       'schwarzatal': {
-                centerLatLng: L.latLng(47.70, 16.00),
-                nextbikeUrl: 'https://maps.nextbike.net/maps/nextbike.json?domains=la&bikes=false'
-        },
+	'schwarzatal': {
+		centerLatLng: L.latLng(47.70, 16.00),
+		nextbikeUrl: 'https://maps.nextbike.net/maps/nextbike.json?domains=la&bikes=false'
+	},
 	'steyr': {
 		centerLatLng: L.latLng(48.039, 14.42),
 	},
@@ -840,7 +840,7 @@ function loadLeaflet() {
 		position: 'left'
 	}).addTo(rkGlobal.leafletMap);
 	if (window.innerWidth < rkGlobal.fullWidthThreshold) {
-		// sidebar.close(); TODO disabled to show news for mobile users, re-enable in the future
+		sidebar.close();
 	}
 
 	initializeIcons();
