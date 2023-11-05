@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   version="1.1"
+   id="Layer_1"
+   x="0px"
+   y="0px"
+   viewBox="0 0 100 150"
+   enable-background="new 0 0 365 560"
+   xml:space="preserve"
+   width="100"
+   height="150"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">&#10;   <defs
+   id="defs9" />&#10;&#10;   &#10;&#10;   <path
+   fill="#00AEEF"
+   d="m 49.97743,143.84567 c 0,0 46.61771,-69.37694 46.61771,-92.176262 C 96.59514,18.11523 72.96088,3.4795706 49.97743,3.4279886 26.993989,3.4795686 3.4279799,18.072975 3.4279799,51.627157 c 0,22.799313 46.5494501,92.218513 46.5494501,92.218513 z"
+   id="path2"
+   style="fill:#b8cc24;fill-opacity:1;stroke:#839617;stroke-width:6.85596;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />&#10;<g
+   id="g2"
+   transform="matrix(0.84843029,0,0,0.84843029,13.953273,11.552265)"
+   style="fill:#ffffff"><path
+     d="M 50,60 H 70 V 50 A 20,20 0 0 0 50,30 H 40 A 4.23,4.23 0 0 0 40,29.5 4.49,4.49 0 0 0 35.5,25 H 35 v -5 h 3.72 a 8.82,8.82 0 0 1 5.36,2 5.63,5.63 0 0 0 9,-5.12 5.67,5.67 0 0 0 -4.81,-4.91 5.6,5.6 0 0 0 -4.07,1 10,10 0 0 1 -5.85,2.03 h -11.7 a 10,10 0 0 1 -5.86,-2.06 5.6,5.6 0 0 0 -4.07,-1 5.62,5.62 0 0 0 0.78,11.19 5.58,5.58 0 0 0 3.42,-1.13 8.82,8.82 0 0 1 5.36,-2 H 30 v 5 h -0.67 a 4.5,4.5 0 0 0 -4.5,4.5 c 0,0.17 0,0.33 0.05,0.5 H 10 v 20 h 40 z"
+     fill="#000000"
+     id="path1"
+     style="fill:#ffffff" /><polygon
+     points="45,65 50,90 70,90 75,65 "
+     fill="#000000"
+     id="polygon1"
+     style="fill:#ffffff" /></g></svg>

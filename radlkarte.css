@@ -33,18 +33,22 @@ body,
 	background-color: #fff;
 }
 
-p,
-h4,
-li {
-	font-family: Roboto, arial, sans-serif;
-	color: #004B67;
-}
-
 h1,
 h2,
 h3 {
 	font-family: 'Museo 500 Regular', sans-serif;
 	color: #004B67;
+}
+
+h4,
+a {
+	color: #004B67;
+}
+
+h4,
+p,
+li {
+	font-family: Roboto, arial, sans-serif;
 }
 
 h2 {
@@ -57,6 +61,10 @@ h3 {
 
 strong {
 	font-weight: bold;
+}
+
+input {
+	accent-color: #004B67;
 }
 
 .leaflet-sidebar {
@@ -77,12 +85,14 @@ strong {
 .leaflet-sidebar-pane a:visited,
 .leaflet-sidebar-pane a:active,
 .leaflet-control-attribution a {
-	color: #AAB622;
-	text-decoration: none;
+	color: #004B67;
+	/* text-decoration: none; */
 }
 
 a:hover {
-	text-decoration: underline;
+	color: white !important;
+	background-color: #B8CC24 !important;
+	/* text-decoration: underline; */
 }
 
 ul.legend-leftified {
@@ -165,9 +175,8 @@ div.legend-container div {
 
 ul.legend li img {
 	float: right;
-	margin-left: 1em;
-	margin-right: 1em;
-	margin-bottom: 1em;
+	margin-left: 0.5em;
+	margin-bottom: 0.5em;
 }
 
 .leaflet-popup-content p,

@@ -33,21 +33,21 @@ Route data is stored in `GeoJSON` format with the following attributes.
 - `priority`=`0` (highest), `1` (medium), `2` (lowest)
 - `stress`=`0` (no stress), `1` (medium), `2` (a lot of stress)
 
-**Optional** (omitting the attributes means 'no'):
+**Optional** (omitting the attributes means `no`):
 - `oneway`=`yes`: route only legal in one direction
 - `steep`=`yes`: very steep, e.g. more than  5-6%, but excluding short ramps
 - `unpaved`=`yes`: dirt, gravel or extremely uneven surfaces even though they are paved
 
 ### Point Attributes
 
-- `dismount`=`yes`: bicycle must or should be pushed (in at least one direction), either due to legal restrictions or because it's a very dangrous spot
+- `dismount`=`yes`: bicycle must or should be pushed (in at least one direction), either due to legal restrictions or because it's a very dangerous spot
 - `nocargo`=`yes`: not feasible for heavy/extra-long/extra-wide bicycles, e.g. cargo bicycles or bikes with trailers due to e.g. stairs or chicanes
-- `warning`=`yes`: problematic location, should alwys be combined with the `description` attribute
-- `description`: string explaining details shown to the users in a popup
+- `warning`=`yes`: problematic location, should always be combined with the `description` attribute
+- `description`: string explaining details shown to users in a popup
 
 ### Edit Instructions
 
-1. [Download JOSM](https://josm.openstreetmap.de)
+1. [Install JOSM](https://josm.openstreetmap.de)
 2. Add [josm-radlkarte-style.mapcss](data/josm-radlkarte-style.mapcss) in `edit > preferences > map settings (3rd buttom from the top) > map paint styles`
 3. Load an existing radlkarte `GeoJSON` file, e.g. [radlkarte-example.geojson](data/radlkarte-example.geojson), or create a new layer
 4. Edit routes
@@ -59,7 +59,7 @@ Route data is stored in `GeoJSON` format with the following attributes.
 
 The license for all our code and data is [here](LICENSE).
 
-Obviously this excludes the libraries [leaflet (BSD 2-Clause)](https://leafletjs.com), font-awesome, [opening_hours.js (GPLv3)](https://github.com/opening-hours/opening_hours.js) or jquery) and the fonts.
+Obviously this excludes the libraries [leaflet (BSD 2-Clause)](https://leafletjs.com), font-awesome, [opening_hours.js (GPLv3)](https://github.com/opening-hours/opening_hours.js) or jquery and the fonts.
 
 Other exceptions:
 - railway icon based on https://de.m.wikipedia.org/wiki/Datei:Train_Austria.svg
@@ -67,3 +67,4 @@ Other exceptions:
 - bicycle repair station icon based on icon taken from the [OpenStreetMap-carto](https://github.com/gravitystorm/openstreetmap-carto) style licensed under CC0 public domain
 - bicycle tube vending icon based on icon taken from https://github.com/cyclosm/cyclosm-cartocss-style licensed under BSD-3-Clause license
 - bicycle pump icon based on icon from https://github.com/osmandapp/OsmAnd-resources
+- drinking water icon based on Drinking Water by Dmitry Baranovskiy from <a href="https://thenounproject.com/browse/icons/term/drinking-water/" target="_blank" title="Drinking Water Icons">Noun Project</a> (CC BY 3.0)
