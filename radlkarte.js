@@ -51,28 +51,28 @@ rkGlobal.currentRegion = undefined;
 rkGlobal.defaultZoom = 14;
 rkGlobal.configurations = {
 	'rendertest': {
-		centerLatLng: L.latLng(50.088, 14.392),
+		centerLatLng: L.latLng(50.09, 14.39),
 	},
 	'klagenfurt': {
-		centerLatLng: L.latLng(46.624, 14.308),
+		centerLatLng: L.latLng(46.62, 14.31),
 		nextbikeUrl: 'https://maps.nextbike.net/maps/nextbike.json?domains=ka&bikes=false'
 	},
 	'linz': {
-		centerLatLng: L.latLng(48.30, 14.285),
+		centerLatLng: L.latLng(48.30, 14.26),
 		nextbikeUrl: 'https://maps.nextbike.net/maps/nextbike.json?domains=al&bikes=false'
 	},
 	'rheintal': {
-		centerLatLng: L.latLng(47.4102, 9.7211),
+		centerLatLng: L.latLng(47.41, 9.72),
 	},
 	'schwarzatal': {
-		centerLatLng: L.latLng(47.70, 16.00),
+		centerLatLng: L.latLng(47.67, 15.94),
 		nextbikeUrl: 'https://maps.nextbike.net/maps/nextbike.json?domains=la&bikes=false'
 	},
 	'steyr': {
-		centerLatLng: L.latLng(48.039, 14.42),
+		centerLatLng: L.latLng(48.04, 14.42),
 	},
 	'wien': {
-		centerLatLng: L.latLng(48.208, 16.372),
+		centerLatLng: L.latLng(48.21, 16.37),
 		nextbikeUrl: 'https://maps.nextbike.net/maps/nextbike.json?domains=wr,la&bikes=false',
 	}
 };
