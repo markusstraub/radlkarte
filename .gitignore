@@ -9,6 +9,8 @@ test_output.geojson
 # Jetbrains IDE settings
 .idea
 
+# Node Modules
+node_modules/
 # Yarn - not using Zero-Installs
 .pnp.*
 .yarn/*
