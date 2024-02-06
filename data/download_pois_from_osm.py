@@ -127,6 +127,10 @@ def main(radlkarte_dir, out_dir, only_region, only_query):
     logging.info(f"loading regions from '{radlkarte_dir}'")
     regions = get_regions_with_bboxes(radlkarte_dir)
     logging.info(f"found {len(regions)} regions: {sorted(list(regions.keys()))}")
+    if only_region != None:
+      logging.info(f"Only downloading data for region: {only_region}")
+    if only_query != None:
+      logging.info(f"Only downloading data for query: {only_query}")
     logging.info(f"all output will be written to '{out_dir}'")
     out_dir.mkdir(parents=True, exist_ok=True)
 
