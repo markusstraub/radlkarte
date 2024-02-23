@@ -15,7 +15,8 @@
   "private": true,
   "packageManager": "yarn@4.1.0",
   "scripts": {
-    "start": "http-server -a localhost -p 8081 -c-1",
+    "start": "$(yarn bin why)",
+    "serve": "http-server -a localhost -p 8081 -c-1",
     "geojson": "./data/prepare_geojson.py",
     "pois": "./data/download_pois_from_osm.py data data/osm-overpass",
     "pois:klagenfurt": "yarn pois --only-region klagenfurt",
@@ -31,6 +32,7 @@
   "devDependencies": {
     "html5-lint": "^0.3.0",
     "http-server": "^14.1.1",
-    "jshint": "^2.13.6"
+    "jshint": "^2.13.6",
+    "why": "^0.6.2"
   }
 }

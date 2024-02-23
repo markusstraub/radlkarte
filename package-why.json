@@ -1,0 +1,17 @@
+{
+  "scripts": {
+    "start": "Shows all available scripts.",
+    "serve": "Starts a simple HTTP server on http://localhost:8081/ for running the Radlkarte locally.",
+    "geojson": "Prepare the geoJSON data files for deployment (compressing etc.)",
+    "pois": "Update all POIs from OpenStreetMap.org. This can take a while, better use a region-specific command.",
+    "pois:klagenfurt": "Update all POIs for Klagenfurt.",
+    "pois:linz": "Update all POIs for Linz.",
+    "pois:rheintal": "Update all POIs for the Rheintal region.",
+    "pois:schwarzatal": "Update all POIs for the Schwarzatal region.",
+    "pois:steyr": "Update all POIs for Steyr.",
+    "pois:wien": "Update all POIs for Vienna.",
+    "lint": "Lint the code (HTML & JavaScript).",
+    "lint:html": "Lint the HTML files.",
+    "lint:js": "Lint the JavaScript files."
+  }
+}

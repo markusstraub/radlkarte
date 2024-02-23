@@ -12,6 +12,7 @@ __metadata:
     html5-lint: "npm:^0.3.0"
     http-server: "npm:^14.1.1"
     jshint: "npm:^2.13.6"
+    why: "npm:^0.6.2"
   languageName: unknown
   linkType: soft
 
@@ -1104,6 +1105,15 @@ __metadata:
   dependencies:
     iconv-lite: "npm:0.6.3"
   checksum: 10c0/91b90a49f312dc751496fd23a7e68981e62f33afe938b97281ad766235c4872fc4e66319f925c5e9001502b3040dd25a33b02a9c693b73a4cbbfdc4ad10c3e3e
+  languageName: node
+  linkType: hard
+
+"why@npm:^0.6.2":
+  version: 0.6.2
+  resolution: "why@npm:0.6.2"
+  bin:
+    why: src/index.js
+  checksum: 10c0/c53bbf87a3cf9f08a75d8e5e5b73da9f23e98068b9ad36d3bb01a7600829f6286cfef1de2fd23fe28f07b8936e694ee072a529b92bf7684d8e5a7cb0191f2bf0
   languageName: node
   linkType: hard
 
