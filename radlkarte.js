@@ -51,31 +51,39 @@ rkGlobal.currentRegion = undefined;
 rkGlobal.defaultZoom = 14;
 rkGlobal.configurations = {
 	'rendertest': {
+		title: '[DEV] Rendertest',
 		centerLatLng: L.latLng(50.09, 14.39),
 	},
 	'klagenfurt': {
+		title: 'Klagenfurt',
 		centerLatLng: L.latLng(46.62, 14.31),
 		nextbikeUrl: 'https://maps.nextbike.net/maps/nextbike.json?domains=ka&bikes=false'
 	},
 	'linz': {
+		title: 'Linz',
 		centerLatLng: L.latLng(48.30, 14.26),
 		nextbikeUrl: 'https://maps.nextbike.net/maps/nextbike.json?domains=al&bikes=false'
 	},
 	'rheintal': {
+		title: 'Rheintal',
 		centerLatLng: L.latLng(47.41, 9.72),
 	},
 	'schwarzatal': {
+		title: 'Schwarztal',
 		centerLatLng: L.latLng(47.67, 15.94),
 		nextbikeUrl: 'https://maps.nextbike.net/maps/nextbike.json?domains=la&bikes=false'
 	},
 	'steyr': {
+		title: 'Steyr',
 		centerLatLng: L.latLng(48.04, 14.42),
 	},
 	'wien': {
+		title: 'Wien',
 		centerLatLng: L.latLng(48.21, 16.37),
 		nextbikeUrl: 'https://maps.nextbike.net/maps/nextbike.json?domains=wr,la&bikes=false',
-	}
+	},
 };
+rkGlobal.pageHeader = function() {return $('h1');}
 
 function debug(obj) {
 	if (rkGlobal.debug) {
@@ -109,6 +117,8 @@ function updateRadlkarteRegion(region) {
 		}
 	}
 	clearAndLoadOsmPois(visibleOsmPois);
+
+	rkGlobal.pageHeader().text('Radlkarte ' + configuration.title);
 
 
 	// virtual page hit in matomo analytics
@@ -296,7 +306,7 @@ function clearAndLoadNextbike(url) {
  * @param place JSON from Nextbike API describing a bike-share station. 
  */
 function createNextbikeMarkerIncludingPopup(domain, place, cityUrl) {
-	let description = '<h1>' + place.name + '</h1>';
+	let description = '<h2>' + place.name + '</h2>';
 	if (place.bikes === 1) {
 		description += "<p>1 Rad verfügbar</p>";
 	} else {
@@ -319,7 +329,7 @@ function createMarkerIncludingPopup(latLng, icon, description, altText) {
 		icon: icon,
 		alt: altText,
 	});
-	marker.bindPopup(description, { closeButton: true });
+	marker.bindPopup(`<article class="tooltip">${description}</article>`, { closeButton: true });
 	marker.on('mouseover', function () { marker.openPopup(); });
 	// adding a mouseover event listener causes a problem with touch browsers:
 	// then two taps are required to show the marker.
@@ -362,7 +372,7 @@ async function clearAndLoadTransit(region) {
 					console.warn("invalid lat/lon for " + element.type + " with OSM id " + element.id);
 					continue;
 				}
-				let description = `<h1>${element.tags.name}</h1>`;
+				let description = `<h2>${element.tags.name}</h2>`;
 				let icon = rkGlobal.icons[transitType];
 				if (stationName2Line2Colour[element.tags.name] != null) {
 					let refs = Array.from(Object.keys(stationName2Line2Colour[element.tags.name])).sort();
@@ -425,7 +435,7 @@ function clearAndLoadBasicOsmPoi(type, region) {
 			if (website != null) {
 				heading = `<a href="${website}" target="_blank">${heading}</a>`;
 			}
-			let description = `<h1>${heading}</h1>`;
+			let description = `<h2>${heading}</h2>`;
 
 			const address = extractAddressFromTagSoup(tags);
 			if (address) {
@@ -1019,5 +1029,5 @@ function getProblemDescriptionText(properties) {
 
 	const description = properties.description ? `<p>${properties.description}</p>` : "";
 
-	return `<h1>${title}</h1>${description}`;
+	return `<h2>${title}</h2>${description}`;
 }
