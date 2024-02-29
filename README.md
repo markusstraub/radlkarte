@@ -48,12 +48,17 @@ Route data is stored in `GeoJSON` format with the following attributes.
 ### Edit Instructions
 
 1. [Install JOSM](https://josm.openstreetmap.de)
-2. Add [josm-radlkarte-style.mapcss](data/josm-radlkarte-style.mapcss) in `edit > preferences > map settings (3rd buttom from the top) > map paint styles`
+2. Add [josm-radlkarte-style.mapcss](data/josm-radlkarte-style.mapcss) in `Edit > Preferences… > Map Paint Styles` (~9<sup>th</sup> buttom from the top) (In older JOSM versions `Map Paint Styles` is under `Map Settings` (3<sup>rd</sup> button from the top).)
 3. Load an existing radlkarte `GeoJSON` file, e.g. [radlkarte-example.geojson](data/radlkarte-example.geojson), or create a new layer
 4. Edit routes
 5. Save the result as `GeoJSON` (not as `.osm`!)
 6. Prepare (minify, add bbox,..) the .geojson with [prepare_geojson.py](data/prepare_geojson.py)
+   - with [development tools](./Development.md): `yarn geojson [path to GeoJSON file]`
+   - without development tools: `./data/prepare_geojson.py [path to GeoJSON file]`
 
+## Development (tools)
+
+Further information for developing the radlkarte.at codebase and using the development tools can be found in the [development documentation](Development.md). 
 
 ## License
 

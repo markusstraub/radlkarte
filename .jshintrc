@@ -1,0 +1,14 @@
+{
+  "esversion": 10,
+  "browser": true,
+  "devel": true,
+  "strict": "global",
+  "undef": true,
+  "unused": false,
+  "globals": {
+    "L": true,
+    "turf": true,
+    "_paq": true,
+    "$": true
+  }
+}

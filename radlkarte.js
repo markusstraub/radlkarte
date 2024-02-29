@@ -6,7 +6,7 @@ rkGlobal.leafletMap = undefined;
 rkGlobal.geocodingControl = undefined;
 /** object holding all linestring and decorator layers (the key represents the properties) */
 rkGlobal.segments = {};
-rkGlobal.poiLayers = {}
+rkGlobal.poiLayers = {};
 /** layer group holding currently active variant of problem icons */
 rkGlobal.poiLayers.problemLayerActive = L.layerGroup();
 /** layer group holding problem icons for low zoom levels */
@@ -21,11 +21,11 @@ rkGlobal.osmPoiTypes = {
 	bicycleRepairStation: { urlKey: "r", name: "Reparaturstation", layerName: "Reparaturstationen" },
 	bicyclePump: { urlKey: "l", name: "Luftpumpe", layerName: "Luftpumpen" },
 	bicycleTubeVending: { urlKey: "s", name: "Schlauchomat", layerName: "Schlauchomaten" },
-	drinkingWater: { urlKey: "w", name: "Trinkwasser", layerName: "Trinkwasser" }
-}
+	drinkingWater: { urlKey: "w", name: "Trinkwasser", layerName: "Trinkwasser" },
+};
 for (const [k, v] of Object.entries(rkGlobal.osmPoiTypes)) {
-	v["layer"] = L.layerGroup()
-	rkGlobal.poiLayers[k] = v["layer"];
+	v.layer = L.layerGroup();
+	rkGlobal.poiLayers[k] = v.layer;
 }
 /** names of all different levels of priorities (ordered descending by priority) */
 rkGlobal.priorityStrings = ["Überregional", "Regional", "Lokal"];
@@ -51,31 +51,39 @@ rkGlobal.currentRegion = undefined;
 rkGlobal.defaultZoom = 14;
 rkGlobal.configurations = {
 	'rendertest': {
+		title: '[DEV] Rendertest',
 		centerLatLng: L.latLng(50.09, 14.39),
 	},
 	'klagenfurt': {
+		title: 'Klagenfurt',
 		centerLatLng: L.latLng(46.62, 14.31),
 		nextbikeUrl: 'https://maps.nextbike.net/maps/nextbike.json?domains=ka&bikes=false'
 	},
 	'linz': {
+		title: 'Linz',
 		centerLatLng: L.latLng(48.30, 14.26),
 		nextbikeUrl: 'https://maps.nextbike.net/maps/nextbike.json?domains=al&bikes=false'
 	},
 	'rheintal': {
+		title: 'Rheintal',
 		centerLatLng: L.latLng(47.41, 9.72),
 	},
 	'schwarzatal': {
+		title: 'Schwarztal',
 		centerLatLng: L.latLng(47.67, 15.94),
 		nextbikeUrl: 'https://maps.nextbike.net/maps/nextbike.json?domains=la&bikes=false'
 	},
 	'steyr': {
+		title: 'Steyr',
 		centerLatLng: L.latLng(48.04, 14.42),
 	},
 	'wien': {
+		title: 'Wien',
 		centerLatLng: L.latLng(48.21, 16.37),
 		nextbikeUrl: 'https://maps.nextbike.net/maps/nextbike.json?domains=wr,la&bikes=false',
-	}
+	},
 };
+rkGlobal.pageHeader = function() {return $('h1');}
 
 function debug(obj) {
 	if (rkGlobal.debug) {
@@ -102,13 +110,15 @@ function updateRadlkarteRegion(region) {
 	if (rkGlobal.leafletMap.hasLayer(rkGlobal.poiLayers.bikeShareLayer)) {
 		clearAndLoadNextbike(configuration.nextbikeUrl);
 	}
-	let visibleOsmPois = []
+	let visibleOsmPois = [];
 	for (const [k, v] of Object.entries(rkGlobal.osmPoiTypes)) {
 		if (rkGlobal.leafletMap.hasLayer(v.layer)) {
 			visibleOsmPois.push(k);
 		}
 	}
 	clearAndLoadOsmPois(visibleOsmPois);
+
+	rkGlobal.pageHeader().text('Radlkarte ' + configuration.title);
 
 
 	// virtual page hit in matomo analytics
@@ -296,9 +306,9 @@ function clearAndLoadNextbike(url) {
  * @param place JSON from Nextbike API describing a bike-share station. 
  */
 function createNextbikeMarkerIncludingPopup(domain, place, cityUrl) {
-	let description = '<h1>' + place.name + '</h1>';
+	let description = '<h2>' + place.name + '</h2>';
 	if (place.bikes === 1) {
-		description += "<p>1 Rad verfügbar</p>"
+		description += "<p>1 Rad verfügbar</p>";
 	} else {
 		description += `<p>${place.bikes} Räder verfügbar</p>`;
 	}
@@ -319,7 +329,7 @@ function createMarkerIncludingPopup(latLng, icon, description, altText) {
 		icon: icon,
 		alt: altText,
 	});
-	marker.bindPopup(description, { closeButton: true });
+	marker.bindPopup(`<article class="tooltip">${description}</article>`, { closeButton: true });
 	marker.on('mouseover', function () { marker.openPopup(); });
 	// adding a mouseover event listener causes a problem with touch browsers:
 	// then two taps are required to show the marker.
@@ -345,7 +355,7 @@ async function clearAndLoadTransit(region) {
 	const seen = new Set();
 
 	for (const transitType of ["subway", "railway"]) {
-		if (transitType === "subway" && region != "wien") {
+		if (transitType === "subway" && region !== "wien") {
 			continue;
 		}
 		const stationName2Line2Colour = await loadStationName2Line2Colour(region, `data/osm-overpass/${region}-${transitType}Lines.json`);
@@ -359,10 +369,10 @@ async function clearAndLoadTransit(region) {
 				let latLng = "center" in element ? L.latLng(element.center.lat, element.center.lon) : L.latLng(element.lat, element.lon);
 				if (latLng == null) {
 					// L.latLng can return null/undefined for invalid lat/lon values, catch this here
-					console.warn("invalid lat/lon for " + type + " with OSM id " + element.id);
+					console.warn("invalid lat/lon for " + element.type + " with OSM id " + element.id);
 					continue;
 				}
-				let description = `<h1>${element.tags.name}</h1>`;
+				let description = `<h2>${element.tags.name}</h2>`;
 				let icon = rkGlobal.icons[transitType];
 				if (stationName2Line2Colour[element.tags.name] != null) {
 					let refs = Array.from(Object.keys(stationName2Line2Colour[element.tags.name])).sort();
@@ -371,7 +381,7 @@ async function clearAndLoadTransit(region) {
 					}
 
 					if (transitType === "railway") {
-						icon = rkGlobal.icons["sbahn"];
+						icon = rkGlobal.icons.sbahn;
 					}
 				}
 				let altText = element.tags.name;
@@ -391,19 +401,19 @@ async function loadStationName2Line2Colour(region, fileName) {
 	$.getJSON(fileName, function (data) {
 		for (const element of data.elements) {
 			if (stationName2Line2Colour[element.tags.name] == null) {
-				stationName2Line2Colour[element.tags.name] = {}
+				stationName2Line2Colour[element.tags.name] = {};
 			}
 			stationName2Line2Colour[element.tags.name][element.tags.ref] = element.tags.colour;
 		}
 	});
-	return stationName2Line2Colour
+	return stationName2Line2Colour;
 }
 
 function clearAndLoadBasicOsmPoi(type, region) {
 	rkGlobal.poiLayers[type].clearLayers();
 	let poiFile = "data/osm-overpass/" + region + "-" + type + ".json";
 	$.getJSON(poiFile, function (data) {
-		let count = 0
+		let count = 0;
 		let dataDate = extractDateFromOverpassResponse(data);
 		for (const element of data.elements) {
 			const latLng = "center" in element ? L.latLng(element.center.lat, element.center.lon) : L.latLng(element.lat, element.lon);
@@ -425,7 +435,7 @@ function clearAndLoadBasicOsmPoi(type, region) {
 			if (website != null) {
 				heading = `<a href="${website}" target="_blank">${heading}</a>`;
 			}
-			let description = `<h1>${heading}</h1>`;
+			let description = `<h2>${heading}</h2>`;
 
 			const address = extractAddressFromTagSoup(tags);
 			if (address) {
@@ -440,6 +450,7 @@ function clearAndLoadBasicOsmPoi(type, region) {
 					opening_hours_value += ";PH off";
 				}
 				// NOTE: state left empty because school holidays are likely not relevant (not a single mapped instance in our data set)
+				// noinspection JSPotentiallyInvalidConstructorUsage
 				const oh = new opening_hours(opening_hours_value, { lat: latLng.lat, lon: latLng.lng, address: { country_code: "at", state: "" } });
 				currentlyOpen = oh.getState();
 				const openText = currentlyOpen ? "jetzt geöffnet" : "derzeit geschlossen";
@@ -451,11 +462,11 @@ function clearAndLoadBasicOsmPoi(type, region) {
 						// avoid redundant info
 						items[i] = "";
 					} else {
-						items[i] = `<li>${items[i]}</li>`
+						items[i] = `<li>${items[i]}</li>`;
 					}
 				}
 				const itemList = "<ul>" + items.join("\n") + "</ul>";
-				description += `<p>Öffnungszeiten (${openText}):</p>${itemList}`
+				description += `<p>Öffnungszeiten (${openText}):</p>${itemList}`;
 			}
 
 			const phone = tags.phone != null ? tags.phone : tags["contact:phone"];
@@ -486,7 +497,7 @@ function clearAndLoadBasicOsmPoi(type, region) {
 function extractDateFromOverpassResponse(data) {
 	if (data.osm3s && data.osm3s.timestamp_osm_base) {
 		if (typeof data.osm3s.timestamp_osm_base === 'string') {
-			return data.osm3s.timestamp_osm_base.split("T")[0]
+			return data.osm3s.timestamp_osm_base.split("T")[0];
 		}
 	}
 	return null;
@@ -495,17 +506,17 @@ function extractDateFromOverpassResponse(data) {
 function extractAddressFromTagSoup(tags) {
 	if (tags["addr:street"] != null) {
 		let address = "";
-		address += tags["addr:street"]
+		address += tags["addr:street"];
 		if (tags["addr:housenumber"] != null) {
-			address += " " + tags["addr:housenumber"]
+			address += " " + tags["addr:housenumber"];
 		}
 		if (tags["addr:postcode"] != null) {
-			address += ", " + tags["addr:postcode"]
+			address += ", " + tags["addr:postcode"];
 			if (tags["addr:city"] != null) {
-				address += " " + tags["addr:city"]
+				address += " " + tags["addr:city"];
 			}
 		} else if (tags["addr:city"] != null) {
-			address += ", " + tags["addr:city"]
+			address += ", " + tags["addr:city"];
 		}
 		return address;
 	}
@@ -1007,7 +1018,7 @@ function getProblemDescriptionText(properties) {
 
 	let title = "";
 	if (dismount && nocargo) {
-		title = 'Schiebestelle / untauglich für Spezialräder'
+		title = 'Schiebestelle / untauglich für Spezialräder';
 	} else if (dismount) {
 		title = 'Schiebestelle';
 	} else if (nocargo) {
@@ -1018,5 +1029,5 @@ function getProblemDescriptionText(properties) {
 
 	const description = properties.description ? `<p>${properties.description}</p>` : "";
 
-	return `<h1>${title}</h1>${description}`;
+	return `<h2>${title}</h2>${description}`;
 }
