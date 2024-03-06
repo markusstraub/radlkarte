@@ -3,8 +3,16 @@ root = true
 [*]
 end_of_line = lf
 insert_final_newline = true
+ij_formatter_off_tag = @formatter:off
+ij_formatter_on_tag = @formatter:on
 
 [*.{js,json,yml}]
 charset = utf-8
 indent_style = space
 indent_size = 2
+
+[*.html]
+# JetBrains IDEs (Webstorm) specific:
+# Add space to void elements (self-closing tags) to keep status quo and format the same way as VSCode in this project.
+# See discussion in https://github.com/markusstraub/radlkarte/pull/30 for details.
+ij_html_space_inside_empty_tag = true
