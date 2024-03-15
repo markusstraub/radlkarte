@@ -12,7 +12,6 @@ and serves these purposes:
 For the latter point it adds unique ids to each feature and gracefully
 handles duplicate and invalid ids.
 """
-
 import json
 import logging
 import sys
@@ -112,7 +111,7 @@ def calc_bbox(features):
 def minimize(infile, outfile):
     data = None
     try:
-        with open(infile) as json_file:
+        with open(infile, encoding=sys.getfilesystemencoding()) as json_file:
             data = json.load(json_file)
     except json.JSONDecodeError:
         logging.warning("{} is not a valid json file - skipping.".format(infile))
@@ -154,7 +153,6 @@ def minimize(infile, outfile):
             len(sorted_ids), len(bad_features), outfile
         )
     )
-
 
 if __name__ == "__main__":
     if len(sys.argv) > 1:
