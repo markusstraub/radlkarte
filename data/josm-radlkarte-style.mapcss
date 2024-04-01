@@ -60,6 +60,6 @@ node[nocargo=yes] {
 }
 
 node[warning=yes] {
-    icon-image: "warning-small.png";
+    icon-image: "warning-small.svg";
     text: auto;
 }

@@ -35,27 +35,35 @@ body,
 
 h1,
 h2,
-h3 {
+h3,
+h4 {
 	font-family: 'Museo 500 Regular', sans-serif;
 	color: #004B67;
 }
 
-h4,
+h5,
 a {
 	color: #004B67;
 }
 
-h4,
+h5,
 p,
 li {
 	font-family: Roboto, arial, sans-serif;
 }
 
-h2 {
-	font-size: 115%;
+h1 {
+	font-size: 100%;
+	margin-top: 0;
+	margin-bottom: 0.2em;
+	color: #B8CC24;
 }
 
 h3 {
+	font-size: 115%;
+}
+
+h4 {
 	font-size: 110%;
 }
 
@@ -185,7 +193,7 @@ ul.legend li img {
 	margin-bottom: 0.2em;
 }
 
-.leaflet-popup-content h1 {
+.leaflet-popup-content h2 {
 	font-size: 100%;
 	margin-top: 0;
 	margin-bottom: 0.2em;

@@ -1,0 +1,38 @@
+{
+  "name": "@radlobby-at/radlkarte",
+  "description": "Website for desktop, tablet & smartphone usage with the goal to provide useful (route) information for cyclists.",
+  "version": "1.0.0",
+  "author": "Radlobby Östereich (https://radlobby.at)",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/markusstraub/radlkarte.git"
+  },
+  "bugs": {
+    "url": "https://github.com/markusstraub/radlkarte/issues"
+  },
+  "homepage": "https://github.com/markusstraub/radlkarte",
+  "private": true,
+  "packageManager": "yarn@4.1.0",
+  "scripts": {
+    "start": "$(yarn bin why)",
+    "serve": "http-server -a localhost -p 8081 -c-1",
+    "geojson": "./data/prepare_geojson.py",
+    "pois": "./data/download_pois_from_osm.py data data/osm-overpass",
+    "pois:klagenfurt": "yarn pois --only-region klagenfurt",
+    "pois:linz": "yarn pois --only-region linz",
+    "pois:rheintal": "yarn pois --only-region rheintal",
+    "pois:schwarzatal": "yarn pois --only-region schwarzatal",
+    "pois:steyr": "yarn pois --only-region steyr",
+    "pois:wien": "yarn pois --only-region wien",
+    "lint": "yarn lint:html && yarn lint:js",
+    "lint:html": "python3 ./node_modules/html5-lint/html5check.py index.html",
+    "lint:js": "jshint radlkarte.js"
+  },
+  "devDependencies": {
+    "html5-lint": "^0.3.0",
+    "http-server": "^14.1.1",
+    "jshint": "^2.13.6",
+    "why": "^0.6.2"
+  }
+}
