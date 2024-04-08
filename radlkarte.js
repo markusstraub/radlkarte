@@ -83,7 +83,9 @@ rkGlobal.configurations = {
     nextbikeUrl: 'https://maps.nextbike.net/maps/nextbike.json?domains=wr,la&bikes=false',
   },
 };
-rkGlobal.pageHeader = function () { return $('h1'); }
+rkGlobal.pageHeader = function () {
+  return $('h1');
+}
 
 function debug(obj) {
   if (rkGlobal.debug) {
@@ -301,9 +303,9 @@ function clearAndLoadNextbike(url) {
   });
 }
 
-/** 
+/**
  * @param domain 2-letter Nextbike domain for determining special icons (optional).
- * @param place JSON from Nextbike API describing a bike-share station. 
+ * @param place JSON from Nextbike API describing a bike-share station.
  */
 function createNextbikeMarkerIncludingPopup(domain, place, cityUrl) {
   let description = '<h2>' + place.name + '</h2>';
@@ -330,11 +332,15 @@ function createMarkerIncludingPopup(latLng, icon, description, altText) {
     alt: altText,
   });
   marker.bindPopup(`<article class="tooltip">${description}</article>`, { closeButton: true });
-  marker.on('mouseover', function () { marker.openPopup(); });
+  marker.on('mouseover', function () {
+    marker.openPopup();
+  });
   // adding a mouseover event listener causes a problem with touch browsers:
   // then two taps are required to show the marker.
   // explicitly adding the click event listener here solves the issue
-  marker.on('click', function () { marker.openPopup(); });
+  marker.on('click', function () {
+    marker.openPopup();
+  });
   return marker;
 }
 
@@ -451,7 +457,11 @@ function clearAndLoadBasicOsmPoi(type, region) {
         }
         // NOTE: state left empty because school holidays are likely not relevant (not a single mapped instance in our data set)
         // noinspection JSPotentiallyInvalidConstructorUsage
-        const oh = new opening_hours(opening_hours_value, { lat: latLng.lat, lon: latLng.lng, address: { country_code: "at", state: "" } });
+        const oh = new opening_hours(opening_hours_value, {
+          lat: latLng.lat,
+          lon: latLng.lng,
+          address: { country_code: "at", state: "" }
+        });
         currentlyOpen = oh.getState();
         const openText = currentlyOpen ? "jetzt geöffnet" : "derzeit geschlossen";
         let items = oh.prettifyValue({ conf: { locale: 'de' }, }).split(";");
