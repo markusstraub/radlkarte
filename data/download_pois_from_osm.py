@@ -15,8 +15,8 @@ logging.basicConfig(format=logFormatter, level=logging.INFO)
 
 # see https://wiki.openstreetmap.org/wiki/Overpass_API#Public_Overpass_API_instances
 OVERPASS_ENDPOINTS = [
-    "https://overpass.kumi.systems/api/interpreter",
     "https://overpass-api.de/api/interpreter",
+    "https://overpass.kumi.systems/api/interpreter",
 ]
 
 QUERY_TEMPLATE = """[out:json][timeout:120][bbox:{min_lat},{min_lon},{max_lat},{max_lon}];
@@ -128,9 +128,9 @@ def main(radlkarte_dir, out_dir, only_region, only_query):
     regions = get_regions_with_bboxes(radlkarte_dir)
     logging.info(f"found {len(regions)} regions: {sorted(list(regions.keys()))}")
     if only_region != None:
-      logging.info(f"Only downloading data for region: {only_region}")
+        logging.info(f"Only downloading data for region: {only_region}")
     if only_query != None:
-      logging.info(f"Only downloading data for query: {only_query}")
+        logging.info(f"Only downloading data for query: {only_query}")
     logging.info(f"all output will be written to '{out_dir}'")
     out_dir.mkdir(parents=True, exist_ok=True)
 
@@ -147,6 +147,7 @@ def main(radlkarte_dir, out_dir, only_region, only_query):
 
             logging.info(f"downloading {data_name} data for {region_name}..")
             full_query = QUERY_TEMPLATE.format(query=query, **bbox)
+            logging.debug(full_query)
             output_filename = out_dir / f"{region_name}-{data_name}.json"
             status_code = download(full_query, output_filename)
             if status_code == 200:
