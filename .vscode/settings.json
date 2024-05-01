@@ -1,4 +1,5 @@
 {
     "editor.formatOnSave": true,
-    "files.insertFinalNewline": true
+    "files.insertFinalNewline": true,
+    "css.format.spaceAroundSelectorSeparator": true
 }

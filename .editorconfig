@@ -1,3 +1,7 @@
+# JetBrains IDEs (Webstorm) specific properties: ij_*
+# They are ignored by other IDEs like VSCode and should help apply the same format across IDEs.
+# See discussion in https://github.com/markusstraub/radlkarte/pull/30 for details.
+
 root = true
 
 [*]
@@ -5,14 +9,28 @@ end_of_line = lf
 insert_final_newline = true
 ij_formatter_off_tag = @formatter:off
 ij_formatter_on_tag = @formatter:on
+ij_formatter_tags_enabled = true
+ij_visual_guides = 80, 120
 
 [*.{js,json,yml}]
 charset = utf-8
 indent_style = space
 indent_size = 2
+ij_javascript_spaces_within_object_literal_braces = true
+ij_javascript_spaces_within_object_type_braces = true
+
+[*.{css,scss}]
+charset = utf-8
+indent_style = space
+indent_size = 2
+ij_scss_blank_lines_around_nested_selector = 1
+ij_scss_blank_lines_between_blocks = 1
+
+[.vscode/**.json]
+indent_size = 4
 
 [*.html]
-# JetBrains IDEs (Webstorm) specific:
+ij_continuation_indent_size = 4
+ij_html_align_attributes = false
 # Add space to void elements (self-closing tags) to keep status quo and format the same way as VSCode in this project.
-# See discussion in https://github.com/markusstraub/radlkarte/pull/30 for details.
 ij_html_space_inside_empty_tag = true

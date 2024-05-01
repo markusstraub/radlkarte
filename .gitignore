@@ -2,6 +2,8 @@
 /data/osm-overpass
 
 .vscode
+!.vscode/settings.json
+!.vscode/extensions.json
 __pycache__
 .pytest_cache
 test_output.geojson
