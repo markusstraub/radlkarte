@@ -177,6 +177,7 @@ function loadGeoJson(file) {
             rkGlobal.poiLayers.problemLayerHighZoom.addLayer(problemMarkers.highZoom);
             ++poiCount;
           } else {
+            console.warn("ignoring invalid point (not a problem marker): " + JSON.stringify(geojson));
             ++ignoreCount;
           }
         } else {
