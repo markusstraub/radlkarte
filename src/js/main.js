@@ -10,7 +10,8 @@ import 'leaflet.locatecontrol/dist/L.Control.Locate.min.css'
 import 'leaflet-sidebar-v2';
 import 'leaflet-sidebar-v2/css/leaflet-sidebar.min.css';
 
-import './leaflet-hash-1.0.1-customized/leaflet-hash.js'
+//TODO: make the customized version work
+//import './leaflet-hash-1.0.1-customized/leaflet-hash.js'
 
 /** global variable for radlkarte properties / data storage */
 var rkGlobal = {};
@@ -882,7 +883,8 @@ function loadLeaflet() {
 
   // initialize hash, this causes loading of the default region
   // and positioning of the map
-  new L.Hash(rkGlobal.leafletMap);
+  // TODO: make L.Hash work again and uncomment the next line
+  //new L.Hash(rkGlobal.leafletMap);
 }
 
 function initializeIcons() {
