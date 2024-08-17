@@ -5,6 +5,15 @@ __metadata:
   version: 8
   cacheKey: 10c0
 
+"@babel/runtime@npm:^7.17.2, @babel/runtime@npm:^7.19.0":
+  version: 7.25.0
+  resolution: "@babel/runtime@npm:7.25.0"
+  dependencies:
+    regenerator-runtime: "npm:^0.14.0"
+  checksum: 10c0/bd3faf246170826cef2071a94d7b47b49d532351360ecd17722d03f6713fd93a3eb3dbd9518faa778d5e8ccad7392a7a604e56bd37aaad3f3aa68d619ccd983d
+  languageName: node
+  linkType: hard
+
 "@esbuild/aix-ppc64@npm:0.21.5":
   version: 0.21.5
   resolution: "@esbuild/aix-ppc64@npm:0.21.5"
@@ -222,6 +231,7 @@ __metadata:
     leaflet-polylinedecorator: "npm:^1.6.0"
     leaflet-sidebar-v2: "npm:^3.2.3"
     leaflet.locatecontrol: "npm:^0.81.1"
+    opening_hours: "npm:^3.8.0"
     vite: "npm:^5.4.1"
     why: "npm:^0.6.2"
   languageName: unknown
@@ -3037,6 +3047,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"i18next-browser-languagedetector@npm:^6.1.4":
+  version: 6.1.8
+  resolution: "i18next-browser-languagedetector@npm:6.1.8"
+  dependencies:
+    "@babel/runtime": "npm:^7.19.0"
+  checksum: 10c0/ab679a136de2b9df5984e810ea6ae8f848ac85d64562930f7d9be38d5cff139ed14262fd4abfde8a9a66b01cb521306e87493df766625194b90f0eb240be6f6a
+  languageName: node
+  linkType: hard
+
+"i18next@npm:^21.8.3":
+  version: 21.10.0
+  resolution: "i18next@npm:21.10.0"
+  dependencies:
+    "@babel/runtime": "npm:^7.17.2"
+  checksum: 10c0/2a674739aab219704d5a0bf62d03bed20ad2bceff9579efb4da61c4946c883fc172062ba7405a26bf795995860f2ab15826b05271f4c457bf7eb19e852f6006d
+  languageName: node
+  linkType: hard
+
 "iconv-lite@npm:0.6.3, iconv-lite@npm:^0.6.2":
   version: 0.6.3
   resolution: "iconv-lite@npm:0.6.3"
@@ -3575,6 +3603,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"opening_hours@npm:^3.8.0":
+  version: 3.8.0
+  resolution: "opening_hours@npm:3.8.0"
+  dependencies:
+    i18next: "npm:^21.8.3"
+    i18next-browser-languagedetector: "npm:^6.1.4"
+    suncalc: "npm:^1.9.0"
+  checksum: 10c0/92c66ddd8d5ae74b06075122b1e3b7e173ced7cb1a4a9e385b23b3e1961c464bcfde405391c3c5ed9b0eb9b8209349ae2f0b368dc806aec74de5b0e3fd3114d6
+  languageName: node
+  linkType: hard
+
 "p-map@npm:^4.0.0":
   version: 4.0.0
   resolution: "p-map@npm:4.0.0"
@@ -3763,6 +3802,13 @@ __metadata:
     isarray: "npm:0.0.1"
     string_decoder: "npm:~0.10.x"
   checksum: 10c0/b7f41b16b305103d598e3c8964fa30d52d6e0b5d9fdad567588964521691c24b279c7a8bb71f11927c3613acf355bac72d8396885a43d50425b2caafd49bc83d
+  languageName: node
+  linkType: hard
+
+"regenerator-runtime@npm:^0.14.0":
+  version: 0.14.1
+  resolution: "regenerator-runtime@npm:0.14.1"
+  checksum: 10c0/1b16eb2c4bceb1665c89de70dcb64126a22bc8eb958feef3cd68fe11ac6d2a4899b5cd1b80b0774c7c03591dc57d16631a7f69d2daa2ec98100e2f29f7ec4cc4
   languageName: node
   linkType: hard
 
@@ -4110,6 +4156,13 @@ __metadata:
   bin:
     strip-json-comments: cli.js
   checksum: 10c0/8388f352771ea508977f519758cc725670710e388ca24333bf61c7aaf073f40d99961b6b802432787ea5e5e2bf7dcbca9c391d6d7c5774f17495bf567ba08df4
+  languageName: node
+  linkType: hard
+
+"suncalc@npm:^1.9.0":
+  version: 1.9.0
+  resolution: "suncalc@npm:1.9.0"
+  checksum: 10c0/3c76c600ec8e60b7a6efab72f48cce3fc9b4ce95f8fa404fcd13d22f618fee2b83d7ad486544aee76bc20129c9f4eae4a76b09640c54167edd1de6099ca6cd3d
   languageName: node
   linkType: hard
 

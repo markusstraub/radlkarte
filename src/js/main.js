@@ -14,6 +14,8 @@ import 'leaflet-polylineDecorator';
 
 import '@turf/turf';
 
+import 'opening_hours';
+
 //TODO: make the customized version work
 //import './leaflet-hash-1.0.1-customized/leaflet-hash.js'
 
