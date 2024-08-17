@@ -36,5 +36,8 @@
     "jshint": "^2.13.6",
     "vite": "^5.4.1",
     "why": "^0.6.2"
+  },
+  "dependencies": {
+    "leaflet": "^1.9.4"
   }
 }
