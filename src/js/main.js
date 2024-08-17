@@ -1,20 +1,18 @@
 import L from "leaflet";
-import 'leaflet/dist/leaflet.css';
-
 import 'leaflet-control-geocoder';
-import 'leaflet-control-geocoder/dist/Control.Geocoder.css';
-
 import 'leaflet.locatecontrol';
-import 'leaflet.locatecontrol/dist/L.Control.Locate.min.css'
-
 import 'leaflet-sidebar-v2';
+import 'leaflet-polylineDecorator';
+import '@turf/turf';
+import 'opening_hours';
+import $ from "jquery";
+
+import 'leaflet/dist/leaflet.css';
+import 'leaflet-control-geocoder/dist/Control.Geocoder.css';
+import 'leaflet.locatecontrol/dist/L.Control.Locate.min.css'
 import 'leaflet-sidebar-v2/css/leaflet-sidebar.min.css';
 
-import 'leaflet-polylineDecorator';
-
-import '@turf/turf';
-
-import 'opening_hours';
+window.$ = $;
 
 //TODO: make the customized version work
 //import './leaflet-hash-1.0.1-customized/leaflet-hash.js'
@@ -1064,5 +1062,6 @@ function getProblemDescriptionText(properties) {
   return `<h2>${title}</h2>${description}`;
 }
 
-
-loadLeaflet();
+$( document ).ready(function() {
+  loadLeaflet();
+});

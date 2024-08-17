@@ -39,6 +39,7 @@
   },
   "dependencies": {
     "@turf/turf": "^7.1.0",
+    "jquery": "^3.7.1",
     "leaflet": "^1.9.4",
     "leaflet-control-geocoder": "^2.4.0",
     "leaflet-polylinedecorator": "^1.6.0",
