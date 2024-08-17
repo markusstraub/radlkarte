@@ -17,7 +17,7 @@
   "scripts": {
     "start": "$(yarn bin why)",
     "build": "vite build --emptyOutDir",
-    "serve": "vite preview --port 8081",
+    "serve": "yarn build && vite preview --port 8081",
     "geojson": "./data/prepare_geojson.py",
     "pois": "./data/download_pois_from_osm.py data data/osm-overpass",
     "pois:klagenfurt": "yarn pois --only-region klagenfurt",
@@ -38,6 +38,7 @@
     "why": "^0.6.2"
   },
   "dependencies": {
-    "leaflet": "^1.9.4"
+    "leaflet": "^1.9.4",
+    "leaflet-control-geocoder": "^2.4.0"
   }
 }

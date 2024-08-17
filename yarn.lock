@@ -217,6 +217,7 @@ __metadata:
     http-server: "npm:^14.1.1"
     jshint: "npm:^2.13.6"
     leaflet: "npm:^1.9.4"
+    leaflet-control-geocoder: "npm:^2.4.0"
     vite: "npm:^5.4.1"
     why: "npm:^0.6.2"
   languageName: unknown
@@ -1457,6 +1458,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"leaflet-control-geocoder@npm:^2.4.0":
+  version: 2.4.0
+  resolution: "leaflet-control-geocoder@npm:2.4.0"
+  dependencies:
+    open-location-code: "npm:^1.0.0"
+  peerDependencies:
+    leaflet: ^1.6.0
+  dependenciesMeta:
+    open-location-code:
+      optional: true
+  checksum: 10c0/305ece184ff4b52240748c5adb4f73a04dc87f9a21cfb967c9367a1ff522a89bb32ddf74b3df5f8d1b7a9cfc9a5f749d3cfec690d0f2109f44182f5dfb082f0b
+  languageName: node
+  linkType: hard
+
 "leaflet@npm:^1.9.4":
   version: 1.9.4
   resolution: "leaflet@npm:1.9.4"
@@ -1742,6 +1757,13 @@ __metadata:
   dependencies:
     wrappy: "npm:1"
   checksum: 10c0/5d48aca287dfefabd756621c5dfce5c91a549a93e9fdb7b8246bc4c4790aa2ec17b34a260530474635147aeb631a2dcc8b32c613df0675f96041cbb8244517d0
+  languageName: node
+  linkType: hard
+
+"open-location-code@npm:^1.0.0":
+  version: 1.0.3
+  resolution: "open-location-code@npm:1.0.3"
+  checksum: 10c0/46ec5c9ff3ce1dad7f713d5659d6211d9fdfe8d02297790ce91d7913192cae1702b5988e4edc324fc43fdb8bb4db2486ffc09389d2e4f388d501ef532622d9ec
   languageName: node
   linkType: hard
 
