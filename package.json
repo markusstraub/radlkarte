@@ -40,6 +40,7 @@
   "dependencies": {
     "leaflet": "^1.9.4",
     "leaflet-control-geocoder": "^2.4.0",
+    "leaflet-polylinedecorator": "^1.6.0",
     "leaflet-sidebar-v2": "^3.2.3",
     "leaflet.locatecontrol": "^0.81.1"
   }
