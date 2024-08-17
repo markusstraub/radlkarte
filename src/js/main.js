@@ -1,5 +1,7 @@
 import L from "leaflet";
 import 'leaflet/dist/leaflet.css';
+import 'leaflet-control-geocoder';
+
 
 /** global variable for radlkarte properties / data storage */
 var rkGlobal = {};
