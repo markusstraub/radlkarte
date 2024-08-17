@@ -218,6 +218,7 @@ __metadata:
     jshint: "npm:^2.13.6"
     leaflet: "npm:^1.9.4"
     leaflet-control-geocoder: "npm:^2.4.0"
+    leaflet-sidebar-v2: "npm:^3.2.3"
     leaflet.locatecontrol: "npm:^0.81.1"
     vite: "npm:^5.4.1"
     why: "npm:^0.6.2"
@@ -1470,6 +1471,13 @@ __metadata:
     open-location-code:
       optional: true
   checksum: 10c0/305ece184ff4b52240748c5adb4f73a04dc87f9a21cfb967c9367a1ff522a89bb32ddf74b3df5f8d1b7a9cfc9a5f749d3cfec690d0f2109f44182f5dfb082f0b
+  languageName: node
+  linkType: hard
+
+"leaflet-sidebar-v2@npm:^3.2.3":
+  version: 3.2.3
+  resolution: "leaflet-sidebar-v2@npm:3.2.3"
+  checksum: 10c0/fababc01b9b5b609959affb7ca8f06c3a77c6154d80ee18d67aa9462962408f1b40135caac365596d7a2679aaec48026ccdab36687fdd4a136f5e4984fd79b11
   languageName: node
   linkType: hard
 
