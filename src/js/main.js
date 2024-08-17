@@ -7,6 +7,11 @@ import 'leaflet-control-geocoder/dist/Control.Geocoder.css';
 import 'leaflet.locatecontrol';
 import 'leaflet.locatecontrol/dist/L.Control.Locate.min.css'
 
+import 'leaflet-sidebar-v2';
+import 'leaflet-sidebar-v2/css/leaflet-sidebar.min.css';
+
+import './leaflet-hash-1.0.1-customized/leaflet-hash.js'
+
 /** global variable for radlkarte properties / data storage */
 var rkGlobal = {};
 /** the main leaflet map */
