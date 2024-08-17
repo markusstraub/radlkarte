@@ -16,7 +16,8 @@
   "packageManager": "yarn@4.1.0",
   "scripts": {
     "start": "$(yarn bin why)",
-    "serve": "http-server -a localhost -p 8081 -c-1",
+    "build": "vite build --emptyOutDir",
+    "serve": "vite preview --port 8081",
     "geojson": "./data/prepare_geojson.py",
     "pois": "./data/download_pois_from_osm.py data data/osm-overpass",
     "pois:klagenfurt": "yarn pois --only-region klagenfurt",
