@@ -216,6 +216,7 @@ __metadata:
     html5-lint: "npm:^0.3.0"
     http-server: "npm:^14.1.1"
     jshint: "npm:^2.13.6"
+    leaflet: "npm:^1.9.4"
     vite: "npm:^5.4.1"
     why: "npm:^0.6.2"
   languageName: unknown
@@ -1453,6 +1454,13 @@ __metadata:
     json-schema: "npm:0.4.0"
     verror: "npm:1.10.0"
   checksum: 10c0/5e4bca99e90727c2040eb4c2190d0ef1fe51798ed5714e87b841d304526190d960f9772acc7108fa1416b61e1122bcd60e4460c91793dce0835df5852aab55af
+  languageName: node
+  linkType: hard
+
+"leaflet@npm:^1.9.4":
+  version: 1.9.4
+  resolution: "leaflet@npm:1.9.4"
+  checksum: 10c0/f639441dbb7eb9ae3fcd29ffd7d3508f6c6106892441634b0232fafb9ffb1588b05a8244ec7085de2c98b5ed703894df246898477836cfd0ce5b96d4717b5ca1
   languageName: node
   linkType: hard
 

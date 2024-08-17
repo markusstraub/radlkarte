@@ -1,4 +1,6 @@
-"use strict";
+import L from "leaflet";
+import 'leaflet/dist/leaflet.css';
+
 /** global variable for radlkarte properties / data storage */
 var rkGlobal = {};
 /** the main leaflet map */
@@ -1042,3 +1044,6 @@ function getProblemDescriptionText(properties) {
 
   return `<h2>${title}</h2>${description}`;
 }
+
+
+loadLeaflet();
