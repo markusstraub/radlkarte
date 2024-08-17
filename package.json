@@ -39,6 +39,7 @@
   },
   "dependencies": {
     "leaflet": "^1.9.4",
-    "leaflet-control-geocoder": "^2.4.0"
+    "leaflet-control-geocoder": "^2.4.0",
+    "leaflet.locatecontrol": "^0.81.1"
   }
 }
