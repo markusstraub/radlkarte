@@ -1,6 +1,8 @@
 /non_vcs
 /data/osm-overpass
 
+dist
+
 .vscode
 !.vscode/settings.json
 !.vscode/extensions.json
