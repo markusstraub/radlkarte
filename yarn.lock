@@ -218,6 +218,7 @@ __metadata:
     jshint: "npm:^2.13.6"
     leaflet: "npm:^1.9.4"
     leaflet-control-geocoder: "npm:^2.4.0"
+    leaflet-polylinedecorator: "npm:^1.6.0"
     leaflet-sidebar-v2: "npm:^3.2.3"
     leaflet.locatecontrol: "npm:^0.81.1"
     vite: "npm:^5.4.1"
@@ -1471,6 +1472,22 @@ __metadata:
     open-location-code:
       optional: true
   checksum: 10c0/305ece184ff4b52240748c5adb4f73a04dc87f9a21cfb967c9367a1ff522a89bb32ddf74b3df5f8d1b7a9cfc9a5f749d3cfec690d0f2109f44182f5dfb082f0b
+  languageName: node
+  linkType: hard
+
+"leaflet-polylinedecorator@npm:^1.6.0":
+  version: 1.6.0
+  resolution: "leaflet-polylinedecorator@npm:1.6.0"
+  dependencies:
+    leaflet-rotatedmarker: "npm:^0.2.0"
+  checksum: 10c0/ba175ec87853d550ff24dd2d0afc47f07b28b6a9771845bd4a23e11ce5e546998605577643e452cea529c3c31ebc100aea89e02595ac4c885946fcfe7da969b1
+  languageName: node
+  linkType: hard
+
+"leaflet-rotatedmarker@npm:^0.2.0":
+  version: 0.2.0
+  resolution: "leaflet-rotatedmarker@npm:0.2.0"
+  checksum: 10c0/c5116bec4438bcad873f7f656328225abd5d14812750b7f9331c72b46efaed6bbb4b99b6a7f02795a5bd680f888a84f047b1c535071c0861ef6971166f8dc584
   languageName: node
   linkType: hard
 
