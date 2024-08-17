@@ -38,6 +38,7 @@
     "why": "^0.6.2"
   },
   "dependencies": {
+    "@turf/turf": "^7.1.0",
     "leaflet": "^1.9.4",
     "leaflet-control-geocoder": "^2.4.0",
     "leaflet-polylinedecorator": "^1.6.0",

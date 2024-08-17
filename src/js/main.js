@@ -12,6 +12,8 @@ import 'leaflet-sidebar-v2/css/leaflet-sidebar.min.css';
 
 import 'leaflet-polylineDecorator';
 
+import '@turf/turf';
+
 //TODO: make the customized version work
 //import './leaflet-hash-1.0.1-customized/leaflet-hash.js'
 
