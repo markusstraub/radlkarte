@@ -32,10 +32,6 @@ const rk = {
   fullWidthThreshold: 768,
 
 // style: stress = color, priority = line width
-  styleFunction: function() {
-    //TODO: import style function
-    window['updateStyles']();
-  },
   tileLayerOpacity: 1,
   priorityFullVisibleFromZoom: [0, 14, 15],
   priorityReducedVisibilityFromZoom: [0, 12, 14],
