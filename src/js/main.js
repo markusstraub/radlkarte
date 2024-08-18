@@ -162,12 +162,12 @@ function loadGeoJson(file) {
     }
 
     // apply styles
-    rk.styleFunction();
+    updateStyles();
 
     rk.leafletMap.on('zoomend', function (ev) {
       //debug("zoom level changed to " + rk.leafletMap.getZoom() + ".. enqueueing style change");
       $("#map").queue(function () {
-        rk.styleFunction();
+        updateStyles()
         $(this).dequeue();
       });
     });
