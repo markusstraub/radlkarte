@@ -17,7 +17,7 @@ import 'leaflet-sidebar-v2/css/leaflet-sidebar.min.css';
 window.$ = $;
 
 //own modules
-import './leaflet-hash-1.0.1-customized/leaflet-hash.js'
+import './modules/leaflet-hash-1.0.1-customized/leaflet-hash.js'
 import rk from './modules/config';
 
 
@@ -25,6 +25,10 @@ function debug(obj) {
   if (rk.debug) {
     console.log(obj);
   }
+}
+
+function getPageHeader (){
+  return $('h1');
 }
 
 /**
@@ -54,7 +58,7 @@ function updateRadlkarteRegion(region) {
   }
   clearAndLoadOsmPois(visibleOsmPois);
 
-  rk.pageHeader().text('Radlkarte ' + configuration.title);
+  getPageHeader().text('Radlkarte ' + configuration.title);
 
 
   // virtual page hit in matomo analytics

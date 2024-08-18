@@ -80,9 +80,6 @@ const rk = {
       nextbikeUrl: 'https://maps.nextbike.net/maps/nextbike.json?domains=wr,la&bikes=false',
     },
   },
-  pageHeader: function () {
-    return $('h1');
-  }
 }
 
 for (const [k, v] of Object.entries(rk.osmPoiTypes)) {
