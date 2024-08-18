@@ -805,8 +805,6 @@ function loadLeaflet() {
   // and positioning of the map
 
   new L.Hash(rk, updateRadlkarteRegion, selectPoiLayersForKey, getSelectedPoiLayerKey);
-
-  console.log(rk);
 }
 
 function initializeIcons() {
