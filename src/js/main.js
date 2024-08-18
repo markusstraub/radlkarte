@@ -1,12 +1,14 @@
+//third party modules
 import L from "leaflet";
 import 'leaflet-control-geocoder';
 import 'leaflet.locatecontrol';
 import 'leaflet-sidebar-v2';
 import 'leaflet-polylineDecorator';
-import '@turf/turf';
+import * as turf from '@turf/turf'
 import 'opening_hours';
 import $ from "jquery";
 
+//css
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-control-geocoder/dist/Control.Geocoder.css';
 import 'leaflet.locatecontrol/dist/L.Control.Locate.min.css'
