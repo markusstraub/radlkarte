@@ -804,7 +804,7 @@ function loadLeaflet() {
   // initialize hash, this causes loading of the default region
   // and positioning of the map
 
-  new L.Hash(rk, updateRadlkarteRegion, selectPoiLayersForKey, getSelectedPoiLayerKey());
+  new L.Hash(rk, updateRadlkarteRegion, selectPoiLayersForKey, getSelectedPoiLayerKey);
 
   console.log(rk);
 }

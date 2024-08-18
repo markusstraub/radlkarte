@@ -13,7 +13,7 @@
 		this.onHashChange = L.Util.bind(this.onHashChange, this);
 
 		if (rk.leafletMap) {
-			this.init(rk.leafletMap, rk, updateRadlkarteRegion, selectPoiLayersForKey);
+			this.init(rk.leafletMap);
 		}
 	};
 
