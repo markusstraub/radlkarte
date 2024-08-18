@@ -31,7 +31,7 @@ const rk = {
   debug: true,
   fullWidthThreshold: 768,
 
-// style: stress = color, priority = line width
+  // style: stress = color, priority = line width
   tileLayerOpacity: 1,
   priorityFullVisibleFromZoom: [0, 14, 15],
   priorityReducedVisibilityFromZoom: [0, 12, 14],
@@ -90,4 +90,4 @@ for (const [k, v] of Object.entries(rk.osmPoiTypes)) {
   rk.poiLayers[k] = v.layer;
 }
 
-export default rk ;
+export default rk;
