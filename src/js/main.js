@@ -25,6 +25,13 @@ import "../radlkarte.css";
 import "../css/museo-500/style.css";
 import "../css/roboto/style.css";
 
+//data
+import geoJsonKlagenfurt from "../data/radlkarte-klagenfurt.geojson?url";
+import geoJsonLinz from "../data/radlkarte-linz.geojson?url";
+import geoJsonRheintal from "../data/radlkarte-rheintal.geojson?url";
+import geoJsonSchwarzatal from "../data/radlkarte-schwarzatal.geojson?url";
+import geoJsonSteyr from "../data/radlkarte-steyr.geojson?url";
+import geoJsonWien from "../data/radlkarte-wien.geojson?url";
 
 function debug(obj) {
   if (rk.debug) {
