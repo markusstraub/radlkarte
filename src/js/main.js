@@ -22,6 +22,9 @@ import rk from './modules/config';
 
 //own css
 import "../radlkarte.css";
+import "../css/museo-500/style.css";
+import "../css/roboto/style.css";
+
 
 function debug(obj) {
   if (rk.debug) {
