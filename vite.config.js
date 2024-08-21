@@ -1,9 +1,14 @@
-import { defineConfig } from 'vite'
-
+import {defineConfig} from 'vite'
+import replaceGeoJsonInHtml from './vite-plugin-replace-geojson-in-html'
 
 export default defineConfig({
   root: 'src',
+  assetsInclude: ['**/*.geojson'],
   build: {
-    outDir: '../dist'
-  }
+    outDir: '../dist',
+    assetsDir: 'assets',
+    manifest: true,
+  },
+  plugins: [replaceGeoJsonInHtml()],
+
 })
