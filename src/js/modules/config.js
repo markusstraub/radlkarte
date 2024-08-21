@@ -1,3 +1,12 @@
+
+import geoJsonRendertest from "../../data/radlkarte-rendertest.geojson";
+import geoJsonKlagenfurt from "../../data/radlkarte-klagenfurt.geojson";
+import geoJsonLinz from "../../data/radlkarte-linz.geojson";
+import geoJsonRheintal from "../../data/radlkarte-rheintal.geojson";
+import geoJsonSchwarzatal from "../../data/radlkarte-schwarzatal.geojson";
+import geoJsonSteyr from "../../data/radlkarte-steyr.geojson";
+import geoJsonWien from "../../data/radlkarte-wien.geojson";
+
 /**  variable for radlkarte properties / data storage */
 const rk = {
   /** the main leaflet map */
@@ -50,33 +59,40 @@ const rk = {
     'rendertest': {
       title: '[DEV] Rendertest',
       centerLatLng: L.latLng(50.09, 14.39),
+      filename: geoJsonRendertest,
     },
     'klagenfurt': {
       title: 'Klagenfurt',
       centerLatLng: L.latLng(46.62, 14.31),
+      filename: geoJsonKlagenfurt,
       nextbikeUrl: 'https://maps.nextbike.net/maps/nextbike.json?domains=ka&bikes=false'
     },
     'linz': {
       title: 'Linz',
       centerLatLng: L.latLng(48.30, 14.26),
+      filename: geoJsonLinz,
       nextbikeUrl: 'https://maps.nextbike.net/maps/nextbike.json?domains=al&bikes=false'
     },
     'rheintal': {
       title: 'Rheintal',
       centerLatLng: L.latLng(47.41, 9.72),
+      filename: geoJsonRheintal,
     },
     'schwarzatal': {
       title: 'Schwarztal',
       centerLatLng: L.latLng(47.67, 15.94),
+      filename: geoJsonSchwarzatal,
       nextbikeUrl: 'https://maps.nextbike.net/maps/nextbike.json?domains=la&bikes=false'
     },
     'steyr': {
       title: 'Steyr',
       centerLatLng: L.latLng(48.04, 14.42),
+      filename: geoJsonSteyr,
     },
     'wien': {
       title: 'Wien',
       centerLatLng: L.latLng(48.21, 16.37),
+      filename: geoJsonWien,
       nextbikeUrl: 'https://maps.nextbike.net/maps/nextbike.json?domains=wr,la&bikes=false',
     },
   },
