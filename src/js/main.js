@@ -11,15 +11,17 @@ import $ from "jquery";
 //css
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-control-geocoder/dist/Control.Geocoder.css';
-import 'leaflet.locatecontrol/dist/L.Control.Locate.min.css'
+import 'leaflet.locatecontrol/dist/L.Control.Locate.min.css';
 import 'leaflet-sidebar-v2/css/leaflet-sidebar.min.css';
 
 window.$ = $;
 
 //own modules
-import './modules/leaflet-hash-1.0.1-customized/leaflet-hash.js'
+import './modules/leaflet-hash-1.0.1-customized/leaflet-hash.js';
 import rk from './modules/config';
 
+//own css
+import "../radlkarte.css";
 
 function debug(obj) {
   if (rk.debug) {
