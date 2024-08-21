@@ -25,13 +25,6 @@ import "../radlkarte.css";
 import "../css/museo-500/style.css";
 import "../css/roboto/style.css";
 
-//data
-import geoJsonKlagenfurt from "../data/radlkarte-klagenfurt.geojson";
-import geoJsonLinz from "../data/radlkarte-linz.geojson";
-import geoJsonRheintal from "../data/radlkarte-rheintal.geojson";
-import geoJsonSchwarzatal from "../data/radlkarte-schwarzatal.geojson";
-import geoJsonSteyr from "../data/radlkarte-steyr.geojson";
-import geoJsonWien from "../data/radlkarte-wien.geojson";
 
 
 function debug(obj) {
@@ -58,7 +51,7 @@ function updateRadlkarteRegion(region) {
   }
 
   removeAllSegmentsAndMarkers();
-  loadGeoJson('data/radlkarte-' + region + '.geojson');
+  loadGeoJson(rk.configurations[region].filename);
   // POI layers: only reload visible layers
   if (rk.leafletMap.hasLayer(rk.poiLayers.bikeShareLayer)) {
     clearAndLoadNextbike(configuration.nextbikeUrl);
