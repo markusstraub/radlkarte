@@ -1,3 +1,7 @@
+import rk from '../base_radlkarte_object';
+import updateRadlkarteRegion from '../updateRadlkarteRegion';
+import {getSelectedPoiLayerKey, selectPoiLayersForKey} from "../poi";
+
 (function(window) {
 	var HAS_HASHCHANGE = (function() {
 		var doc_mode = window.documentMode;
@@ -5,11 +9,7 @@
 			(doc_mode === undefined || doc_mode > 7);
 	})();
 
-	L.Hash = function(rk, updateRadlkarteRegion,selectPoiLayersForKey, getSelectedPoiLayerKey) {
-    this.rk = rk;
-    this.updateRadlkarteRegion = updateRadlkarteRegion;
-    this.selectPoiLayersForKey = selectPoiLayersForKey;
-    this.getSelectedPoiLayerKey = getSelectedPoiLayerKey;
+	L.Hash = function() {
 		this.onHashChange = L.Util.bind(this.onHashChange, this);
 
 		if (rk.leafletMap) {
@@ -26,9 +26,9 @@
 		}
 
 		var parsed = {
-			region: this.rk.defaultRegion,
+			region: rk.defaultRegion,
 			poiLayers: 'p',
-			zoom: this.rk.defaultZoom,
+			zoom: rk.defaultZoom,
 			center: undefined
 		}
 
@@ -36,7 +36,7 @@
 
 		if(args.length >= 1) {
 			var region = args[0];
-			if(region in this.rk.configurations) {
+			if(region in rk.configurations) {
 				parsed.region = region;
 			}
 		}
@@ -62,7 +62,7 @@
 		if (!isNaN(lat) && !isNaN(lon)) {
 			parsed.center = new L.LatLng(lat, lon);
 		} else {
-			var config = this.rk.configurations[parsed.region];
+			var config = rk.configurations[parsed.region];
 			parsed.center = config.centerLatLng;
 		}
 
@@ -75,7 +75,7 @@
 		    precision = Math.max(0, Math.ceil(Math.log(zoom) / Math.LN2));
 
 		return "#" + [this.region,
-			this.getSelectedPoiLayerKey(),
+			getSelectedPoiLayerKey(),
 			//(L.version >= '1.0.0') ? zoom.toFixed(precision) : zoom,
 			zoom,
 			center.lat.toFixed(precision),
@@ -135,14 +135,14 @@
 		autoSwitchRegionIfCloseEnough: function() {
 			var minDistanceM = Number.MAX_VALUE;
 			var minRegion = undefined;
-			for(const key of Object.keys(this.rk.configurations)) {
-				var distanceM = this.map.getCenter().distanceTo(this.rk.configurations[key].centerLatLng);
+			for(const key of Object.keys(rk.configurations)) {
+				var distanceM = this.map.getCenter().distanceTo(rk.configurations[key].centerLatLng);
 				if(distanceM < minDistanceM) {
 					minDistanceM = distanceM;
 					minRegion = key;
 				}
 			}
-			if(this.region != minRegion && minDistanceM < this.rk.autoSwitchDistanceMeters) {
+			if(this.region != minRegion && minDistanceM < rk.autoSwitchDistanceMeters) {
 				this.updateRadlkarteRegion(minRegion);
 				this.region = minRegion;
 				console.log("auto-switching region to " + minRegion + ", map center is only " + Math.round(minDistanceM) + "m away");
@@ -160,10 +160,10 @@
 			this.movingMap = true;
 			if(this.region !== parsed.region) {
 				// console.log('hash update got a new region, change from ' + this.region + ' to ' + parsed.region);
-				this.updateRadlkarteRegion(parsed.region);
+				updateRadlkarteRegion(parsed.region);
 				this.region = parsed.region;
 			}
-			this.selectPoiLayersForKey(parsed.poiLayers);
+			selectPoiLayersForKey(parsed.poiLayers);
 			this.map.setView(parsed.center, parsed.zoom);
 			this.movingMap = false;
 		},
@@ -187,8 +187,8 @@
 		hashChangeInterval: null,
 		startListening: function() {
 			this.map.on("moveend", this.onMapMove, this);
-			this.rk.leafletMap.on("overlayadd", this.onMapMove, this);
-			this.rk.leafletMap.on("overlayremove", this.onMapMove, this);
+			rk.leafletMap.on("overlayadd", this.onMapMove, this);
+			rk.leafletMap.on("overlayremove", this.onMapMove, this);
 
 			if (HAS_HASHCHANGE) {
 				L.DomEvent.addListener(window, "hashchange", this.onHashChange);
