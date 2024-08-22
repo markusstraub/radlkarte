@@ -1,4 +1,7 @@
+//third party modules
 import L from "leaflet";
+
+//own modules
 import icons from './icons';
 
 function createMarkerIncludingPopup(latLng, icon, description, altText) {

@@ -1,13 +1,14 @@
-import rk from "./base_radlkarte_object";
+//third party modules
 import L from "leaflet";
 
-
+//own modules
+import rk from "./base_radlkarte_object";
 import './leaflet-hash-1.0.1-customized/leaflet-hash.js';
-import debug from "./debug";
 import updateRadlkarteRegion from "./updateRadlkarteRegion";
 import {getSelectedPoiLayerKey, selectPoiLayersForKey} from "./poi";
 import {clearAndLoadNextbike} from "./poi_nextbike";
 import {clearAndLoadOsmPois} from "./poi_osm";
+import debug from "./debug";
 
 function loadLeaflet() {
   rk.leafletMap = L.map('map', { 'zoomControl': false });
