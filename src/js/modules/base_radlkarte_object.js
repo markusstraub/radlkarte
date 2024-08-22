@@ -1,4 +1,4 @@
-
+//assets
 import geoJsonRendertest from "../../data/radlkarte-rendertest.geojson";
 import geoJsonKlagenfurt from "../../data/radlkarte-klagenfurt.geojson";
 import geoJsonLinz from "../../data/radlkarte-linz.geojson";

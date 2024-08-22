@@ -1,4 +1,4 @@
-import rk from "./config";
+import rk from "./base_radlkarte_object";
 
 /**
  * Updates the styles of all layers. Takes current zoom level into account.

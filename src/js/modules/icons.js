@@ -1,6 +1,6 @@
-import rk from "./config";
 import L from "leaflet";
 
+//assets
 import iconDismount from '../../css/dismount.svg';
 import iconWarning from '../../css/warning.svg';
 import iconNoCargo from '../../css/nocargo.svg';
