@@ -19,11 +19,14 @@ window.$ = $;
 //own modules
 import './modules/leaflet-hash-1.0.1-customized/leaflet-hash.js';
 import rk from './modules/config';
+import icons from "./modules/icons";
+import {createMarkerIncludingPopup, createProblemMarkersIncludingPopup} from "./modules/markers";
 
 //own css
 import "../radlkarte.css";
 import "../css/museo-500/style.css";
 import "../css/roboto/style.css";
+
 
 
 
@@ -261,32 +264,14 @@ function createNextbikeMarkerIncludingPopup(domain, place, cityUrl) {
   }
   description += `<p class="sidenote">Mehr Informationen: ${cityUrl}</p>`;
 
-  let icon = place.bikes !== 0 ? rk.icons.nextbike : rk.icons.nextbikeGray;
+  let icon = place.bikes !== 0 ? icons.nextbike : icons.nextbikeGray;
   if (domain === "wr") {
-    icon = place.bikes !== 0 ? rk.icons.wienmobilrad : rk.icons.wienmobilradGray;
+    icon = place.bikes !== 0 ? icons.wienmobilrad : icons.wienmobilradGray;
   } else if (domain === "al") {
-    icon = place.bikes !== 0 ? rk.icons.citybikelinz : rk.icons.citybikelinzGray;
+    icon = place.bikes !== 0 ? icons.citybikelinz : icons.citybikelinzGray;
   }
 
   return createMarkerIncludingPopup(L.latLng(place.lat, place.lng), icon, description, place.name);
-}
-
-function createMarkerIncludingPopup(latLng, icon, description, altText) {
-  let marker = L.marker(latLng, {
-    icon: icon,
-    alt: altText,
-  });
-  marker.bindPopup(`<article class="tooltip">${description}</article>`, { closeButton: true });
-  marker.on('mouseover', function () {
-    marker.openPopup();
-  });
-  // adding a mouseover event listener causes a problem with touch browsers:
-  // then two taps are required to show the marker.
-  // explicitly adding the click event listener here solves the issue
-  marker.on('click', function () {
-    marker.openPopup();
-  });
-  return marker;
 }
 
 /** expects a list of poi types */
@@ -324,7 +309,7 @@ async function clearAndLoadTransit(region) {
           continue;
         }
         let description = `<h2>${element.tags.name}</h2>`;
-        let icon = rk.icons[transitType];
+        let icon = icons[transitType];
         if (stationName2Line2Colour[element.tags.name] != null) {
           let refs = Array.from(Object.keys(stationName2Line2Colour[element.tags.name])).sort();
           for (const ref of refs) {
@@ -332,7 +317,7 @@ async function clearAndLoadTransit(region) {
           }
 
           if (transitType === "railway") {
-            icon = rk.icons.sbahn;
+            icon = icons.sbahn;
           }
         }
         let altText = element.tags.name;
@@ -437,7 +422,7 @@ function clearAndLoadBasicOsmPoi(type, region) {
       const osmLink = `<a href="https://www.osm.org/${element.type}/${element.id}" target="_blank">Quelle: OpenStreetMap</a>`;
       description += `<p class="sidenote">${osmLink} (Stand: ${dataDate})</p>`;
 
-      let icon = rk.icons[`${type}${currentlyOpen ? "" : "Gray"}`];
+      let icon = icons[`${type}${currentlyOpen ? "" : "Gray"}`];
       let altText = element.tags.name;
       const markerLayer = createMarkerIncludingPopup(latLng, icon, description, altText);
       if (markerLayer != null) {
@@ -809,184 +794,12 @@ function loadLeaflet() {
     sidebar.close();
   }
 
-  initializeIcons();
-
   // initialize hash, this causes loading of the default region
   // and positioning of the map
 
   new L.Hash(rk, updateRadlkarteRegion, selectPoiLayersForKey, getSelectedPoiLayerKey);
 }
 
-function initializeIcons() {
-  rk.icons = {};
-  rk.icons.dismount = L.icon({
-    iconUrl: 'css/dismount.svg',
-    iconSize: [33, 29],
-    iconAnchor: [16.5, 14.5],
-    popupAnchor: [0, -14.5]
-  });
-  rk.icons.warning = L.icon({
-    iconUrl: 'css/warning.svg',
-    iconSize: [33, 29],
-    iconAnchor: [16.5, 14.5],
-    popupAnchor: [0, -14.5]
-  });
-  rk.icons.noCargo = L.icon({
-    iconUrl: 'css/nocargo.svg',
-    iconSize: [29, 29],
-    iconAnchor: [14.5, 14.5],
-    popupAnchor: [0, -14.5]
-  });
-  rk.icons.noCargoAndDismount = L.icon({
-    iconUrl: 'css/nocargo+dismount.svg',
-    iconSize: [57.7, 29],
-    iconAnchor: [28.85, 14.5],
-    popupAnchor: [0, -14.5]
-  });
-  rk.icons.redDot = L.icon({
-    iconUrl: 'css/reddot.svg',
-    iconSize: [10, 10],
-    iconAnchor: [5, 5],
-    popupAnchor: [0, -5]
-  });
-  rk.icons.swimming = L.icon({
-    iconUrl: 'css/swimming.svg',
-    iconSize: [29, 29],
-    iconAnchor: [14.5, 14.5],
-    popupAnchor: [0, -14.5]
-  });
-  rk.icons.swimmingSmall = L.icon({
-    iconUrl: 'css/swimming_small.svg',
-    iconSize: [10, 10],
-    iconAnchor: [5, 5],
-    popupAnchor: [0, -5]
-  });
-  let subwaySize = 15;
-  rk.icons.subway = L.icon({
-    iconUrl: 'css/subway.svg',
-    iconSize: [subwaySize, subwaySize],
-    iconAnchor: [subwaySize / 2, subwaySize / 2],
-    popupAnchor: [0, -subwaySize / 2]
-  });
-  rk.icons.sbahn = L.icon({
-    iconUrl: 'css/sbahn.svg',
-    iconSize: [subwaySize, subwaySize],
-    iconAnchor: [subwaySize / 2, subwaySize / 2],
-    popupAnchor: [0, -subwaySize / 2]
-  });
-  let railwaySize = 20;
-  rk.icons.railway = L.icon({
-    iconUrl: 'css/railway.svg',
-    iconSize: [railwaySize, railwaySize],
-    iconAnchor: [railwaySize / 2, railwaySize / 2],
-    popupAnchor: [0, -railwaySize / 2]
-  });
-
-  rk.icons.nextbike = createMarkerIcon('css/nextbike.svg');
-  rk.icons.nextbikeGray = createMarkerIcon('css/nextbike-gray.svg');
-  rk.icons.wienmobilrad = createMarkerIcon('css/wienmobilrad.svg');
-  rk.icons.wienmobilradGray = createMarkerIcon('css/wienmobilrad-gray.svg');
-  rk.icons.citybikelinz = createMarkerIcon('css/citybikelinz.svg');
-  rk.icons.citybikelinzGray = createMarkerIcon('css/citybikelinz-gray.svg');
-  rk.icons.bicycleShop = createMarkerIcon('css/bicycleShop.svg');
-  rk.icons.bicycleShopGray = createMarkerIcon('css/bicycleShop-gray.svg');
-  rk.icons.bicycleRepairStation = createMarkerIcon('css/bicycleRepairStation.svg');
-  rk.icons.bicycleRepairStationGray = createMarkerIcon('css/bicycleRepairStation-gray.svg');
-  rk.icons.bicyclePump = createMarkerIcon('css/bicyclePump.svg');
-  rk.icons.bicyclePumpGray = createMarkerIcon('css/bicyclePump-gray.svg');
-  rk.icons.bicycleTubeVending = createMarkerIcon('css/bicycleTubeVending.svg');
-  rk.icons.bicycleTubeVendingGray = createMarkerIcon('css/bicycleTubeVending-gray.svg');
-  rk.icons.drinkingWater = createMarkerIcon('css/drinkingWater.svg');
-  rk.icons.drinkingWaterGray = createMarkerIcon('css/drinkingWater-gray.svg');
-}
-
-function createMarkerIcon(url) {
-  let markerWidth = 100 / 5;
-  let markerHeight = 150 / 5;
-  return L.icon({
-    iconUrl: url,
-    iconSize: [markerWidth, markerHeight],
-    iconAnchor: [markerWidth / 2, markerHeight],
-    popupAnchor: [0, -markerHeight]
-  });
-}
-
-function createProblemMarkersIncludingPopup(geojsonPoint) {
-  let icons = getProblemIcons(geojsonPoint.properties);
-  if (icons == null) {
-    return undefined;
-  }
-  let description = getProblemDescriptionText(geojsonPoint.properties);
-  let latLng = L.geoJSON(geojsonPoint).getLayers()[0].getLatLng();
-  let markers = {
-    lowZoom: createMarkerIncludingPopup(latLng, icons.small, description, 'Problemstelle'),
-    highZoom: createMarkerIncludingPopup(latLng, icons.large, description, 'Problemstelle')
-  };
-  return markers;
-}
-
-
-/**
- * @param properties GeoJSON properties of a point
- * @return a small and a large icon or undefined if no icons should be used
- */
-function getProblemIcons(properties) {
-  if (properties.leisure === 'swimming_pool') {
-    return {
-      small: rk.icons.swimmingSmall,
-      large: rk.icons.swimming
-    };
-  }
-
-  let dismount = properties.dismount === 'yes';
-  let nocargo = properties.nocargo === 'yes';
-  let warning = properties.warning === 'yes';
-
-  let problemIcon;
-  if (dismount && nocargo) {
-    problemIcon = rk.icons.noCargoAndDismount;
-  } else if (dismount) {
-    problemIcon = rk.icons.dismount;
-  } else if (nocargo) {
-    problemIcon = rk.icons.noCargo;
-  } else if (warning) {
-    problemIcon = rk.icons.warning;
-  }
-
-  if (problemIcon === undefined) {
-    return undefined;
-  } else {
-    return {
-      small: rk.icons.redDot,
-      large: problemIcon
-    };
-  }
-}
-
-/**
- * @param properties GeoJSON properties of a point
- * @return a description string
- */
-function getProblemDescriptionText(properties) {
-  let dismount = properties.dismount === 'yes';
-  let nocargo = properties.nocargo === 'yes';
-  let warning = properties.warning === 'yes';
-
-  let title = "";
-  if (dismount && nocargo) {
-    title = 'Schiebestelle / untauglich für Spezialräder';
-  } else if (dismount) {
-    title = 'Schiebestelle';
-  } else if (nocargo) {
-    title = 'Untauglich für Spezialräder';
-  } else if (warning) {
-    title = 'Achtung';
-  }
-
-  const description = properties.description ? `<p>${properties.description}</p>` : "";
-
-  return `<h2>${title}</h2>${description}`;
-}
 
 $( document ).ready(function() {
   loadLeaflet();
