@@ -96,7 +96,7 @@ const rk = {
       nextbikeUrl: 'https://maps.nextbike.net/maps/nextbike.json?domains=wr,la&bikes=false',
     },
   },
-}
+};
 
 for (const [k, v] of Object.entries(rk.osmPoiTypes)) {
   v.layer = L.layerGroup();

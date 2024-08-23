@@ -32,7 +32,7 @@ import {getSelectedPoiLayerKey, selectPoiLayersForKey} from "../poi";
 			poiLayers: 'p',
 			zoom: rk.defaultZoom,
 			center: undefined
-		}
+		};
 
 		var args = hash.split("/");
 
@@ -50,15 +50,15 @@ import {getSelectedPoiLayerKey, selectPoiLayersForKey} from "../poi";
 		if(args.length >= 3) {
 			var zoom = (L.version >= '1.0.0') ? parseFloat(args[2]) : parseInt(args[2], 10);
 			if(!isNaN(zoom)) {
-				parsed.zoom = zoom
+				parsed.zoom = zoom;
 			}
 		}
 
-		var lat = undefined;
-		var lon = undefined;
-		if (args.length >= 5) {
-			var lat = parseFloat(args[3]);
-			var lon = parseFloat(args[4]);
+    var lat;
+    var lon;
+    if (args.length >= 5) {
+			lat = parseFloat(args[3]);
+			lon = parseFloat(args[4]);
 		}
 
 		if (!isNaN(lat) && !isNaN(lon)) {
@@ -136,7 +136,7 @@ import {getSelectedPoiLayerKey, selectPoiLayersForKey} from "../poi";
 
 		autoSwitchRegionIfCloseEnough: function() {
 			var minDistanceM = Number.MAX_VALUE;
-			var minRegion = undefined;
+			var minRegion;
 			for(const key of Object.keys(rk.configurations)) {
 				var distanceM = this.map.getCenter().distanceTo(rk.configurations[key].centerLatLng);
 				if(distanceM < minDistanceM) {

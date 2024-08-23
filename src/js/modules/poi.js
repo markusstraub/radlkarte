@@ -46,4 +46,4 @@ function selectPoiLayersForKey(key) {
 export {
   selectPoiLayersForKey,
   getSelectedPoiLayerKey
-}
+};
