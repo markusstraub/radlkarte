@@ -49,4 +49,4 @@ function createNextbikeMarkerIncludingPopup(domain, place, cityUrl) {
 
 export {
   clearAndLoadNextbike
-}
+};

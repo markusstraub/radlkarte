@@ -29,7 +29,7 @@
     "pois:wien": "yarn pois --only-region wien",
     "lint": "yarn lint:html && yarn lint:js",
     "lint:html": "python3 ./node_modules/html5-lint/html5check.py index.html",
-    "lint:js": "jshint radlkarte.js"
+    "lint:js": "jshint ./src/js/*"
   },
   "devDependencies": {
     "html5-lint": "^0.3.0",

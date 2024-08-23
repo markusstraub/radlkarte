@@ -2,6 +2,7 @@ import rk from "./base_radlkarte_object";
 import icons from "./icons";
 import {createMarkerIncludingPopup} from "./markers";
 import opening_hours from "opening_hours";
+import debug from "./debug";
 
 /** expects a list of poi types */
 function clearAndLoadOsmPois(types) {
@@ -205,4 +206,4 @@ function extractWebsiteFromTagSoup(tags) {
 
 export {
   clearAndLoadOsmPois
-}
+};

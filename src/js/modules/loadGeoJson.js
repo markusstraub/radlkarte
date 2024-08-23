@@ -98,7 +98,7 @@ function loadGeoJson(file) {
     rk.leafletMap.on('zoomend', function (ev) {
       //debug("zoom level changed to " + rk.leafletMap.getZoom() + ".. enqueueing style change");
       $("#map").queue(function () {
-        updateStyles()
+        updateStyles();
         $(this).dequeue();
       });
     });

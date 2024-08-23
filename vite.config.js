@@ -3,7 +3,7 @@ import replaceGeoJsonInHtml from './vite-plugin-replace-geojson-in-html'
 
 export default defineConfig({
   root: 'src',
-  assetsInclude: ['**/*.geojson'],
+  assetsInclude: ['**/*.geojson', '**/*.svg'],
   build: {
     outDir: '../dist',
     assetsDir: 'assets',
