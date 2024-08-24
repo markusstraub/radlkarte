@@ -11,10 +11,4 @@
         Header set Cache-Control "max-age=0, public"
     </FilesMatch>
 
-    <Directory "/data/osm-overpass">
-        <FilesMatch "\.(json)$">
-            Header set Cache-Control "max-age=4000, public"
-        </FilesMatch>
-    </Directory>
-
 </IfModule>
