@@ -18,8 +18,11 @@ jobs:
         with:
           node-version: '18.13'  # Specify the Node.js version you need
 
+      - name: Enable Corepack
+        run: corepack enable
+
       - name: Install dependencies
-        run: corepack enable && yarn install
+        run: yarn install
 
       - name: Build project
         run: yarn build
