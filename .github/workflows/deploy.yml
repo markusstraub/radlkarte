@@ -58,7 +58,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
          name: pois
-         path: dist/data/osm-overpass/*.json
+         path: data/osm-overpass/**
 
   deploy:
     runs-on: ubuntu-latest
