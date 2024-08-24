@@ -6,7 +6,7 @@ on:
       - vite  # Change this to your default branch if it's not 'main'
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -27,6 +27,11 @@ jobs:
       - name: Build project
         run: yarn build
 
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
       - name: Deploy to FTP server
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
