@@ -1,7 +1,7 @@
 //third party modules
 import * as turf from "@turf/turf";
 import L from "leaflet";
-import 'leaflet-polylineDecorator';
+import 'leaflet-polylinedecorator';
 import $ from "jquery";
 
 //own modules
