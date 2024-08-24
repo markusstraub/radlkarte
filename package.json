@@ -28,7 +28,7 @@
     "pois:steyr": "yarn pois --only-region steyr",
     "pois:wien": "yarn pois --only-region wien",
     "lint": "yarn lint:html && yarn lint:js",
-    "lint:html": "python3 ./node_modules/html5-lint/html5check.py index.html",
+    "lint:html": "python3 ./node_modules/html5-lint/html5check.py ./src/index.html",
     "lint:js": "jshint ./src/js/*"
   },
   "devDependencies": {
