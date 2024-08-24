@@ -28,7 +28,7 @@ jobs:
         run: yarn build
 
       - name: Save build artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: build-artifacts
           path: |
@@ -40,12 +40,13 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Download build artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: build-artifacts
+          path: dist
 
       - name: Deploy to FTP server
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
