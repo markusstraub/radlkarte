@@ -20,7 +20,7 @@
     "serve": "vite --port 8081",
     "preview": "vite build --emptyOutDir && vite preview --port 8081",
     "geojson": "./data/prepare_geojson.py",
-    "pois": "python3 ./src/data/download_pois_from_osm.py src/data data/osm-overpass",
+    "pois": "python3 ./src/data/download_pois_from_osm.py src/data src/data/osm-overpass",
     "pois:klagenfurt": "yarn pois --only-region klagenfurt",
     "pois:linz": "yarn pois --only-region linz",
     "pois:rheintal": "yarn pois --only-region rheintal",
