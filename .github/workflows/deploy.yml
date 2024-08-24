@@ -3,7 +3,7 @@ name: Build and Deploy
 on:
   push:
     branches:
-      - main  # Change this to your default branch if it's not 'main'
+      - vite  # Change this to your default branch if it's not 'main'
 
 jobs:
   build-and-deploy:
