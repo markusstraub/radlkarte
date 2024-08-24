@@ -48,6 +48,9 @@ jobs:
       - name: Enable Corepack
         run: corepack enable
 
+      - name: Install dependencies
+        run: yarn install
+
       - name: Download POI Files
         run: yarn pois
 
