@@ -145,7 +145,7 @@ import {getSelectedPoiLayerKey, selectPoiLayersForKey} from "../poi";
 				}
 			}
 			if(this.region != minRegion && minDistanceM < rk.autoSwitchDistanceMeters) {
-				this.updateRadlkarteRegion(minRegion);
+				updateRadlkarteRegion(minRegion);
 				this.region = minRegion;
 				console.log("auto-switching region to " + minRegion + ", map center is only " + Math.round(minDistanceM) + "m away");
 				return;
