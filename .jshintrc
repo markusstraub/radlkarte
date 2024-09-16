@@ -2,7 +2,6 @@
   "esversion": 10,
   "browser": true,
   "devel": true,
-  "strict": "global",
   "undef": true,
   "unused": false,
   "globals": {

@@ -1,0 +1,7 @@
+<IfModule mod_headers.c>
+
+    <FilesMatch "\.(json)$">
+        Header set Cache-Control "max-age=86400, public"
+    </FilesMatch>
+
+</IfModule>

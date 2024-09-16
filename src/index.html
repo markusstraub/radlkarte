@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta property="og:title" content="Radlkarte - Entspannt durch Klagenfurt, Linz, Steyr, Wien und das Rheintal" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://www.radlkarte.at" />
+  <meta property="og:image" content="https://www.radlkarte.at/css/radlkarte-banner.jpg" />
+  <meta property="og:description"
+    content="Viele Wege führen zum Ziel. Finden Sie Ihren optimalen Weg durch die Stadt mit der Radlkarte der Radlobby. Auf zu neuen Ufern, unbekannten Gegenden, und neuen Alternativen zu Ihren alltäglichen Routen." />
+
+  <title>Radlkarte - Entspannt durch Klagenfurt, Linz, Rheintal, Schwarzatal, Steyr und Wien</title>
+
+  <!-- font awesome is required by sidebar & leaflet-locatecontrol-->
+  <link rel="stylesheet" href="css/font-awesome-4.7.0/css/font-awesome.min.css" />
+
+  <script type="module" src="./js/main.js"></script>
+
+  <link rel="icon" type="image/x-icon" href="css/favicon.ico" />
+
+  <!-- Set up Matomo Analytics. Actual tracking of page/region views happens in updateRadlkarteRegion -->
+  <script>
+    var _paq = window._paq = window._paq || [];
+    /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+    _paq.push(['setDoNotTrack', true]);
+    //_paq.push(['trackPageView']);
+    _paq.push(['enableLinkTracking']);
+    _paq.push(['HeatmapSessionRecording::disable']);
+    (function () {
+      var u = "https://matomo.radlobby.at/";
+      _paq.push(['setTrackerUrl', u + 'matomo.php']);
+      _paq.push(['setSiteId', '1']);
+      var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
+      g.async = true;
+      g.src = u + 'matomo.js';
+      s.parentNode.insertBefore(g, s);
+    })();
+  </script>
+  <!-- End Matomo Code -->
+</head>
+
+<body>
+  <!-- Matomo Image Tracker -->
+  <noscript>
+    <p><img src="//matomo.radlobby.at/matomo.php?idsite=1&amp;rec=1" style="border:0;" alt=""></p>
+  </noscript>
+  <!-- End Matomo Image Tracker -->
+  <div id="sidebar" class="leaflet-sidebar">
+    <h1></h1>
+    <!-- Nav tabs -->
+    <div class="leaflet-sidebar-tabs">
+      <ul role="tablist">
+        <li class="active"><a href="#radlkarte_legend" role="tab"><i class="fa fa-align-justify"></i></a></li>
+        <li><a href="#radlkarte_news" role="tab"><i class="fa fa-bullhorn"></i></a></li>
+        <li><a href="#radlkarte_description" role="tab"><i class="fa fa-info-circle"></i></a></li>
+        <li><a href="#radlkarte_download" role="tab"><i class="fa fa-download"></i></a></li>
+        <li><a href="#radlkarte_contact" role="tab"><i class="fa fa-envelope"></i></a></li>
+        <li><a href="#radlkarte_privacy" role="tab"><i class="fa fa-user-secret"></i></a></li>
+      </ul>
+    </div>
+
+    <!-- Tab panes -->
+    <div class="leaflet-sidebar-content">
+      <div class="leaflet-sidebar-pane active" id="radlkarte_legend">
+        <h2 class="leaflet-sidebar-header">
+          <span class="leaflet-sidebar-close"><i class="fa fa-caret-left"></i></span> Übersicht
+        </h2>
+        <h3>Entspannt durch
+          <a href="#klagenfurt">Klagenfurt</a>,
+          <a href="#linz">Linz</a>,
+          <a href="#rheintal">Rheintal</a>,
+          <a href="#schwarzatal">Schwarzatal</a>,
+          <a href="#steyr">Steyr</a> und
+          <a href="#wien">Wien</a>
+        </h3>
+        <p>
+          Viele Wege führen zum Ziel. Finden Sie Ihren optimalen Weg durch die Stadt mit der Radlkarte der <a
+            href="https://www.radlobby.at" target="_blank">Radlobby</a>. Auf zu neuen Ufern, unbekannten
+          Gegenden und neuen Alternativen zu Ihren alltäglichen Routen.
+        </p>
+        <h4>Farbe = Gemütlichkeit</h4>
+        <ul class="legend legend-leftified">
+          <li>
+            Gemütlich
+            <div class="legend legend-calm"></div>
+          </li>
+          <li>
+            Durchschnittlich
+            <div class="legend legend-medium"></div>
+          </li>
+          <li>
+            Stressig
+            <div class="legend legend-stressful"></div>
+          </li>
+        </ul>
+        <h4>Strichstärke = Relevanz</h4>
+        <ul class="legend legend-leftified">
+          <li>
+            Hauptrouten
+            <div class="legend legend-main"></div>
+          </li>
+          <li>
+            Nebenrouten
+            <div class="legend legend-regional"></div>
+          </li>
+        </ul>
+        <h4>Spezielle Eigenschaften</h4>
+        <ul class="legend legend-leftified">
+          <li>
+            Einbahn
+            <div class="legend-container">
+              <div class="legend legend-main"></div>
+              <div>
+                <div class="legend legend-oneway"></div>
+                <div class="legend legend-oneway"></div>
+                <div class="legend legend-oneway"></div>
+                <div class="legend legend-oneway"></div>
+              </div>
+            </div>
+          </li>
+          <li>
+            Unbefestigt (oder sehr uneben)
+            <div class="legend legend-unpaved"></div>
+          </li>
+          <li>
+            Steil
+            <div class="legend-container">
+              <div class="legend legend-main"></div>
+              <div class="legend legend-steep"></div>
+            </div>
+          </li>
+        </ul>
+        <p>&nbsp;</p>
+        <p>
+          <img src="css/layers-2x.png" width="30" alt="Symbol: Ebenenauswahl">
+          Fürs Radeln hilfreiche Orte können rechts oben in den <strong>Kartenebenen</strong>
+          eingeblendet werden.
+        </p>
+      </div>
+      <div class="leaflet-sidebar-pane" id="radlkarte_news">
+        <h2 class="leaflet-sidebar-header">
+          <span class="leaflet-sidebar-close"><i class="fa fa-caret-left"></i></span>Neu!
+        </h2>
+        <h3>Neue Region: <a href="#schwarzatal">Schwarzatal</a></h3>
+        <p>
+          Dank der <a href="https://www.radlobby.org/noe/schwarzatal/" target="_blank">Radlobby
+            Schwarzatal</a>
+          gibt es eine <strong>große Erweiterung der Radlkarte</strong>:
+          ab sofort ist das <a href="#schwarzatal">gesamte Schwarzatal von Hirschwang über Gloggnitz,
+            Ternitz, Neunkirchen bis Wiener Neustadt</a> in der Radlkarte verfügbar!
+        </p>
+        <p>
+          Die Abdeckung von Wiener Neustadt ist noch verbesserungswürdig,
+          Feedback dazu (und natürlich auch allgemein) gerne an <a
+            href="mailto:schwarzatal@radlobby.at">schwarzatal@radlobby.at</a>!
+        </p>
+      </div>
+
+      <div class="leaflet-sidebar-pane" id="radlkarte_description">
+        <h2 class="leaflet-sidebar-header">
+          <span class="leaflet-sidebar-close"><i class="fa fa-caret-left"></i></span> Die Radlkarte stellt
+          sich vor
+        </h2>
+        <p>
+          Die Radlkarte der <a href="https://www.radlobby.at" target="_blank">Radlobby</a> ist eine kostenlose
+          Online-Orientierungshilfe, mit der Sie Ihre Fahrten mit dem Fahrrad schneller und gemütlicher
+          gestalten können. Sie ist jederzeit im Browser bereit, ob am Smartphone, Tablet oder PC.
+        </p>
+        <h3>Wegenetz</h3>
+        <p>
+          Ein <strong>alltagstaugliches Wegenetz</strong> spiegelt unsere langjährige Erfahrung des
+          Alltagsradelns und unsere Ortskenntnis wider. Dieses Netz zeigt, welche Strecken sich am besten fürs
+          Radeln eignen. So hilft Ihnen die Radlkarte beim <strong>Finden von Routenvarianten zwischen Ihren
+            Zielen</strong>. Die Abwägung zwischen Direktheit/Schnelligkeit und Gemütlichkeit/Sicherheit
+          liegt dabei ganz bei Ihnen: ist noch genügend Zeit für eine entspannte Strecke bis zum Läuten der
+          Schulglocken? Ist der nächste Arbeitstermin doch schon näher als gewünscht und Schnelligkeit ist die
+          oberste Prämisse? Geht's gemeinsam mit Ihren Kindern zur Schule oder in den Park?
+        </p>
+        <h3>Sicherheitskategorien</h3>
+        <p>
+          Zur individuellen Entscheidungsfindung sind Abschnitte hinsichtlich unserer (subjektiven) Erfahrung
+          zur <strong>Sicherheit bzw. Gemütlichkeit in drei Kategorien</strong> bewertet: gemütlich,
+          durchschnittlich, stressig. Wir halten uns dabei nicht zwingend an <a
+            href="https://www.radlobby.at/wien/radverkehrsnetz" target="_blank">zum Teil leider lückenhafte
+            Radverkehrsnetze</a>. Die drei Kategorien werden anhand der Farbe unterschieden. Abschnitte, die
+          nur in eine Richtung befahren werden können, sind durch Pfeile markiert:
+        <p>
+        <ul class="legend">
+          <li>
+            <strong>Gemütlich (dunkelblau)</strong>
+            <div class="legend legend-calm"></div>
+            Vom Autoverkehr getrennter Weg oder Straße mit sehr geringem Kfz-Aufkommen und niedrigen
+            Geschwindigkeiten (z.B. Radwege oder Fußgängerzonen, auch wenn das Vorankommen durch viel
+            Fußverkehr möglicherweise schwierig ist)
+          </li>
+          <li>
+            <strong>Durchschnittlich (hellblau)</strong>
+            <div class="legend legend-medium"></div>
+            Radeln im Mischverkehr mit moderatem und langsamem Kfz-Verkehr (z.B. Tempo 30 Zonen in denen das
+            Tempolimit meistens eingehalten wird) oder baulich getrennte Wege, die aber dennoch
+            viele Gefahrenstellen mit Kfz haben (z.B. Ausfahrten und Kreuzungen).
+          </li>
+          <li>
+            <strong>Stressig (orange)</strong>
+            <div class="legend legend-stressful"></div>
+            Strecken, die für ein vollständiges Wegenetz nötig, aber z.B. aufgrund von starkem Kfz-Verkehr
+            oder <a href="https://www.radlobby.at/oesterreich/abstand-zur-tuerzone-macht-sicher"
+              target="_blank">beengten Verhältnissen</a> unangenehm sind (z.B. vielbefahrene Schleichwege
+            in Tempo 30 Zonen, Fahrradstreifen eng neben Parkplätzen, Überlandstraßen, ...)
+          </li>
+        </ul>
+        <h3>Prioritätsstufen</h3>
+        <p>
+          Zusätzlich ist das Wegenetz für mehr Übersichtlichkeit - vor allem bei langen Strecken quer durch
+          die ganze Stadt - in <strong>Prioritätsstufen</strong> gegliedert. Beim Zoomen in der Karte werden
+          lokale und regionale Nebenrouten nach und nach ausgeblendet bzw. nur dünn dargestellt. Überregionale
+          Routen sind immer dick hervorgehoben.
+        </p>
+        <ul class="legend">
+          <li>
+            <strong>Hauptrouten (dick)</strong>
+            <div class="legend legend-main"></div>
+            <span>Hauptrouten - vor allem relevant für längere Strecken</span>
+          </li>
+          <li>
+            <strong>Nebenrouten (dünn)</strong>
+            <div class="legend legend-regional"></div>
+            Ergänzende Routen, Abkürzungen, Zubringer
+          </li>
+        </ul>
+        <h3>Spezielle Eigenschaften</h3>
+        <ul class="legend">
+          <li>
+            <strong>Einbahn (Pfeile)</strong>
+            <div class="legend-container">
+              <div class="legend legend-main"></div>
+              <div>
+                <div class="legend legend-oneway"></div>
+                <div class="legend legend-oneway"></div>
+                <div class="legend legend-oneway"></div>
+                <div class="legend legend-oneway"></div>
+              </div>
+            </div>
+            Einbahnen, die nicht für den Radverkehr geöffnet sind
+          </li>
+          <li>
+            <strong>Unbefestigt oder sehr uneben (strichliert)</strong>
+            <div class="legend legend-unpaved"></div>
+            Wegbeschaffenheiten, die unangenehm sein können: beispielsweise nicht asphaltierte Wege (bei
+            Regen) oder sehr unebenes Kopfsteinpflaster
+          </li>
+          <li>
+            <strong>Steile Wege (Querstriche)</strong>
+            <div class="legend-container">
+              <div class="legend legend-main"></div>
+              <div class="legend legend-steep"></div>
+            </div>
+            Wege mit mehr als 5-6% Steigung oder Gefälle (kurze Rampen ausgenommen)
+          </li>
+        </ul>
+        <h3>Problemstellen</h3>
+        <p>
+          Punktuelle Probleme sind in diesen Kategorien hervorgehoben:
+        </p>
+        <ul class="legend">
+          <li>
+            <img src="css/dismount.svg" width="60" alt="Symbol: Schiebestellen"><strong>Schiebestelle</strong><br>
+            Schiebe-Empfehlung beispielsweise bei unübersichtlichen Kreuzungen oder Fahrverboten
+          </li>
+          <li>
+            <img src="css/nocargo.svg" width="60" alt="Symbol: Untauglichkeit für Spezialräder"><strong>Untauglichkeit
+              für
+              Spezialräder</strong><br>
+            Stellen, die mit Lastenrädern, Rädern mit Anhängern, oder anderen breiten bzw. schweren Rädern
+            umständlich oder gar nicht passierbar sind
+          </li>
+          <li>
+            <img src="css/warning.svg" width="60" alt="Symbol: Allgemeine Problemstelle"><strong>Allgemeine
+              Problemstelle</strong><br>
+            bzw. Hinweis
+          </li>
+        </ul>
+        <p>
+          Für eine Beschreibung der Problemstelle bewegen Sie den Mauszeiger über das Symbol
+          bzw. tippen Sie das Symbol an.
+        </p>
+        <h3>Bike-Sharing, Radgeschäfte und mehr</h3>
+        <p>
+          <img src="css/layers-2x.png" width="30" alt="Symbol: Ebenenauswahl">
+          Fürs Radeln hilfreiche Orte können rechts oben in den <strong>Kartenebenen</strong>
+          eingeblendet werden.
+        </p>
+        <p>
+          <strong>Details per Klick / Antippen:</strong>
+          Adresse, Öffnungszeiten, Website und mehr.
+        </p>
+        <h4>Kategorien</h4>
+        <ul class="legend">
+          <li>
+            <img src="css/wienmobilrad.svg" width="30" alt="Symbol: Leihrad">
+            <img src="css/citybikelinz.svg" width="30" alt="Symbol: Leihrad">
+            <img src="css/nextbike.svg" width="30" alt="Symbol: Leihrad">
+            <strong>Leihräder</strong><br>
+            Stationen von Leihradsystemen (Bike-Sharing) mit der Anzahl an aktuell verfügbaren Rädern.
+            Graues Symbol: leer (kein Rad verfügbar).
+            Derzeit unterstützt werden
+            <a href="https://www.wienerlinien.at/wienmobil/rad" target="_blank">WienMobil&nbsp;Rad</a>,
+            <a href="https://www.citybikelinz.at" target="_blank">city&nbsp;bike&nbsp;Linz</a>,
+            <a href="https://www.nextbike.at/de/klagenfurt" target="_blank">Nextbike&nbsp;Klagenfurt</a>,
+            und
+            <a href="https://www.nextbike.at/de/niederoesterreich/" target="_blank">Nextbike&nbsp;Niederösterreich</a>.
+          </li>
+          <li>
+            <img src="css/subway.svg" width="30" alt="Symbol: U-Bahn">
+            <img src="css/sbahn.svg" width="30" alt="Symbol: S-Bahn">
+            <img src="css/railway.svg" width="30" alt="Symbol: Bahnhof">
+            <strong>Öffentlicher Verkehr</strong><br>
+            U-Bahn- und S-Bahn-Stationen sowie Bahnhöfe.
+          </li>
+          <li>
+            <img src="css/bicycleShop.svg" width="30" alt="Symbol: Fahrradgeschäfte">
+            <strong>Fahrradgeschäfte</strong><br>
+            Verkauf bzw. Reparatur von Fahrrädern sowie Zubehör.
+          </li>
+          <li>
+            <img src="css/bicycleRepairStation.svg" width="30" alt="Symbol: Reparaturstation">
+            <strong>Reparaturstationen</strong><br>
+            Fahrrad-Reparaturbereich, in der Regel mit Werkzeug, Luftpumpe und Montageständer ausgestattet.
+          </li>
+          <li>
+            <img src="css/bicyclePump.svg" width="30" alt="Symbol: Luftpumpe">
+            <strong>Luftpumpen</strong><br>
+            Frei zugängliche Luftpumpen.
+          </li>
+          <li>
+            <img src="css/bicycleTubeVending.svg" width="30" alt="Symbol: Schlauchomat">
+            <strong>Schlauchomaten</strong><br>
+            Automaten zum Kauf von Fahrradschläuchen.
+          </li>
+          <li>
+            <img src="css/drinkingWater.svg" width="30" alt="Symbol: Trinkwasser">
+            <strong>Trinkwasser</strong><br>
+            Öffentlich zugängliche Trinkwasserbrunnen oder -quellen.
+            Achtung: in den Wintermonaten meist geschlossen!
+          </li>
+        </ul>
+        <p>
+          <strong>Graue Symbole</strong> bedeuten für Leihradstationen, dass kein Rad verfügbar ist.
+          Bei allen anderen Kategorien steht es für derzeit geschlossen / nicht verfügbar /
+          bzw. keine bekannten Öffnungszeiten.
+        </p>
+        <p>
+          Die Leihradstationen werden von der offiziellen Nextbike API abgefragt und somit minutengenau.
+          Alle anderen Orte sind von <a href="https://www.openstreetmap.org" target="_blank">OpenStreetMap</a>
+          entnommen und werden täglich aktualisiert.
+        </p>
+        <h3>Viel Spaß beim Erkunden!</h3>
+        <p>
+          Wir hoffen, dass Sie sich mithilfe der Radlkarte leichter zurechtfinden und wünschen Ihnen schönes
+          und angenehmes Radfahren. Sollten Sie Verbesserungsvorschläge oder neue Routenvorschläge haben, <a
+            href="mailto:radlkarte@radlobby.at">freuen wir uns auf Rückmeldungen</a>.
+          Sie können Problemstellen (für Wien) auch direkt im <a href="https://www.radkummerkasten.at"
+            target="_blank">Radkummerkasten</a> melden.
+        </p>
+      </div>
+
+      <div class="leaflet-sidebar-pane" id="radlkarte_download">
+        <h2 class="leaflet-sidebar-header">
+          <span class="leaflet-sidebar-close"><i class="fa fa-caret-left"></i></span>Open Source
+        </h2>
+        <p>
+          Die Wegenetze (und auch die Software) sind open source und damit frei verfügbar auf <a
+            href="https://github.com/markusstraub/radlkarte" target="_blank">Github</a> (Apache-Lizenz 2.0).
+        </p>
+        <h3>Download der Wegenetze</h3>
+        <p>
+          Die Wegenetze stehen im .geojson-Format zum Download zur Verfügung:
+        </p>
+        <p>
+          <a href="data/radlkarte-klagenfurt.geojson" target="_blank">Klagenfurt</a><br>
+          <a href="data/radlkarte-linz.geojson" target="_blank">Linz</a><br>
+          <a href="data/radlkarte-rheintal.geojson" target="_blank">Rheintal (Dornbirn, Hohenems und
+            Umgebung)</a><br>
+          <a href="data/radlkarte-schwarzatal.geojson" target="_blank">Schwarzatal</a><br>
+          <a href="data/radlkarte-steyr.geojson" target="_blank">Steyr</a><br>
+          <a href="data/radlkarte-wien.geojson" target="_blank">Wien</a><br>
+        </p>
+        <p>
+          Bitte <a href="mailto:radlkarte@radlobby.at?subject=Die%20Radlkarte%20kommt%20zum%20Einsatz%20in..">schreiben
+            Sie uns</a>, wenn Sie die Radlkarte für Ihre Arbeiten verwenden und geben Sie als Datenquelle
+          <strong>© radlkarte.at - Radlobby Österreich</strong> an. Wir freuen uns, wenn die Radlkarte zum
+          Einsatz
+          kommt!
+        </p>
+      </div>
+
+      <div class="leaflet-sidebar-pane" id="radlkarte_contact">
+        <h2 class="leaflet-sidebar-header">
+          <span class="leaflet-sidebar-close"><i class="fa fa-caret-left"></i></span>Kontakt
+        </h2>
+        <p>
+          <a href="mailto:radlkarte@radlobby.at?subject=Kommentar%20zur%20Radlkarte">Allgemein</a> <a
+            href="https://www.facebook.com/radlkarte" target="_blank">(Facebook)</a><br>
+          <a href="mailto:kaernten@radlobby.at?subject=Kommentar%20zur%20Radlkarte%20Klagenfurt">Klagenfurt</a><br>
+          <a href="mailto:linz@radlobby.at?subject=Kommentar%20zur%20Radlkarte%20Linz">Linz</a><br>
+          <a href="mailto:guenther.hilbe@radlobby.at?subject=Kommentar%20zur%20Radlkarte%20Rheintal">Rheintal
+            (Dornbirn, Hohenems und Umgebung)</a><br>
+          <a href="mailto:schwarzatal@radlobby.at?subject=Kommentar%20zur%20Radlkarte%20Schwarzatal">Schwarzatal</a><br>
+          <a href="mailto:steyr@radlobby.at?subject=Kommentar%20zur%20Radlkarte%20Steyr">Steyr</a><br>
+          <a href="mailto:radlkarte@radlobby.at?subject=Kommentar%20zur%20Radlkarte%20Wien">Wien</a><br>
+        </p>
+        <h3>Team</h3>
+        <p>
+          <strong>Programmierung:</strong> Markus Straub, Paul Weber, Marco von Frieling<br>
+          <strong>Wegenetz Klagenfurt:</strong> Mark Richter &amp; Anneliese Fuchs, Daniel Wuttej, Julia
+          Gesierich<br>
+          <strong>Wegenetz Linz:</strong> Paul Weber &amp; Christoph Daill, Johannes Kastenhofer<br>
+          <strong>Wegenetz Schwarzatal:</strong> Doug Culnane<br>
+          <strong>Wegenetz Steyr:</strong> Bernhard Freiberger &amp; Christine Derntl, Peter Czermak, Wolfgang
+          Hirschberg<br>
+          <strong>Wegenetz Rheintal:</strong> Günther Hilbe<br>
+          <strong>Wegenetz Wien:</strong> Markus Straub &amp; Arno Dermutz, Axel Gschaider, Barbara Ottawa,
+          Christian Hütter, Franz Hatzl, Gant, Heinrich Flickschuh,
+          Heinz Bogner (Deutsch-Wagram),
+          Martin Satzinger, Michael Wotzel (Mödling &amp; Umgebung),
+          <a href="https://rad22.at" target="_blank">Radagenda 22</a>,
+          Robert Koch (Klosterneuburg), Rudolf Ramberger, Ulrich Kiermayr<br>
+        </p>
+        <p>
+          Besonderer Dank auch an alle NutzerInnen, die ihre bevorzugten Wege und Aktualisierungen beigetragen
+          haben!
+        </p>
+        <h3>Impressum</h3>
+        <p>
+          <img src="css/radlobby-wien.png" width="150" alt="Radlobby Wien" />
+        </p>
+        <p>
+          <a href="https://www.radlobby.at/wien" target="_blank">Radlobby Wien</a><br>
+          Lichtenauergasse 4/1/1<br>
+          1020 Wien<br>
+        </p>
+      </div>
+
+      <div class="leaflet-sidebar-pane" id="radlkarte_privacy">
+        <h2 class="leaflet-sidebar-header">
+          <span class="leaflet-sidebar-close"><i class="fa fa-caret-left"></i></span>Datenschutz
+        </h2>
+        <h3>Matomo</h3>
+        <p>
+          Diese Website benutzt den Open Source Webanalysedienst Matomo. Matomo verwendet Technologien, die
+          die Analyse des Nutzerverhaltens ermöglichen. Die durch Matomo erfassten Informationen über die
+          Benutzung dieser Website werden auf unserem Server gespeichert.
+        </p>
+        <p>
+          Mithilfe von Matomo sind wir in der Lage Daten über die Nutzung unserer Website zu
+          erfassen und zu analysieren. Für uns relevant sind:
+        </p>
+        <ul>
+          <li>Entwicklung der Besucheranzahl pro Radlkarte-Region</li>
+          <li>Statistiken über die verwendeten Betriebssysteme, Browser, Bildschirmgrößen</li>
+        </ul>
+        <p>
+          Die Nutzung dieses Analyse-Tools erfolgt auf Grundlage von Art. 6 Abs. 1 lit. f DSGVO. Wir als
+          Websitebetreiber haben ein berechtigtes Interesse an der anonymisierten Analyse des
+          Nutzerverhaltens, um unser Angebot zu optimieren.
+        </p>
+        <h4>Personenbezogene Daten</h4>
+        <p>
+          Wir haben Matomo in einer Weise konfiguriert, dass keine personenbezogenen Daten gespeichert werden,
+          die einen Einwilligung durch den Benutzer erforderlich machen. Dennoch besteht die Möglichkeit das
+          Tracking per Opt-Out zu deaktivieren (siehe entsprechendes Kapitel weiter unten).
+        </p>
+        <h4>IP-Anonymisierung</h4>
+        <p>
+          Bei der Analyse mit Matomo setzen wir IP-Anonymisierung ein. Hierbei wird Ihre IP-Adresse vor der
+          Analyse gekürzt, sodass Sie Ihnen nicht mehr eindeutig zuordenbar ist.
+        </p>
+        <h4>Verweis-URL (Referrer)</h4>
+        <p>
+          Wir speichern nicht die gesamte Verweis-URL, sondern nur den Domain-Teil der URL.
+          Es ist so nur möglich nachzuvollziehen, dass die Anfrage von z.B. google.com oder facebook.com
+          weitergeleitet wurde, andere Teile der Verweis-URL die ggf. auch Rückschlüsse auf einzelnen
+          Personen möglich machen könnte, werden so nicht verarbeitet bzw. gespeichert.
+        </p>
+        <h4>Cookies</h4>
+        <p>
+          Es werden keine Cookies gespeichert. (Ausnahme: "Matomo Opt-Out"-Cookie, siehe Kapitel Tracking
+          deaktivieren) </p>
+        <h4>Fingerprinting</h4>
+        <p>
+          Es kommt kein Fingerprinting im klassischen Sinn zum Einsatz, das es potenziell ermöglichen würde
+          einen wiederkehrenden Benutzer über einen längeren Zeitraum, oder über verschiedenen Webseiten
+          hinweg wiederzuerkennen (was zwingend eine Einwilligung der Benutzer voraussetzen würde).
+        </p>
+        <p>
+          Matomo setzt auf eine ähnliche Methode, die aber bedeutend Privatsphäre- und datenschutzfreundlicher
+          ist. Es für jeden Zugriff eine config_id erstellt (ein Hashwert errechnet aus einer Zufallszahl,
+          Eigenschaften wie verwendetes Betriebsystem, Browser, Plugins, anonymisierten IP-Adresse,
+          Systemsprache), die nur 24
+          Stunden und
+          nur für diese spezifische Domain gültig ist.
+        </p>
+        <p>
+          Ein wiederkehrendes Identifizieren eines Benutzers über 24h hinaus oder über mehrere Webseiten
+          (selbst der gleichen Matomo-Instanz) ist damit nicht möglich.
+        </p>
+        <p>
+          Dies ist auch ohne Einverständnis des Benutzers (in Kombination mit anderen Maßnahmen, wie einer
+          Opt-Out-Möglichkeit) mit den Vorgaben der Europäischen Datenschutzgrundverordnung vereinbar. (z.B.
+          hat die französischen Datenschutzbehörde CNIL dies bereits offiziell bestätigt)
+        </p>
+        <h4>Hosting</h4>
+        <p>
+          Wir hosten Matomo ausschließlich auf einer von uns angemieteten Webserver-Instanz bei der Firma
+          Easyname GmbH (Fernkorngasse 10/3/501, 1100 Wien). Easyname GmbH agiert als Auftragsverarbeiter nach
+          Art. 28 DSGVO. Es wurde ein entsprechender Auftragsverarbeiter-Vertrag zwischen uns und der Easyname
+          GmbH abgeschlossen, sodass alle
+          Analysedaten bei uns verbleiben und nicht an Dritte weitergegeben werden.
+        </p>
+        <h4>Tracking deaktivieren</h4>
+        <p>
+          Wir respektieren das "do not track"-HTTP-Headerfeld bei Zugriffsanfragen. D.h. wenn Sie in Ihrem
+          Browser diese Option aktiviert haben (global oder nur für unsere Seite) wird von uns kein Tracking
+          durchgeführt </p>
+        <p>
+          Wenn Sie mit der Speicherung und Nutzung Ihrer Daten nicht einverstanden sind, können Sie die
+          Speicherung und Nutzung hier deaktivieren. In diesem Fall wird in Ihrem Browser ein Opt-Out-Cookie
+          hinterlegt (Name: mtm_consent_removed für die Domain: radlkarte.radlobby.at) das verhindert, dass
+          Matomo Nutzungsdaten gespeichert werden. Wenn Sie Ihre Cookies löschen, hat dies zur Folge, dass auch das
+          Matomo Opt-Out-Cookie gelöscht wird. Das Opt-Out muss bei einem erneuten Besuch unserer Seite dann
+          wieder aktiviert werden. </p>
+        <p>
+          Hier können Sie das Tracking deaktivieren:
+        </p>
+        <div id="matomo-opt-out"></div>
+        <script
+          src="https://matomo.radlobby.at/index.php?module=CoreAdminHome&action=optOutJS&divId=matomo-opt-out&language=de&showIntro=0"></script>
+        <h3>Ihre Rechte</h3>
+        <p>
+          Ihnen stehen nach DSGVO die Rechte auf Auskunft, Berichtigung, Löschung, Einschränkung,
+          Datenübertragbarkeit, Widerruf und Widerspruch zu. Wenn Sie glauben, dass die Verarbeitung Ihrer
+          Daten gegen das Datenschutzrecht verstößt oder Ihre datenschutzrechtlichen Ansprüche sonst in einer
+          Weise verletzt worden sind, können Sie sich bei der Aufsichtsbehörde beschweren. In Österreich ist
+          dies die Datenschutzbehörde.
+        </p>
+        <h3>Kontakt</h3>
+        <p>
+          Falls Sie Fragen haben, oder Sie von Ihren Rechten Gebrauch machen möchten, nehmen Sie bitte Kontakt
+          mit uns auf:
+        </p>
+        <p>
+          <a href="https://www.radlobby.at" target="_blank">Radlobby Österreich</a><br>
+          Lichtenauergasse 4/1/1<br>
+          1020 Wien<br>
+          <a href="mailto:datenschutz@radlobby.at" target="_blank">datenschutz@radlobby.at</a>
+        </p>
+      </div>
+    </div>
+  </div>
+  <div id="map"></div>
+  <div id="radlobby-logo">
+    <a href="http://www.radlobby.at" target="_blank"><img src="css/radlobby.png" alt="Radlobby Österreich" /></a>
+  </div>
+
+</body>
+
+</html>
