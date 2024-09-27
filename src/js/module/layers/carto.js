@@ -1,16 +1,4 @@
-export default {
-  "version": 8,
-  "name": "Positron",
-  "metadata": {},
-  "sources": {
-  "carto": {
-    "type": "vector",
-      "url": "https://tiles.basemaps.cartocdn.com/vector/carto.streets/v1/tiles.json"
-  }
-},
-  "sprite": "https://tiles.basemaps.cartocdn.com/gl/positron-gl-style/sprite",
-  "glyphs": "https://tiles.basemaps.cartocdn.com/fonts/{fontstack}/{range}.pbf",
-  "layers": [
+export default [
   {
     "id": "background",
     "type": "background",
@@ -5887,7 +5875,4 @@ export default {
       "text-halo-width": 0.75
     }
   }
-],
-  "id": "voyager",
-  "owner": "Carto"
-}
+];
