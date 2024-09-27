@@ -33,19 +33,10 @@
   },
   "devDependencies": {
     "html5-lint": "^0.3.0",
-    "http-server": "^14.1.1",
     "jshint": "^2.13.6",
-    "vite": "^5.4.1",
-    "why": "^0.6.2"
+    "vite": "^5.4.1"
   },
   "dependencies": {
-    "@turf/turf": "^7.1.0",
-    "jquery": "^3.7.1",
-    "leaflet": "^1.9.4",
-    "leaflet-control-geocoder": "^2.4.0",
-    "leaflet-polylinedecorator": "^1.6.0",
-    "leaflet-sidebar-v2": "^3.2.3",
-    "leaflet.locatecontrol": "^0.81.1",
-    "opening_hours": "^3.8.0"
+    "maplibre-gl": "^4.7.0"
   }
 }
