@@ -13,7 +13,6 @@
   },
   "homepage": "https://github.com/markusstraub/radlkarte",
   "private": true,
-  "packageManager": "yarn@4.1.0",
   "scripts": {
     "start": "$(yarn bin why)",
     "build": "vite build --emptyOutDir",
@@ -21,31 +20,22 @@
     "preview": "vite build --emptyOutDir && vite preview --port 8081",
     "geojson": "./src/data/prepare_geojson.py",
     "pois": "python3 ./src/data/download_pois_from_osm.py src/data src/data/osm-overpass",
-    "pois:klagenfurt": "yarn pois --only-region klagenfurt",
-    "pois:linz": "yarn pois --only-region linz",
-    "pois:rheintal": "yarn pois --only-region rheintal",
-    "pois:schwarzatal": "yarn pois --only-region schwarzatal",
-    "pois:steyr": "yarn pois --only-region steyr",
-    "pois:wien": "yarn pois --only-region wien",
-    "lint": "yarn lint:html && yarn lint:js",
+    "pois:klagenfurt": "npm run pois --only-region klagenfurt",
+    "pois:linz": "npm run pois --only-region linz",
+    "pois:rheintal": "npm run pois --only-region rheintal",
+    "pois:schwarzatal": "npm run pois --only-region schwarzatal",
+    "pois:steyr": "npm run pois --only-region steyr",
+    "pois:wien": "npm run pois --only-region wien",
+    "lint": "npm run lint:html && yarn lint:js",
     "lint:html": "python3 ./node_modules/html5-lint/html5check.py ./src/index.html",
     "lint:js": "jshint ./src/js/*"
   },
   "devDependencies": {
     "html5-lint": "^0.3.0",
-    "http-server": "^14.1.1",
     "jshint": "^2.13.6",
-    "vite": "^5.4.1",
-    "why": "^0.6.2"
+    "vite": "^5.4.1"
   },
   "dependencies": {
-    "@turf/turf": "^7.1.0",
-    "jquery": "^3.7.1",
-    "leaflet": "^1.9.4",
-    "leaflet-control-geocoder": "^2.4.0",
-    "leaflet-polylinedecorator": "^1.6.0",
-    "leaflet-sidebar-v2": "^3.2.3",
-    "leaflet.locatecontrol": "^0.81.1",
-    "opening_hours": "^3.8.0"
+    "maplibre-gl": "^4.7.0"
   }
 }

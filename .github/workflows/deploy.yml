@@ -3,7 +3,7 @@ name: Build and Deploy
 on:
   push:
     branches:
-      - vite_v2  # Change this to your default branch if it's not 'main'
+      - dev  # Change this to your default branch if it's not 'main'
 
 jobs:
   build:
