@@ -1,5 +1,5 @@
 import "../radlkarte.css"
-import init from "./module/init";
+import init from "./modules/init";
 
 
 init();
