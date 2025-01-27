@@ -747,7 +747,7 @@ function loadLeaflet() {
   });
   let mixed = L.layerGroup([minMaxZoomLayer, cartodbPositronLowZoom, osmHiZoom]);
 
-  let basemapAtOrthofoto = L.tileLayer('https://maps{s}.wien.gv.at/basemap/bmaporthofoto30cm/normal/google3857/{z}/{y}/{x}.{format}', {
+  let basemapAtOrthofoto = L.tileLayer('https://mapsneu.wien.gv.at/basemap/bmaporthofoto30cm/normal/google3857/{z}/{y}/{x}.{format}', {
     maxZoom: 18, // up to 20 is possible
     attribution: '<a href="https://www.basemap.at" target="_blank">basemap.at</a>',
     subdomains: ["", "1", "2", "3", "4"],
