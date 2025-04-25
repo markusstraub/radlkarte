@@ -2425,7 +2425,7 @@
 {"geometry": {"coordinates": [16.23788, 47.80837], "type": "Point"}, "properties": {"id": 2531, "warning": "yes"}, "type": "Feature"},
 {"geometry": {"coordinates": [[16.24439, 47.82542], [16.24372, 47.8251]], "type": "LineString"}, "properties": {"id": 2532, "priority": "1", "stress": "0"}, "type": "Feature"},
 {"geometry": {"coordinates": [[16.23378, 47.81525], [16.23371, 47.81527], [16.23351, 47.81536]], "type": "LineString"}, "properties": {"id": 2533, "priority": "2", "stress": "1"}, "type": "Feature"},
-{"geometry": {"coordinates": [16.24299, 47.81597], "type": "Point"}, "properties": {"description": "Viele Fu\u00dfg\u00e4nger", "id": 2534, "warning": "yes"}, "type": "Feature"},
+{"geometry": {"coordinates": [16.24299, 47.81597], "type": "Point"}, "properties": {"description": "Fu\u00dfg\u00e4nger queren", "id": 2534, "warning": "yes"}, "type": "Feature"},
 {"geometry": {"coordinates": [[16.23212, 47.81643], [16.23246, 47.81703]], "type": "LineString"}, "properties": {"id": 2535, "priority": "2", "stress": "1"}, "type": "Feature"},
 {"geometry": {"coordinates": [[16.23212, 47.81643], [16.23309, 47.81618], [16.23367, 47.81592], [16.2338, 47.81581], [16.23378, 47.81573], [16.23351, 47.81536]], "type": "LineString"}, "properties": {"id": 2536, "priority": "2", "stress": "1"}, "type": "Feature"},
 {"geometry": {"coordinates": [[16.23744, 47.82227], [16.23753, 47.82201], [16.23755, 47.82195]], "type": "LineString"}, "properties": {"id": 2537, "priority": "1", "stress": "1"}, "type": "Feature"},
