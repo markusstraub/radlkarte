@@ -2393,7 +2393,7 @@
 {"geometry": {"coordinates": [[16.23931, 47.81298], [16.23955, 47.81352], [16.23958, 47.81358]], "type": "LineString"}, "properties": {"id": 2498, "priority": "1", "stress": "0"}, "type": "Feature"},
 {"geometry": {"coordinates": [[16.24209, 47.81518], [16.24214, 47.815], [16.24215, 47.81493], [16.24215, 47.81491], [16.24215, 47.81451]], "type": "LineString"}, "properties": {"id": 2499, "priority": "1", "stress": "1"}, "type": "Feature"},
 {"geometry": {"coordinates": [[16.24367, 47.81051], [16.24367, 47.81095], [16.24372, 47.81147], [16.24373, 47.81158], [16.24376, 47.81168], [16.2438, 47.81227], [16.24379, 47.81233], [16.24378, 47.81279], [16.24377, 47.8129]], "type": "LineString"}, "properties": {"id": 2500, "priority": "1", "stress": "0"}, "type": "Feature"},
-{"geometry": {"coordinates": [16.23257, 47.80337], "type": "Point"}, "properties": {"description": "kein legales Abbiegen", "id": 2501, "warning": "yes"}, "type": "Feature"},
+{"geometry": {"coordinates": [16.23257, 47.80337], "type": "Point"}, "properties": {"id": 2501, "warning": "yes"}, "type": "Feature"},
 {"geometry": {"coordinates": [16.23973, 47.81566], "type": "Point"}, "properties": {"id": 2502}, "type": "Feature"},
 {"geometry": {"coordinates": [[16.24369, 47.8129], [16.24376, 47.81343]], "type": "LineString"}, "properties": {"id": 2503, "priority": "0", "stress": "0"}, "type": "Feature"},
 {"geometry": {"coordinates": [[16.24215, 47.81451], [16.24229, 47.81453], [16.24246, 47.81453]], "type": "LineString"}, "properties": {"id": 2504, "priority": "1", "stress": "1"}, "type": "Feature"},
