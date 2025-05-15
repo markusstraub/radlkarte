@@ -2481,9 +2481,9 @@
 {"geometry": {"coordinates": [[16.23427, 47.83146], [16.23446, 47.83142], [16.235, 47.83108], [16.23611, 47.83044], [16.23626, 47.8304]], "type": "LineString"}, "properties": {"id": 2594, "priority": "1", "stress": "1"}, "type": "Feature"},
 {"geometry": {"coordinates": [[16.24641, 47.81539], [16.24623, 47.81502], [16.24594, 47.81439], [16.24583, 47.8141], [16.24576, 47.81387], [16.24574, 47.81382], [16.24573, 47.81377], [16.24572, 47.81375]], "type": "LineString"}, "properties": {"id": 2595, "priority": "1", "stress": "2"}, "type": "Feature"},
 {"geometry": {"coordinates": [[16.23479, 47.81308], [16.23487, 47.81305], [16.23495, 47.813]], "type": "LineString"}, "properties": {"id": 2596, "priority": "2", "stress": "1"}, "type": "Feature"},
-{"geometry": {"coordinates": [16.24821, 47.8197], "type": "Point"}, "properties": {"description": "Grazerstra\u00dfe", "id": 2597, "warning": "yes"}, "type": "Feature"},
+{"geometry": {"coordinates": [16.24821, 47.8197], "type": "Point"}, "properties": {"description": "Gro\u00dfe L\u00fccke im Radwegenetz auf der Grazer Stra\u00dfe", "id": 2597, "warning": "yes"}, "type": "Feature"},
 {"geometry": {"coordinates": [[16.24497, 47.79567], [16.24433, 47.79615], [16.24396, 47.79545], [16.24394, 47.79535], [16.24392, 47.79526], [16.24389, 47.79515]], "type": "LineString"}, "properties": {"id": 2598, "priority": "1", "stress": "0"}, "type": "Feature"},
-{"geometry": {"coordinates": [16.24727, 47.81733], "type": "Point"}, "properties": {"description": "Grazerstra\u00dfe", "id": 2599, "warning": "yes"}, "type": "Feature"},
+{"geometry": {"coordinates": [16.24727, 47.81733], "type": "Point"}, "properties": {"description": "Gro\u00dfe L\u00fccke im Radwegenetz auf der Grazer Stra\u00dfe", "id": 2599, "warning": "yes"}, "type": "Feature"},
 {"geometry": {"coordinates": [[16.23475, 47.813], [16.2348, 47.81297]], "type": "LineString"}, "properties": {"id": 2600, "priority": "2", "stress": "1"}, "type": "Feature"},
 {"geometry": {"coordinates": [[16.23626, 47.8304], [16.23619, 47.83047], [16.23545, 47.83091], [16.23511, 47.83111], [16.23507, 47.83114], [16.23439, 47.83157], [16.23429, 47.83163]], "type": "LineString"}, "properties": {"id": 2601, "priority": "1", "stress": "1"}, "type": "Feature"},
 {"geometry": {"coordinates": [[16.23885, 47.81578], [16.23946, 47.8157], [16.23959, 47.81568]], "type": "LineString"}, "properties": {"id": 2602, "priority": "2", "stress": "1"}, "type": "Feature"},
@@ -2491,4 +2491,4 @@
 {"geometry": {"coordinates": [[16.24348, 47.79396], [16.24352, 47.79468], [16.24355, 47.7952], [16.2436, 47.79555]], "type": "LineString"}, "properties": {"id": 2604, "priority": "0", "stress": "1"}, "type": "Feature"},
 {"geometry": {"coordinates": [[16.24554, 47.81299], [16.24552, 47.81291], [16.24551, 47.81285], [16.24542, 47.81239], [16.24542, 47.81235], [16.2454, 47.81226]], "type": "LineString"}, "properties": {"id": 2605, "priority": "1", "stress": "2"}, "type": "Feature"},
 {"geometry": {"coordinates": [[16.23495, 47.813], [16.23504, 47.8129], [16.23512, 47.81274]], "type": "LineString"}, "properties": {"id": 2606, "priority": "2", "stress": "1"}, "type": "Feature"},
-{"geometry": {"coordinates": [16.2477, 47.82156], "type": "Point"}, "properties": {"description": "Grazerstra\u00dfe", "id": 2607, "warning": "yes"}, "type": "Feature"}]}
+{"geometry": {"coordinates": [16.2477, 47.82156], "type": "Point"}, "properties": {"description": "Gro\u00dfe L\u00fccke im Radwegenetz auf der Grazer Stra\u00dfe", "id": 2607, "warning": "yes"}, "type": "Feature"}]}
