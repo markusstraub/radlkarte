@@ -23,7 +23,6 @@
     "pois:linz": "yarn pois --only-region linz",
     "pois:noe-suedost": "yarn pois --only-region noe-suedost",
     "pois:rheintal": "yarn pois --only-region rheintal",
-    "pois:schwarzatal": "yarn pois --only-region noe-suedost",
     "pois:steyr": "yarn pois --only-region steyr",
     "pois:wien": "yarn pois --only-region wien",
     "lint": "yarn lint:html && yarn lint:js",
