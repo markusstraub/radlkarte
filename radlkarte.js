@@ -64,14 +64,14 @@ rkGlobal.configurations = {
     centerLatLng: L.latLng(48.30, 14.26),
     nextbikeUrl: 'https://maps.nextbike.net/maps/nextbike.json?domains=al&bikes=false'
   },
+  'noe-suedost': {
+    title: 'NÖ-Südost',
+    centerLatLng: L.latLng(47.67, 15.94),
+    nextbikeUrl: 'https://maps.nextbike.net/maps/nextbike.json?domains=la&bikes=false'
+  },
   'rheintal': {
     title: 'Rheintal',
     centerLatLng: L.latLng(47.41, 9.72),
-  },
-  'schwarzatal': {
-    title: 'Schwarztal',
-    centerLatLng: L.latLng(47.67, 15.94),
-    nextbikeUrl: 'https://maps.nextbike.net/maps/nextbike.json?domains=la&bikes=false'
   },
   'steyr': {
     title: 'Steyr',
