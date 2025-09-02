@@ -29,7 +29,7 @@ rkGlobal.debug = true;
 rkGlobal.fullWidthThreshold = 768;
 
 // style: stress = color, priority = line width
-rkGlobal.styleFunction = updateStyles;
+// rkGlobal.styleFunction = updateStyles; // Not needed for MapLibre
 rkGlobal.tileLayerOpacity = 1;
 rkGlobal.priorityFullVisibleFromZoom = [0, 14, 15];
 rkGlobal.priorityReducedVisibilityFromZoom = [0, 12, 14];
@@ -82,644 +82,6 @@ rkGlobal.pageHeader = function () {
   return $('h1');
 };
 
-function debug(obj) {
-  if (rkGlobal.debug) {
-    console.log(obj);
-  }
-}
-
-/**
- * set the currently active region.
- * called from the CUSTOMIZED hash plugin
- * (when region is changed e.g. via hyperlink or by changing the URL)
- */
-function updateRadlkarteRegion(region) {
-  rkGlobal.currentRegion = region;
-  let configuration = rkGlobal.configurations[region];
-  if (configuration === undefined) {
-    console.warn('ignoring unknown region ' + region);
-    return;
-  }
-
-  removeAllSegmentsAndMarkers();
-  loadGeoJson('data/radlkarte-' + region + '.geojson');
-  // POI layers: only reload visible layers
-  if (rkGlobal.leafletMap.hasLayer(rkGlobal.poiLayers.bikeShareLayer)) {
-    clearAndLoadNextbike(configuration.nextbikeUrl);
-  }
-  let visibleOsmPois = [];
-  for (const [k, v] of Object.entries(rkGlobal.osmPoiTypes)) {
-    if (rkGlobal.leafletMap.hasLayer(v.layer)) {
-      visibleOsmPois.push(k);
-    }
-  }
-  clearAndLoadOsmPois(visibleOsmPois);
-
-  rkGlobal.pageHeader().text('Radlkarte ' + configuration.title);
-
-
-  // virtual page hit in matomo analytics
-  _paq.push(['setCustomUrl', '/' + region]);
-  _paq.push(['setDocumentTitle', region]);
-  _paq.push(['trackPageView']);
-}
-
-function removeAllSegmentsAndMarkers() {
-  // we can't simply delete all layers (otherwise the base layer is gone as well)
-  // TODO refactor?
-  for (const key of Object.keys(rkGlobal.segments)) {
-    rkGlobal.leafletMap.removeLayer(rkGlobal.segments[key].lines);
-    if (rkGlobal.segments[key].steepLines && rkGlobal.leafletMap.hasLayer(rkGlobal.segments[key].steepLines)) {
-      rkGlobal.leafletMap.removeLayer(rkGlobal.segments[key].steepLines);
-    }
-    rkGlobal.leafletMap.removeLayer(rkGlobal.segments[key].decorators);
-  }
-  rkGlobal.segments = {};
-
-  for (const [k, v] of Object.entries(rkGlobal.osmPoiTypes)) {
-    v.layer.clearLayers();
-  }
-}
-
-function loadGeoJson(file) {
-  rkGlobal.poiLayers.problemLayerLowZoom.clearLayers();
-  rkGlobal.poiLayers.problemLayerHighZoom.clearLayers();
-  $.getJSON(file, function (data) {
-    if (data.type != "FeatureCollection") {
-      console.error("expected a GeoJSON FeatureCollection. no radlkarte network can be displayed.");
-      return;
-    }
-
-    if (!data.bbox) {
-      console.warn("no bbox defined in GeoJSON - can not configure geocoding");
-      rkGlobal.geocodingControl.options.geocoder.options.geocodingQueryParams.bounds = null;
-    } else {
-      rkGlobal.geocodingControl.options.geocoder.options.geocodingQueryParams.bounds = data.bbox.join(",");
-    }
-
-    // collect geojson linestring features (and marker points)
-    let ignoreCount = 0;
-    let goodCount = 0;
-    let poiCount = 0;
-    let categorizedLinestrings = {};
-    for (let i = 0; i < data.features.length; i++) {
-      let geojson = data.features[i];
-      if (geojson.type != 'Feature' || geojson.properties == undefined || geojson.geometry == undefined || geojson.geometry.type != 'LineString' || geojson.geometry.coordinates.length < 2) {
-        if (geojson.geometry.type == 'Point') {
-          let problemMarkers = createProblemMarkersIncludingPopup(geojson);
-          if (problemMarkers != null) {
-            rkGlobal.poiLayers.problemLayerLowZoom.addLayer(problemMarkers.lowZoom);
-            rkGlobal.poiLayers.problemLayerHighZoom.addLayer(problemMarkers.highZoom);
-            ++poiCount;
-          } else {
-            console.warn("ignoring invalid point (not a problem marker): " + JSON.stringify(geojson));
-            ++ignoreCount;
-          }
-        } else {
-          console.warn("ignoring invalid object (not a proper linestring feature): " + JSON.stringify(geojson));
-          ++ignoreCount;
-        }
-        continue;
-      }
-
-      let priority = parseInt(geojson.properties.priority, 10);
-      let stress = parseInt(geojson.properties.stress, 10);
-      if (isNaN(priority) || isNaN(stress)) {
-        console.warn("ignoring invalid object (priority / stress not set): " + JSON.stringify(geojson));
-        ++ignoreCount;
-        continue;
-      }
-
-      // collect linestrings by category
-      addSegmentToObject(categorizedLinestrings, geojson);
-
-      ++goodCount;
-    }
-    debug("processed " + goodCount + " valid LineString features, " + poiCount + " Point features, and " + ignoreCount + " ignored features.");
-
-    // merge geojson linestring features
-    // with the same properties into a single multilinestring
-    // and then put them in a leaflet layer
-    for (const key of Object.keys(categorizedLinestrings)) {
-      let multilinestringFeatures = turf.combine(turf.featureCollection(categorizedLinestrings[key]));
-      let properties = JSON.parse(key);
-      multilinestringFeatures.properties = properties;
-
-      let decoratorCoordinates = [];
-      for (const linestring of categorizedLinestrings[key]) {
-        decoratorCoordinates.push(turf.flip(linestring).geometry.coordinates);
-      }
-
-      // separate panes to allow setting zIndex, which is not possible on
-      // the geojson layers themselves
-      // see https://stackoverflow.com/q/39767499/1648538
-      rkGlobal.leafletMap.createPane(key);
-      rkGlobal.leafletMap.getPane(key).style.zIndex = getSegmentZIndex(properties);
-      rkGlobal.segments[key] = {
-        'lines': L.geoJSON(multilinestringFeatures, { pane: key }),
-        'steepLines': properties.steep === 'yes' ? L.geoJSON(multilinestringFeatures, { pane: key }) : undefined,
-        'decorators': L.polylineDecorator(decoratorCoordinates)
-      };
-    }
-
-    // apply styles
-    rkGlobal.styleFunction();
-
-    rkGlobal.leafletMap.on('zoomend', function (ev) {
-      //debug("zoom level changed to " + rkGlobal.leafletMap.getZoom() + ".. enqueueing style change");
-      $("#map").queue(function () {
-        rkGlobal.styleFunction();
-        $(this).dequeue();
-      });
-    });
-  });
-}
-
-/**
- * @returns a key representing activated layers with one char each. x means no active layer.
- */
-function getSelectedPoiLayerKey() {
-  let selected = "";
-  if (rkGlobal.leafletMap.hasLayer(rkGlobal.poiLayers.problemLayerActive)) {
-    selected += 'p';
-  }
-  if (rkGlobal.leafletMap.hasLayer(rkGlobal.poiLayers.bikeShareLayer)) {
-    selected += 'b';
-  }
-  for (const type in rkGlobal.osmPoiTypes) {
-    if (rkGlobal.leafletMap.hasLayer(rkGlobal.poiLayers[type])) {
-      selected += rkGlobal.osmPoiTypes[type].urlKey;
-    }
-  }
-  if (selected.length == 0) {
-    selected = "x";
-  }
-  return selected;
-}
-
-function selectPoiLayersForKey(key) {
-  if (key.includes("p")) {
-    rkGlobal.leafletMap.addLayer(rkGlobal.poiLayers.problemLayerActive);
-  } else {
-    rkGlobal.leafletMap.removeLayer(rkGlobal.poiLayers.problemLayerActive);
-  }
-  if (key.includes("b")) {
-    rkGlobal.leafletMap.addLayer(rkGlobal.poiLayers.bikeShareLayer);
-  } else {
-    rkGlobal.leafletMap.removeLayer(rkGlobal.poiLayers.bikeShareLayer);
-  }
-  for (const type in rkGlobal.osmPoiTypes) {
-    if (key.includes(rkGlobal.osmPoiTypes[type].urlKey)) {
-      rkGlobal.leafletMap.addLayer(rkGlobal.poiLayers[type]);
-    } else {
-      rkGlobal.leafletMap.removeLayer(rkGlobal.poiLayers[type]);
-    }
-  }
-}
-
-/**
- * use nextbike API to get stations and current nr of bikes.
- * API doc: https://github.com/nextbike/api-doc/blob/master/maps/nextbike-maps.openapi.yaml
- * List of all cities (to easily get domain code): https://maps.nextbike.net/maps/nextbike.json?list_cities=1
- */
-function clearAndLoadNextbike(url) {
-  rkGlobal.poiLayers.bikeShareLayer.clearLayers();
-  $.getJSON(url, function (data) {
-    for (const country of data.countries) {
-      for (const city of country.cities) {
-        let cityUrl = `<a href="${city.website}" target="_blank">Nextbike ${city.name}</a>`;
-        for (const place of city.places) {
-          let markerLayer = createNextbikeMarkerIncludingPopup(country.domain, place, cityUrl);
-          if (markerLayer != null) {
-            rkGlobal.poiLayers.bikeShareLayer.addLayer(markerLayer);
-          }
-        }
-      }
-    }
-  });
-}
-
-/**
- * @param domain 2-letter Nextbike domain for determining special icons (optional).
- * @param place JSON from Nextbike API describing a bike-share station.
- */
-function createNextbikeMarkerIncludingPopup(domain, place, cityUrl) {
-  let description = '<h2>' + place.name + '</h2>';
-  if (place.bikes === 1) {
-    description += "<p>1 Rad verfügbar</p>";
-  } else {
-    description += `<p>${place.bikes} Räder verfügbar</p>`;
-  }
-  description += `<p class="sidenote">Mehr Informationen: ${cityUrl}</p>`;
-
-  let icon = place.bikes !== 0 ? rkGlobal.icons.nextbike : rkGlobal.icons.nextbikeGray;
-  if (domain === "wr") {
-    icon = place.bikes !== 0 ? rkGlobal.icons.wienmobilrad : rkGlobal.icons.wienmobilradGray;
-  } else if (domain === "al") {
-    icon = place.bikes !== 0 ? rkGlobal.icons.citybikelinz : rkGlobal.icons.citybikelinzGray;
-  }
-
-  return createMarkerIncludingPopup(L.latLng(place.lat, place.lng), icon, description, place.name);
-}
-
-function createMarkerIncludingPopup(latLng, icon, description, altText) {
-  let marker = L.marker(latLng, {
-    icon: icon,
-    alt: altText,
-  });
-  marker.bindPopup(`<article class="tooltip">${description}</article>`, { closeButton: true });
-  marker.on('mouseover', function () {
-    marker.openPopup();
-  });
-  // adding a mouseover event listener causes a problem with touch browsers:
-  // then two taps are required to show the marker.
-  // explicitly adding the click event listener here solves the issue
-  marker.on('click', function () {
-    marker.openPopup();
-  });
-  return marker;
-}
-
-/** expects a list of poi types */
-function clearAndLoadOsmPois(types) {
-  for (const type of types) {
-    if (type === "transit") {
-      clearAndLoadTransit(rkGlobal.currentRegion);
-    } else {
-      clearAndLoadBasicOsmPoi(type, rkGlobal.currentRegion);
-    }
-  }
-}
-
-/** special handling for transit because we need to merge subway and railway in one layer */
-async function clearAndLoadTransit(region) {
-  rkGlobal.poiLayers.transit.clearLayers();
-  const seen = new Set();
-
-  for (const transitType of ["subway", "railway"]) {
-    if (transitType === "subway" && region !== "wien") {
-      continue;
-    }
-    const stationName2Line2Colour = await loadStationName2Line2Colour(region, `data/osm-overpass/${region}-${transitType}Lines.json`);
-    let transitFile = `data/osm-overpass/${region}-${transitType}.json`;
-    $.getJSON(transitFile, function (data) {
-      for (const element of data.elements) {
-        if (seen.has(element.tags.name)) {
-          // filter duplicate stations (happens when multiple lines cross)
-          continue;
-        }
-        let latLng = "center" in element ? L.latLng(element.center.lat, element.center.lon) : L.latLng(element.lat, element.lon);
-        if (latLng == null) {
-          // L.latLng can return null/undefined for invalid lat/lon values, catch this here
-          console.warn("invalid lat/lon for " + element.type + " with OSM id " + element.id);
-          continue;
-        }
-        let description = `<h2>${element.tags.name}</h2>`;
-        let icon = rkGlobal.icons[transitType];
-        if (stationName2Line2Colour[element.tags.name] != null) {
-          let refs = Array.from(Object.keys(stationName2Line2Colour[element.tags.name])).sort();
-          for (const ref of refs) {
-            description += `<span class="transitLine" style="background-color:${stationName2Line2Colour[element.tags.name][ref]};">${ref}</span>\n`;
-          }
-
-          if (transitType === "railway") {
-            icon = rkGlobal.icons.sbahn;
-          }
-        }
-        let altText = element.tags.name;
-        const markerLayer = createMarkerIncludingPopup(latLng, icon, description, altText);
-        if (markerLayer != null) {
-          seen.add(element.tags.name);
-          rkGlobal.poiLayers.transit.addLayer(markerLayer);
-        }
-      }
-      debug('created ' + seen.size + ' ' + transitType + ' icons.');
-    });
-  }
-}
-
-async function loadStationName2Line2Colour(region, fileName) {
-  const stationName2Line2Colour = {};
-  $.getJSON(fileName, function (data) {
-    for (const element of data.elements) {
-      if (stationName2Line2Colour[element.tags.name] == null) {
-        stationName2Line2Colour[element.tags.name] = {};
-      }
-      stationName2Line2Colour[element.tags.name][element.tags.ref] = element.tags.colour;
-    }
-  });
-  return stationName2Line2Colour;
-}
-
-function clearAndLoadBasicOsmPoi(type, region) {
-  rkGlobal.poiLayers[type].clearLayers();
-  let poiFile = "data/osm-overpass/" + region + "-" + type + ".json";
-  $.getJSON(poiFile, function (data) {
-    let count = 0;
-    let dataDate = extractDateFromOverpassResponse(data);
-    for (const element of data.elements) {
-      const latLng = "center" in element ? L.latLng(element.center.lat, element.center.lon) : L.latLng(element.lat, element.lon);
-      if (latLng == null) {
-        // L.latLng can return null/undefined for invalid lat/lon values, catch this here
-        console.warn("invalid lat/lon for " + type + " with OSM id " + element.id);
-        continue;
-      }
-      const tags = element.tags;
-
-      const access = tags.access;
-      if (["no", "private", "permit"].includes(access)) {
-        continue;
-      }
-
-      const name = tags.name;
-      const website = extractWebsiteFromTagSoup(tags);
-      let heading = name != null ? name : rkGlobal.osmPoiTypes[type].name;
-      if (website != null) {
-        heading = `<a href="${website}" target="_blank">${heading}</a>`;
-      }
-      let description = `<h2>${heading}</h2>`;
-
-      const address = extractAddressFromTagSoup(tags);
-      if (address) {
-        description += `<p>${address}</p>`;
-      }
-
-      let currentlyOpen = type === 'bicycleShop' ? false : true;
-      let opening_hours_value = tags.opening_hours;
-      if (opening_hours_value) {
-        if (type === "bicycleShop" && !opening_hours_value.includes("PH")) {
-          // bicycle shops are usually closed on holidays but this is rarely mapped
-          opening_hours_value += ";PH off";
-        }
-        // NOTE: state left empty because school holidays are likely not relevant (not a single mapped instance in our data set)
-        // noinspection JSPotentiallyInvalidConstructorUsage
-        const oh = new opening_hours(opening_hours_value, {
-          lat: latLng.lat,
-          lon: latLng.lng,
-          address: { country_code: "at", state: "" }
-        });
-        currentlyOpen = oh.getState();
-        const openText = currentlyOpen ? "jetzt geöffnet" : "derzeit geschlossen";
-        let items = oh.prettifyValue({ conf: { locale: 'de' }, }).split(";");
-
-        for (let i = 0; i < items.length; i++) {
-          items[i] = items[i].trim();
-          if (type === "bicycleShop" && items[i] === "Feiertags geschlossen") {
-            // avoid redundant info
-            items[i] = "";
-          } else {
-            items[i] = `<li>${items[i]}</li>`;
-          }
-        }
-        const itemList = "<ul>" + items.join("\n") + "</ul>";
-        description += `<p>Öffnungszeiten (${openText}):</p>${itemList}`;
-      }
-
-      const phone = tags.phone != null ? tags.phone : tags["contact:phone"];
-      if (phone) {
-        description += `<p>${phone}</p>`;
-      }
-
-      const operator = tags.operator;
-      if (operator) {
-        description += `<p class="sidenote">Betreiber: ${operator}</p>`;
-      }
-
-      const osmLink = `<a href="https://www.osm.org/${element.type}/${element.id}" target="_blank">Quelle: OpenStreetMap</a>`;
-      description += `<p class="sidenote">${osmLink} (Stand: ${dataDate})</p>`;
-
-      let icon = rkGlobal.icons[`${type}${currentlyOpen ? "" : "Gray"}`];
-      let altText = element.tags.name;
-      const markerLayer = createMarkerIncludingPopup(latLng, icon, description, altText);
-      if (markerLayer != null) {
-        rkGlobal.poiLayers[type].addLayer(markerLayer);
-        count++;
-      }
-    }
-    debug('created ' + count + ' ' + type + ' icons.');
-  });
-}
-
-function extractDateFromOverpassResponse(data) {
-  if (data.osm3s && data.osm3s.timestamp_osm_base) {
-    if (typeof data.osm3s.timestamp_osm_base === 'string') {
-      return data.osm3s.timestamp_osm_base.split("T")[0];
-    }
-  }
-  return null;
-}
-
-function extractAddressFromTagSoup(tags) {
-  if (tags["addr:street"] != null) {
-    let address = "";
-    address += tags["addr:street"];
-    if (tags["addr:housenumber"] != null) {
-      address += " " + tags["addr:housenumber"];
-    }
-    if (tags["addr:postcode"] != null) {
-      address += ", " + tags["addr:postcode"];
-      if (tags["addr:city"] != null) {
-        address += " " + tags["addr:city"];
-      }
-    } else if (tags["addr:city"] != null) {
-      address += ", " + tags["addr:city"];
-    }
-    return address;
-  }
-  return undefined;
-}
-
-function extractWebsiteFromTagSoup(tags) {
-  let website = tags.website != null ? tags.website : tags["contact:website"];
-  if (website == null) {
-    return website;
-  }
-  if (!website.startsWith("http")) {
-    website = `http://${website}`;
-  }
-  return website;
-}
-
-/**
- * Get a zIndex based on priority and stress
- * where low-stress high-priority is on the top
- */
-function getSegmentZIndex(properties) {
-  // 400 is the default zIndex for overlayPanes, stay slightly below this level
-  let index = 350;
-  index += 10 * (rkGlobal.priorityStrings.length - properties.priority);
-  index += 1 * (rkGlobal.stressStrings.length - properties.stress);
-  return index;
-}
-
-function addSegmentToObject(object, geojsonLinestring) {
-  let key = getSegmentKey(geojsonLinestring);
-  let keyString = JSON.stringify(key);
-  if (object[keyString] === undefined) {
-    object[keyString] = [];
-  }
-  object[keyString].push(geojsonLinestring);
-}
-
-/*
- * Get a JSON object as key for a segment linestring.
- * This object explicitly contains all values to be used in styling
- */
-function getSegmentKey(geojsonLinestring) {
-  let properties = geojsonLinestring.properties;
-  return {
-    "priority": properties.priority,
-    "stress": properties.stress,
-    "oneway": properties.oneway === undefined ? 'no' : properties.oneway,
-    "unpaved": properties.unpaved === undefined ? 'no' : properties.unpaved,
-    "steep": properties.steep === undefined ? 'no' : properties.steep
-  };
-}
-
-/**
- * Updates the styles of all layers. Takes current zoom level into account.
- * Special styles for unpaved, steep, oneway arrows are matched, take care in future adapations
- */
-function updateStyles() {
-  let zoom = rkGlobal.leafletMap.getZoom();
-  for (const key of Object.keys(rkGlobal.segments)) {
-    let properties = JSON.parse(key);
-    let showFull = zoom >= rkGlobal.priorityFullVisibleFromZoom[properties.priority];
-    let showMinimal = zoom < rkGlobal.priorityFullVisibleFromZoom[properties.priority] && zoom >= rkGlobal.priorityReducedVisibilityFromZoom[properties.priority];
-
-    let lineStyle;
-    if (showFull) {
-      lineStyle = getLineStyle(zoom, properties);
-    } else if (showMinimal) {
-      lineStyle = getLineStyleMinimal(properties);
-    }
-
-    let lines = rkGlobal.segments[key].lines;
-    if (showFull || showMinimal) {
-      lines.setStyle(lineStyle);
-      rkGlobal.leafletMap.addLayer(lines);
-    } else {
-      rkGlobal.leafletMap.removeLayer(lines);
-    }
-
-    // steep lines are drawn twice, once regular,
-    // a second time as bristles (that's what this copy is for)
-    let steepLines = rkGlobal.segments[key].steepLines;
-    if (steepLines !== undefined) {
-      if (showFull || showMinimal) {
-        let steepLineStyle;
-        if (showFull) {
-          steepLineStyle = getSteepLineStyle(zoom, properties);
-        } else {
-          steepLineStyle = getSteepLineStyleMinimal(properties);
-        }
-        steepLines.setStyle(steepLineStyle);
-        rkGlobal.leafletMap.addLayer(steepLines);
-      } else {
-        rkGlobal.leafletMap.removeLayer(steepLines);
-      }
-    }
-
-    let decorators = rkGlobal.segments[key].decorators;
-    if ((showFull || showMinimal) && zoom >= rkGlobal.onewayIconThreshold && properties.oneway === 'yes') {
-      decorators.setPatterns(getOnewayArrowPatterns(zoom, properties, lineStyle.weight));
-      rkGlobal.leafletMap.addLayer(decorators);
-    } else {
-      rkGlobal.leafletMap.removeLayer(decorators);
-    }
-  }
-
-  if (zoom >= rkGlobal.problemIconThreshold) {
-    rkGlobal.poiLayers.problemLayerActive.clearLayers();
-    rkGlobal.poiLayers.problemLayerActive.addLayer(rkGlobal.poiLayers.problemLayerHighZoom);
-  } else {
-    rkGlobal.poiLayers.problemLayerActive.clearLayers();
-    rkGlobal.poiLayers.problemLayerActive.addLayer(rkGlobal.poiLayers.problemLayerLowZoom);
-  }
-}
-
-function getLineStyle(zoom, properties) {
-  let lineWeight = getLineWeight(zoom, properties.priority);
-  return _getLineStyle(lineWeight, properties);
-}
-
-function getLineStyleMinimal(properties) {
-  let lineWeight = 1;
-  return _getLineStyle(lineWeight, properties);
-}
-
-function _getLineStyle(lineWeight, properties) {
-  let style = {
-    color: rkGlobal.colors[properties.stress],
-    weight: lineWeight,
-    opacity: rkGlobal.opacity
-  };
-  if (properties.unpaved === 'yes') {
-    style.dashArray = getUnpavedDashStyle(Math.max(2, lineWeight));
-  }
-  return style;
-}
-
-function getSteepLineStyle(zoom, properties) {
-  let lineWeight = getLineWeight(zoom, properties.priority);
-  return _getSteepLineStyle(lineWeight, properties);
-}
-
-function getSteepLineStyleMinimal(properties) {
-  let lineWeight = 1;
-  return _getSteepLineStyle(lineWeight, properties);
-}
-
-function _getSteepLineStyle(lineWeight, properties) {
-  let steepBristleLength = 2;
-  return {
-    color: rkGlobal.colors[properties.stress],
-    weight: lineWeight * 2,
-    opacity: rkGlobal.opacity,
-    lineCap: 'butt',
-    dashArray: getSteepDashStyle(Math.max(2, lineWeight), steepBristleLength),
-    dashOffset: Math.max(2, lineWeight) * -0.5 + steepBristleLength / 2
-  };
-}
-
-/**
- * weight aka width of a line
- */
-function getLineWeight(zoom, priority) {
-  let lineWeight = zoom - 10;
-  lineWeight = (lineWeight <= 0 ? 1 : lineWeight) * 1.4;
-  lineWeight *= rkGlobal.lineWidthFactor[priority];
-  return lineWeight;
-}
-
-function getUnpavedDashStyle(lineWeight) {
-  return lineWeight + " " + lineWeight * 1.5;
-}
-
-function getSteepDashStyle(lineWeight, steepBristleLength) {
-  return steepBristleLength + " " + (lineWeight * 2.5 - steepBristleLength);
-}
-
-/**
- * @return an array of patterns as expected by L.PolylineDecorator.setPatterns
- */
-function getOnewayArrowPatterns(zoom, properties, lineWeight) {
-  let arrowWidth = Math.max(5, lineWeight * rkGlobal.arrowWidthFactor[properties.priority]);
-  return [{
-    offset: arrowWidth - 2,
-    repeat: Math.max(2, lineWeight) * 5,
-    symbol: L.Symbol.arrowHead({
-      pixelSize: arrowWidth,
-      headAngle: 90,
-      pathOptions: {
-        color: rkGlobal.colors[properties.stress],
-        fillOpacity: rkGlobal.opacity,
-        weight: 0
-      }
-    })
-  }];
-}
-
 function loadMapLibre() {
   // Create the MapLibre map
   rkGlobal.map = new maplibregl.Map({
@@ -739,9 +101,6 @@ function loadMapLibre() {
 
   // Initialize data loading
   initializeDataLoading();
-
-  // Initialize icons
-  initializeIcons();
 }
 
 function createBaseMapStyle() {
@@ -833,71 +192,218 @@ function initializeMapControls() {
 function initializeDataLoading() {
   // Load default region (Wien) when map is loaded
   rkGlobal.map.on('load', () => {
-    // TODO: Load Vienna data by default
-    console.log('Map loaded, ready to load data');
+    console.log('Map loaded, loading Wien data...');
+    // Set default region
+    rkGlobal.currentRegion = rkGlobal.defaultRegion;
+    updateRadlkarteRegion(rkGlobal.currentRegion);
+    
+    // Initialize icons after map is loaded
+    initializeIcons();
   });
 }
 
-function initializeIcons() {
-  rkGlobal.icons = {};
-  // For MapLibre, we'll store icon configurations instead of Leaflet icon objects
-  rkGlobal.icons.dismount = {
-    url: 'css/dismount.svg',
-    size: [33, 29],
-    anchor: [16.5, 14.5]
-  };
-  rkGlobal.icons.warning = {
-    url: 'css/warning.svg',
-    size: [33, 29],
-    anchor: [16.5, 14.5]
-  };
-  rkGlobal.icons.noCargo = {
-    url: 'css/nocargo.svg',
-    size: [29, 29],
-    anchor: [14.5, 14.5]
-  };
-  rkGlobal.icons.noCargoAndDismount = {
-    url: 'css/nocargo+dismount.svg',
-    size: [57.7, 29],
-    anchor: [28.85, 14.5]
-  };
-  rkGlobal.icons.redDot = {
-    url: 'css/reddot.svg',
-    size: [10, 10],
-    anchor: [5, 5]
-  };
-}
-
-function createMarkerIcon(url) {
-  let markerWidth = 100 / 5;
-  let markerHeight = 150 / 5;
-  return L.icon({
-    iconUrl: url,
-    iconSize: [markerWidth, markerHeight],
-    iconAnchor: [markerWidth / 2, markerHeight],
-    popupAnchor: [0, -markerHeight]
-  });
-}
-
-function createProblemMarkersIncludingPopup(geojsonPoint) {
-  let icons = getProblemIcons(geojsonPoint.properties);
-  if (icons == null) {
-    return undefined;
+function debug(obj) {
+  if (rkGlobal.debug) {
+    console.log(obj);
   }
-  let description = getProblemDescriptionText(geojsonPoint.properties);
-  let latLng = L.geoJSON(geojsonPoint).getLayers()[0].getLatLng();
-  let markers = {
-    lowZoom: createMarkerIncludingPopup(latLng, icons.small, description, 'Problemstelle'),
-    highZoom: createMarkerIncludingPopup(latLng, icons.large, description, 'Problemstelle')
-  };
-  return markers;
 }
-
 
 /**
- * @param properties GeoJSON properties of a point
- * @return a small and a large icon or undefined if no icons should be used
+ * set the currently active region.
+ * called from the CUSTOMIZED hash plugin
+ * (when region is changed e.g. via hyperlink or by changing the URL)
  */
+function updateRadlkarteRegion(region) {
+  rkGlobal.currentRegion = region;
+  let configuration = rkGlobal.configurations[region];
+  if (configuration === undefined) {
+    console.warn('ignoring unknown region ' + region);
+    return;
+  }
+
+  removeAllSegmentsAndMarkers();
+  loadGeoJson('data/radlkarte-' + region + '.geojson');
+  
+  // Update page title
+  rkGlobal.pageHeader().text('Radlkarte ' + configuration.title);
+
+  // Center map on region
+  if (configuration.centerLatLng) {
+    rkGlobal.map.flyTo({
+      center: configuration.centerLatLng,
+      zoom: rkGlobal.defaultZoom
+    });
+  }
+
+  // Virtual page hit in matomo analytics
+  if (typeof _paq !== 'undefined') {
+    _paq.push(['setCustomUrl', '/' + region]);
+    _paq.push(['setDocumentTitle', region]);
+    _paq.push(['trackPageView']);
+  }
+}
+
+function removeAllSegmentsAndMarkers() {
+  // Remove all sources and layers from MapLibre map
+  if (rkGlobal.map.getSource('bike-routes')) {
+    rkGlobal.map.removeSource('bike-routes');
+  }
+  if (rkGlobal.map.getSource('problem-markers')) {
+    rkGlobal.map.removeSource('problem-markers');
+  }
+  
+  // Remove route layers
+  ['bike-routes-main', 'bike-routes-secondary', 'bike-routes-arrows', 'problem-markers-layer'].forEach(layerId => {
+    if (rkGlobal.map.getLayer(layerId)) {
+      rkGlobal.map.removeLayer(layerId);
+    }
+  });
+  
+  rkGlobal.segments = {};
+}
+
+function loadGeoJson(file) {
+  console.log('Loading GeoJSON:', file);
+  fetch(file)
+    .then(response => response.json())
+    .then(data => {
+      if (data.type !== "FeatureCollection") {
+        console.error("expected a GeoJSON FeatureCollection. no radlkarte network can be displayed.");
+        return;
+      }
+      
+      processGeoJsonData(data);
+    })
+    .catch(error => {
+      console.error('Error loading GeoJSON:', error);
+    });
+}
+
+function processGeoJsonData(data) {
+  console.log(`Processing ${data.features.length} features`);
+  
+  // Separate LineString features (bike routes) from Point features (markers)
+  const bikeRoutes = {
+    type: "FeatureCollection",
+    features: data.features.filter(f => f.geometry.type === "LineString" && 
+                                        f.properties.priority !== undefined && 
+                                        f.properties.stress !== undefined)
+  };
+  
+  const problemMarkers = {
+    type: "FeatureCollection", 
+    features: data.features.filter(f => f.geometry.type === "Point" && 
+                                        (f.properties.dismount === "yes" || 
+                                         f.properties.nocargo === "yes" || 
+                                         f.properties.warning === "yes"))
+  };
+  
+  console.log(`Found ${bikeRoutes.features.length} bike routes and ${problemMarkers.features.length} problem markers`);
+  
+  // Add bike routes to map
+  if (bikeRoutes.features.length > 0) {
+    addBikeRoutesToMap(bikeRoutes);
+  }
+  
+  // Add problem markers to map
+  if (problemMarkers.features.length > 0) {
+    addProblemMarkersToMap(problemMarkers);
+  }
+}
+
+function addBikeRoutesToMap(bikeRoutes) {
+  // Add source for bike routes
+  rkGlobal.map.addSource('bike-routes', {
+    type: 'geojson',
+    data: bikeRoutes
+  });
+  
+  // Add main routes layer (priority 0)
+  rkGlobal.map.addLayer({
+    id: 'bike-routes-main',
+    type: 'line',
+    source: 'bike-routes',
+    filter: ['==', ['get', 'priority'], '0'],
+    paint: {
+      'line-width': [
+        'interpolate',
+        ['linear'],
+        ['zoom'],
+        10, 3,
+        15, 6,
+        18, 12
+      ],
+      'line-color': [
+        'case',
+        ['==', ['get', 'stress'], '0'], rkGlobal.colors[0], // calm - dark blue
+        ['==', ['get', 'stress'], '1'], rkGlobal.colors[1], // medium - light blue
+        ['==', ['get', 'stress'], '2'], rkGlobal.colors[2], // stressful - orange
+        rkGlobal.colors[1] // default
+      ],
+      'line-opacity': rkGlobal.opacity,
+      'line-dasharray': [
+        'case',
+        ['==', ['get', 'unpaved'], 'yes'], ['literal', [3, 3]], // dashed for unpaved
+        ['literal', [1, 0]] // solid
+      ]
+    }
+  });
+  
+  // Add secondary routes layer (priority 1)
+  rkGlobal.map.addLayer({
+    id: 'bike-routes-secondary',
+    type: 'line',
+    source: 'bike-routes',
+    filter: ['==', ['get', 'priority'], '1'],
+    paint: {
+      'line-width': [
+        'interpolate',
+        ['linear'],
+        ['zoom'],
+        10, 1.5,
+        15, 3,
+        18, 6
+      ],
+      'line-color': [
+        'case',
+        ['==', ['get', 'stress'], '0'], rkGlobal.colors[0],
+        ['==', ['get', 'stress'], '1'], rkGlobal.colors[1],
+        ['==', ['get', 'stress'], '2'], rkGlobal.colors[2],
+        rkGlobal.colors[1]
+      ],
+      'line-opacity': rkGlobal.opacity,
+      'line-dasharray': [
+        'case',
+        ['==', ['get', 'unpaved'], 'yes'], ['literal', [3, 3]],
+        ['literal', [1, 0]]
+      ]
+    }
+  });
+}
+
+function addProblemMarkersToMap(problemMarkers) {
+  // Add source for problem markers
+  rkGlobal.map.addSource('problem-markers', {
+    type: 'geojson',
+    data: problemMarkers
+  });
+  
+  // Add problem markers layer
+  rkGlobal.map.addLayer({
+    id: 'problem-markers-layer',
+    type: 'symbol',
+    source: 'problem-markers',
+    layout: {
+      'icon-image': 'warning-triangle', // We'll need to add this icon
+      'icon-size': 0.8,
+      'icon-allow-overlap': true
+    },
+    paint: {
+      'icon-opacity': 0.8
+    }
+  });
+}
+
 function getProblemIcons(properties) {
   if (properties.leisure === 'swimming_pool') {
     return {

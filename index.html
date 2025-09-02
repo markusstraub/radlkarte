@@ -25,11 +25,13 @@
           this._zoom = options.zoom || 0;
           this._style = options.style;
           this._listeners = {};
+          this._sources = {};
+          this._layers = [];
           
           // Create a div for the map
           const mapDiv = document.getElementById(this.container);
           if (mapDiv) {
-            mapDiv.innerHTML = '<div style="width: 100%; height: 100%; background: #f0f0f0; display: flex; align-items: center; justify-content: center; color: #666;"><div><h3>MapLibre Map (Fallback Mode)</h3><p>Center: ' + this._center + '</p><p>Zoom: ' + this._zoom + '</p></div></div>';
+            mapDiv.innerHTML = '<div style="width: 100%; height: 100%; background: #f8f8f8; display: flex; align-items: center; justify-content: center; color: #666; flex-direction: column;"><div style="text-align: center;"><h3>MapLibre Map (Fallback Mode)</h3><p>Center: ' + this._center + '</p><p>Zoom: ' + this._zoom + '</p><p id="map-status">Ready to load bike routes...</p></div></div>';
           }
           
           // Simulate map loaded event
@@ -72,6 +74,52 @@
         },
         getZoom: function() {
           return this._zoom;
+        },
+        flyTo: function(options) {
+          console.log('MapLibre fallback: Flying to:', options);
+          this._center = options.center;
+          this._zoom = options.zoom;
+          const status = document.getElementById('map-status');
+          if (status) {
+            status.textContent = `Centered on: ${options.center} (zoom: ${options.zoom})`;
+          }
+          return this;
+        },
+        addSource: function(id, source) {
+          console.log('MapLibre fallback: Adding source:', id, source);
+          this._sources[id] = source;
+          if (source.data && source.data.features) {
+            const status = document.getElementById('map-status');
+            if (status) {
+              status.innerHTML += `<br>Added ${source.data.features.length} features from source: ${id}`;
+            }
+          }
+          return this;
+        },
+        addLayer: function(layer) {
+          console.log('MapLibre fallback: Adding layer:', layer.id, layer);
+          this._layers.push(layer);
+          const status = document.getElementById('map-status');
+          if (status) {
+            status.innerHTML += `<br>Added layer: ${layer.id} (${layer.type})`;
+          }
+          return this;
+        },
+        removeSource: function(id) {
+          console.log('MapLibre fallback: Removing source:', id);
+          delete this._sources[id];
+          return this;
+        },
+        removeLayer: function(id) {
+          console.log('MapLibre fallback: Removing layer:', id);
+          this._layers = this._layers.filter(l => l.id !== id);
+          return this;
+        },
+        getSource: function(id) {
+          return this._sources[id];
+        },
+        getLayer: function(id) {
+          return this._layers.find(l => l.id === id);
         }
       };
     }
