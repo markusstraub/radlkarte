@@ -1,14 +1,20 @@
 "use strict";
 /** global variable for radlkarte properties / data storage */
 var rkGlobal = {};
-/** the main maplibre map */
-rkGlobal.map = undefined;
+/** the main leaflet map */
+rkGlobal.leafletMap = undefined;
 rkGlobal.geocodingControl = undefined;
-/** object holding all data sources and layers */
+/** object holding all linestring and decorator layers (the key represents the properties) */
 rkGlobal.segments = {};
 rkGlobal.poiLayers = {};
-/** data sources for the map */
-rkGlobal.dataSources = {};
+/** layer group holding currently active variant of problem icons */
+rkGlobal.poiLayers.problemLayerActive = L.layerGroup();
+/** layer group holding problem icons for low zoom levels */
+rkGlobal.poiLayers.problemLayerLowZoom = L.layerGroup();
+/** layer group holding problem icons for high zoom levels */
+rkGlobal.poiLayers.problemLayerHighZoom = L.layerGroup();
+/** layer group holding bike sharing icons */
+rkGlobal.poiLayers.bikeShareLayer = L.layerGroup();
 rkGlobal.osmPoiTypes = {
   transit: { urlKey: "o", name: "ÖV-Station", layerName: "Öffentlicher Verkehr" },
   bicycleShop: { urlKey: "f", name: "Fahrradgeschäft", layerName: "Fahrradgeschäfte" },
@@ -17,9 +23,8 @@ rkGlobal.osmPoiTypes = {
   bicycleTubeVending: { urlKey: "s", name: "Schlauchomat", layerName: "Schlauchomaten" },
   drinkingWater: { urlKey: "w", name: "Trinkwasser", layerName: "Trinkwasser" },
 };
-// Initialize empty layer groups for POI types
 for (const [k, v] of Object.entries(rkGlobal.osmPoiTypes)) {
-  v.layer = { features: [], visible: false };
+  v.layer = L.layerGroup();
   rkGlobal.poiLayers[k] = v.layer;
 }
 /** names of all different levels of priorities (ordered descending by priority) */
@@ -47,40 +52,40 @@ rkGlobal.defaultZoom = 14;
 rkGlobal.configurations = {
   'rendertest': {
     title: '[DEV] Rendertest',
-    centerLatLng: [14.39, 50.09], // [longitude, latitude] for MapLibre
+    centerLatLng: L.latLng(50.09, 14.39),
   },
   'klagenfurt': {
     title: 'Klagenfurt',
-    centerLatLng: [14.31, 46.62],
+    centerLatLng: L.latLng(46.62, 14.31),
     nextbikeUrl: 'https://maps.nextbike.net/maps/nextbike.json?domains=ka&bikes=false'
   },
   'linz': {
     title: 'Linz',
-    centerLatLng: [14.26, 48.30],
+    centerLatLng: L.latLng(48.30, 14.26),
     nextbikeUrl: 'https://maps.nextbike.net/maps/nextbike.json?domains=al&bikes=false'
   },
   'noe-suedost': {
     title: 'NÖ-Südost',
-    centerLatLng: [15.94, 47.67],
+    centerLatLng: L.latLng(47.67, 15.94),
     nextbikeUrl: 'https://maps.nextbike.net/maps/nextbike.json?domains=la&bikes=false'
   },
   'rheintal': {
     title: 'Rheintal',
-    centerLatLng: [9.72, 47.41],
+    centerLatLng: L.latLng(47.41, 9.72),
   },
   'steyr': {
     title: 'Steyr',
-    centerLatLng: [14.42, 48.04],
+    centerLatLng: L.latLng(48.04, 14.42),
   },
   'wien': {
     title: 'Wien',
-    centerLatLng: [16.37, 48.21],
+    centerLatLng: L.latLng(48.21, 16.37),
     nextbikeUrl: 'https://maps.nextbike.net/maps/nextbike.json?domains=wr,la&bikes=false',
   },
 };
 rkGlobal.pageHeader = function () {
   return $('h1');
-};
+}
 
 function debug(obj) {
   if (rkGlobal.debug) {
@@ -720,152 +725,234 @@ function getOnewayArrowPatterns(zoom, properties, lineWeight) {
   }];
 }
 
-function loadMapLibre() {
-  // Create the MapLibre map
-  rkGlobal.map = new maplibregl.Map({
-    container: 'map',
-    style: createBaseMapStyle(),
-    center: [16.3738, 48.2082], // Vienna center
-    zoom: 11,
+function loadLeaflet() {
+  rkGlobal.leafletMap = L.map('map', { 'zoomControl': false });
+
+  // avoid troubles with min/maxZoom from our layer group, see https://github.com/Leaflet/Leaflet/issues/6557
+  let minMaxZoomLayer = L.gridLayer({
     minZoom: 0,
     maxZoom: 19
   });
+  let cartodbPositronLowZoom = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org" target="_blank">OpenStreetMap</a> contributors | &copy; <a href="https://carto.com/attributions" target="_blank">CARTO</a>',
+    subdomains: 'abcd',
+    minZoom: 0,
+    maxZoom: 15
+  });
+  let osmHiZoom = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    minZoom: 16,
+    maxZoom: 19,
+    // low and high zoom layer contributions are combined, so skip it here
+    //attribution: 'map data &amp; imagery &copy; <a href="https://openstreetmap.org" target="_blank">OpenStreetMap</a> contributors'
+  });
+  let mixed = L.layerGroup([minMaxZoomLayer, cartodbPositronLowZoom, osmHiZoom]);
 
-  // Initialize sidebar manually since we don't have leaflet-sidebar
-  initializeSidebar();
+  let basemapAtOrthofoto = L.tileLayer('https://mapsneu.wien.gv.at/basemap/bmaporthofoto30cm/normal/google3857/{z}/{y}/{x}.{format}', {
+    maxZoom: 18, // up to 20 is possible
+    attribution: '<a href="https://www.basemap.at" target="_blank">basemap.at</a>',
+    subdomains: ["", "1", "2", "3", "4"],
+    format: 'jpeg',
+    bounds: [[46.35877, 8.782379], [49.037872, 17.189532]]
+  });
+  let ocm = L.tileLayer('https://{s}.tile.thunderforest.com/cycle/{z}/{x}/{y}.png?apikey=ab5e4b2d24854fefb139c538ef5187a8', {
+    minZoom: 0,
+    maxZoom: 18,
+    attribution: '&copy; <a href="https://openstreetmap.org" target="_blank">OpenStreetMap</a> contributors | &copy; <a href="https://www.thunderforest.com" target="_blank">Thunderforest</a>'
+  });
+  let cyclosm = L.tileLayer('https://{s}.tile-cyclosm.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png', {
+    minZoom: 0,
+    maxZoom: 18,
+    attribution: '&copy; <a href="https://openstreetmap.org" target="_blank">OpenStreetMap</a> contributors | <a href="https://www.cyclosm.org" target="_blank">CyclOSM</a> | <a href="https://openstreetmap.fr/" target="_blank">OpenStreetMap Frankreich</a>.'
+  });
+  let empty = L.tileLayer('', { attribution: '' });
 
-  // Initialize map controls
-  initializeMapControls();
+  /*let osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    minZoom: 0,
+    maxZoom: 18,
+    attribution: 'map data &amp; imagery &copy; <a href="https://openstreetmap.org" target="_blank">OpenStreetMap</a> contributors'
+  });*/
 
-  // Initialize data loading
-  initializeDataLoading();
-
-  // Initialize icons
-  initializeIcons();
-}
-
-function createBaseMapStyle() {
-  return {
-    version: 8,
-    sources: {
-      'carto-light': {
-        type: 'raster',
-        tiles: [
-          'https://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
-          'https://b.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
-          'https://c.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
-          'https://d.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png'
-        ],
-        tileSize: 256,
-        attribution: '&copy; <a href="https://www.openstreetmap.org" target="_blank">OpenStreetMap</a> contributors | &copy; <a href="https://carto.com/attributions" target="_blank">CARTO</a>'
-      }
-    },
-    layers: [
-      {
-        id: 'carto-light-layer',
-        type: 'raster',
-        source: 'carto-light'
-      }
-    ]
+  let baseMaps = {
+    "Straßenkarte": mixed,
+    "Luftbild": basemapAtOrthofoto,
+    "CyclOSM": cyclosm,
+    "OpenCycleMap": ocm,
+    //"OpenStreetMap": osm,
+    "Weiß": empty,
   };
-}
-
-function initializeSidebar() {
-  // Manual sidebar implementation since we're not using leaflet-sidebar
-  const sidebar = document.getElementById('sidebar');
-  const tabs = sidebar.querySelectorAll('[role="tab"]');
-  const panes = sidebar.querySelectorAll('.leaflet-sidebar-pane');
-  
-  // Add click handlers for tabs
-  tabs.forEach(tab => {
-    tab.addEventListener('click', (e) => {
-      e.preventDefault();
-      const targetId = tab.getAttribute('href').substring(1);
-      
-      // Remove active from all tabs and panes
-      tabs.forEach(t => t.parentElement.classList.remove('active'));
-      panes.forEach(p => p.classList.remove('active'));
-      
-      // Add active to clicked tab and corresponding pane
-      tab.parentElement.classList.add('active');
-      document.getElementById(targetId).classList.add('active');
-    });
-  });
-  
-  // Add close button functionality
-  const closeBtns = sidebar.querySelectorAll('.leaflet-sidebar-close');
-  closeBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      if (window.innerWidth < rkGlobal.fullWidthThreshold) {
-        sidebar.style.transform = 'translateX(-100%)';
-      }
-    });
-  });
-  
-  // Show sidebar by default on desktop
-  if (window.innerWidth >= rkGlobal.fullWidthThreshold) {
-    sidebar.style.transform = 'translateX(0)';
-  } else {
-    sidebar.style.transform = 'translateX(-100%)';
+  let overlayMaps = {
+    "Problemstellen": rkGlobal.poiLayers.problemLayerActive,
+    "Leihräder": rkGlobal.poiLayers.bikeShareLayer
+  };
+  for (const [k, v] of Object.entries(rkGlobal.osmPoiTypes)) {
+    overlayMaps[v.layerName] = v.layer;
   }
-}
 
-function initializeMapControls() {
-  // Add zoom controls
-  rkGlobal.map.addControl(new maplibregl.NavigationControl(), 'top-right');
-  
-  // Add scale control
-  rkGlobal.map.addControl(new maplibregl.ScaleControl({
-    maxWidth: 200,
-    unit: 'metric'
-  }), 'top-left');
-  
-  // Add geolocate control
-  rkGlobal.map.addControl(new maplibregl.GeolocateControl({
-    positionOptions: {
-      enableHighAccuracy: true
-    },
-    trackUserLocation: true,
-    showUserHeading: true
-  }), 'top-right');
-}
+  mixed.addTo(rkGlobal.leafletMap);
+  // default overlays are added via the customized leaflet-hash (see L.Hash.parseHash)
+  // rkGlobal.poiLayers.problemLayerActive.addTo(rkGlobal.leafletMap);
+  L.control.layers(baseMaps, overlayMaps, { 'position': 'topright', 'collapsed': true }).addTo(rkGlobal.leafletMap);
 
-function initializeDataLoading() {
-  // Load default region (Wien) when map is loaded
-  rkGlobal.map.on('load', () => {
-    // TODO: Load Vienna data by default
-    console.log('Map loaded, ready to load data');
+  rkGlobal.leafletMap.on({
+    overlayadd: function (e) {
+      let configuration = rkGlobal.configurations[rkGlobal.currentRegion];
+      if (e.layer === rkGlobal.poiLayers.bikeShareLayer) {
+        clearAndLoadNextbike(configuration.nextbikeUrl);
+      }
+      for (const [k, v] of Object.entries(rkGlobal.osmPoiTypes)) {
+        if (e.layer === v.layer) {
+          clearAndLoadOsmPois([k]);
+        }
+      }
+    }
   });
+
+  rkGlobal.geocodingControl = L.Control.geocoder({
+    position: 'topright',
+    placeholder: 'Adresssuche',
+    errorMessage: 'Leider nicht gefunden',
+    geocoder: L.Control.Geocoder.opencage({
+      apiKey: "657bf10308f144c7a9cbb7675c9b0d36",
+      geocodingQueryParams: {
+        countrycode: 'at',
+        language: 'de'
+        // bounds are set whenever a JSON is read (min lon, min lat, max lon, max lat)
+      }
+    }),
+    defaultMarkGeocode: false
+  }).on('markgeocode', function (e) {
+    let result = e.geocode || e;
+    debug(result);
+
+    let resultText = result.name;
+    resultText = resultText.replace(/, Österreich$/, "").replace(/, /g, "<br/>");
+    L.popup({
+      autoClose: false,
+      closeOnClick: false,
+      closeButton: true
+    }).setLatLng(result.center).setContent(resultText).openOn(rkGlobal.leafletMap);
+
+    let roughlyHalfPopupWidth = 100; // TODO ideally get the real width of the popup
+    let topLeft = L.point(document.querySelector('#sidebar').offsetWidth + roughlyHalfPopupWidth, 0);
+    let bottomRight = L.point(document.querySelector('#radlobby-logo').offsetWidth + roughlyHalfPopupWidth, document.querySelector('#radlobby-logo').offsetHeight);
+    rkGlobal.leafletMap.panInside(result.center, { "paddingTopLeft": topLeft, "paddingBottomRight": bottomRight });
+  }).addTo(rkGlobal.leafletMap);
+
+  L.control.locate({
+    position: 'topright',
+    setView: 'untilPan',
+    flyTo: true,
+    //markerStyle: { weight: 5 },
+    locateOptions: {
+      enableHighAccuracy: true,
+      watch: true,
+      maxZoom: 16
+    },
+    strings: {
+      title: 'Verfolge Position'
+    }
+  }).addTo(rkGlobal.leafletMap);
+
+  L.control.zoom({ position: 'topright' }).addTo(rkGlobal.leafletMap);
+
+  L.control.scale({ position: 'topleft', imperial: false, maxWidth: 200 }).addTo(rkGlobal.leafletMap);
+
+  let sidebar = L.control.sidebar({
+    container: 'sidebar',
+    position: 'left'
+  }).addTo(rkGlobal.leafletMap);
+  if (window.innerWidth < rkGlobal.fullWidthThreshold) {
+    sidebar.close();
+  }
+
+  initializeIcons();
+
+  // initialize hash, this causes loading of the default region
+  // and positioning of the map
+  new L.Hash(rkGlobal.leafletMap);
 }
 
 function initializeIcons() {
   rkGlobal.icons = {};
-  // For MapLibre, we'll store icon configurations instead of Leaflet icon objects
-  rkGlobal.icons.dismount = {
-    url: 'css/dismount.svg',
-    size: [33, 29],
-    anchor: [16.5, 14.5]
-  };
-  rkGlobal.icons.warning = {
-    url: 'css/warning.svg',
-    size: [33, 29],
-    anchor: [16.5, 14.5]
-  };
-  rkGlobal.icons.noCargo = {
-    url: 'css/nocargo.svg',
-    size: [29, 29],
-    anchor: [14.5, 14.5]
-  };
-  rkGlobal.icons.noCargoAndDismount = {
-    url: 'css/nocargo+dismount.svg',
-    size: [57.7, 29],
-    anchor: [28.85, 14.5]
-  };
-  rkGlobal.icons.redDot = {
-    url: 'css/reddot.svg',
-    size: [10, 10],
-    anchor: [5, 5]
-  };
+  rkGlobal.icons.dismount = L.icon({
+    iconUrl: 'css/dismount.svg',
+    iconSize: [33, 29],
+    iconAnchor: [16.5, 14.5],
+    popupAnchor: [0, -14.5]
+  });
+  rkGlobal.icons.warning = L.icon({
+    iconUrl: 'css/warning.svg',
+    iconSize: [33, 29],
+    iconAnchor: [16.5, 14.5],
+    popupAnchor: [0, -14.5]
+  });
+  rkGlobal.icons.noCargo = L.icon({
+    iconUrl: 'css/nocargo.svg',
+    iconSize: [29, 29],
+    iconAnchor: [14.5, 14.5],
+    popupAnchor: [0, -14.5]
+  });
+  rkGlobal.icons.noCargoAndDismount = L.icon({
+    iconUrl: 'css/nocargo+dismount.svg',
+    iconSize: [57.7, 29],
+    iconAnchor: [28.85, 14.5],
+    popupAnchor: [0, -14.5]
+  });
+  rkGlobal.icons.redDot = L.icon({
+    iconUrl: 'css/reddot.svg',
+    iconSize: [10, 10],
+    iconAnchor: [5, 5],
+    popupAnchor: [0, -5]
+  });
+  rkGlobal.icons.swimming = L.icon({
+    iconUrl: 'css/swimming.svg',
+    iconSize: [29, 29],
+    iconAnchor: [14.5, 14.5],
+    popupAnchor: [0, -14.5]
+  });
+  rkGlobal.icons.swimmingSmall = L.icon({
+    iconUrl: 'css/swimming_small.svg',
+    iconSize: [10, 10],
+    iconAnchor: [5, 5],
+    popupAnchor: [0, -5]
+  });
+  let subwaySize = 15;
+  rkGlobal.icons.subway = L.icon({
+    iconUrl: 'css/subway.svg',
+    iconSize: [subwaySize, subwaySize],
+    iconAnchor: [subwaySize / 2, subwaySize / 2],
+    popupAnchor: [0, -subwaySize / 2]
+  });
+  rkGlobal.icons.sbahn = L.icon({
+    iconUrl: 'css/sbahn.svg',
+    iconSize: [subwaySize, subwaySize],
+    iconAnchor: [subwaySize / 2, subwaySize / 2],
+    popupAnchor: [0, -subwaySize / 2]
+  });
+  let railwaySize = 20;
+  rkGlobal.icons.railway = L.icon({
+    iconUrl: 'css/railway.svg',
+    iconSize: [railwaySize, railwaySize],
+    iconAnchor: [railwaySize / 2, railwaySize / 2],
+    popupAnchor: [0, -railwaySize / 2]
+  });
+
+  rkGlobal.icons.nextbike = createMarkerIcon('css/nextbike.svg');
+  rkGlobal.icons.nextbikeGray = createMarkerIcon('css/nextbike-gray.svg');
+  rkGlobal.icons.wienmobilrad = createMarkerIcon('css/wienmobilrad.svg');
+  rkGlobal.icons.wienmobilradGray = createMarkerIcon('css/wienmobilrad-gray.svg');
+  rkGlobal.icons.citybikelinz = createMarkerIcon('css/citybikelinz.svg');
+  rkGlobal.icons.citybikelinzGray = createMarkerIcon('css/citybikelinz-gray.svg');
+  rkGlobal.icons.bicycleShop = createMarkerIcon('css/bicycleShop.svg');
+  rkGlobal.icons.bicycleShopGray = createMarkerIcon('css/bicycleShop-gray.svg');
+  rkGlobal.icons.bicycleRepairStation = createMarkerIcon('css/bicycleRepairStation.svg');
+  rkGlobal.icons.bicycleRepairStationGray = createMarkerIcon('css/bicycleRepairStation-gray.svg');
+  rkGlobal.icons.bicyclePump = createMarkerIcon('css/bicyclePump.svg');
+  rkGlobal.icons.bicyclePumpGray = createMarkerIcon('css/bicyclePump-gray.svg');
+  rkGlobal.icons.bicycleTubeVending = createMarkerIcon('css/bicycleTubeVending.svg');
+  rkGlobal.icons.bicycleTubeVendingGray = createMarkerIcon('css/bicycleTubeVending-gray.svg');
+  rkGlobal.icons.drinkingWater = createMarkerIcon('css/drinkingWater.svg');
+  rkGlobal.icons.drinkingWaterGray = createMarkerIcon('css/drinkingWater-gray.svg');
 }
 
 function createMarkerIcon(url) {
