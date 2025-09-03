@@ -156,17 +156,26 @@ function initializeSidebar() {
   closeBtns.forEach(btn => {
     btn.addEventListener('click', () => {
       if (window.innerWidth < rkGlobal.fullWidthThreshold) {
-        sidebar.style.transform = 'translateX(-100%)';
+        sidebar.classList.remove('open');
       }
     });
   });
   
   // Show sidebar by default on desktop
   if (window.innerWidth >= rkGlobal.fullWidthThreshold) {
-    sidebar.style.transform = 'translateX(0)';
+    sidebar.classList.add('open');
   } else {
-    sidebar.style.transform = 'translateX(-100%)';
+    sidebar.classList.remove('open');
   }
+  
+  // Handle window resize
+  window.addEventListener('resize', () => {
+    if (window.innerWidth >= rkGlobal.fullWidthThreshold) {
+      sidebar.classList.add('open');
+    } else {
+      sidebar.classList.remove('open');
+    }
+  });
 }
 
 function initializeMapControls() {
@@ -200,6 +209,12 @@ function initializeDataLoading() {
     // Initialize icons after map is loaded
     initializeIcons();
   });
+}
+
+function initializeIcons() {
+  // Placeholder function for icon initialization
+  // TODO: Implement icon loading for MapLibre GL JS if needed
+  console.log('Icons initialized (placeholder)');
 }
 
 function debug(obj) {
@@ -253,7 +268,7 @@ function removeAllSegmentsAndMarkers() {
   }
   
   // Remove route layers
-  ['bike-routes-main', 'bike-routes-secondary', 'bike-routes-arrows', 'problem-markers-layer'].forEach(layerId => {
+  ['bike-routes-main', 'bike-routes-main-unpaved', 'bike-routes-secondary', 'bike-routes-secondary-unpaved', 'bike-routes-arrows', 'problem-markers-layer'].forEach(layerId => {
     if (rkGlobal.map.getLayer(layerId)) {
       rkGlobal.map.removeLayer(layerId);
     }
@@ -318,12 +333,15 @@ function addBikeRoutesToMap(bikeRoutes) {
     data: bikeRoutes
   });
   
-  // Add main routes layer (priority 0)
+  // Add main routes layer (priority 0) - paved roads
   rkGlobal.map.addLayer({
     id: 'bike-routes-main',
     type: 'line',
     source: 'bike-routes',
-    filter: ['==', ['get', 'priority'], '0'],
+    filter: ['all', 
+      ['==', ['get', 'priority'], '0'],
+      ['!=', ['get', 'unpaved'], 'yes']
+    ],
     paint: {
       'line-width': [
         'interpolate',
@@ -340,21 +358,78 @@ function addBikeRoutesToMap(bikeRoutes) {
         ['==', ['get', 'stress'], '2'], rkGlobal.colors[2], // stressful - orange
         rkGlobal.colors[1] // default
       ],
-      'line-opacity': rkGlobal.opacity,
-      'line-dasharray': [
-        'case',
-        ['==', ['get', 'unpaved'], 'yes'], ['literal', [3, 3]], // dashed for unpaved
-        ['literal', [1, 0]] // solid
-      ]
+      'line-opacity': rkGlobal.opacity
     }
   });
   
-  // Add secondary routes layer (priority 1)
+  // Add main routes layer (priority 0) - unpaved roads (dashed)
+  rkGlobal.map.addLayer({
+    id: 'bike-routes-main-unpaved',
+    type: 'line',
+    source: 'bike-routes',
+    filter: ['all', 
+      ['==', ['get', 'priority'], '0'],
+      ['==', ['get', 'unpaved'], 'yes']
+    ],
+    paint: {
+      'line-width': [
+        'interpolate',
+        ['linear'],
+        ['zoom'],
+        10, 3,
+        15, 6,
+        18, 12
+      ],
+      'line-color': [
+        'case',
+        ['==', ['get', 'stress'], '0'], rkGlobal.colors[0],
+        ['==', ['get', 'stress'], '1'], rkGlobal.colors[1],
+        ['==', ['get', 'stress'], '2'], rkGlobal.colors[2],
+        rkGlobal.colors[1]
+      ],
+      'line-opacity': rkGlobal.opacity,
+      'line-dasharray': [3, 3]
+    }
+  });
+  
+  // Add secondary routes layer (priority 1) - paved roads
   rkGlobal.map.addLayer({
     id: 'bike-routes-secondary',
     type: 'line',
     source: 'bike-routes',
-    filter: ['==', ['get', 'priority'], '1'],
+    filter: ['all', 
+      ['==', ['get', 'priority'], '1'],
+      ['!=', ['get', 'unpaved'], 'yes']
+    ],
+    paint: {
+      'line-width': [
+        'interpolate',
+        ['linear'],
+        ['zoom'],
+        10, 1.5,
+        15, 3,
+        18, 6
+      ],
+      'line-color': [
+        'case',
+        ['==', ['get', 'stress'], '0'], rkGlobal.colors[0],
+        ['==', ['get', 'stress'], '1'], rkGlobal.colors[1],
+        ['==', ['get', 'stress'], '2'], rkGlobal.colors[2],
+        rkGlobal.colors[1]
+      ],
+      'line-opacity': rkGlobal.opacity
+    }
+  });
+  
+  // Add secondary routes layer (priority 1) - unpaved roads (dashed)
+  rkGlobal.map.addLayer({
+    id: 'bike-routes-secondary-unpaved',
+    type: 'line',
+    source: 'bike-routes',
+    filter: ['all', 
+      ['==', ['get', 'priority'], '1'],
+      ['==', ['get', 'unpaved'], 'yes']
+    ],
     paint: {
       'line-width': [
         'interpolate',
@@ -372,11 +447,7 @@ function addBikeRoutesToMap(bikeRoutes) {
         rkGlobal.colors[1]
       ],
       'line-opacity': rkGlobal.opacity,
-      'line-dasharray': [
-        'case',
-        ['==', ['get', 'unpaved'], 'yes'], ['literal', [3, 3]],
-        ['literal', [1, 0]]
-      ]
+      'line-dasharray': [3, 3]
     }
   });
 }
