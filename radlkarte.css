@@ -317,3 +317,76 @@ span.transitLine {
 - #A2C8D3 Sekundärfarbe (Hellblau)
 - #FF6600 Sekundärfarbe (Orange)
 */
+
+/* Layer Control Styling */
+.layer-control {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 1000;
+  background: white;
+  border-radius: 5px;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.4);
+  font-family: "Museo Sans", sans-serif;
+  font-size: 14px;
+}
+
+.layer-control-toggle {
+  padding: 8px;
+  cursor: pointer;
+  background: white;
+  border-radius: 5px;
+  border: 2px solid #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.layer-control-toggle:hover {
+  background: #f4f4f4;
+}
+
+.layer-control-content {
+  display: none;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  min-width: 200px;
+  background: white;
+  border-radius: 5px;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.4);
+  padding: 10px;
+  margin-top: 5px;
+}
+
+.layer-control.expanded .layer-control-content {
+  display: block;
+}
+
+.layer-control-section {
+  margin-bottom: 10px;
+}
+
+.layer-control-section h4 {
+  margin: 0 0 5px 0;
+  font-size: 12px;
+  font-weight: bold;
+  color: #004B67;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 3px;
+}
+
+.layer-control-section label {
+  display: block;
+  padding: 3px 0;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.layer-control-section label:hover {
+  color: #004B67;
+}
+
+.layer-control-section input[type="checkbox"] {
+  margin-right: 5px;
+}

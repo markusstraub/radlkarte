@@ -209,6 +209,13 @@ function initializeDataLoading() {
     // Initialize icons after map is loaded
     initializeIcons();
   });
+  
+  // Add zoom event listener to update layer visibility
+  rkGlobal.map.on('zoom', updateLayerVisibility);
+  rkGlobal.map.on('zoomend', updateLayerVisibility);
+  
+  // Initialize layer control
+  initializeLayerControl();
 }
 
 function initializeIcons() {
@@ -430,6 +437,9 @@ function addBikeRoutesToMap(bikeRoutes) {
       ['==', ['get', 'priority'], '1'],
       ['==', ['get', 'unpaved'], 'yes']
     ],
+    layout: {
+      'visibility': 'visible'
+    },
     paint: {
       'line-width': [
         'interpolate',
@@ -450,6 +460,74 @@ function addBikeRoutesToMap(bikeRoutes) {
       'line-dasharray': [3, 3]
     }
   });
+  
+  // Add local routes layer (priority 2) - paved roads
+  rkGlobal.map.addLayer({
+    id: 'bike-routes-local',
+    type: 'line',
+    source: 'bike-routes',
+    filter: ['all', 
+      ['==', ['get', 'priority'], '2'],
+      ['!=', ['get', 'unpaved'], 'yes']
+    ],
+    layout: {
+      'visibility': 'visible'
+    },
+    paint: {
+      'line-width': [
+        'interpolate',
+        ['linear'],
+        ['zoom'],
+        10, 0.8,
+        15, 1.5,
+        18, 3
+      ],
+      'line-color': [
+        'case',
+        ['==', ['get', 'stress'], '0'], rkGlobal.colors[0],
+        ['==', ['get', 'stress'], '1'], rkGlobal.colors[1],
+        ['==', ['get', 'stress'], '2'], rkGlobal.colors[2],
+        rkGlobal.colors[1]
+      ],
+      'line-opacity': rkGlobal.opacity
+    }
+  });
+  
+  // Add local routes layer (priority 2) - unpaved roads (dashed)
+  rkGlobal.map.addLayer({
+    id: 'bike-routes-local-unpaved',
+    type: 'line',
+    source: 'bike-routes',
+    filter: ['all', 
+      ['==', ['get', 'priority'], '2'],
+      ['==', ['get', 'unpaved'], 'yes']
+    ],
+    layout: {
+      'visibility': 'visible'
+    },
+    paint: {
+      'line-width': [
+        'interpolate',
+        ['linear'],
+        ['zoom'],
+        10, 0.8,
+        15, 1.5,
+        18, 3
+      ],
+      'line-color': [
+        'case',
+        ['==', ['get', 'stress'], '0'], rkGlobal.colors[0],
+        ['==', ['get', 'stress'], '1'], rkGlobal.colors[1],
+        ['==', ['get', 'stress'], '2'], rkGlobal.colors[2],
+        rkGlobal.colors[1]
+      ],
+      'line-opacity': rkGlobal.opacity,
+      'line-dasharray': [3, 3]
+    }
+  });
+  
+  // Update layer visibility based on current zoom level
+  updateLayerVisibility();
 }
 
 function addProblemMarkersToMap(problemMarkers) {
@@ -506,6 +584,217 @@ function getProblemIcons(properties) {
       large: problemIcon
     };
   }
+}
+
+/**
+ * Updates layer visibility based on current zoom level.
+ * Mimics the original Leaflet updateStyles function behavior.
+ */
+function updateLayerVisibility() {
+  const zoom = rkGlobal.map.getZoom();
+  
+  // Priority visibility rules (matching original Leaflet behavior):
+  // Priority 0 (Überregional): fully visible from zoom 0, reduced from zoom 0 (always visible)
+  // Priority 1 (Regional): fully visible from zoom 14, reduced from zoom 12
+  // Priority 2 (Lokal): fully visible from zoom 15, reduced from zoom 14
+  
+  // Priority 0 layers (main routes) - always visible
+  setLayerVisibility('bike-routes-main', true);
+  setLayerVisibility('bike-routes-main-unpaved', true);
+  
+  // Priority 1 layers (secondary routes) - visible from zoom 12+
+  const showSecondary = zoom >= rkGlobal.priorityReducedVisibilityFromZoom[1]; // zoom 12+
+  setLayerVisibility('bike-routes-secondary', showSecondary);
+  setLayerVisibility('bike-routes-secondary-unpaved', showSecondary);
+  
+  // Priority 2 layers (local routes) - visible from zoom 14+
+  const showLocal = zoom >= rkGlobal.priorityReducedVisibilityFromZoom[2]; // zoom 14+
+  setLayerVisibility('bike-routes-local', showLocal);
+  setLayerVisibility('bike-routes-local-unpaved', showLocal);
+}
+
+/**
+ * Helper function to set layer visibility
+ */
+function setLayerVisibility(layerId, visible) {
+  if (rkGlobal.map.getLayer(layerId)) {
+    rkGlobal.map.setLayoutProperty(layerId, 'visibility', visible ? 'visible' : 'none');
+  }
+}
+
+/**
+ * Initialize the layer control functionality
+ */
+function initializeLayerControl() {
+  const control = document.getElementById('layer-control');
+  const toggle = control.querySelector('.layer-control-toggle');
+  
+  // Toggle layer control visibility
+  toggle.addEventListener('click', function() {
+    control.classList.toggle('expanded');
+  });
+  
+  // Close when clicking outside
+  document.addEventListener('click', function(e) {
+    if (!control.contains(e.target)) {
+      control.classList.remove('expanded');
+    }
+  });
+  
+  // Handle layer checkbox changes
+  const layerCheckboxes = {
+    'layer-problems': 'problem-markers-layer',
+    'layer-transit': 'poi-transit',
+    'layer-bicycleShop': 'poi-bicycleShop', 
+    'layer-bicycleRepairStation': 'poi-bicycleRepairStation',
+    'layer-bicyclePump': 'poi-bicyclePump',
+    'layer-bicycleTubeVending': 'poi-bicycleTubeVending',
+    'layer-drinkingWater': 'poi-drinkingWater'
+  };
+  
+  Object.entries(layerCheckboxes).forEach(([checkboxId, layerId]) => {
+    const checkbox = document.getElementById(checkboxId);
+    if (checkbox) {
+      checkbox.addEventListener('change', function() {
+        togglePoiLayer(layerId, checkbox.checked);
+      });
+    }
+  });
+}
+
+/**
+ * Toggle POI layer visibility and load data if needed
+ */
+function togglePoiLayer(layerId, visible) {
+  if (layerId === 'problem-markers-layer') {
+    // Problem markers are already loaded
+    setLayerVisibility(layerId, visible);
+    return;
+  }
+  
+  if (visible) {
+    // Load POI data if not already loaded
+    const poiType = layerId.replace('poi-', '');
+    loadPoiData(poiType);
+  } else {
+    // Hide layer
+    setLayerVisibility(layerId, false);
+  }
+}
+
+/**
+ * Load POI data for a specific type
+ */
+async function loadPoiData(poiType) {
+  if (!rkGlobal.currentRegion) {
+    console.warn('No region selected, cannot load POI data');
+    return;
+  }
+  
+  const poiFile = `data/osm-overpass/${rkGlobal.currentRegion}-${poiType}.json`;
+  
+  try {
+    const response = await fetch(poiFile);
+    if (!response.ok) {
+      console.warn(`POI file not found: ${poiFile}`);
+      return;
+    }
+    
+    const data = await response.json();
+    createPoiLayer(poiType, data);
+  } catch (error) {
+    console.warn(`Error loading POI data for ${poiType}:`, error);
+  }
+}
+
+/**
+ * Create MapLibre layer for POI data
+ */
+function createPoiLayer(poiType, data) {
+  const layerId = `poi-${poiType}`;
+  const sourceId = `source-${poiType}`;
+  
+  // Convert OSM Overpass data to GeoJSON
+  const geojsonData = {
+    type: "FeatureCollection",
+    features: data.elements
+      .filter(element => element.lat && element.lon)
+      .map(element => ({
+        type: "Feature",
+        geometry: {
+          type: "Point",
+          coordinates: [element.lon, element.lat]
+        },
+        properties: {
+          ...element.tags,
+          osmId: element.id,
+          osmType: element.type
+        }
+      }))
+  };
+  
+  // Remove existing source and layer if they exist
+  if (rkGlobal.map.getSource(sourceId)) {
+    rkGlobal.map.removeLayer(layerId);
+    rkGlobal.map.removeSource(sourceId);
+  }
+  
+  // Add source
+  rkGlobal.map.addSource(sourceId, {
+    type: 'geojson',
+    data: geojsonData
+  });
+  
+  // Add layer - use circle symbol for now since we don't have the POI icons loaded yet
+  rkGlobal.map.addLayer({
+    id: layerId,
+    type: 'circle',
+    source: sourceId,
+    layout: {
+      'visibility': 'visible'
+    },
+    paint: {
+      'circle-radius': 6,
+      'circle-color': getPoiColor(poiType),
+      'circle-stroke-color': '#fff',
+      'circle-stroke-width': 1,
+      'circle-opacity': 0.8
+    }
+  });
+  
+  console.log(`Added POI layer: ${layerId} with ${geojsonData.features.length} features`);
+}
+
+/**
+ * Get color for POI type (temporary until we have proper icons)
+ */
+function getPoiColor(poiType) {
+  const colorMap = {
+    'transit': '#004B67',     // Dark blue for transit
+    'bicycleShop': '#B8CC24',  // Green for bike shops
+    'bicycleRepairStation': '#51A4B6', // Light blue for repair
+    'bicyclePump': '#FF6600',  // Orange for pumps
+    'bicycleTubeVending': '#A2C8D3', // Light blue for vending
+    'drinkingWater': '#51A4B6' // Blue for water
+  };
+  
+  return colorMap[poiType] || '#666666';
+}
+
+/**
+ * Get icon name for POI type
+ */
+function getPoiIcon(poiType) {
+  const iconMap = {
+    'transit': 'subway-icon',
+    'bicycleShop': 'bicycle-shop-icon',
+    'bicycleRepairStation': 'repair-station-icon',
+    'bicyclePump': 'pump-icon',
+    'bicycleTubeVending': 'tube-vending-icon',
+    'drinkingWater': 'water-icon'
+  };
+  
+  return iconMap[poiType] || 'default-poi-icon';
 }
 
 /**
