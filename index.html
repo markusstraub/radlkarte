@@ -120,6 +120,15 @@
         },
         getLayer: function(id) {
           return this._layers.find(l => l.id === id);
+        },
+        setLayoutProperty: function(layerId, property, value) {
+          console.log('MapLibre fallback: Setting layout property:', layerId, property, value);
+          const layer = this._layers.find(l => l.id === layerId);
+          if (layer) {
+            if (!layer.layout) layer.layout = {};
+            layer.layout[property] = value;
+          }
+          return this;
         }
       };
     }
