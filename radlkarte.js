@@ -106,6 +106,7 @@ function loadMapLibre() {
 function createBaseMapStyle() {
   return {
     version: 8,
+    glyphs: 'https://demotiles.maplibre.org/font/{fontstack}/{range}.pbf',
     sources: {
       'carto-light': {
         type: 'raster',
@@ -669,7 +670,7 @@ function addOnewayArrowLayers() {
       'visibility': 'visible',
       'symbol-placement': 'line',
       'text-field': '▶',
-      'text-font': ['Arial Unicode MS Regular'],
+      'text-font': ['Open Sans Semibold', 'Arial Unicode MS Regular'],
       'text-size': [
         'interpolate',
         ['linear'],
@@ -714,7 +715,7 @@ function addOnewayArrowLayers() {
       'visibility': 'visible',
       'symbol-placement': 'line',
       'text-field': '▶',
-      'text-font': ['Arial Unicode MS Regular'],
+      'text-font': ['Open Sans Semibold', 'Arial Unicode MS Regular'],
       'text-size': [
         'interpolate',
         ['linear'],
@@ -759,7 +760,7 @@ function addOnewayArrowLayers() {
       'visibility': 'visible',
       'symbol-placement': 'line',
       'text-field': '▶',
-      'text-font': ['Arial Unicode MS Regular'],
+      'text-font': ['Open Sans Semibold', 'Arial Unicode MS Regular'],
       'text-size': [
         'interpolate',
         ['linear'],
