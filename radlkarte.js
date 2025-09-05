@@ -275,7 +275,10 @@ function removeAllSegmentsAndMarkers() {
   }
   
   // Remove route layers
-  ['bike-routes-main', 'bike-routes-main-unpaved', 'bike-routes-secondary', 'bike-routes-secondary-unpaved', 'bike-routes-arrows', 'problem-markers-layer'].forEach(layerId => {
+  ['bike-routes-main', 'bike-routes-main-unpaved', 'bike-routes-secondary', 'bike-routes-secondary-unpaved', 
+   'bike-routes-local', 'bike-routes-local-unpaved', 'bike-routes-main-steep', 'bike-routes-secondary-steep', 
+   'bike-routes-local-steep', 'bike-routes-main-arrows', 'bike-routes-secondary-arrows', 'bike-routes-local-arrows', 
+   'problem-markers-layer'].forEach(layerId => {
     if (rkGlobal.map.getLayer(layerId)) {
       rkGlobal.map.removeLayer(layerId);
     }
@@ -525,9 +528,268 @@ function addBikeRoutesToMap(bikeRoutes) {
       'line-dasharray': [3, 3]
     }
   });
+
+  // Add steep sections overlay layers (bristles effect)
+  addSteepSectionLayers();
+  
+  // Add oneway arrow layers
+  addOnewayArrowLayers();
   
   // Update layer visibility based on current zoom level
   updateLayerVisibility();
+}
+
+function addSteepSectionLayers() {
+  // For steep sections (bristles), MapLibre GL JS doesn't have direct equivalent to Leaflet's bristle patterns
+  // Original Leaflet used getSteepDashStyle() with special dashArray and dashOffset for bristle effect
+  // MapLibre alternatives implemented:
+  // 1. Short dash patterns to simulate bristles (current implementation)
+  // 2. Alternative: thicker lines with different colors for steep sections
+  // 3. Alternative: double lines or dotted patterns
+  
+  // Add steep section layers (bristles effect using perpendicular dash pattern)
+  // Priority 0 (main) steep sections
+  rkGlobal.map.addLayer({
+    id: 'bike-routes-main-steep',
+    type: 'line',
+    source: 'bike-routes',
+    filter: ['all', 
+      ['==', ['get', 'priority'], '0'],
+      ['==', ['get', 'steep'], 'yes']
+    ],
+    layout: {
+      'visibility': 'visible'
+    },
+    paint: {
+      'line-width': [
+        'interpolate',
+        ['linear'],
+        ['zoom'],
+        10, 6,
+        15, 12,
+        18, 24
+      ],
+      'line-color': [
+        'case',
+        ['==', ['get', 'stress'], '0'], rkGlobal.colors[0],
+        ['==', ['get', 'stress'], '1'], rkGlobal.colors[1],
+        ['==', ['get', 'stress'], '2'], rkGlobal.colors[2],
+        rkGlobal.colors[1]
+      ],
+      'line-opacity': rkGlobal.opacity,
+      'line-dasharray': [0.5, 2] // Short dashes to create bristle effect
+    }
+  });
+
+  // Priority 1 (secondary) steep sections
+  rkGlobal.map.addLayer({
+    id: 'bike-routes-secondary-steep',
+    type: 'line',
+    source: 'bike-routes',
+    filter: ['all', 
+      ['==', ['get', 'priority'], '1'],
+      ['==', ['get', 'steep'], 'yes']
+    ],
+    layout: {
+      'visibility': 'visible'
+    },
+    paint: {
+      'line-width': [
+        'interpolate',
+        ['linear'],
+        ['zoom'],
+        10, 3,
+        15, 6,
+        18, 12
+      ],
+      'line-color': [
+        'case',
+        ['==', ['get', 'stress'], '0'], rkGlobal.colors[0],
+        ['==', ['get', 'stress'], '1'], rkGlobal.colors[1],
+        ['==', ['get', 'stress'], '2'], rkGlobal.colors[2],
+        rkGlobal.colors[1]
+      ],
+      'line-opacity': rkGlobal.opacity,
+      'line-dasharray': [0.5, 2] // Short bristles
+    }
+  });
+
+  // Priority 2 (local) steep sections
+  rkGlobal.map.addLayer({
+    id: 'bike-routes-local-steep',
+    type: 'line',
+    source: 'bike-routes',
+    filter: ['all', 
+      ['==', ['get', 'priority'], '2'],
+      ['==', ['get', 'steep'], 'yes']
+    ],
+    layout: {
+      'visibility': 'visible'
+    },
+    paint: {
+      'line-width': [
+        'interpolate',
+        ['linear'],
+        ['zoom'],
+        10, 1.6,
+        15, 3,
+        18, 6
+      ],
+      'line-color': [
+        'case',
+        ['==', ['get', 'stress'], '0'], rkGlobal.colors[0],
+        ['==', ['get', 'stress'], '1'], rkGlobal.colors[1],
+        ['==', ['get', 'stress'], '2'], rkGlobal.colors[2],
+        rkGlobal.colors[1]
+      ],
+      'line-opacity': rkGlobal.opacity,
+      'line-dasharray': [0.5, 2] // Short bristles
+    }
+  });
+}
+
+function addOnewayArrowLayers() {
+  // For oneway arrows, MapLibre GL JS has limitations compared to Leaflet's polylineDecorator
+  // Original Leaflet used L.polylineDecorator with arrow symbols placed along lines
+  // MapLibre alternatives implemented:
+  // 1. Symbol layer with text arrows (current implementation)
+  // 2. Alternative: asymmetric dash patterns to suggest direction
+  // 3. Alternative: different line weights/colors for oneway roads
+  
+  // Priority 0 (main) oneway arrows
+  rkGlobal.map.addLayer({
+    id: 'bike-routes-main-arrows',
+    type: 'symbol',
+    source: 'bike-routes',
+    filter: ['all', 
+      ['==', ['get', 'priority'], '0'],
+      ['==', ['get', 'oneway'], 'yes']
+    ],
+    layout: {
+      'visibility': 'visible',
+      'symbol-placement': 'line',
+      'text-field': '▶',
+      'text-font': ['Arial Unicode MS Regular'],
+      'text-size': [
+        'interpolate',
+        ['linear'],
+        ['zoom'],
+        10, 8,
+        15, 12,
+        18, 20
+      ],
+      'symbol-spacing': [
+        'interpolate',
+        ['linear'],
+        ['zoom'],
+        10, 50,
+        15, 80,
+        18, 120
+      ],
+      'text-rotation-alignment': 'map',
+      'text-pitch-alignment': 'map'
+    },
+    paint: {
+      'text-color': [
+        'case',
+        ['==', ['get', 'stress'], '0'], rkGlobal.colors[0],
+        ['==', ['get', 'stress'], '1'], rkGlobal.colors[1],
+        ['==', ['get', 'stress'], '2'], rkGlobal.colors[2],
+        rkGlobal.colors[1]
+      ],
+      'text-opacity': rkGlobal.opacity
+    }
+  });
+
+  // Priority 1 (secondary) oneway arrows
+  rkGlobal.map.addLayer({
+    id: 'bike-routes-secondary-arrows',
+    type: 'symbol',
+    source: 'bike-routes',
+    filter: ['all', 
+      ['==', ['get', 'priority'], '1'],
+      ['==', ['get', 'oneway'], 'yes']
+    ],
+    layout: {
+      'visibility': 'visible',
+      'symbol-placement': 'line',
+      'text-field': '▶',
+      'text-font': ['Arial Unicode MS Regular'],
+      'text-size': [
+        'interpolate',
+        ['linear'],
+        ['zoom'],
+        10, 6,
+        15, 10,
+        18, 16
+      ],
+      'symbol-spacing': [
+        'interpolate',
+        ['linear'],
+        ['zoom'],
+        10, 40,
+        15, 60,
+        18, 100
+      ],
+      'text-rotation-alignment': 'map',
+      'text-pitch-alignment': 'map'
+    },
+    paint: {
+      'text-color': [
+        'case',
+        ['==', ['get', 'stress'], '0'], rkGlobal.colors[0],
+        ['==', ['get', 'stress'], '1'], rkGlobal.colors[1],
+        ['==', ['get', 'stress'], '2'], rkGlobal.colors[2],
+        rkGlobal.colors[1]
+      ],
+      'text-opacity': rkGlobal.opacity
+    }
+  });
+
+  // Priority 2 (local) oneway arrows
+  rkGlobal.map.addLayer({
+    id: 'bike-routes-local-arrows',
+    type: 'symbol',
+    source: 'bike-routes',
+    filter: ['all', 
+      ['==', ['get', 'priority'], '2'],
+      ['==', ['get', 'oneway'], 'yes']
+    ],
+    layout: {
+      'visibility': 'visible',
+      'symbol-placement': 'line',
+      'text-field': '▶',
+      'text-font': ['Arial Unicode MS Regular'],
+      'text-size': [
+        'interpolate',
+        ['linear'],
+        ['zoom'],
+        10, 5,
+        15, 8,
+        18, 12
+      ],
+      'symbol-spacing': [
+        'interpolate',
+        ['linear'],
+        ['zoom'],
+        10, 30,
+        15, 50,
+        18, 80
+      ],
+      'text-rotation-alignment': 'map',
+      'text-pitch-alignment': 'map'
+    },
+    paint: {
+      'text-color': [
+        'case',
+        ['==', ['get', 'stress'], '0'], rkGlobal.colors[0],
+        ['==', ['get', 'stress'], '1'], rkGlobal.colors[1],
+        ['==', ['get', 'stress'], '2'], rkGlobal.colors[2],
+        rkGlobal.colors[1]
+      ],
+      'text-opacity': rkGlobal.opacity
+    }
+  });
 }
 
 function addProblemMarkersToMap(problemMarkers) {
@@ -601,16 +863,25 @@ function updateLayerVisibility() {
   // Priority 0 layers (main routes) - always visible
   setLayerVisibility('bike-routes-main', true);
   setLayerVisibility('bike-routes-main-unpaved', true);
+  setLayerVisibility('bike-routes-main-steep', true);
   
   // Priority 1 layers (secondary routes) - visible from zoom 12+
   const showSecondary = zoom >= rkGlobal.priorityReducedVisibilityFromZoom[1]; // zoom 12+
   setLayerVisibility('bike-routes-secondary', showSecondary);
   setLayerVisibility('bike-routes-secondary-unpaved', showSecondary);
+  setLayerVisibility('bike-routes-secondary-steep', showSecondary);
   
   // Priority 2 layers (local routes) - visible from zoom 14+
   const showLocal = zoom >= rkGlobal.priorityReducedVisibilityFromZoom[2]; // zoom 14+
   setLayerVisibility('bike-routes-local', showLocal);
   setLayerVisibility('bike-routes-local-unpaved', showLocal);
+  setLayerVisibility('bike-routes-local-steep', showLocal);
+  
+  // Oneway arrows - only visible from zoom 12+ (matching original rkGlobal.onewayIconThreshold)
+  const showArrows = zoom >= rkGlobal.onewayIconThreshold; // zoom 12+
+  setLayerVisibility('bike-routes-main-arrows', showArrows);
+  setLayerVisibility('bike-routes-secondary-arrows', showArrows && showSecondary);
+  setLayerVisibility('bike-routes-local-arrows', showArrows && showLocal);
 }
 
 /**
