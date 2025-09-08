@@ -54,6 +54,11 @@ rkGlobal.configurations = {
     title: '[DEV] Rendertest',
     centerLatLng: L.latLng(50.09, 14.39),
   },
+  'bruckleitha': {
+    title: 'Bezirk Bruck/Leitha',
+    centerLatLng: L.latLng(48.02, 16.78),
+    nextbikeUrl: 'https://maps.nextbike.net/maps/nextbike.json?domains=la,eq&bikes=false'
+  },
   'klagenfurt': {
     title: 'Klagenfurt',
     centerLatLng: L.latLng(46.62, 14.31),
