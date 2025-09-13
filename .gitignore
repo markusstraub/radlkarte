@@ -1,5 +1,6 @@
 /non_vcs
 /data/osm-overpass
+/spreet
 
 .vscode
 !.vscode/settings.json
