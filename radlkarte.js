@@ -815,6 +815,91 @@ function addProblemMarkersToMap(problemMarkers) {
       'icon-opacity': 0.8
     }
   });
+
+  // Add popup functionality for problem markers
+  addProblemMarkerPopups();
+}
+
+/**
+ * Add popup functionality to problem markers
+ * Shows description on hover (desktop) and tap (mobile)
+ */
+function addProblemMarkerPopups() {
+  let popup = null;
+  let currentFeature = null;
+
+  // Create a popup instance
+  const createPopup = (feature, lngLat) => {
+    const description = getProblemDescriptionText(feature.properties);
+    
+    popup = new maplibregl.Popup({
+      closeButton: false,
+      closeOnClick: false,
+      className: 'problem-marker-popup'
+    })
+      .setLngLat(lngLat)
+      .setHTML(description)
+      .addTo(rkGlobal.map);
+  };
+
+  // Remove existing popup
+  const removePopup = () => {
+    if (popup) {
+      popup.remove();
+      popup = null;
+      currentFeature = null;
+    }
+  };
+
+  // Mouse enter event (hover) - for desktop
+  rkGlobal.map.on('mouseenter', 'problem-markers-layer', (e) => {
+    // Change cursor to pointer
+    rkGlobal.map.getCanvas().style.cursor = 'pointer';
+    
+    // Show popup on hover
+    if (e.features.length > 0) {
+      const feature = e.features[0];
+      currentFeature = feature;
+      createPopup(feature, e.lngLat);
+    }
+  });
+
+  // Mouse leave event - for desktop
+  rkGlobal.map.on('mouseleave', 'problem-markers-layer', () => {
+    // Reset cursor
+    rkGlobal.map.getCanvas().style.cursor = '';
+    
+    // Remove popup on mouse leave
+    removePopup();
+  });
+
+  // Click event - for mobile/touch and desktop as fallback
+  rkGlobal.map.on('click', 'problem-markers-layer', (e) => {
+    if (e.features.length > 0) {
+      const feature = e.features[0];
+      
+      // If popup is already showing for this feature, remove it (toggle behavior)
+      if (currentFeature && currentFeature.id === feature.id) {
+        removePopup();
+      } else {
+        // Show popup for clicked feature
+        removePopup(); // Remove any existing popup first
+        createPopup(feature, e.lngLat);
+        currentFeature = feature;
+      }
+    }
+  });
+
+  // Close popup when clicking elsewhere on the map
+  rkGlobal.map.on('click', (e) => {
+    // Check if click was on the problem markers layer
+    const features = rkGlobal.map.queryRenderedFeatures(e.point, { layers: ['problem-markers-layer'] });
+    
+    // If no problem marker was clicked, remove popup
+    if (features.length === 0) {
+      removePopup();
+    }
+  });
 }
 
 function getProblemIcons(properties) {
