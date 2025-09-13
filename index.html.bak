@@ -4,148 +4,23 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta property="og:title"
-    content="Radlkarte - Entspannt durch den Bezirk Bruck/Leitha, Klagenfurt, Linz, NÖ-Südost, Rheintal, Steyr und Wien & Umgebung" />
+  <meta property="og:title" content="Radlkarte - Entspannt durch Klagenfurt, Linz, Steyr, Wien und das Rheintal" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://www.radlkarte.at" />
   <meta property="og:image" content="https://www.radlkarte.at/css/radlkarte-banner.jpg" />
   <meta property="og:description"
     content="Viele Wege führen zum Ziel. Finden Sie Ihren optimalen Weg durch die Stadt mit der Radlkarte der Radlobby. Auf zu neuen Ufern, unbekannten Gegenden, und neuen Alternativen zu Ihren alltäglichen Routen." />
 
-  <title>Radlkarte - Entspannt durch den Bezirk Bruck/Leitha, Klagenfurt, Linz, NÖ-Südost, Rheintal, Steyr und Wien
-    &amp; Umgebung</title>
+  <title>Radlkarte - Entspannt durch Klagenfurt, Linz, NÖ-Südost, Rheintal, Steyr und Wien</title>
 
-  <!-- MapLibre GL JS - using CDN with local fallback -->
-  <script>
-    // Fallback MapLibre object for testing when CDN is blocked
-    if (typeof maplibregl === 'undefined') {
-      window.maplibregl = {
-        Map: function(options) {
-          console.log('MapLibre fallback: Map created with options:', options);
-          this.container = options.container;
-          this._center = options.center || [0, 0];
-          this._zoom = options.zoom || 0;
-          this._style = options.style;
-          this._listeners = {};
-          this._sources = {};
-          this._layers = [];
-          
-          // Create a div for the map
-          const mapDiv = document.getElementById(this.container);
-          if (mapDiv) {
-            mapDiv.innerHTML = '<div style="width: 100%; height: 100%; background: #f8f8f8; display: flex; align-items: center; justify-content: center; color: #666; flex-direction: column;"><div style="text-align: center;"><h3>MapLibre Map (Fallback Mode)</h3><p>Center: ' + this._center + '</p><p>Zoom: ' + this._zoom + '</p><p id="map-status">Ready to load bike routes...</p></div></div>';
-          }
-          
-          // Simulate map loaded event
-          setTimeout(() => {
-            if (this._listeners.load) {
-              this._listeners.load.forEach(callback => callback());
-            }
-          }, 100);
-          
-          return this;
-        },
-        NavigationControl: function() {
-          console.log('MapLibre fallback: NavigationControl created');
-          return {};
-        },
-        ScaleControl: function(options) {
-          console.log('MapLibre fallback: ScaleControl created with options:', options);
-          return {};
-        },
-        GeolocateControl: function(options) {
-          console.log('MapLibre fallback: GeolocateControl created with options:', options);
-          return {};
-        }
-      };
-      
-      maplibregl.Map.prototype = {
-        on: function(event, callback) {
-          if (!this._listeners[event]) {
-            this._listeners[event] = [];
-          }
-          this._listeners[event].push(callback);
-          return this;
-        },
-        addControl: function(control, position) {
-          console.log('MapLibre fallback: Control added at position:', position);
-          return this;
-        },
-        getCenter: function() {
-          return this._center;
-        },
-        getZoom: function() {
-          return this._zoom;
-        },
-        flyTo: function(options) {
-          console.log('MapLibre fallback: Flying to:', options);
-          this._center = options.center;
-          this._zoom = options.zoom;
-          const status = document.getElementById('map-status');
-          if (status) {
-            status.textContent = `Centered on: ${options.center} (zoom: ${options.zoom})`;
-          }
-          return this;
-        },
-        addSource: function(id, source) {
-          console.log('MapLibre fallback: Adding source:', id, source);
-          this._sources[id] = source;
-          if (source.data && source.data.features) {
-            const status = document.getElementById('map-status');
-            if (status) {
-              status.innerHTML += `<br>Added ${source.data.features.length} features from source: ${id}`;
-            }
-          }
-          return this;
-        },
-        addLayer: function(layer) {
-          console.log('MapLibre fallback: Adding layer:', layer.id, layer);
-          this._layers.push(layer);
-          const status = document.getElementById('map-status');
-          if (status) {
-            status.innerHTML += `<br>Added layer: ${layer.id} (${layer.type})`;
-          }
-          return this;
-        },
-        removeSource: function(id) {
-          console.log('MapLibre fallback: Removing source:', id);
-          delete this._sources[id];
-          return this;
-        },
-        removeLayer: function(id) {
-          console.log('MapLibre fallback: Removing layer:', id);
-          this._layers = this._layers.filter(l => l.id !== id);
-          return this;
-        },
-        getSource: function(id) {
-          return this._sources[id];
-        },
-        getLayer: function(id) {
-          return this._layers.find(l => l.id === id);
-        },
-        setLayoutProperty: function(layerId, property, value) {
-          console.log('MapLibre fallback: Setting layout property:', layerId, property, value);
-          const layer = this._layers.find(l => l.id === layerId);
-          if (layer) {
-            if (!layer.layout) layer.layout = {};
-            layer.layout[property] = value;
-          }
-          return this;
-        }
-      };
-    }
-  </script>
-  <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
-  <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet" />
+  <script src="js/leaflet-1.9.4/leaflet.js"></script>
+  <link rel="stylesheet" href="js/leaflet-1.9.4/leaflet.css" />
 
-  <!-- Commented out during MapLibre migration
   <script src="js/leaflet-sidebar-v2-3.2.3/leaflet-sidebar.min.js"></script>
   <link rel="stylesheet" href="js/leaflet-sidebar-v2-3.2.3/leaflet-sidebar.css" />
-  -->
-  <!-- font awesome is required by sidebar -->
+  <!-- font awesome is required by sidebar & leaflet-locatecontrol-->
   <link rel="stylesheet" href="css/font-awesome-4.7.0/css/font-awesome.min.css" />
 
-  <!-- Commented out during MapLibre migration
   <script src="js/leaflet-polylineDecorator-1.6.0/leaflet.polylineDecorator.js"></script>
 
   <script src="js/leaflet-hash-1.0.1-customized/leaflet-hash.js"></script>
@@ -155,7 +30,6 @@
 
   <script src="js/leaflet-control-geocoder-2.4.0/Control.Geocoder.js"></script>
   <link rel="stylesheet" href="js/leaflet-control-geocoder-2.4.0/Control.Geocoder.css" />
-  -->
 
   <script src="js/turf-2017-02-16/turf.min.js"></script>
 
@@ -218,7 +92,6 @@
           <span class="leaflet-sidebar-close"><i class="fa fa-caret-left"></i></span> Übersicht
         </h2>
         <h3>Entspannt durch
-          <a href="#bruckleitha">Bezirk Bruck/Leitha</a>
           <a href="#klagenfurt">Klagenfurt</a>,
           <a href="#linz">Linz</a>,
           <a href="#noe-suedost">NÖ-Südost</a>,
@@ -294,18 +167,12 @@
         <h2 class="leaflet-sidebar-header">
           <span class="leaflet-sidebar-close"><i class="fa fa-caret-left"></i></span>Neu!
         </h2>
-        <h3>Neue Region: <a href="#bruckleitha">Bezirk Bruck/Leitha</a></h3>
+        <h3>Neue Region: <a href="#noe-suedost">NÖ-Südost</a></h3>
         <p>
-          Dank an die Engagierten im Bezirk sowie <a href="https://www.radlobby.org/noe/bruckleitha/"
-            target="_blank">Radlobby Bruck/Leitha</a>. Die Radlkarte für den Bezirk Bruck/Leitha ist
-          bereit. Jeweils drei Stufen für Qualität und Wichtigkeit vermitteln erstmals eine gute Gesamtübersicht über
-          die ganze Region.
-        </p>
-        <p>
-          Seit Herbst 2025 ist sie öffentlich verfügbar und dient auch als langfristige Basis für die
-          Kommunikation bestehender Alltags-Radfahrqualitäten. Feedback oder Verbesserungsvorschläge zum Netz sind
-          willkommen, bitte per Mail an <a href="mailto:bruckleitha@radlobby.at">bruckleitha@radlobby.at</a>.
-          Gute Fahrt!
+          Dank der <a href="https://www.radlobby.org/noe/radlkarte-at-fuer-wr-neustadt-komplettiert/" target="_blank">Radlobby Wr. Neustadt</a>.
+          Die Radlkarte für Wiener Neustadt ist nun detailliert ausgearbeitet. Jeweils drei Stufen für Qualität und Wichtigkeit vermitteln 
+          eine gute Übersicht nicht nur für Gäste der Stadt und spontan Radfahrende.
+          Sie wird nach öffentlicher Präsentation auch als Basis für hoffentlich konstruktive Zusammenarbeit mit der Stadt dienen.
         </p>
       </div>
 
@@ -530,7 +397,6 @@
           Die Wegenetze stehen im .geojson-Format zum Download zur Verfügung:
         </p>
         <p>
-          <a href="data/radlkarte-bruckleitha.geojson" target="_blank">Bezirk Bruck/Leitha</a><br>
           <a href="data/radlkarte-klagenfurt.geojson" target="_blank">Klagenfurt</a><br>
           <a href="data/radlkarte-linz.geojson" target="_blank">Linz</a><br>
           <a href="data/radlkarte-noe-suedost.geojson" target="_blank">NÖ-Südost</a><br>
@@ -554,22 +420,16 @@
         <p>
           <a href="mailto:radlkarte@radlobby.at?subject=Kommentar%20zur%20Radlkarte">Allgemein</a> <a
             href="https://www.facebook.com/radlkarte" target="_blank">(Facebook)</a><br>
-          <a href="mailto:bruckleitha@radlobby.at?subject=Kommentar%20zur%20Radlkarte%20Bruck/Leitha">Bezirk
-            Bruck/Leitha</a><br>
           <a href="mailto:kaernten@radlobby.at?subject=Kommentar%20zur%20Radlkarte%20Klagenfurt">Klagenfurt</a><br>
           <a href="mailto:linz@radlobby.at?subject=Kommentar%20zur%20Radlkarte%20Linz">Linz</a><br>
           <a href="mailto:schwarzatal@radlobby.at?subject=Kommentar%20zur%20Radlkarte%20Schwarzatal">NÖ-Südost</a><br>
-          <a href="mailto:guenther.hilbe@radlobby.at?subject=Kommentar%20zur%20Radlkarte%20Rheintal">Rheintal (Dornbirn,
-            Hohenems und Umgebung)</a><br>
+          <a href="mailto:guenther.hilbe@radlobby.at?subject=Kommentar%20zur%20Radlkarte%20Rheintal">Rheintal (Dornbirn, Hohenems und Umgebung)</a><br>
           <a href="mailto:steyr@radlobby.at?subject=Kommentar%20zur%20Radlkarte%20Steyr">Steyr</a><br>
           <a href="mailto:radlkarte@radlobby.at?subject=Kommentar%20zur%20Radlkarte%20Wien">Wien</a><br>
         </p>
         <h3>Team</h3>
         <p>
-          <strong>Programmierung:</strong> Markus Straub &amp; Paul Weber, Marco von Frieling<br>
-          <strong>Wegenetz Bezirk Bruck/Leitha:</strong> Roland Romano, Wolfgang Hohenauer (Bruck/Leitha), Kerstin
-          Martens (Ebergassing), Stefan Moritz (Velm), Johan Rosman (Parndorf), Robert Skocek (Hainburg), Ulrich
-          Kiermayr (Bratislava), Stefan Haider (Eisenstadt)<br>
+          <strong>Programmierung:</strong> Markus Straub, Paul Weber, Marco von Frieling<br>
           <strong>Wegenetz Klagenfurt:</strong> Mark Richter &amp; Anneliese Fuchs, Daniel Wuttej, Julia
           Gesierich<br>
           <strong>Wegenetz Linz:</strong> Paul Weber &amp; Christoph Daill, Johannes Kastenhofer<br>
@@ -716,35 +576,12 @@
     </div>
   </div>
   <div id="map"></div>
-  
-  <!-- Layer chooser control -->
-  <div id="layer-control" class="layer-control">
-    <div class="layer-control-toggle">
-      <img src="js/leaflet-1.9.4/images/layers-2x.png" width="18" alt="Layer Control" />
-    </div>
-    <div class="layer-control-content">
-      <div class="layer-control-section">
-        <h4>Problemstellen & Services</h4>
-        <label><input type="checkbox" id="layer-problems" checked> Problemstellen</label>
-      </div>
-      <div class="layer-control-section">
-        <h4>Zusätzliche Ebenen</h4>
-        <label><input type="checkbox" id="layer-transit"> Öffentlicher Verkehr</label>
-        <label><input type="checkbox" id="layer-bicycleShop"> Fahrradgeschäfte</label>
-        <label><input type="checkbox" id="layer-bicycleRepairStation"> Reparaturstationen</label>
-        <label><input type="checkbox" id="layer-bicyclePump"> Luftpumpen</label>
-        <label><input type="checkbox" id="layer-bicycleTubeVending"> Schlauchomaten</label>
-        <label><input type="checkbox" id="layer-drinkingWater"> Trinkwasser</label>
-      </div>
-    </div>
-  </div>
-  
   <div id="radlobby-logo">
     <a href="http://www.radlobby.at" target="_blank"><img src="css/radlobby.png" alt="Radlobby Österreich" /></a>
   </div>
 
   <script>
-    loadMapLibre();
+    loadLeaflet();
   </script>
 </body>
 

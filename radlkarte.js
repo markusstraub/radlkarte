@@ -1,20 +1,14 @@
 "use strict";
 /** global variable for radlkarte properties / data storage */
 var rkGlobal = {};
-/** the main leaflet map */
-rkGlobal.leafletMap = undefined;
+/** the main maplibre map */
+rkGlobal.map = undefined;
 rkGlobal.geocodingControl = undefined;
-/** object holding all linestring and decorator layers (the key represents the properties) */
+/** object holding all data sources and layers */
 rkGlobal.segments = {};
 rkGlobal.poiLayers = {};
-/** layer group holding currently active variant of problem icons */
-rkGlobal.poiLayers.problemLayerActive = L.layerGroup();
-/** layer group holding problem icons for low zoom levels */
-rkGlobal.poiLayers.problemLayerLowZoom = L.layerGroup();
-/** layer group holding problem icons for high zoom levels */
-rkGlobal.poiLayers.problemLayerHighZoom = L.layerGroup();
-/** layer group holding bike sharing icons */
-rkGlobal.poiLayers.bikeShareLayer = L.layerGroup();
+/** data sources for the map */
+rkGlobal.dataSources = {};
 rkGlobal.osmPoiTypes = {
   transit: { urlKey: "o", name: "ÖV-Station", layerName: "Öffentlicher Verkehr" },
   bicycleShop: { urlKey: "f", name: "Fahrradgeschäft", layerName: "Fahrradgeschäfte" },
@@ -23,8 +17,9 @@ rkGlobal.osmPoiTypes = {
   bicycleTubeVending: { urlKey: "s", name: "Schlauchomat", layerName: "Schlauchomaten" },
   drinkingWater: { urlKey: "w", name: "Trinkwasser", layerName: "Trinkwasser" },
 };
+// Initialize empty layer groups for POI types
 for (const [k, v] of Object.entries(rkGlobal.osmPoiTypes)) {
-  v.layer = L.layerGroup();
+  v.layer = { features: [], visible: false };
   rkGlobal.poiLayers[k] = v.layer;
 }
 /** names of all different levels of priorities (ordered descending by priority) */
@@ -34,7 +29,7 @@ rkGlobal.debug = true;
 rkGlobal.fullWidthThreshold = 768;
 
 // style: stress = color, priority = line width
-rkGlobal.styleFunction = updateStyles;
+// rkGlobal.styleFunction = updateStyles; // Not needed for MapLibre
 rkGlobal.tileLayerOpacity = 1;
 rkGlobal.priorityFullVisibleFromZoom = [0, 14, 15];
 rkGlobal.priorityReducedVisibilityFromZoom = [0, 12, 14];
@@ -52,7 +47,7 @@ rkGlobal.defaultZoom = 14;
 rkGlobal.configurations = {
   'rendertest': {
     title: '[DEV] Rendertest',
-    centerLatLng: L.latLng(50.09, 14.39),
+    centerLatLng: [14.39, 50.09], // [longitude, latitude] for MapLibre
   },
   'bruckleitha': {
     title: 'Bezirk Bruck/Leitha',
@@ -61,35 +56,178 @@ rkGlobal.configurations = {
   },
   'klagenfurt': {
     title: 'Klagenfurt',
-    centerLatLng: L.latLng(46.62, 14.31),
+    centerLatLng: [14.31, 46.62],
     nextbikeUrl: 'https://maps.nextbike.net/maps/nextbike.json?domains=ka&bikes=false'
   },
   'linz': {
     title: 'Linz',
-    centerLatLng: L.latLng(48.30, 14.26),
+    centerLatLng: [14.26, 48.30],
     nextbikeUrl: 'https://maps.nextbike.net/maps/nextbike.json?domains=al&bikes=false'
   },
   'noe-suedost': {
     title: 'NÖ-Südost',
-    centerLatLng: L.latLng(47.67, 15.94),
+    centerLatLng: [15.94, 47.67],
     nextbikeUrl: 'https://maps.nextbike.net/maps/nextbike.json?domains=la&bikes=false'
   },
   'rheintal': {
     title: 'Rheintal',
-    centerLatLng: L.latLng(47.41, 9.72),
+    centerLatLng: [9.72, 47.41],
   },
   'steyr': {
     title: 'Steyr',
-    centerLatLng: L.latLng(48.04, 14.42),
+    centerLatLng: [14.42, 48.04],
   },
   'wien': {
     title: 'Wien',
-    centerLatLng: L.latLng(48.21, 16.37),
+    centerLatLng: [16.37, 48.21],
     nextbikeUrl: 'https://maps.nextbike.net/maps/nextbike.json?domains=wr,la&bikes=false',
   },
 };
 rkGlobal.pageHeader = function () {
   return $('h1');
+};
+
+function loadMapLibre() {
+  // Create the MapLibre map
+  rkGlobal.map = new maplibregl.Map({
+    container: 'map',
+    style: createBaseMapStyle(),
+    center: [16.3738, 48.2082], // Vienna center
+    zoom: 11,
+    minZoom: 0,
+    maxZoom: 19
+  });
+
+  // Initialize sidebar manually since we don't have leaflet-sidebar
+  initializeSidebar();
+
+  // Initialize map controls
+  initializeMapControls();
+
+  // Initialize data loading
+  initializeDataLoading();
+}
+
+function createBaseMapStyle() {
+  return {
+    version: 8,
+    glyphs: 'https://demotiles.maplibre.org/font/{fontstack}/{range}.pbf',
+    sources: {
+      'carto-light': {
+        type: 'raster',
+        tiles: [
+          'https://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
+          'https://b.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
+          'https://c.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
+          'https://d.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png'
+        ],
+        tileSize: 256,
+        attribution: '&copy; <a href="https://www.openstreetmap.org" target="_blank">OpenStreetMap</a> contributors | &copy; <a href="https://carto.com/attributions" target="_blank">CARTO</a>'
+      }
+    },
+    layers: [
+      {
+        id: 'carto-light-layer',
+        type: 'raster',
+        source: 'carto-light'
+      }
+    ]
+  };
+}
+
+function initializeSidebar() {
+  // Manual sidebar implementation since we're not using leaflet-sidebar
+  const sidebar = document.getElementById('sidebar');
+  const tabs = sidebar.querySelectorAll('[role="tab"]');
+  const panes = sidebar.querySelectorAll('.leaflet-sidebar-pane');
+  
+  // Add click handlers for tabs
+  tabs.forEach(tab => {
+    tab.addEventListener('click', (e) => {
+      e.preventDefault();
+      const targetId = tab.getAttribute('href').substring(1);
+      
+      // Remove active from all tabs and panes
+      tabs.forEach(t => t.parentElement.classList.remove('active'));
+      panes.forEach(p => p.classList.remove('active'));
+      
+      // Add active to clicked tab and corresponding pane
+      tab.parentElement.classList.add('active');
+      document.getElementById(targetId).classList.add('active');
+    });
+  });
+  
+  // Add close button functionality
+  const closeBtns = sidebar.querySelectorAll('.leaflet-sidebar-close');
+  closeBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (window.innerWidth < rkGlobal.fullWidthThreshold) {
+        sidebar.classList.remove('open');
+      }
+    });
+  });
+  
+  // Show sidebar by default on desktop
+  if (window.innerWidth >= rkGlobal.fullWidthThreshold) {
+    sidebar.classList.add('open');
+  } else {
+    sidebar.classList.remove('open');
+  }
+  
+  // Handle window resize
+  window.addEventListener('resize', () => {
+    if (window.innerWidth >= rkGlobal.fullWidthThreshold) {
+      sidebar.classList.add('open');
+    } else {
+      sidebar.classList.remove('open');
+    }
+  });
+}
+
+function initializeMapControls() {
+  // Add zoom controls
+  rkGlobal.map.addControl(new maplibregl.NavigationControl(), 'top-right');
+  
+  // Add scale control
+  rkGlobal.map.addControl(new maplibregl.ScaleControl({
+    maxWidth: 200,
+    unit: 'metric'
+  }), 'top-left');
+  
+  // Add geolocate control
+  rkGlobal.map.addControl(new maplibregl.GeolocateControl({
+    positionOptions: {
+      enableHighAccuracy: true
+    },
+    trackUserLocation: true,
+    showUserHeading: true
+  }), 'top-right');
+}
+
+function initializeDataLoading() {
+  // Load default region (Wien) when map is loaded
+  rkGlobal.map.on('load', () => {
+    console.log('Map loaded, loading Wien data...');
+    // Set default region
+    rkGlobal.currentRegion = rkGlobal.defaultRegion;
+    updateRadlkarteRegion(rkGlobal.currentRegion);
+    
+    // Initialize icons after map is loaded
+    initializeIcons();
+  });
+  
+  // Add zoom event listener to update layer visibility
+  rkGlobal.map.on('zoom', updateLayerVisibility);
+  rkGlobal.map.on('zoomend', updateLayerVisibility);
+  
+  // Initialize layer control
+  initializeLayerControl();
+}
+
+function initializeIcons() {
+  // Placeholder function for icon initialization
+  // TODO: Implement icon loading for MapLibre GL JS if needed
+  console.log('Icons initialized (placeholder)');
 }
 
 function debug(obj) {
@@ -113,883 +251,576 @@ function updateRadlkarteRegion(region) {
 
   removeAllSegmentsAndMarkers();
   loadGeoJson('data/radlkarte-' + region + '.geojson');
-  // POI layers: only reload visible layers
-  if (rkGlobal.leafletMap.hasLayer(rkGlobal.poiLayers.bikeShareLayer)) {
-    clearAndLoadNextbike(configuration.nextbikeUrl);
-  }
-  let visibleOsmPois = [];
-  for (const [k, v] of Object.entries(rkGlobal.osmPoiTypes)) {
-    if (rkGlobal.leafletMap.hasLayer(v.layer)) {
-      visibleOsmPois.push(k);
-    }
-  }
-  clearAndLoadOsmPois(visibleOsmPois);
-
+  
+  // Update page title
   rkGlobal.pageHeader().text('Radlkarte ' + configuration.title);
 
+  // Center map on region
+  if (configuration.centerLatLng) {
+    rkGlobal.map.flyTo({
+      center: configuration.centerLatLng,
+      zoom: rkGlobal.defaultZoom
+    });
+  }
 
-  // virtual page hit in matomo analytics
-  _paq.push(['setCustomUrl', '/' + region]);
-  _paq.push(['setDocumentTitle', region]);
-  _paq.push(['trackPageView']);
+  // Virtual page hit in matomo analytics
+  if (typeof _paq !== 'undefined') {
+    _paq.push(['setCustomUrl', '/' + region]);
+    _paq.push(['setDocumentTitle', region]);
+    _paq.push(['trackPageView']);
+  }
 }
 
 function removeAllSegmentsAndMarkers() {
-  // we can't simply delete all layers (otherwise the base layer is gone as well)
-  // TODO refactor?
-  for (const key of Object.keys(rkGlobal.segments)) {
-    rkGlobal.leafletMap.removeLayer(rkGlobal.segments[key].lines);
-    if (rkGlobal.segments[key].steepLines && rkGlobal.leafletMap.hasLayer(rkGlobal.segments[key].steepLines)) {
-      rkGlobal.leafletMap.removeLayer(rkGlobal.segments[key].steepLines);
+  // Remove all sources and layers from MapLibre map
+  if (rkGlobal.map.getSource('bike-routes')) {
+    rkGlobal.map.removeSource('bike-routes');
+  }
+  if (rkGlobal.map.getSource('problem-markers')) {
+    rkGlobal.map.removeSource('problem-markers');
+  }
+  
+  // Remove route layers
+  ['bike-routes-main', 'bike-routes-main-unpaved', 'bike-routes-secondary', 'bike-routes-secondary-unpaved', 
+   'bike-routes-local', 'bike-routes-local-unpaved', 'bike-routes-main-steep', 'bike-routes-secondary-steep', 
+   'bike-routes-local-steep', 'bike-routes-main-arrows', 'bike-routes-secondary-arrows', 'bike-routes-local-arrows', 
+   'problem-markers-layer'].forEach(layerId => {
+    if (rkGlobal.map.getLayer(layerId)) {
+      rkGlobal.map.removeLayer(layerId);
     }
-    rkGlobal.leafletMap.removeLayer(rkGlobal.segments[key].decorators);
-  }
+  });
+  
   rkGlobal.segments = {};
-
-  for (const [k, v] of Object.entries(rkGlobal.osmPoiTypes)) {
-    v.layer.clearLayers();
-  }
 }
 
 function loadGeoJson(file) {
-  rkGlobal.poiLayers.problemLayerLowZoom.clearLayers();
-  rkGlobal.poiLayers.problemLayerHighZoom.clearLayers();
-  $.getJSON(file, function (data) {
-    if (data.type != "FeatureCollection") {
-      console.error("expected a GeoJSON FeatureCollection. no radlkarte network can be displayed.");
-      return;
-    }
-
-    if (!data.bbox) {
-      console.warn("no bbox defined in GeoJSON - can not configure geocoding");
-      rkGlobal.geocodingControl.options.geocoder.options.geocodingQueryParams.bounds = null;
-    } else {
-      rkGlobal.geocodingControl.options.geocoder.options.geocodingQueryParams.bounds = data.bbox.join(",");
-    }
-
-    // collect geojson linestring features (and marker points)
-    let ignoreCount = 0;
-    let goodCount = 0;
-    let poiCount = 0;
-    let categorizedLinestrings = {};
-    for (let i = 0; i < data.features.length; i++) {
-      let geojson = data.features[i];
-      if (geojson.type != 'Feature' || geojson.properties == undefined || geojson.geometry == undefined || geojson.geometry.type != 'LineString' || geojson.geometry.coordinates.length < 2) {
-        if (geojson.geometry.type == 'Point') {
-          let problemMarkers = createProblemMarkersIncludingPopup(geojson);
-          if (problemMarkers != null) {
-            rkGlobal.poiLayers.problemLayerLowZoom.addLayer(problemMarkers.lowZoom);
-            rkGlobal.poiLayers.problemLayerHighZoom.addLayer(problemMarkers.highZoom);
-            ++poiCount;
-          } else {
-            console.warn("ignoring invalid point (not a problem marker): " + JSON.stringify(geojson));
-            ++ignoreCount;
-          }
-        } else {
-          console.warn("ignoring invalid object (not a proper linestring feature): " + JSON.stringify(geojson));
-          ++ignoreCount;
-        }
-        continue;
+  console.log('Loading GeoJSON:', file);
+  fetch(file)
+    .then(response => response.json())
+    .then(data => {
+      if (data.type !== "FeatureCollection") {
+        console.error("expected a GeoJSON FeatureCollection. no radlkarte network can be displayed.");
+        return;
       }
-
-      let priority = parseInt(geojson.properties.priority, 10);
-      let stress = parseInt(geojson.properties.stress, 10);
-      if (isNaN(priority) || isNaN(stress)) {
-        console.warn("ignoring invalid object (priority / stress not set): " + JSON.stringify(geojson));
-        ++ignoreCount;
-        continue;
-      }
-
-      // collect linestrings by category
-      addSegmentToObject(categorizedLinestrings, geojson);
-
-      ++goodCount;
-    }
-    debug("processed " + goodCount + " valid LineString features, " + poiCount + " Point features, and " + ignoreCount + " ignored features.");
-
-    // merge geojson linestring features
-    // with the same properties into a single multilinestring
-    // and then put them in a leaflet layer
-    for (const key of Object.keys(categorizedLinestrings)) {
-      let multilinestringFeatures = turf.combine(turf.featureCollection(categorizedLinestrings[key]));
-      let properties = JSON.parse(key);
-      multilinestringFeatures.properties = properties;
-
-      let decoratorCoordinates = [];
-      for (const linestring of categorizedLinestrings[key]) {
-        decoratorCoordinates.push(turf.flip(linestring).geometry.coordinates);
-      }
-
-      // separate panes to allow setting zIndex, which is not possible on
-      // the geojson layers themselves
-      // see https://stackoverflow.com/q/39767499/1648538
-      rkGlobal.leafletMap.createPane(key);
-      rkGlobal.leafletMap.getPane(key).style.zIndex = getSegmentZIndex(properties);
-      rkGlobal.segments[key] = {
-        'lines': L.geoJSON(multilinestringFeatures, { pane: key }),
-        'steepLines': properties.steep === 'yes' ? L.geoJSON(multilinestringFeatures, { pane: key }) : undefined,
-        'decorators': L.polylineDecorator(decoratorCoordinates)
-      };
-    }
-
-    // apply styles
-    rkGlobal.styleFunction();
-
-    rkGlobal.leafletMap.on('zoomend', function (ev) {
-      //debug("zoom level changed to " + rkGlobal.leafletMap.getZoom() + ".. enqueueing style change");
-      $("#map").queue(function () {
-        rkGlobal.styleFunction();
-        $(this).dequeue();
-      });
-    });
-  });
-}
-
-/**
- * @returns a key representing activated layers with one char each. x means no active layer.
- */
-function getSelectedPoiLayerKey() {
-  let selected = "";
-  if (rkGlobal.leafletMap.hasLayer(rkGlobal.poiLayers.problemLayerActive)) {
-    selected += 'p';
-  }
-  if (rkGlobal.leafletMap.hasLayer(rkGlobal.poiLayers.bikeShareLayer)) {
-    selected += 'b';
-  }
-  for (const type in rkGlobal.osmPoiTypes) {
-    if (rkGlobal.leafletMap.hasLayer(rkGlobal.poiLayers[type])) {
-      selected += rkGlobal.osmPoiTypes[type].urlKey;
-    }
-  }
-  if (selected.length == 0) {
-    selected = "x";
-  }
-  return selected;
-}
-
-function selectPoiLayersForKey(key) {
-  if (key.includes("p")) {
-    rkGlobal.leafletMap.addLayer(rkGlobal.poiLayers.problemLayerActive);
-  } else {
-    rkGlobal.leafletMap.removeLayer(rkGlobal.poiLayers.problemLayerActive);
-  }
-  if (key.includes("b")) {
-    rkGlobal.leafletMap.addLayer(rkGlobal.poiLayers.bikeShareLayer);
-  } else {
-    rkGlobal.leafletMap.removeLayer(rkGlobal.poiLayers.bikeShareLayer);
-  }
-  for (const type in rkGlobal.osmPoiTypes) {
-    if (key.includes(rkGlobal.osmPoiTypes[type].urlKey)) {
-      rkGlobal.leafletMap.addLayer(rkGlobal.poiLayers[type]);
-    } else {
-      rkGlobal.leafletMap.removeLayer(rkGlobal.poiLayers[type]);
-    }
-  }
-}
-
-/**
- * use nextbike API to get stations and current nr of bikes.
- * API doc: https://github.com/nextbike/api-doc/blob/master/maps/nextbike-maps.openapi.yaml
- * List of all cities (to easily get domain code): https://maps.nextbike.net/maps/nextbike.json?list_cities=1
- */
-function clearAndLoadNextbike(url) {
-  rkGlobal.poiLayers.bikeShareLayer.clearLayers();
-  $.getJSON(url, function (data) {
-    for (const country of data.countries) {
-      for (const city of country.cities) {
-        let cityUrl = `<a href="${city.website}" target="_blank">Nextbike ${city.name}</a>`;
-        for (const place of city.places) {
-          let markerLayer = createNextbikeMarkerIncludingPopup(country.domain, place, cityUrl);
-          if (markerLayer != null) {
-            rkGlobal.poiLayers.bikeShareLayer.addLayer(markerLayer);
-          }
-        }
-      }
-    }
-  });
-}
-
-/**
- * @param domain 2-letter Nextbike domain for determining special icons (optional).
- * @param place JSON from Nextbike API describing a bike-share station.
- */
-function createNextbikeMarkerIncludingPopup(domain, place, cityUrl) {
-  let description = '<h2>' + place.name + '</h2>';
-  if (place.bikes === 1) {
-    description += "<p>1 Rad verfügbar</p>";
-  } else {
-    description += `<p>${place.bikes} Räder verfügbar</p>`;
-  }
-  description += `<p class="sidenote">Mehr Informationen: ${cityUrl}</p>`;
-
-  let icon = place.bikes !== 0 ? rkGlobal.icons.nextbike : rkGlobal.icons.nextbikeGray;
-  if (domain === "wr") {
-    icon = place.bikes !== 0 ? rkGlobal.icons.wienmobilrad : rkGlobal.icons.wienmobilradGray;
-  } else if (domain === "al") {
-    icon = place.bikes !== 0 ? rkGlobal.icons.citybikelinz : rkGlobal.icons.citybikelinzGray;
-  }
-
-  return createMarkerIncludingPopup(L.latLng(place.lat, place.lng), icon, description, place.name);
-}
-
-function createMarkerIncludingPopup(latLng, icon, description, altText) {
-  let marker = L.marker(latLng, {
-    icon: icon,
-    alt: altText,
-  });
-  marker.bindPopup(`<article class="tooltip">${description}</article>`, { closeButton: true });
-  marker.on('mouseover', function () {
-    marker.openPopup();
-  });
-  // adding a mouseover event listener causes a problem with touch browsers:
-  // then two taps are required to show the marker.
-  // explicitly adding the click event listener here solves the issue
-  marker.on('click', function () {
-    marker.openPopup();
-  });
-  return marker;
-}
-
-/** expects a list of poi types */
-function clearAndLoadOsmPois(types) {
-  for (const type of types) {
-    if (type === "transit") {
-      clearAndLoadTransit(rkGlobal.currentRegion);
-    } else {
-      clearAndLoadBasicOsmPoi(type, rkGlobal.currentRegion);
-    }
-  }
-}
-
-/** special handling for transit because we need to merge subway and railway in one layer */
-async function clearAndLoadTransit(region) {
-  rkGlobal.poiLayers.transit.clearLayers();
-  const seen = new Set();
-
-  for (const transitType of ["subway", "railway"]) {
-    if (transitType === "subway" && region !== "wien") {
-      continue;
-    }
-    const stationName2Line2Colour = await loadStationName2Line2Colour(region, `data/osm-overpass/${region}-${transitType}Lines.json`);
-    let transitFile = `data/osm-overpass/${region}-${transitType}.json`;
-    $.getJSON(transitFile, function (data) {
-      for (const element of data.elements) {
-        if (seen.has(element.tags.name)) {
-          // filter duplicate stations (happens when multiple lines cross)
-          continue;
-        }
-        let latLng = "center" in element ? L.latLng(element.center.lat, element.center.lon) : L.latLng(element.lat, element.lon);
-        if (latLng == null) {
-          // L.latLng can return null/undefined for invalid lat/lon values, catch this here
-          console.warn("invalid lat/lon for " + element.type + " with OSM id " + element.id);
-          continue;
-        }
-        let description = `<h2>${element.tags.name}</h2>`;
-        let icon = rkGlobal.icons[transitType];
-        if (stationName2Line2Colour[element.tags.name] != null) {
-          let refs = Array.from(Object.keys(stationName2Line2Colour[element.tags.name])).sort();
-          for (const ref of refs) {
-            description += `<span class="transitLine" style="background-color:${stationName2Line2Colour[element.tags.name][ref]};">${ref}</span>\n`;
-          }
-
-          if (transitType === "railway") {
-            icon = rkGlobal.icons.sbahn;
-          }
-        }
-        let altText = element.tags.name;
-        const markerLayer = createMarkerIncludingPopup(latLng, icon, description, altText);
-        if (markerLayer != null) {
-          seen.add(element.tags.name);
-          rkGlobal.poiLayers.transit.addLayer(markerLayer);
-        }
-      }
-      debug('created ' + seen.size + ' ' + transitType + ' icons.');
-    });
-  }
-}
-
-async function loadStationName2Line2Colour(region, fileName) {
-  const stationName2Line2Colour = {};
-  $.getJSON(fileName, function (data) {
-    for (const element of data.elements) {
-      if (stationName2Line2Colour[element.tags.name] == null) {
-        stationName2Line2Colour[element.tags.name] = {};
-      }
-      stationName2Line2Colour[element.tags.name][element.tags.ref] = element.tags.colour;
-    }
-  });
-  return stationName2Line2Colour;
-}
-
-function clearAndLoadBasicOsmPoi(type, region) {
-  rkGlobal.poiLayers[type].clearLayers();
-  let poiFile = "data/osm-overpass/" + region + "-" + type + ".json";
-  $.getJSON(poiFile, function (data) {
-    let count = 0;
-    let dataDate = extractDateFromOverpassResponse(data);
-    for (const element of data.elements) {
-      const latLng = "center" in element ? L.latLng(element.center.lat, element.center.lon) : L.latLng(element.lat, element.lon);
-      if (latLng == null) {
-        // L.latLng can return null/undefined for invalid lat/lon values, catch this here
-        console.warn("invalid lat/lon for " + type + " with OSM id " + element.id);
-        continue;
-      }
-      const tags = element.tags;
-
-      const access = tags.access;
-      if (["no", "private", "permit"].includes(access)) {
-        continue;
-      }
-
-      const name = tags.name;
-      const website = extractWebsiteFromTagSoup(tags);
-      let heading = name != null ? name : rkGlobal.osmPoiTypes[type].name;
-      if (website != null) {
-        heading = `<a href="${website}" target="_blank">${heading}</a>`;
-      }
-      let description = `<h2>${heading}</h2>`;
-
-      const address = extractAddressFromTagSoup(tags);
-      if (address) {
-        description += `<p>${address}</p>`;
-      }
-
-      let currentlyOpen = type === 'bicycleShop' ? false : true;
-      let opening_hours_value = tags.opening_hours;
-      if (opening_hours_value) {
-        if (type === "bicycleShop" && !opening_hours_value.includes("PH")) {
-          // bicycle shops are usually closed on holidays but this is rarely mapped
-          opening_hours_value += ";PH off";
-        }
-        // NOTE: state left empty because school holidays are likely not relevant (not a single mapped instance in our data set)
-        // noinspection JSPotentiallyInvalidConstructorUsage
-        const oh = new opening_hours(opening_hours_value, {
-          lat: latLng.lat,
-          lon: latLng.lng,
-          address: { country_code: "at", state: "" }
-        });
-        currentlyOpen = oh.getState();
-        const openText = currentlyOpen ? "jetzt geöffnet" : "derzeit geschlossen";
-        let items = oh.prettifyValue({ conf: { locale: 'de' }, }).split(";");
-
-        for (let i = 0; i < items.length; i++) {
-          items[i] = items[i].trim();
-          if (type === "bicycleShop" && items[i] === "Feiertags geschlossen") {
-            // avoid redundant info
-            items[i] = "";
-          } else {
-            items[i] = `<li>${items[i]}</li>`;
-          }
-        }
-        const itemList = "<ul>" + items.join("\n") + "</ul>";
-        description += `<p>Öffnungszeiten (${openText}):</p>${itemList}`;
-      }
-
-      const phone = tags.phone != null ? tags.phone : tags["contact:phone"];
-      if (phone) {
-        description += `<p>${phone}</p>`;
-      }
-
-      const operator = tags.operator;
-      if (operator) {
-        description += `<p class="sidenote">Betreiber: ${operator}</p>`;
-      }
-
-      const osmLink = `<a href="https://www.osm.org/${element.type}/${element.id}" target="_blank">Quelle: OpenStreetMap</a>`;
-      description += `<p class="sidenote">${osmLink} (Stand: ${dataDate})</p>`;
-
-      let icon = rkGlobal.icons[`${type}${currentlyOpen ? "" : "Gray"}`];
-      let altText = element.tags.name;
-      const markerLayer = createMarkerIncludingPopup(latLng, icon, description, altText);
-      if (markerLayer != null) {
-        rkGlobal.poiLayers[type].addLayer(markerLayer);
-        count++;
-      }
-    }
-    debug('created ' + count + ' ' + type + ' icons.');
-  });
-}
-
-function extractDateFromOverpassResponse(data) {
-  if (data.osm3s && data.osm3s.timestamp_osm_base) {
-    if (typeof data.osm3s.timestamp_osm_base === 'string') {
-      return data.osm3s.timestamp_osm_base.split("T")[0];
-    }
-  }
-  return null;
-}
-
-function extractAddressFromTagSoup(tags) {
-  if (tags["addr:street"] != null) {
-    let address = "";
-    address += tags["addr:street"];
-    if (tags["addr:housenumber"] != null) {
-      address += " " + tags["addr:housenumber"];
-    }
-    if (tags["addr:postcode"] != null) {
-      address += ", " + tags["addr:postcode"];
-      if (tags["addr:city"] != null) {
-        address += " " + tags["addr:city"];
-      }
-    } else if (tags["addr:city"] != null) {
-      address += ", " + tags["addr:city"];
-    }
-    return address;
-  }
-  return undefined;
-}
-
-function extractWebsiteFromTagSoup(tags) {
-  let website = tags.website != null ? tags.website : tags["contact:website"];
-  if (website == null) {
-    return website;
-  }
-  if (!website.startsWith("http")) {
-    website = `http://${website}`;
-  }
-  return website;
-}
-
-/**
- * Get a zIndex based on priority and stress
- * where low-stress high-priority is on the top
- */
-function getSegmentZIndex(properties) {
-  // 400 is the default zIndex for overlayPanes, stay slightly below this level
-  let index = 350;
-  index += 10 * (rkGlobal.priorityStrings.length - properties.priority);
-  index += 1 * (rkGlobal.stressStrings.length - properties.stress);
-  return index;
-}
-
-function addSegmentToObject(object, geojsonLinestring) {
-  let key = getSegmentKey(geojsonLinestring);
-  let keyString = JSON.stringify(key);
-  if (object[keyString] === undefined) {
-    object[keyString] = [];
-  }
-  object[keyString].push(geojsonLinestring);
-}
-
-/*
- * Get a JSON object as key for a segment linestring.
- * This object explicitly contains all values to be used in styling
- */
-function getSegmentKey(geojsonLinestring) {
-  let properties = geojsonLinestring.properties;
-  return {
-    "priority": properties.priority,
-    "stress": properties.stress,
-    "oneway": properties.oneway === undefined ? 'no' : properties.oneway,
-    "unpaved": properties.unpaved === undefined ? 'no' : properties.unpaved,
-    "steep": properties.steep === undefined ? 'no' : properties.steep
-  };
-}
-
-/**
- * Updates the styles of all layers. Takes current zoom level into account.
- * Special styles for unpaved, steep, oneway arrows are matched, take care in future adapations
- */
-function updateStyles() {
-  let zoom = rkGlobal.leafletMap.getZoom();
-  for (const key of Object.keys(rkGlobal.segments)) {
-    let properties = JSON.parse(key);
-    let showFull = zoom >= rkGlobal.priorityFullVisibleFromZoom[properties.priority];
-    let showMinimal = zoom < rkGlobal.priorityFullVisibleFromZoom[properties.priority] && zoom >= rkGlobal.priorityReducedVisibilityFromZoom[properties.priority];
-
-    let lineStyle;
-    if (showFull) {
-      lineStyle = getLineStyle(zoom, properties);
-    } else if (showMinimal) {
-      lineStyle = getLineStyleMinimal(properties);
-    }
-
-    let lines = rkGlobal.segments[key].lines;
-    if (showFull || showMinimal) {
-      lines.setStyle(lineStyle);
-      rkGlobal.leafletMap.addLayer(lines);
-    } else {
-      rkGlobal.leafletMap.removeLayer(lines);
-    }
-
-    // steep lines are drawn twice, once regular,
-    // a second time as bristles (that's what this copy is for)
-    let steepLines = rkGlobal.segments[key].steepLines;
-    if (steepLines !== undefined) {
-      if (showFull || showMinimal) {
-        let steepLineStyle;
-        if (showFull) {
-          steepLineStyle = getSteepLineStyle(zoom, properties);
-        } else {
-          steepLineStyle = getSteepLineStyleMinimal(properties);
-        }
-        steepLines.setStyle(steepLineStyle);
-        rkGlobal.leafletMap.addLayer(steepLines);
-      } else {
-        rkGlobal.leafletMap.removeLayer(steepLines);
-      }
-    }
-
-    let decorators = rkGlobal.segments[key].decorators;
-    if ((showFull || showMinimal) && zoom >= rkGlobal.onewayIconThreshold && properties.oneway === 'yes') {
-      decorators.setPatterns(getOnewayArrowPatterns(zoom, properties, lineStyle.weight));
-      rkGlobal.leafletMap.addLayer(decorators);
-    } else {
-      rkGlobal.leafletMap.removeLayer(decorators);
-    }
-  }
-
-  if (zoom >= rkGlobal.problemIconThreshold) {
-    rkGlobal.poiLayers.problemLayerActive.clearLayers();
-    rkGlobal.poiLayers.problemLayerActive.addLayer(rkGlobal.poiLayers.problemLayerHighZoom);
-  } else {
-    rkGlobal.poiLayers.problemLayerActive.clearLayers();
-    rkGlobal.poiLayers.problemLayerActive.addLayer(rkGlobal.poiLayers.problemLayerLowZoom);
-  }
-}
-
-function getLineStyle(zoom, properties) {
-  let lineWeight = getLineWeight(zoom, properties.priority);
-  return _getLineStyle(lineWeight, properties);
-}
-
-function getLineStyleMinimal(properties) {
-  let lineWeight = 1;
-  return _getLineStyle(lineWeight, properties);
-}
-
-function _getLineStyle(lineWeight, properties) {
-  let style = {
-    color: rkGlobal.colors[properties.stress],
-    weight: lineWeight,
-    opacity: rkGlobal.opacity
-  };
-  if (properties.unpaved === 'yes') {
-    style.dashArray = getUnpavedDashStyle(Math.max(2, lineWeight));
-  }
-  return style;
-}
-
-function getSteepLineStyle(zoom, properties) {
-  let lineWeight = getLineWeight(zoom, properties.priority);
-  return _getSteepLineStyle(lineWeight, properties);
-}
-
-function getSteepLineStyleMinimal(properties) {
-  let lineWeight = 1;
-  return _getSteepLineStyle(lineWeight, properties);
-}
-
-function _getSteepLineStyle(lineWeight, properties) {
-  let steepBristleLength = 2;
-  return {
-    color: rkGlobal.colors[properties.stress],
-    weight: lineWeight * 2,
-    opacity: rkGlobal.opacity,
-    lineCap: 'butt',
-    dashArray: getSteepDashStyle(Math.max(2, lineWeight), steepBristleLength),
-    dashOffset: Math.max(2, lineWeight) * -0.5 + steepBristleLength / 2
-  };
-}
-
-/**
- * weight aka width of a line
- */
-function getLineWeight(zoom, priority) {
-  let lineWeight = zoom - 10;
-  lineWeight = (lineWeight <= 0 ? 1 : lineWeight) * 1.4;
-  lineWeight *= rkGlobal.lineWidthFactor[priority];
-  return lineWeight;
-}
-
-function getUnpavedDashStyle(lineWeight) {
-  return lineWeight + " " + lineWeight * 1.5;
-}
-
-function getSteepDashStyle(lineWeight, steepBristleLength) {
-  return steepBristleLength + " " + (lineWeight * 2.5 - steepBristleLength);
-}
-
-/**
- * @return an array of patterns as expected by L.PolylineDecorator.setPatterns
- */
-function getOnewayArrowPatterns(zoom, properties, lineWeight) {
-  let arrowWidth = Math.max(5, lineWeight * rkGlobal.arrowWidthFactor[properties.priority]);
-  return [{
-    offset: arrowWidth - 2,
-    repeat: Math.max(2, lineWeight) * 5,
-    symbol: L.Symbol.arrowHead({
-      pixelSize: arrowWidth,
-      headAngle: 90,
-      pathOptions: {
-        color: rkGlobal.colors[properties.stress],
-        fillOpacity: rkGlobal.opacity,
-        weight: 0
-      }
+      
+      processGeoJsonData(data);
     })
-  }];
+    .catch(error => {
+      console.error('Error loading GeoJSON:', error);
+    });
 }
 
-function loadLeaflet() {
-  rkGlobal.leafletMap = L.map('map', { 'zoomControl': false });
-
-  // avoid troubles with min/maxZoom from our layer group, see https://github.com/Leaflet/Leaflet/issues/6557
-  let minMaxZoomLayer = L.gridLayer({
-    minZoom: 0,
-    maxZoom: 19
-  });
-  let cartodbPositronLowZoom = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org" target="_blank">OpenStreetMap</a> contributors | &copy; <a href="https://carto.com/attributions" target="_blank">CARTO</a>',
-    subdomains: 'abcd',
-    minZoom: 0,
-    maxZoom: 15
-  });
-  let osmHiZoom = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    minZoom: 16,
-    maxZoom: 19,
-    // low and high zoom layer contributions are combined, so skip it here
-    //attribution: 'map data &amp; imagery &copy; <a href="https://openstreetmap.org" target="_blank">OpenStreetMap</a> contributors'
-  });
-  let mixed = L.layerGroup([minMaxZoomLayer, cartodbPositronLowZoom, osmHiZoom]);
-
-  let basemapAtOrthofoto = L.tileLayer('https://mapsneu.wien.gv.at/basemap/bmaporthofoto30cm/normal/google3857/{z}/{y}/{x}.{format}', {
-    maxZoom: 18, // up to 20 is possible
-    attribution: '<a href="https://www.basemap.at" target="_blank">basemap.at</a>',
-    subdomains: ["", "1", "2", "3", "4"],
-    format: 'jpeg',
-    bounds: [[46.35877, 8.782379], [49.037872, 17.189532]]
-  });
-  let ocm = L.tileLayer('https://{s}.tile.thunderforest.com/cycle/{z}/{x}/{y}.png?apikey=ab5e4b2d24854fefb139c538ef5187a8', {
-    minZoom: 0,
-    maxZoom: 18,
-    attribution: '&copy; <a href="https://openstreetmap.org" target="_blank">OpenStreetMap</a> contributors | &copy; <a href="https://www.thunderforest.com" target="_blank">Thunderforest</a>'
-  });
-  let cyclosm = L.tileLayer('https://{s}.tile-cyclosm.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png', {
-    minZoom: 0,
-    maxZoom: 18,
-    attribution: '&copy; <a href="https://openstreetmap.org" target="_blank">OpenStreetMap</a> contributors | <a href="https://www.cyclosm.org" target="_blank">CyclOSM</a> | <a href="https://openstreetmap.fr/" target="_blank">OpenStreetMap Frankreich</a>.'
-  });
-  let empty = L.tileLayer('', { attribution: '' });
-
-  /*let osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    minZoom: 0,
-    maxZoom: 18,
-    attribution: 'map data &amp; imagery &copy; <a href="https://openstreetmap.org" target="_blank">OpenStreetMap</a> contributors'
-  });*/
-
-  let baseMaps = {
-    "Straßenkarte": mixed,
-    "Luftbild": basemapAtOrthofoto,
-    "CyclOSM": cyclosm,
-    "OpenCycleMap": ocm,
-    //"OpenStreetMap": osm,
-    "Weiß": empty,
+function processGeoJsonData(data) {
+  console.log(`Processing ${data.features.length} features`);
+  
+  // Separate LineString features (bike routes) from Point features (markers)
+  const bikeRoutes = {
+    type: "FeatureCollection",
+    features: data.features.filter(f => f.geometry.type === "LineString" && 
+                                        f.properties.priority !== undefined && 
+                                        f.properties.stress !== undefined)
   };
-  let overlayMaps = {
-    "Problemstellen": rkGlobal.poiLayers.problemLayerActive,
-    "Leihräder": rkGlobal.poiLayers.bikeShareLayer
+  
+  const problemMarkers = {
+    type: "FeatureCollection", 
+    features: data.features.filter(f => f.geometry.type === "Point" && 
+                                        (f.properties.dismount === "yes" || 
+                                         f.properties.nocargo === "yes" || 
+                                         f.properties.warning === "yes"))
   };
-  for (const [k, v] of Object.entries(rkGlobal.osmPoiTypes)) {
-    overlayMaps[v.layerName] = v.layer;
+  
+  console.log(`Found ${bikeRoutes.features.length} bike routes and ${problemMarkers.features.length} problem markers`);
+  
+  // Add bike routes to map
+  if (bikeRoutes.features.length > 0) {
+    addBikeRoutesToMap(bikeRoutes);
   }
+  
+  // Add problem markers to map
+  if (problemMarkers.features.length > 0) {
+    addProblemMarkersToMap(problemMarkers);
+  }
+}
 
-  mixed.addTo(rkGlobal.leafletMap);
-  // default overlays are added via the customized leaflet-hash (see L.Hash.parseHash)
-  // rkGlobal.poiLayers.problemLayerActive.addTo(rkGlobal.leafletMap);
-  L.control.layers(baseMaps, overlayMaps, { 'position': 'topright', 'collapsed': true }).addTo(rkGlobal.leafletMap);
-
-  rkGlobal.leafletMap.on({
-    overlayadd: function (e) {
-      let configuration = rkGlobal.configurations[rkGlobal.currentRegion];
-      if (e.layer === rkGlobal.poiLayers.bikeShareLayer) {
-        clearAndLoadNextbike(configuration.nextbikeUrl);
-      }
-      for (const [k, v] of Object.entries(rkGlobal.osmPoiTypes)) {
-        if (e.layer === v.layer) {
-          clearAndLoadOsmPois([k]);
-        }
-      }
+function addBikeRoutesToMap(bikeRoutes) {
+  // Add source for bike routes
+  rkGlobal.map.addSource('bike-routes', {
+    type: 'geojson',
+    data: bikeRoutes
+  });
+  
+  // Add main routes layer (priority 0) - paved roads
+  rkGlobal.map.addLayer({
+    id: 'bike-routes-main',
+    type: 'line',
+    source: 'bike-routes',
+    filter: ['all', 
+      ['==', ['get', 'priority'], '0'],
+      ['!=', ['get', 'unpaved'], 'yes']
+    ],
+    paint: {
+      'line-width': [
+        'interpolate',
+        ['linear'],
+        ['zoom'],
+        10, 3,
+        15, 6,
+        18, 12
+      ],
+      'line-color': [
+        'case',
+        ['==', ['get', 'stress'], '0'], rkGlobal.colors[0], // calm - dark blue
+        ['==', ['get', 'stress'], '1'], rkGlobal.colors[1], // medium - light blue
+        ['==', ['get', 'stress'], '2'], rkGlobal.colors[2], // stressful - orange
+        rkGlobal.colors[1] // default
+      ],
+      'line-opacity': rkGlobal.opacity
     }
   });
-
-  rkGlobal.geocodingControl = L.Control.geocoder({
-    position: 'topright',
-    placeholder: 'Adresssuche',
-    errorMessage: 'Leider nicht gefunden',
-    geocoder: L.Control.Geocoder.opencage({
-      apiKey: "657bf10308f144c7a9cbb7675c9b0d36",
-      geocodingQueryParams: {
-        countrycode: 'at',
-        language: 'de'
-        // bounds are set whenever a JSON is read (min lon, min lat, max lon, max lat)
-      }
-    }),
-    defaultMarkGeocode: false
-  }).on('markgeocode', function (e) {
-    let result = e.geocode || e;
-    debug(result);
-
-    let resultText = result.name;
-    resultText = resultText.replace(/, Österreich$/, "").replace(/, /g, "<br/>");
-    L.popup({
-      autoClose: false,
-      closeOnClick: false,
-      closeButton: true
-    }).setLatLng(result.center).setContent(resultText).openOn(rkGlobal.leafletMap);
-
-    let roughlyHalfPopupWidth = 100; // TODO ideally get the real width of the popup
-    let topLeft = L.point(document.querySelector('#sidebar').offsetWidth + roughlyHalfPopupWidth, 0);
-    let bottomRight = L.point(document.querySelector('#radlobby-logo').offsetWidth + roughlyHalfPopupWidth, document.querySelector('#radlobby-logo').offsetHeight);
-    rkGlobal.leafletMap.panInside(result.center, { "paddingTopLeft": topLeft, "paddingBottomRight": bottomRight });
-  }).addTo(rkGlobal.leafletMap);
-
-  L.control.locate({
-    position: 'topright',
-    setView: 'untilPan',
-    flyTo: true,
-    //markerStyle: { weight: 5 },
-    locateOptions: {
-      enableHighAccuracy: true,
-      watch: true,
-      maxZoom: 16
+  
+  // Add main routes layer (priority 0) - unpaved roads (dashed)
+  rkGlobal.map.addLayer({
+    id: 'bike-routes-main-unpaved',
+    type: 'line',
+    source: 'bike-routes',
+    filter: ['all', 
+      ['==', ['get', 'priority'], '0'],
+      ['==', ['get', 'unpaved'], 'yes']
+    ],
+    paint: {
+      'line-width': [
+        'interpolate',
+        ['linear'],
+        ['zoom'],
+        10, 3,
+        15, 6,
+        18, 12
+      ],
+      'line-color': [
+        'case',
+        ['==', ['get', 'stress'], '0'], rkGlobal.colors[0],
+        ['==', ['get', 'stress'], '1'], rkGlobal.colors[1],
+        ['==', ['get', 'stress'], '2'], rkGlobal.colors[2],
+        rkGlobal.colors[1]
+      ],
+      'line-opacity': rkGlobal.opacity,
+      'line-dasharray': [3, 3]
+    }
+  });
+  
+  // Add secondary routes layer (priority 1) - paved roads
+  rkGlobal.map.addLayer({
+    id: 'bike-routes-secondary',
+    type: 'line',
+    source: 'bike-routes',
+    filter: ['all', 
+      ['==', ['get', 'priority'], '1'],
+      ['!=', ['get', 'unpaved'], 'yes']
+    ],
+    paint: {
+      'line-width': [
+        'interpolate',
+        ['linear'],
+        ['zoom'],
+        10, 1.5,
+        15, 3,
+        18, 6
+      ],
+      'line-color': [
+        'case',
+        ['==', ['get', 'stress'], '0'], rkGlobal.colors[0],
+        ['==', ['get', 'stress'], '1'], rkGlobal.colors[1],
+        ['==', ['get', 'stress'], '2'], rkGlobal.colors[2],
+        rkGlobal.colors[1]
+      ],
+      'line-opacity': rkGlobal.opacity
+    }
+  });
+  
+  // Add secondary routes layer (priority 1) - unpaved roads (dashed)
+  rkGlobal.map.addLayer({
+    id: 'bike-routes-secondary-unpaved',
+    type: 'line',
+    source: 'bike-routes',
+    filter: ['all', 
+      ['==', ['get', 'priority'], '1'],
+      ['==', ['get', 'unpaved'], 'yes']
+    ],
+    layout: {
+      'visibility': 'visible'
     },
-    strings: {
-      title: 'Verfolge Position'
+    paint: {
+      'line-width': [
+        'interpolate',
+        ['linear'],
+        ['zoom'],
+        10, 1.5,
+        15, 3,
+        18, 6
+      ],
+      'line-color': [
+        'case',
+        ['==', ['get', 'stress'], '0'], rkGlobal.colors[0],
+        ['==', ['get', 'stress'], '1'], rkGlobal.colors[1],
+        ['==', ['get', 'stress'], '2'], rkGlobal.colors[2],
+        rkGlobal.colors[1]
+      ],
+      'line-opacity': rkGlobal.opacity,
+      'line-dasharray': [3, 3]
     }
-  }).addTo(rkGlobal.leafletMap);
+  });
+  
+  // Add local routes layer (priority 2) - paved roads
+  rkGlobal.map.addLayer({
+    id: 'bike-routes-local',
+    type: 'line',
+    source: 'bike-routes',
+    filter: ['all', 
+      ['==', ['get', 'priority'], '2'],
+      ['!=', ['get', 'unpaved'], 'yes']
+    ],
+    layout: {
+      'visibility': 'visible'
+    },
+    paint: {
+      'line-width': [
+        'interpolate',
+        ['linear'],
+        ['zoom'],
+        10, 0.8,
+        15, 1.5,
+        18, 3
+      ],
+      'line-color': [
+        'case',
+        ['==', ['get', 'stress'], '0'], rkGlobal.colors[0],
+        ['==', ['get', 'stress'], '1'], rkGlobal.colors[1],
+        ['==', ['get', 'stress'], '2'], rkGlobal.colors[2],
+        rkGlobal.colors[1]
+      ],
+      'line-opacity': rkGlobal.opacity
+    }
+  });
+  
+  // Add local routes layer (priority 2) - unpaved roads (dashed)
+  rkGlobal.map.addLayer({
+    id: 'bike-routes-local-unpaved',
+    type: 'line',
+    source: 'bike-routes',
+    filter: ['all', 
+      ['==', ['get', 'priority'], '2'],
+      ['==', ['get', 'unpaved'], 'yes']
+    ],
+    layout: {
+      'visibility': 'visible'
+    },
+    paint: {
+      'line-width': [
+        'interpolate',
+        ['linear'],
+        ['zoom'],
+        10, 0.8,
+        15, 1.5,
+        18, 3
+      ],
+      'line-color': [
+        'case',
+        ['==', ['get', 'stress'], '0'], rkGlobal.colors[0],
+        ['==', ['get', 'stress'], '1'], rkGlobal.colors[1],
+        ['==', ['get', 'stress'], '2'], rkGlobal.colors[2],
+        rkGlobal.colors[1]
+      ],
+      'line-opacity': rkGlobal.opacity,
+      'line-dasharray': [3, 3]
+    }
+  });
 
-  L.control.zoom({ position: 'topright' }).addTo(rkGlobal.leafletMap);
-
-  L.control.scale({ position: 'topleft', imperial: false, maxWidth: 200 }).addTo(rkGlobal.leafletMap);
-
-  let sidebar = L.control.sidebar({
-    container: 'sidebar',
-    position: 'left'
-  }).addTo(rkGlobal.leafletMap);
-  if (window.innerWidth < rkGlobal.fullWidthThreshold) {
-    sidebar.close();
-  }
-
-  initializeIcons();
-
-  // initialize hash, this causes loading of the default region
-  // and positioning of the map
-  new L.Hash(rkGlobal.leafletMap);
+  // Add steep sections overlay layers (bristles effect)
+  addSteepSectionLayers();
+  
+  // Add oneway arrow layers
+  addOnewayArrowLayers();
+  
+  // Update layer visibility based on current zoom level
+  updateLayerVisibility();
 }
 
-function initializeIcons() {
-  rkGlobal.icons = {};
-  rkGlobal.icons.dismount = L.icon({
-    iconUrl: 'css/dismount.svg',
-    iconSize: [33, 29],
-    iconAnchor: [16.5, 14.5],
-    popupAnchor: [0, -14.5]
-  });
-  rkGlobal.icons.warning = L.icon({
-    iconUrl: 'css/warning.svg',
-    iconSize: [33, 29],
-    iconAnchor: [16.5, 14.5],
-    popupAnchor: [0, -14.5]
-  });
-  rkGlobal.icons.noCargo = L.icon({
-    iconUrl: 'css/nocargo.svg',
-    iconSize: [29, 29],
-    iconAnchor: [14.5, 14.5],
-    popupAnchor: [0, -14.5]
-  });
-  rkGlobal.icons.noCargoAndDismount = L.icon({
-    iconUrl: 'css/nocargo+dismount.svg',
-    iconSize: [57.7, 29],
-    iconAnchor: [28.85, 14.5],
-    popupAnchor: [0, -14.5]
-  });
-  rkGlobal.icons.redDot = L.icon({
-    iconUrl: 'css/reddot.svg',
-    iconSize: [10, 10],
-    iconAnchor: [5, 5],
-    popupAnchor: [0, -5]
-  });
-  rkGlobal.icons.swimming = L.icon({
-    iconUrl: 'css/swimming.svg',
-    iconSize: [29, 29],
-    iconAnchor: [14.5, 14.5],
-    popupAnchor: [0, -14.5]
-  });
-  rkGlobal.icons.swimmingSmall = L.icon({
-    iconUrl: 'css/swimming_small.svg',
-    iconSize: [10, 10],
-    iconAnchor: [5, 5],
-    popupAnchor: [0, -5]
-  });
-  let subwaySize = 15;
-  rkGlobal.icons.subway = L.icon({
-    iconUrl: 'css/subway.svg',
-    iconSize: [subwaySize, subwaySize],
-    iconAnchor: [subwaySize / 2, subwaySize / 2],
-    popupAnchor: [0, -subwaySize / 2]
-  });
-  rkGlobal.icons.sbahn = L.icon({
-    iconUrl: 'css/sbahn.svg',
-    iconSize: [subwaySize, subwaySize],
-    iconAnchor: [subwaySize / 2, subwaySize / 2],
-    popupAnchor: [0, -subwaySize / 2]
-  });
-  let railwaySize = 20;
-  rkGlobal.icons.railway = L.icon({
-    iconUrl: 'css/railway.svg',
-    iconSize: [railwaySize, railwaySize],
-    iconAnchor: [railwaySize / 2, railwaySize / 2],
-    popupAnchor: [0, -railwaySize / 2]
+function addSteepSectionLayers() {
+  // For steep sections (bristles), MapLibre GL JS doesn't have direct equivalent to Leaflet's bristle patterns
+  // Original Leaflet used getSteepDashStyle() with special dashArray and dashOffset for bristle effect
+  // MapLibre alternatives implemented:
+  // 1. Short dash patterns to simulate bristles (current implementation)
+  // 2. Alternative: thicker lines with different colors for steep sections
+  // 3. Alternative: double lines or dotted patterns
+  
+  // Add steep section layers (bristles effect using perpendicular dash pattern)
+  // Priority 0 (main) steep sections
+  rkGlobal.map.addLayer({
+    id: 'bike-routes-main-steep',
+    type: 'line',
+    source: 'bike-routes',
+    filter: ['all', 
+      ['==', ['get', 'priority'], '0'],
+      ['==', ['get', 'steep'], 'yes']
+    ],
+    layout: {
+      'visibility': 'visible'
+    },
+    paint: {
+      'line-width': [
+        'interpolate',
+        ['linear'],
+        ['zoom'],
+        10, 6,
+        15, 12,
+        18, 24
+      ],
+      'line-color': [
+        'case',
+        ['==', ['get', 'stress'], '0'], rkGlobal.colors[0],
+        ['==', ['get', 'stress'], '1'], rkGlobal.colors[1],
+        ['==', ['get', 'stress'], '2'], rkGlobal.colors[2],
+        rkGlobal.colors[1]
+      ],
+      'line-opacity': rkGlobal.opacity,
+      'line-dasharray': [0.5, 2] // Short dashes to create bristle effect
+    }
   });
 
-  rkGlobal.icons.nextbike = createMarkerIcon('css/nextbike.svg');
-  rkGlobal.icons.nextbikeGray = createMarkerIcon('css/nextbike-gray.svg');
-  rkGlobal.icons.wienmobilrad = createMarkerIcon('css/wienmobilrad.svg');
-  rkGlobal.icons.wienmobilradGray = createMarkerIcon('css/wienmobilrad-gray.svg');
-  rkGlobal.icons.citybikelinz = createMarkerIcon('css/citybikelinz.svg');
-  rkGlobal.icons.citybikelinzGray = createMarkerIcon('css/citybikelinz-gray.svg');
-  rkGlobal.icons.bicycleShop = createMarkerIcon('css/bicycleShop.svg');
-  rkGlobal.icons.bicycleShopGray = createMarkerIcon('css/bicycleShop-gray.svg');
-  rkGlobal.icons.bicycleRepairStation = createMarkerIcon('css/bicycleRepairStation.svg');
-  rkGlobal.icons.bicycleRepairStationGray = createMarkerIcon('css/bicycleRepairStation-gray.svg');
-  rkGlobal.icons.bicyclePump = createMarkerIcon('css/bicyclePump.svg');
-  rkGlobal.icons.bicyclePumpGray = createMarkerIcon('css/bicyclePump-gray.svg');
-  rkGlobal.icons.bicycleTubeVending = createMarkerIcon('css/bicycleTubeVending.svg');
-  rkGlobal.icons.bicycleTubeVendingGray = createMarkerIcon('css/bicycleTubeVending-gray.svg');
-  rkGlobal.icons.drinkingWater = createMarkerIcon('css/drinkingWater.svg');
-  rkGlobal.icons.drinkingWaterGray = createMarkerIcon('css/drinkingWater-gray.svg');
+  // Priority 1 (secondary) steep sections
+  rkGlobal.map.addLayer({
+    id: 'bike-routes-secondary-steep',
+    type: 'line',
+    source: 'bike-routes',
+    filter: ['all', 
+      ['==', ['get', 'priority'], '1'],
+      ['==', ['get', 'steep'], 'yes']
+    ],
+    layout: {
+      'visibility': 'visible'
+    },
+    paint: {
+      'line-width': [
+        'interpolate',
+        ['linear'],
+        ['zoom'],
+        10, 3,
+        15, 6,
+        18, 12
+      ],
+      'line-color': [
+        'case',
+        ['==', ['get', 'stress'], '0'], rkGlobal.colors[0],
+        ['==', ['get', 'stress'], '1'], rkGlobal.colors[1],
+        ['==', ['get', 'stress'], '2'], rkGlobal.colors[2],
+        rkGlobal.colors[1]
+      ],
+      'line-opacity': rkGlobal.opacity,
+      'line-dasharray': [0.5, 2] // Short bristles
+    }
+  });
+
+  // Priority 2 (local) steep sections
+  rkGlobal.map.addLayer({
+    id: 'bike-routes-local-steep',
+    type: 'line',
+    source: 'bike-routes',
+    filter: ['all', 
+      ['==', ['get', 'priority'], '2'],
+      ['==', ['get', 'steep'], 'yes']
+    ],
+    layout: {
+      'visibility': 'visible'
+    },
+    paint: {
+      'line-width': [
+        'interpolate',
+        ['linear'],
+        ['zoom'],
+        10, 1.6,
+        15, 3,
+        18, 6
+      ],
+      'line-color': [
+        'case',
+        ['==', ['get', 'stress'], '0'], rkGlobal.colors[0],
+        ['==', ['get', 'stress'], '1'], rkGlobal.colors[1],
+        ['==', ['get', 'stress'], '2'], rkGlobal.colors[2],
+        rkGlobal.colors[1]
+      ],
+      'line-opacity': rkGlobal.opacity,
+      'line-dasharray': [0.5, 2] // Short bristles
+    }
+  });
 }
 
-function createMarkerIcon(url) {
-  let markerWidth = 100 / 5;
-  let markerHeight = 150 / 5;
-  return L.icon({
-    iconUrl: url,
-    iconSize: [markerWidth, markerHeight],
-    iconAnchor: [markerWidth / 2, markerHeight],
-    popupAnchor: [0, -markerHeight]
+function addOnewayArrowLayers() {
+  // For oneway arrows, MapLibre GL JS has limitations compared to Leaflet's polylineDecorator
+  // Original Leaflet used L.polylineDecorator with arrow symbols placed along lines
+  // MapLibre alternatives implemented:
+  // 1. Symbol layer with text arrows (current implementation)
+  // 2. Alternative: asymmetric dash patterns to suggest direction
+  // 3. Alternative: different line weights/colors for oneway roads
+  
+  // Priority 0 (main) oneway arrows
+  rkGlobal.map.addLayer({
+    id: 'bike-routes-main-arrows',
+    type: 'symbol',
+    source: 'bike-routes',
+    filter: ['all', 
+      ['==', ['get', 'priority'], '0'],
+      ['==', ['get', 'oneway'], 'yes']
+    ],
+    layout: {
+      'visibility': 'visible',
+      'symbol-placement': 'line',
+      'text-field': '▶',
+      'text-font': ['Open Sans Semibold', 'Arial Unicode MS Regular'],
+      'text-size': [
+        'interpolate',
+        ['linear'],
+        ['zoom'],
+        10, 8,
+        15, 12,
+        18, 20
+      ],
+      'symbol-spacing': [
+        'interpolate',
+        ['linear'],
+        ['zoom'],
+        10, 50,
+        15, 80,
+        18, 120
+      ],
+      'text-rotation-alignment': 'map',
+      'text-pitch-alignment': 'map'
+    },
+    paint: {
+      'text-color': [
+        'case',
+        ['==', ['get', 'stress'], '0'], rkGlobal.colors[0],
+        ['==', ['get', 'stress'], '1'], rkGlobal.colors[1],
+        ['==', ['get', 'stress'], '2'], rkGlobal.colors[2],
+        rkGlobal.colors[1]
+      ],
+      'text-opacity': rkGlobal.opacity
+    }
+  });
+
+  // Priority 1 (secondary) oneway arrows
+  rkGlobal.map.addLayer({
+    id: 'bike-routes-secondary-arrows',
+    type: 'symbol',
+    source: 'bike-routes',
+    filter: ['all', 
+      ['==', ['get', 'priority'], '1'],
+      ['==', ['get', 'oneway'], 'yes']
+    ],
+    layout: {
+      'visibility': 'visible',
+      'symbol-placement': 'line',
+      'text-field': '▶',
+      'text-font': ['Open Sans Semibold', 'Arial Unicode MS Regular'],
+      'text-size': [
+        'interpolate',
+        ['linear'],
+        ['zoom'],
+        10, 6,
+        15, 10,
+        18, 16
+      ],
+      'symbol-spacing': [
+        'interpolate',
+        ['linear'],
+        ['zoom'],
+        10, 40,
+        15, 60,
+        18, 100
+      ],
+      'text-rotation-alignment': 'map',
+      'text-pitch-alignment': 'map'
+    },
+    paint: {
+      'text-color': [
+        'case',
+        ['==', ['get', 'stress'], '0'], rkGlobal.colors[0],
+        ['==', ['get', 'stress'], '1'], rkGlobal.colors[1],
+        ['==', ['get', 'stress'], '2'], rkGlobal.colors[2],
+        rkGlobal.colors[1]
+      ],
+      'text-opacity': rkGlobal.opacity
+    }
+  });
+
+  // Priority 2 (local) oneway arrows
+  rkGlobal.map.addLayer({
+    id: 'bike-routes-local-arrows',
+    type: 'symbol',
+    source: 'bike-routes',
+    filter: ['all', 
+      ['==', ['get', 'priority'], '2'],
+      ['==', ['get', 'oneway'], 'yes']
+    ],
+    layout: {
+      'visibility': 'visible',
+      'symbol-placement': 'line',
+      'text-field': '▶',
+      'text-font': ['Open Sans Semibold', 'Arial Unicode MS Regular'],
+      'text-size': [
+        'interpolate',
+        ['linear'],
+        ['zoom'],
+        10, 5,
+        15, 8,
+        18, 12
+      ],
+      'symbol-spacing': [
+        'interpolate',
+        ['linear'],
+        ['zoom'],
+        10, 30,
+        15, 50,
+        18, 80
+      ],
+      'text-rotation-alignment': 'map',
+      'text-pitch-alignment': 'map'
+    },
+    paint: {
+      'text-color': [
+        'case',
+        ['==', ['get', 'stress'], '0'], rkGlobal.colors[0],
+        ['==', ['get', 'stress'], '1'], rkGlobal.colors[1],
+        ['==', ['get', 'stress'], '2'], rkGlobal.colors[2],
+        rkGlobal.colors[1]
+      ],
+      'text-opacity': rkGlobal.opacity
+    }
   });
 }
 
-function createProblemMarkersIncludingPopup(geojsonPoint) {
-  let icons = getProblemIcons(geojsonPoint.properties);
-  if (icons == null) {
-    return undefined;
-  }
-  let description = getProblemDescriptionText(geojsonPoint.properties);
-  let latLng = L.geoJSON(geojsonPoint).getLayers()[0].getLatLng();
-  let markers = {
-    lowZoom: createMarkerIncludingPopup(latLng, icons.small, description, 'Problemstelle'),
-    highZoom: createMarkerIncludingPopup(latLng, icons.large, description, 'Problemstelle')
-  };
-  return markers;
+function addProblemMarkersToMap(problemMarkers) {
+  // Add source for problem markers
+  rkGlobal.map.addSource('problem-markers', {
+    type: 'geojson',
+    data: problemMarkers
+  });
+  
+  // Add problem markers layer
+  rkGlobal.map.addLayer({
+    id: 'problem-markers-layer',
+    type: 'symbol',
+    source: 'problem-markers',
+    layout: {
+      'icon-image': 'warning-triangle', // We'll need to add this icon
+      'icon-size': 0.8,
+      'icon-allow-overlap': true
+    },
+    paint: {
+      'icon-opacity': 0.8
+    }
+  });
 }
 
-
-/**
- * @param properties GeoJSON properties of a point
- * @return a small and a large icon or undefined if no icons should be used
- */
 function getProblemIcons(properties) {
   if (properties.leisure === 'swimming_pool') {
     return {
@@ -1021,6 +852,226 @@ function getProblemIcons(properties) {
       large: problemIcon
     };
   }
+}
+
+/**
+ * Updates layer visibility based on current zoom level.
+ * Mimics the original Leaflet updateStyles function behavior.
+ */
+function updateLayerVisibility() {
+  const zoom = rkGlobal.map.getZoom();
+  
+  // Priority visibility rules (matching original Leaflet behavior):
+  // Priority 0 (Überregional): fully visible from zoom 0, reduced from zoom 0 (always visible)
+  // Priority 1 (Regional): fully visible from zoom 14, reduced from zoom 12
+  // Priority 2 (Lokal): fully visible from zoom 15, reduced from zoom 14
+  
+  // Priority 0 layers (main routes) - always visible
+  setLayerVisibility('bike-routes-main', true);
+  setLayerVisibility('bike-routes-main-unpaved', true);
+  setLayerVisibility('bike-routes-main-steep', true);
+  
+  // Priority 1 layers (secondary routes) - visible from zoom 12+
+  const showSecondary = zoom >= rkGlobal.priorityReducedVisibilityFromZoom[1]; // zoom 12+
+  setLayerVisibility('bike-routes-secondary', showSecondary);
+  setLayerVisibility('bike-routes-secondary-unpaved', showSecondary);
+  setLayerVisibility('bike-routes-secondary-steep', showSecondary);
+  
+  // Priority 2 layers (local routes) - visible from zoom 14+
+  const showLocal = zoom >= rkGlobal.priorityReducedVisibilityFromZoom[2]; // zoom 14+
+  setLayerVisibility('bike-routes-local', showLocal);
+  setLayerVisibility('bike-routes-local-unpaved', showLocal);
+  setLayerVisibility('bike-routes-local-steep', showLocal);
+  
+  // Oneway arrows - only visible from zoom 12+ (matching original rkGlobal.onewayIconThreshold)
+  const showArrows = zoom >= rkGlobal.onewayIconThreshold; // zoom 12+
+  setLayerVisibility('bike-routes-main-arrows', showArrows);
+  setLayerVisibility('bike-routes-secondary-arrows', showArrows && showSecondary);
+  setLayerVisibility('bike-routes-local-arrows', showArrows && showLocal);
+}
+
+/**
+ * Helper function to set layer visibility
+ */
+function setLayerVisibility(layerId, visible) {
+  if (rkGlobal.map.getLayer(layerId)) {
+    rkGlobal.map.setLayoutProperty(layerId, 'visibility', visible ? 'visible' : 'none');
+  }
+}
+
+/**
+ * Initialize the layer control functionality
+ */
+function initializeLayerControl() {
+  const control = document.getElementById('layer-control');
+  const toggle = control.querySelector('.layer-control-toggle');
+  
+  // Toggle layer control visibility
+  toggle.addEventListener('click', function() {
+    control.classList.toggle('expanded');
+  });
+  
+  // Close when clicking outside
+  document.addEventListener('click', function(e) {
+    if (!control.contains(e.target)) {
+      control.classList.remove('expanded');
+    }
+  });
+  
+  // Handle layer checkbox changes
+  const layerCheckboxes = {
+    'layer-problems': 'problem-markers-layer',
+    'layer-transit': 'poi-transit',
+    'layer-bicycleShop': 'poi-bicycleShop', 
+    'layer-bicycleRepairStation': 'poi-bicycleRepairStation',
+    'layer-bicyclePump': 'poi-bicyclePump',
+    'layer-bicycleTubeVending': 'poi-bicycleTubeVending',
+    'layer-drinkingWater': 'poi-drinkingWater'
+  };
+  
+  Object.entries(layerCheckboxes).forEach(([checkboxId, layerId]) => {
+    const checkbox = document.getElementById(checkboxId);
+    if (checkbox) {
+      checkbox.addEventListener('change', function() {
+        togglePoiLayer(layerId, checkbox.checked);
+      });
+    }
+  });
+}
+
+/**
+ * Toggle POI layer visibility and load data if needed
+ */
+function togglePoiLayer(layerId, visible) {
+  if (layerId === 'problem-markers-layer') {
+    // Problem markers are already loaded
+    setLayerVisibility(layerId, visible);
+    return;
+  }
+  
+  if (visible) {
+    // Load POI data if not already loaded
+    const poiType = layerId.replace('poi-', '');
+    loadPoiData(poiType);
+  } else {
+    // Hide layer
+    setLayerVisibility(layerId, false);
+  }
+}
+
+/**
+ * Load POI data for a specific type
+ */
+async function loadPoiData(poiType) {
+  if (!rkGlobal.currentRegion) {
+    console.warn('No region selected, cannot load POI data');
+    return;
+  }
+  
+  const poiFile = `data/osm-overpass/${rkGlobal.currentRegion}-${poiType}.json`;
+  
+  try {
+    const response = await fetch(poiFile);
+    if (!response.ok) {
+      console.warn(`POI file not found: ${poiFile}`);
+      return;
+    }
+    
+    const data = await response.json();
+    createPoiLayer(poiType, data);
+  } catch (error) {
+    console.warn(`Error loading POI data for ${poiType}:`, error);
+  }
+}
+
+/**
+ * Create MapLibre layer for POI data
+ */
+function createPoiLayer(poiType, data) {
+  const layerId = `poi-${poiType}`;
+  const sourceId = `source-${poiType}`;
+  
+  // Convert OSM Overpass data to GeoJSON
+  const geojsonData = {
+    type: "FeatureCollection",
+    features: data.elements
+      .filter(element => element.lat && element.lon)
+      .map(element => ({
+        type: "Feature",
+        geometry: {
+          type: "Point",
+          coordinates: [element.lon, element.lat]
+        },
+        properties: {
+          ...element.tags,
+          osmId: element.id,
+          osmType: element.type
+        }
+      }))
+  };
+  
+  // Remove existing source and layer if they exist
+  if (rkGlobal.map.getSource(sourceId)) {
+    rkGlobal.map.removeLayer(layerId);
+    rkGlobal.map.removeSource(sourceId);
+  }
+  
+  // Add source
+  rkGlobal.map.addSource(sourceId, {
+    type: 'geojson',
+    data: geojsonData
+  });
+  
+  // Add layer - use circle symbol for now since we don't have the POI icons loaded yet
+  rkGlobal.map.addLayer({
+    id: layerId,
+    type: 'circle',
+    source: sourceId,
+    layout: {
+      'visibility': 'visible'
+    },
+    paint: {
+      'circle-radius': 6,
+      'circle-color': getPoiColor(poiType),
+      'circle-stroke-color': '#fff',
+      'circle-stroke-width': 1,
+      'circle-opacity': 0.8
+    }
+  });
+  
+  console.log(`Added POI layer: ${layerId} with ${geojsonData.features.length} features`);
+}
+
+/**
+ * Get color for POI type (temporary until we have proper icons)
+ */
+function getPoiColor(poiType) {
+  const colorMap = {
+    'transit': '#004B67',     // Dark blue for transit
+    'bicycleShop': '#B8CC24',  // Green for bike shops
+    'bicycleRepairStation': '#51A4B6', // Light blue for repair
+    'bicyclePump': '#FF6600',  // Orange for pumps
+    'bicycleTubeVending': '#A2C8D3', // Light blue for vending
+    'drinkingWater': '#51A4B6' // Blue for water
+  };
+  
+  return colorMap[poiType] || '#666666';
+}
+
+/**
+ * Get icon name for POI type
+ */
+function getPoiIcon(poiType) {
+  const iconMap = {
+    'transit': 'subway-icon',
+    'bicycleShop': 'bicycle-shop-icon',
+    'bicycleRepairStation': 'repair-station-icon',
+    'bicyclePump': 'pump-icon',
+    'bicycleTubeVending': 'tube-vending-icon',
+    'drinkingWater': 'water-icon'
+  };
+  
+  return iconMap[poiType] || 'default-poi-icon';
 }
 
 /**
