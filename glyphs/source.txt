@@ -1,0 +1,1 @@
+taken from https://github.com/maplibre/maplibre-gl-js/tree/main/test/integration/assets/glyphs
