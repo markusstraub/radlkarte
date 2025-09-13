@@ -808,7 +808,7 @@ function addProblemMarkersToMap(problemMarkers) {
     source: 'problem-markers',
     layout: {
       'icon-image': 'warning',
-      'icon-size': 0.8,
+      'icon-size': 0.3,
       'icon-allow-overlap': true
     },
     paint: {
