@@ -1,0 +1,191 @@
+{
+  "bicyclePump": {
+    "height": 150,
+    "pixelRatio": 1,
+    "width": 100,
+    "x": 3973,
+    "y": 0
+  },
+  "bicyclePump-gray": {
+    "height": 150,
+    "pixelRatio": 1,
+    "width": 100,
+    "x": 3973,
+    "y": 150
+  },
+  "bicycleRepairStation": {
+    "height": 150,
+    "pixelRatio": 1,
+    "width": 100,
+    "x": 3973,
+    "y": 300
+  },
+  "bicycleRepairStation-gray": {
+    "height": 150,
+    "pixelRatio": 1,
+    "width": 100,
+    "x": 3973,
+    "y": 450
+  },
+  "bicycleShop": {
+    "height": 150,
+    "pixelRatio": 1,
+    "width": 100,
+    "x": 3973,
+    "y": 600
+  },
+  "bicycleShop-gray": {
+    "height": 150,
+    "pixelRatio": 1,
+    "width": 100,
+    "x": 3827,
+    "y": 746
+  },
+  "bicycleTubeVending": {
+    "height": 150,
+    "pixelRatio": 1,
+    "width": 100,
+    "x": 3927,
+    "y": 750
+  },
+  "bicycleTubeVending-gray": {
+    "height": 150,
+    "pixelRatio": 1,
+    "width": 100,
+    "x": 3827,
+    "y": 896
+  },
+  "citybikelinz": {
+    "height": 150,
+    "pixelRatio": 1,
+    "width": 100,
+    "x": 3927,
+    "y": 900
+  },
+  "citybikelinz-gray": {
+    "height": 150,
+    "pixelRatio": 1,
+    "width": 100,
+    "x": 3827,
+    "y": 1046
+  },
+  "dismount": {
+    "height": 594,
+    "pixelRatio": 1,
+    "width": 675,
+    "x": 3124,
+    "y": 1449
+  },
+  "drinkingWater": {
+    "height": 150,
+    "pixelRatio": 1,
+    "width": 100,
+    "x": 3927,
+    "y": 1050
+  },
+  "drinkingWater-gray": {
+    "height": 150,
+    "pixelRatio": 1,
+    "width": 100,
+    "x": 3827,
+    "y": 1196
+  },
+  "nextbike": {
+    "height": 150,
+    "pixelRatio": 1,
+    "width": 100,
+    "x": 3927,
+    "y": 1200
+  },
+  "nextbike-gray": {
+    "height": 150,
+    "pixelRatio": 1,
+    "width": 100,
+    "x": 3827,
+    "y": 1346
+  },
+  "nocargo": {
+    "height": 703,
+    "pixelRatio": 1,
+    "width": 703,
+    "x": 3124,
+    "y": 746
+  },
+  "nocargo+dismount": {
+    "height": 703,
+    "pixelRatio": 1,
+    "width": 1398,
+    "x": 0,
+    "y": 1562
+  },
+  "railway": {
+    "height": 87,
+    "pixelRatio": 1,
+    "width": 87,
+    "x": 3899,
+    "y": 1500
+  },
+  "railway3": {
+    "height": 87,
+    "pixelRatio": 1,
+    "width": 87,
+    "x": 3986,
+    "y": 1500
+  },
+  "reddot": {
+    "height": 25,
+    "pixelRatio": 1,
+    "width": 25,
+    "x": 3799,
+    "y": 1449
+  },
+  "sbahn": {
+    "height": 87,
+    "pixelRatio": 1,
+    "width": 87,
+    "x": 3899,
+    "y": 1587
+  },
+  "subway": {
+    "height": 400,
+    "pixelRatio": 1,
+    "width": 400,
+    "x": 1398,
+    "y": 1562
+  },
+  "swimming": {
+    "height": 1562,
+    "pixelRatio": 1,
+    "width": 1562,
+    "x": 0,
+    "y": 0
+  },
+  "swimming_small": {
+    "height": 1562,
+    "pixelRatio": 1,
+    "width": 1562,
+    "x": 1562,
+    "y": 0
+  },
+  "warning": {
+    "height": 746,
+    "pixelRatio": 1,
+    "width": 849,
+    "x": 3124,
+    "y": 0
+  },
+  "wienmobilrad": {
+    "height": 150,
+    "pixelRatio": 1,
+    "width": 100,
+    "x": 3927,
+    "y": 1350
+  },
+  "wienmobilrad-gray": {
+    "height": 150,
+    "pixelRatio": 1,
+    "width": 100,
+    "x": 3799,
+    "y": 1496
+  }
+}

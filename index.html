@@ -20,7 +20,7 @@
     // Fallback MapLibre object for testing when CDN is blocked
     if (typeof maplibregl === 'undefined') {
       window.maplibregl = {
-        Map: function(options) {
+        Map: function (options) {
           console.log('MapLibre fallback: Map created with options:', options);
           this.container = options.container;
           this._center = options.center || [0, 0];
@@ -29,55 +29,55 @@
           this._listeners = {};
           this._sources = {};
           this._layers = [];
-          
+
           // Create a div for the map
           const mapDiv = document.getElementById(this.container);
           if (mapDiv) {
             mapDiv.innerHTML = '<div style="width: 100%; height: 100%; background: #f8f8f8; display: flex; align-items: center; justify-content: center; color: #666; flex-direction: column;"><div style="text-align: center;"><h3>MapLibre Map (Fallback Mode)</h3><p>Center: ' + this._center + '</p><p>Zoom: ' + this._zoom + '</p><p id="map-status">Ready to load bike routes...</p></div></div>';
           }
-          
+
           // Simulate map loaded event
           setTimeout(() => {
             if (this._listeners.load) {
               this._listeners.load.forEach(callback => callback());
             }
           }, 100);
-          
+
           return this;
         },
-        NavigationControl: function() {
+        NavigationControl: function () {
           console.log('MapLibre fallback: NavigationControl created');
           return {};
         },
-        ScaleControl: function(options) {
+        ScaleControl: function (options) {
           console.log('MapLibre fallback: ScaleControl created with options:', options);
           return {};
         },
-        GeolocateControl: function(options) {
+        GeolocateControl: function (options) {
           console.log('MapLibre fallback: GeolocateControl created with options:', options);
           return {};
         }
       };
-      
+
       maplibregl.Map.prototype = {
-        on: function(event, callback) {
+        on: function (event, callback) {
           if (!this._listeners[event]) {
             this._listeners[event] = [];
           }
           this._listeners[event].push(callback);
           return this;
         },
-        addControl: function(control, position) {
+        addControl: function (control, position) {
           console.log('MapLibre fallback: Control added at position:', position);
           return this;
         },
-        getCenter: function() {
+        getCenter: function () {
           return this._center;
         },
-        getZoom: function() {
+        getZoom: function () {
           return this._zoom;
         },
-        flyTo: function(options) {
+        flyTo: function (options) {
           console.log('MapLibre fallback: Flying to:', options);
           this._center = options.center;
           this._zoom = options.zoom;
@@ -87,7 +87,7 @@
           }
           return this;
         },
-        addSource: function(id, source) {
+        addSource: function (id, source) {
           console.log('MapLibre fallback: Adding source:', id, source);
           this._sources[id] = source;
           if (source.data && source.data.features) {
@@ -98,7 +98,7 @@
           }
           return this;
         },
-        addLayer: function(layer) {
+        addLayer: function (layer) {
           console.log('MapLibre fallback: Adding layer:', layer.id, layer);
           this._layers.push(layer);
           const status = document.getElementById('map-status');
@@ -107,23 +107,23 @@
           }
           return this;
         },
-        removeSource: function(id) {
+        removeSource: function (id) {
           console.log('MapLibre fallback: Removing source:', id);
           delete this._sources[id];
           return this;
         },
-        removeLayer: function(id) {
+        removeLayer: function (id) {
           console.log('MapLibre fallback: Removing layer:', id);
           this._layers = this._layers.filter(l => l.id !== id);
           return this;
         },
-        getSource: function(id) {
+        getSource: function (id) {
           return this._sources[id];
         },
-        getLayer: function(id) {
+        getLayer: function (id) {
           return this._layers.find(l => l.id === id);
         },
-        setLayoutProperty: function(layerId, property, value) {
+        setLayoutProperty: function (layerId, property, value) {
           console.log('MapLibre fallback: Setting layout property:', layerId, property, value);
           const layer = this._layers.find(l => l.id === layerId);
           if (layer) {
@@ -417,18 +417,19 @@
         </p>
         <ul class="legend">
           <li>
-            <img src="css/dismount.svg" width="60" alt="Symbol: Schiebestellen"><strong>Schiebestelle</strong><br>
+            <img src="sprites/dismount.svg" width="60" alt="Symbol: Schiebestellen"><strong>Schiebestelle</strong><br>
             Schiebe-Empfehlung beispielsweise bei unübersichtlichen Kreuzungen oder Fahrverboten
           </li>
           <li>
-            <img src="css/nocargo.svg" width="60" alt="Symbol: Untauglichkeit für Spezialräder"><strong>Untauglichkeit
+            <img src="sprites/nocargo.svg" width="60"
+              alt="Symbol: Untauglichkeit für Spezialräder"><strong>Untauglichkeit
               für
               Spezialräder</strong><br>
             Stellen, die mit Lastenrädern, Rädern mit Anhängern, oder anderen breiten bzw. schweren Rädern
             umständlich oder gar nicht passierbar sind
           </li>
           <li>
-            <img src="css/warning.svg" width="60" alt="Symbol: Allgemeine Problemstelle"><strong>Allgemeine
+            <img src="sprites/warning.svg" width="60" alt="Symbol: Allgemeine Problemstelle"><strong>Allgemeine
               Problemstelle</strong><br>
             bzw. Hinweis
           </li>
@@ -450,9 +451,9 @@
         <h4>Kategorien</h4>
         <ul class="legend">
           <li>
-            <img src="css/wienmobilrad.svg" width="30" alt="Symbol: Leihrad">
-            <img src="css/citybikelinz.svg" width="30" alt="Symbol: Leihrad">
-            <img src="css/nextbike.svg" width="30" alt="Symbol: Leihrad">
+            <img src="sprites/wienmobilrad.svg" width="30" alt="Symbol: Leihrad">
+            <img src="sprites/citybikelinz.svg" width="30" alt="Symbol: Leihrad">
+            <img src="sprites/nextbike.svg" width="30" alt="Symbol: Leihrad">
             <strong>Leihräder</strong><br>
             Stationen von Leihradsystemen (Bike-Sharing) mit der Anzahl an aktuell verfügbaren Rädern.
             Graues Symbol: leer (kein Rad verfügbar).
@@ -464,34 +465,34 @@
             <a href="https://www.nextbike.at/de/niederoesterreich/" target="_blank">Nextbike&nbsp;Niederösterreich</a>.
           </li>
           <li>
-            <img src="css/subway.svg" width="30" alt="Symbol: U-Bahn">
-            <img src="css/sbahn.svg" width="30" alt="Symbol: S-Bahn">
-            <img src="css/railway.svg" width="30" alt="Symbol: Bahnhof">
+            <img src="sprites/subway.svg" width="30" alt="Symbol: U-Bahn">
+            <img src="sprites/sbahn.svg" width="30" alt="Symbol: S-Bahn">
+            <img src="sprites/railway.svg" width="30" alt="Symbol: Bahnhof">
             <strong>Öffentlicher Verkehr</strong><br>
             U-Bahn- und S-Bahn-Stationen sowie Bahnhöfe.
           </li>
           <li>
-            <img src="css/bicycleShop.svg" width="30" alt="Symbol: Fahrradgeschäfte">
+            <img src="sprites/bicycleShop.svg" width="30" alt="Symbol: Fahrradgeschäfte">
             <strong>Fahrradgeschäfte</strong><br>
             Verkauf bzw. Reparatur von Fahrrädern sowie Zubehör.
           </li>
           <li>
-            <img src="css/bicycleRepairStation.svg" width="30" alt="Symbol: Reparaturstation">
+            <img src="sprites/bicycleRepairStation.svg" width="30" alt="Symbol: Reparaturstation">
             <strong>Reparaturstationen</strong><br>
             Fahrrad-Reparaturbereich, in der Regel mit Werkzeug, Luftpumpe und Montageständer ausgestattet.
           </li>
           <li>
-            <img src="css/bicyclePump.svg" width="30" alt="Symbol: Luftpumpe">
+            <img src="sprites/bicyclePump.svg" width="30" alt="Symbol: Luftpumpe">
             <strong>Luftpumpen</strong><br>
             Frei zugängliche Luftpumpen.
           </li>
           <li>
-            <img src="css/bicycleTubeVending.svg" width="30" alt="Symbol: Schlauchomat">
+            <img src="sprites/bicycleTubeVending.svg" width="30" alt="Symbol: Schlauchomat">
             <strong>Schlauchomaten</strong><br>
             Automaten zum Kauf von Fahrradschläuchen.
           </li>
           <li>
-            <img src="css/drinkingWater.svg" width="30" alt="Symbol: Trinkwasser">
+            <img src="sprites/drinkingWater.svg" width="30" alt="Symbol: Trinkwasser">
             <strong>Trinkwasser</strong><br>
             Öffentlich zugängliche Trinkwasserbrunnen oder -quellen.
             Achtung: in den Wintermonaten meist geschlossen!
@@ -716,7 +717,7 @@
     </div>
   </div>
   <div id="map"></div>
-  
+
   <!-- Layer chooser control -->
   <div id="layer-control" class="layer-control">
     <div class="layer-control-toggle">
@@ -738,7 +739,7 @@
       </div>
     </div>
   </div>
-  
+
   <div id="radlobby-logo">
     <a href="http://www.radlobby.at" target="_blank"><img src="css/radlobby.png" alt="Radlobby Österreich" /></a>
   </div>

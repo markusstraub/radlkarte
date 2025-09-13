@@ -112,6 +112,7 @@ function createBaseMapStyle() {
   return {
     version: 8,
     glyphs: 'glyphs/{fontstack}/{range}.pbf',
+    sprite: 'sprites/icons', // skip .png/.json extension, created with https://github.com/flother/spreet
     sources: {
       'carto-light': {
         type: 'raster',
@@ -806,7 +807,7 @@ function addProblemMarkersToMap(problemMarkers) {
     type: 'symbol',
     source: 'problem-markers',
     layout: {
-      'icon-image': 'warning-triangle', // We'll need to add this icon
+      'icon-image': 'warning',
       'icon-size': 0.8,
       'icon-allow-overlap': true
     },
