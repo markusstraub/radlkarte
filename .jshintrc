@@ -9,6 +9,7 @@
     "L": true,
     "turf": true,
     "_paq": true,
-    "$": true
+    "$": true,
+    "maplibregl": true
   }
 }

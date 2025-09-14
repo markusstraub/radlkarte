@@ -392,3 +392,25 @@ span.transitLine {
 .layer-control-section input[type="checkbox"] {
   margin-right: 5px;
 }
+
+/* MapLibre Popup Styling for Problem Markers */
+.maplibregl-popup.problem-marker-popup .maplibregl-popup-content {
+  font-family: Roboto, arial, sans-serif;
+  max-width: 300px;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.maplibregl-popup.problem-marker-popup .maplibregl-popup-content h2 {
+  font-family: 'Museo 500 Regular', sans-serif;
+  font-size: 100%;
+  margin-top: 0;
+  margin-bottom: 0.2em;
+  color: #004B67;
+}
+
+.maplibregl-popup.problem-marker-popup .maplibregl-popup-content p {
+  margin-top: 0;
+  margin-bottom: 0.2em;
+  color: #333;
+}

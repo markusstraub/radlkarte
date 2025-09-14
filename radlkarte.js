@@ -807,47 +807,110 @@ function addProblemMarkersToMap(problemMarkers) {
     type: 'symbol',
     source: 'problem-markers',
     layout: {
-      'icon-image': 'warning',
-      'icon-size': 0.3,
+      'icon-image': [
+        'case',
+        ['==', ['get', 'dismount'], 'yes'],
+        'dismount',
+        ['==', ['get', 'nocargo'], 'yes'],
+        'noCargo',
+        ['==', ['get', 'warning'], 'yes'],
+        'warning',
+        ['==', ['get', 'leisure'], 'swimming_pool'],
+        'swimming',
+        'redDot' // fallback
+      ],
+      'icon-size': 0.4,
       'icon-allow-overlap': true
     },
     paint: {
       'icon-opacity': 0.8
     }
   });
+
+  // Add popup functionality for problem markers
+  addProblemMarkerPopups();
 }
 
-function getProblemIcons(properties) {
-  if (properties.leisure === 'swimming_pool') {
-    return {
-      small: rkGlobal.icons.swimmingSmall,
-      large: rkGlobal.icons.swimming
-    };
-  }
+/**
+ * Add popup functionality to problem markers
+ * Shows description on hover (desktop) and tap (mobile)
+ */
+function addProblemMarkerPopups() {
+  let popup = null;
+  let currentFeature = null;
 
-  let dismount = properties.dismount === 'yes';
-  let nocargo = properties.nocargo === 'yes';
-  let warning = properties.warning === 'yes';
+  // Create a popup instance
+  const createPopup = (feature, lngLat) => {
+    const description = getProblemDescriptionText(feature.properties);
 
-  let problemIcon;
-  if (dismount && nocargo) {
-    problemIcon = rkGlobal.icons.noCargoAndDismount;
-  } else if (dismount) {
-    problemIcon = rkGlobal.icons.dismount;
-  } else if (nocargo) {
-    problemIcon = rkGlobal.icons.noCargo;
-  } else if (warning) {
-    problemIcon = rkGlobal.icons.warning;
-  }
+    popup = new maplibregl.Popup({
+      closeButton: false,
+      closeOnClick: false,
+      className: 'problem-marker-popup'
+    })
+      .setLngLat(lngLat)
+      .setHTML(description)
+      .addTo(rkGlobal.map);
+  };
 
-  if (problemIcon === undefined) {
-    return undefined;
-  } else {
-    return {
-      small: rkGlobal.icons.redDot,
-      large: problemIcon
-    };
-  }
+  // Remove existing popup
+  const removePopup = () => {
+    if (popup) {
+      popup.remove();
+      popup = null;
+      currentFeature = null;
+    }
+  };
+
+  // Mouse enter event (hover) - for desktop
+  rkGlobal.map.on('mouseenter', 'problem-markers-layer', (e) => {
+    // Change cursor to pointer
+    rkGlobal.map.getCanvas().style.cursor = 'pointer';
+
+    // Show popup on hover
+    if (e.features.length > 0) {
+      const feature = e.features[0];
+      currentFeature = feature;
+      createPopup(feature, e.lngLat);
+    }
+  });
+
+  // Mouse leave event - for desktop
+  rkGlobal.map.on('mouseleave', 'problem-markers-layer', () => {
+    // Reset cursor
+    rkGlobal.map.getCanvas().style.cursor = '';
+
+    // Remove popup on mouse leave
+    removePopup();
+  });
+
+  // Click event - for mobile/touch and desktop as fallback
+  rkGlobal.map.on('click', 'problem-markers-layer', (e) => {
+    if (e.features.length > 0) {
+      const feature = e.features[0];
+
+      // If popup is already showing for this feature, remove it (toggle behavior)
+      if (currentFeature && currentFeature.id === feature.id) {
+        removePopup();
+      } else {
+        // Show popup for clicked feature
+        removePopup(); // Remove any existing popup first
+        createPopup(feature, e.lngLat);
+        currentFeature = feature;
+      }
+    }
+  });
+
+  // Close popup when clicking elsewhere on the map
+  rkGlobal.map.on('click', (e) => {
+    // Check if click was on the problem markers layer
+    const features = rkGlobal.map.queryRenderedFeatures(e.point, { layers: ['problem-markers-layer'] });
+
+    // If no problem marker was clicked, remove popup
+    if (features.length === 0) {
+      removePopup();
+    }
+  });
 }
 
 /**
@@ -1078,16 +1141,17 @@ function getProblemDescriptionText(properties) {
   let dismount = properties.dismount === 'yes';
   let nocargo = properties.nocargo === 'yes';
   let warning = properties.warning === 'yes';
+  let swimming = properties.leisure === 'swimming_pool';
 
   let title = "";
-  if (dismount && nocargo) {
-    title = 'Schiebestelle / untauglich für Spezialräder';
-  } else if (dismount) {
+  if (dismount) {
     title = 'Schiebestelle';
   } else if (nocargo) {
     title = 'Untauglich für Spezialräder';
   } else if (warning) {
     title = 'Achtung';
+  } else if (swimming) {
+    title = 'Schwimmbad';
   }
 
   const description = properties.description ? `<p>${properties.description}</p>` : "";
