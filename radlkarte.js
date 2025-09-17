@@ -461,28 +461,32 @@ function clearAndLoadBasicOsmPoi(type, region) {
           // bicycle shops are usually closed on holidays but this is rarely mapped
           opening_hours_value += ";PH off";
         }
-        // NOTE: state left empty because school holidays are likely not relevant (not a single mapped instance in our data set)
-        // noinspection JSPotentiallyInvalidConstructorUsage
-        const oh = new opening_hours(opening_hours_value, {
-          lat: latLng.lat,
-          lon: latLng.lng,
-          address: { country_code: "at", state: "" }
-        });
-        currentlyOpen = oh.getState();
-        const openText = currentlyOpen ? "jetzt geöffnet" : "derzeit geschlossen";
-        let items = oh.prettifyValue({ conf: { locale: 'de' }, }).split(";");
+        try {
+          // NOTE: state left empty because school holidays are likely not relevant (not a single mapped instance in our data set)
+          // noinspection JSPotentiallyInvalidConstructorUsage
+          const oh = new opening_hours(opening_hours_value, {
+            lat: latLng.lat,
+            lon: latLng.lng,
+            address: { country_code: "at", state: "" }
+          });
+          currentlyOpen = oh.getState();
+          const openText = currentlyOpen ? "jetzt geöffnet" : "derzeit geschlossen";
+          let items = oh.prettifyValue({ conf: { locale: 'de' }, }).split(";");
 
-        for (let i = 0; i < items.length; i++) {
-          items[i] = items[i].trim();
-          if (type === "bicycleShop" && items[i] === "Feiertags geschlossen") {
-            // avoid redundant info
-            items[i] = "";
-          } else {
-            items[i] = `<li>${items[i]}</li>`;
+          for (let i = 0; i < items.length; i++) {
+            items[i] = items[i].trim();
+            if (type === "bicycleShop" && items[i] === "Feiertags geschlossen") {
+              // avoid redundant info
+              items[i] = "";
+            } else {
+              items[i] = `<li>${items[i]}</li>`;
+            }
           }
+          const itemList = "<ul>" + items.join("\n") + "</ul>";
+          description += `<p>Öffnungszeiten (${openText}):</p>${itemList}`;
+        } catch (e) {
+          console.log("error parsing opening_hours '" + opening_hours_value + "' for " + type + " with OSM id " + element.id + ": " + e.message);
         }
-        const itemList = "<ul>" + items.join("\n") + "</ul>";
-        description += `<p>Öffnungszeiten (${openText}):</p>${itemList}`;
       }
 
       const phone = tags.phone != null ? tags.phone : tags["contact:phone"];
