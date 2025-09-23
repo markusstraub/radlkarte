@@ -111,7 +111,8 @@ function createBaseMapStyle() {
   return {
     version: 8,
     glyphs: 'glyphs/{fontstack}/{range}.pbf',
-    sprite: 'sprites/icons', // skip .png/.json extension, created with https://github.com/flother/spreet
+    // skip .png/.json extension, created with https://github.com/flother/spreet
+    sprite: window.location.origin + '/sprites/icons',
     sources: {
       'carto-light': {
         type: 'raster',
@@ -521,7 +522,7 @@ function addProblemMarkersToMap(problemMarkers) {
         ['==', ['get', 'dismount'], 'yes'],
         'dismount',
         ['==', ['get', 'nocargo'], 'yes'],
-        'noCargo',
+        'nocargo',
         ['==', ['get', 'warning'], 'yes'],
         'warning',
         ['==', ['get', 'leisure'], 'swimming_pool'],
