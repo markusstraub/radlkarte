@@ -454,7 +454,7 @@ function addSteepSectionLayers() {
 }
 
 function addOnewayArrowLayers() {
-  let factor = 5;
+  let factor = 3;
   ['0', '1', '2'].forEach((priority) => {
     rkGlobal.map.addLayer({
       id: `bike-routes-oneway-prio${priority}`,
@@ -468,8 +468,6 @@ function addOnewayArrowLayers() {
       layout: {
         'visibility': 'visible',
         'symbol-placement': 'line',
-        'text-overlap': 'always', // overlap not really working..
-        'text-allow-overlap': true,
         'text-field': '▶',
         'text-font': ['NotoCJK'],
         'text-size': [
@@ -480,14 +478,14 @@ function addOnewayArrowLayers() {
           15, 6 * rkGlobal.lineWidthFactor[priority] * factor,
           18, 28 * rkGlobal.lineWidthFactor[priority] * factor
         ],
-        'symbol-spacing': 20, //[
-        // 'interpolate',
-        // ['linear'],
-        // ['zoom'],
-        // 10, 0.2,
-        // 15, 0.2,
-        // 18, 0.2
-        // ],
+        'symbol-spacing': [
+          'interpolate',
+          ['linear'],
+          ['zoom'],
+          10, 10,
+          15, 15,
+          18, 25
+        ],
         'text-rotation-alignment': 'map',
         'text-pitch-alignment': 'map'
       },
