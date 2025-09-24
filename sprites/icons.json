@@ -1,4 +1,32 @@
 {
+  "100kph": {
+    "height": 100,
+    "pixelRatio": 1,
+    "width": 100,
+    "x": 500,
+    "y": 150
+  },
+  "arrow-stress0": {
+    "height": 64,
+    "pixelRatio": 1,
+    "width": 128,
+    "x": 600,
+    "y": 100
+  },
+  "arrow-stress1": {
+    "height": 64,
+    "pixelRatio": 1,
+    "width": 128,
+    "x": 728,
+    "y": 100
+  },
+  "arrow-stress2": {
+    "height": 64,
+    "pixelRatio": 1,
+    "width": 128,
+    "x": 600,
+    "y": 164
+  },
   "bicyclePump": {
     "height": 150,
     "pixelRatio": 1,
@@ -60,7 +88,7 @@
     "pixelRatio": 1,
     "width": 100,
     "x": 500,
-    "y": 150
+    "y": 250
   },
   "citybikelinz": {
     "height": 150,
@@ -80,7 +108,7 @@
     "height": 88,
     "pixelRatio": 1,
     "width": 100,
-    "x": 800,
+    "x": 900,
     "y": 0
   },
   "drinkingWater": {
@@ -116,48 +144,48 @@
     "pixelRatio": 1,
     "width": 100,
     "x": 500,
-    "y": 250
+    "y": 350
   },
   "railway": {
     "height": 87,
     "pixelRatio": 1,
     "width": 87,
-    "x": 800,
-    "y": 88
+    "x": 728,
+    "y": 164
   },
   "railway3": {
     "height": 87,
     "pixelRatio": 1,
     "width": 87,
-    "x": 887,
-    "y": 88
+    "x": 600,
+    "y": 228
   },
   "reddot": {
-    "height": 100,
-    "pixelRatio": 1,
-    "width": 100,
-    "x": 500,
-    "y": 350
-  },
-  "sbahn": {
-    "height": 87,
-    "pixelRatio": 1,
-    "width": 87,
-    "x": 600,
-    "y": 100
-  },
-  "subway": {
     "height": 100,
     "pixelRatio": 1,
     "width": 100,
     "x": 600,
     "y": 0
   },
-  "swimming": {
+  "sbahn": {
+    "height": 87,
+    "pixelRatio": 1,
+    "width": 87,
+    "x": 815,
+    "y": 176
+  },
+  "subway": {
     "height": 100,
     "pixelRatio": 1,
     "width": 100,
     "x": 700,
+    "y": 0
+  },
+  "swimming": {
+    "height": 100,
+    "pixelRatio": 1,
+    "width": 100,
+    "x": 800,
     "y": 0
   },
   "warning": {
@@ -165,7 +193,7 @@
     "pixelRatio": 1,
     "width": 100,
     "x": 900,
-    "y": 0
+    "y": 88
   },
   "wienmobilrad": {
     "height": 150,

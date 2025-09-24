@@ -1,4 +1,32 @@
 {
+  "100kph": {
+    "height": 200,
+    "pixelRatio": 2,
+    "width": 200,
+    "x": 1000,
+    "y": 300
+  },
+  "arrow-stress0": {
+    "height": 128,
+    "pixelRatio": 2,
+    "width": 256,
+    "x": 1200,
+    "y": 200
+  },
+  "arrow-stress1": {
+    "height": 128,
+    "pixelRatio": 2,
+    "width": 256,
+    "x": 1456,
+    "y": 200
+  },
+  "arrow-stress2": {
+    "height": 128,
+    "pixelRatio": 2,
+    "width": 256,
+    "x": 1200,
+    "y": 328
+  },
   "bicyclePump": {
     "height": 300,
     "pixelRatio": 2,
@@ -60,7 +88,7 @@
     "pixelRatio": 2,
     "width": 200,
     "x": 1000,
-    "y": 300
+    "y": 500
   },
   "citybikelinz": {
     "height": 300,
@@ -80,7 +108,7 @@
     "height": 176,
     "pixelRatio": 2,
     "width": 200,
-    "x": 1600,
+    "x": 1800,
     "y": 0
   },
   "drinkingWater": {
@@ -116,48 +144,48 @@
     "pixelRatio": 2,
     "width": 200,
     "x": 1000,
-    "y": 500
+    "y": 700
   },
   "railway": {
     "height": 174,
     "pixelRatio": 2,
     "width": 174,
-    "x": 1600,
-    "y": 176
+    "x": 1456,
+    "y": 328
   },
   "railway3": {
     "height": 174,
     "pixelRatio": 2,
     "width": 174,
-    "x": 1774,
-    "y": 176
+    "x": 1200,
+    "y": 456
   },
   "reddot": {
-    "height": 200,
-    "pixelRatio": 2,
-    "width": 200,
-    "x": 1000,
-    "y": 700
-  },
-  "sbahn": {
-    "height": 174,
-    "pixelRatio": 2,
-    "width": 174,
-    "x": 1200,
-    "y": 200
-  },
-  "subway": {
     "height": 200,
     "pixelRatio": 2,
     "width": 200,
     "x": 1200,
     "y": 0
   },
-  "swimming": {
+  "sbahn": {
+    "height": 174,
+    "pixelRatio": 2,
+    "width": 174,
+    "x": 1630,
+    "y": 352
+  },
+  "subway": {
     "height": 200,
     "pixelRatio": 2,
     "width": 200,
     "x": 1400,
+    "y": 0
+  },
+  "swimming": {
+    "height": 200,
+    "pixelRatio": 2,
+    "width": 200,
+    "x": 1600,
     "y": 0
   },
   "warning": {
@@ -165,7 +193,7 @@
     "pixelRatio": 2,
     "width": 200,
     "x": 1800,
-    "y": 0
+    "y": 176
   },
   "wienmobilrad": {
     "height": 300,

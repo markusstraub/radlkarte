@@ -35,7 +35,7 @@ rkGlobal.priorityFullVisibleFromZoom = [0, 14, 15];
 rkGlobal.priorityReducedVisibilityFromZoom = [0, 12, 14];
 rkGlobal.onewayIconThreshold = 12;
 rkGlobal.problemIconThreshold = 14;
-rkGlobal.lineWidthFactor = [1.6, 0.6, 0.3];
+rkGlobal.lineWidthFactor = [2, 0.6, 0.3];
 rkGlobal.opacity = 0.62;
 rkGlobal.colors = ['#004B67', '#51A4B6', '#FF6600']; // dark blue - light blue - orange
 
@@ -363,6 +363,10 @@ function addPavedRouteLayers() {
         ['!=', ['get', 'unpaved'], 'yes']
       ],
       minzoom: rkGlobal.priorityReducedVisibilityFromZoom[priority],
+      layout: {
+        'line-cap': 'round',
+        'line-join': 'round',
+      },
       paint: {
         'line-width': [
           'interpolate',
@@ -396,6 +400,10 @@ function addUnpavedRouteLayers() {
         ['==', ['get', 'unpaved'], 'yes']
       ],
       minzoom: rkGlobal.priorityReducedVisibilityFromZoom[priority],
+      layout: {
+        'line-cap': 'round',
+        'line-join': 'round',
+      },
       paint: {
         'line-width': [
           'interpolate',
@@ -413,7 +421,7 @@ function addUnpavedRouteLayers() {
           rkGlobal.colors[1] // default
         ],
         'line-opacity': rkGlobal.opacity,
-        'line-dasharray': [2, 1]
+        'line-dasharray': [1, 1.5], /* fine-tuned to align with steep bristles */
       }
     });
   });
@@ -448,58 +456,51 @@ function addSteepSectionLayers() {
           rkGlobal.colors[1] // default
         ],
         'line-opacity': rkGlobal.opacity,
-        'line-dasharray': [0.1, 1]
+        'line-dasharray': [0.1, 0.73] /* fine-tuned to align unpaved dashes */
       }
     });
   });
 }
 
+/**
+ * Create oneway arrows as line patterns using sprites.
+ * Unfortunately this means that the color is "hardcoded" in the sprite
+ * if we ever want to change the line colors.
+ *
+ * But the initial approach to use a symbol layer / font did not work out,
+ * text symbols were sometimes shown in the wrong color and/or direction.
+ */
 function addOnewayArrowLayers() {
   let factor = 3;
-  ['0', '1', '2'].forEach((priority) => {
-    rkGlobal.map.addLayer({
-      id: `bike-routes-oneway-prio${priority}`,
-      type: 'symbol',
-      source: 'bike-routes',
-      filter: ['all',
-        ['==', ['get', 'priority'], priority],
-        ['==', ['get', 'oneway'], 'yes']
-      ],
-      minzoom: rkGlobal.priorityReducedVisibilityFromZoom[priority],
-      layout: {
-        'visibility': 'visible',
-        'symbol-placement': 'line',
-        'text-field': '▶',
-        'text-font': ['NotoCJK'],
-        'text-size': [
-          'interpolate',
-          ['linear'],
-          ['zoom'],
-          10, 1 * rkGlobal.lineWidthFactor[priority] * factor,
-          15, 6 * rkGlobal.lineWidthFactor[priority] * factor,
-          18, 28 * rkGlobal.lineWidthFactor[priority] * factor
+  ['0', '1', '2'].forEach((stress) => {
+    ['0', '1', '2'].forEach((priority) => {
+      rkGlobal.map.addLayer({
+        id: `bike-routes-oneway-stress${stress}-prio${priority}`,
+        type: 'line',
+        source: 'bike-routes',
+        filter: ['all',
+          ['==', ['get', 'stress'], stress],
+          ['==', ['get', 'priority'], priority],
+          ['==', ['get', 'oneway'], 'yes']
         ],
-        'symbol-spacing': [
-          'interpolate',
-          ['linear'],
-          ['zoom'],
-          10, 10,
-          15, 15,
-          18, 25
-        ],
-        'text-rotation-alignment': 'map',
-        'text-pitch-alignment': 'map'
-      },
-      paint: {
-        'text-color': [
-          'case',
-          ['==', ['get', 'stress'], '0'], rkGlobal.colors[0],
-          ['==', ['get', 'stress'], '1'], rkGlobal.colors[1],
-          ['==', ['get', 'stress'], '2'], rkGlobal.colors[2],
-          rkGlobal.colors[1] // default
-        ],
-        'text-opacity': rkGlobal.opacity,
-      }
+        minzoom: rkGlobal.priorityReducedVisibilityFromZoom[priority],
+        // layout: {
+        //   'line-cap': 'round',
+        //   'line-join': 'round',
+        // },
+        paint: {
+          'line-width': [
+            'interpolate',
+            ['linear'],
+            ['zoom'],
+            10, 1 * rkGlobal.lineWidthFactor[priority] * factor,
+            15, 6 * rkGlobal.lineWidthFactor[priority] * factor,
+            18, 28 * rkGlobal.lineWidthFactor[priority] * factor
+          ],
+          'line-pattern': `arrow-stress${stress}`,
+          'line-opacity': rkGlobal.opacity,
+        }
+      });
     });
   });
 }
