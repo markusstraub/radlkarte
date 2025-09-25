@@ -94,7 +94,8 @@ function loadMapLibre() {
     center: [16.3738, 48.2082], // Vienna center
     zoom: 11,
     minZoom: 0,
-    maxZoom: 19
+    maxZoom: 19,
+    hash: true
   });
 
   // initializeSidebar();
@@ -243,12 +244,12 @@ function updateRadlkarteRegion(region) {
   rkGlobal.pageHeader().text('Radlkarte ' + configuration.title);
 
   // Center map on region
-  if (configuration.centerLngLat) {
-    rkGlobal.map.flyTo({
-      center: configuration.centerLngLat,
-      zoom: rkGlobal.defaultZoom
-    });
-  }
+  // if (configuration.centerLngLat) {
+  //   rkGlobal.map.flyTo({
+  //     center: configuration.centerLngLat,
+  //     zoom: rkGlobal.defaultZoom
+  //   });
+  // }
 
   // Virtual page hit in matomo analytics
   if (typeof _paq !== 'undefined') {
