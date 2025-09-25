@@ -91,10 +91,11 @@ function loadMapLibre() {
     container: 'map',
     style: createBaseMapStyle(),
     attributionControl: false,
-    center: [16.3738, 48.2082], // Vienna center
+    center: [16.3738, 48.2082], // default: Vienna
     zoom: 11,
     minZoom: 0,
     maxZoom: 19,
+    rollEnabled: true, // enable roll (tilt) with ctrl+drag
     hash: true
   });
 
@@ -120,6 +121,28 @@ function createBaseMapStyle() {
         ],
         tileSize: 256,
         attribution: '&copy; <a href="https://www.openstreetmap.org" target="_blank">OpenStreetMap</a> contributors | &copy; <a href="https://carto.com/attributions" target="_blank">CARTO</a>'
+      },
+      mapnik: {
+        type: 'raster',
+        tiles: ['https://a.tile.openstreetmap.org/{z}/{x}/{y}.png'],
+        tileSize: 256,
+        attribution: '&copy; OpenStreetMap Contributors',
+        maxzoom: 19
+      },
+      contour: {
+        type: 'vector',
+        url: 'https://api.maptiler.com/tiles/contours-v2/tiles.json?key=QZJX8Ujsloeve8stpToL',
+      },
+      // Use a different source for terrain and hillshade layers, to improve render quality
+      terrain: {
+        type: 'raster-dem',
+        url: 'https://api.maptiler.com/tiles/terrain-rgb-v2/tiles.json?key=QZJX8Ujsloeve8stpToL',
+        tileSize: 256
+      },
+      hillshade: {
+        type: 'raster-dem',
+        url: 'https://api.maptiler.com/tiles/terrain-rgb-v2/tiles.json?key=QZJX8Ujsloeve8stpToL',
+        tileSize: 256
       }
     },
     layers: [
@@ -127,8 +150,29 @@ function createBaseMapStyle() {
         id: 'carto-light-layer',
         type: 'raster',
         source: 'carto-light'
+      },
+      {
+        id: 'contour',
+        type: 'line',
+        source: 'contour',
+        'source-layer': 'contour_ft', // source-layer name from tileset
+        paint: {
+          'line-color': '#0046171c',
+          'line-width': 1
+        }
+      },
+      {
+        id: 'hills',
+        type: 'hillshade',
+        source: 'hillshade',
+        layout: { visibility: 'visible' },
+        paint: { 'hillshade-shadow-color': '#473B24' }
       }
-    ]
+    ],
+    terrain: {
+      source: 'terrain',
+      exaggeration: 2
+    },
   };
 }
 
@@ -182,20 +226,28 @@ function initializeSidebar() {
 }
 
 function initializeMapControls() {
+  rkGlobal.map.addControl(new maplibregl.AttributionControl({
+    compact: false,
+  }), 'bottom-right');
   rkGlobal.map.addControl(new maplibregl.ScaleControl({
     maxWidth: 200,
     unit: 'metric'
   }), 'bottom-right');
-  rkGlobal.map.addControl(new maplibregl.AttributionControl({
-    compact: true,
-  }), 'bottom-right');
-  rkGlobal.map.addControl(new maplibregl.NavigationControl(), 'top-right');
+  rkGlobal.map.addControl(new maplibregl.NavigationControl({
+    visualizePitch: true,
+    visualizeRoll: true,
+    showZoom: true,
+    showCompass: true
+  }), 'top-right');
   rkGlobal.map.addControl(new maplibregl.GeolocateControl({
     positionOptions: {
       enableHighAccuracy: true
     },
     trackUserLocation: true,
   }), 'top-right');
+  rkGlobal.map.addControl(new maplibregl.TerrainControl({
+    source: "terrain"
+  }));
 
   new maplibregl.Hash().addTo(rkGlobal.map);
 }
