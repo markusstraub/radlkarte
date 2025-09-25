@@ -31,10 +31,9 @@ rkGlobal.fullWidthThreshold = 768;
 // style: stress = color, priority = line width
 // rkGlobal.styleFunction = updateStyles; // Not needed for MapLibre
 rkGlobal.tileLayerOpacity = 1;
-rkGlobal.priorityFullVisibleFromZoom = [0, 14, 15];
-rkGlobal.priorityReducedVisibilityFromZoom = [0, 12, 14];
+rkGlobal.priorityVisibilityFromZoom = [0, 12, 14];
 rkGlobal.onewayIconThreshold = 12;
-rkGlobal.problemIconThreshold = 14;
+rkGlobal.problemIconThreshold = 14; // FIXME
 rkGlobal.lineWidthFactor = [2, 0.6, 0.3];
 rkGlobal.opacity = 0.62;
 rkGlobal.colors = ['#004B67', '#51A4B6', '#FF6600']; // dark blue - light blue - orange
@@ -46,39 +45,39 @@ rkGlobal.defaultZoom = 14;
 rkGlobal.configurations = {
   'rendertest': {
     title: '[DEV] Rendertest',
-    centerLatLng: [14.39, 50.09], // [longitude, latitude] for MapLibre
+    centerLngLat: [14.39, 50.09],
   },
   'bruckleitha': {
     title: 'Bezirk Bruck/Leitha',
-    centerLatLng: [16.78, 48.02],
+    centerLngLat: [16.78, 48.02],
     nextbikeUrl: 'https://maps.nextbike.net/maps/nextbike.json?domains=la,eq&bikes=false'
   },
   'klagenfurt': {
     title: 'Klagenfurt',
-    centerLatLng: [14.31, 46.62],
+    centerLngLat: [14.31, 46.62],
     nextbikeUrl: 'https://maps.nextbike.net/maps/nextbike.json?domains=ka&bikes=false'
   },
   'linz': {
     title: 'Linz',
-    centerLatLng: [14.26, 48.30],
+    centerLngLat: [14.26, 48.30],
     nextbikeUrl: 'https://maps.nextbike.net/maps/nextbike.json?domains=al&bikes=false'
   },
   'noe-suedost': {
     title: 'NÖ-Südost',
-    centerLatLng: [15.94, 47.67],
+    centerLngLat: [15.94, 47.67],
     nextbikeUrl: 'https://maps.nextbike.net/maps/nextbike.json?domains=la&bikes=false'
   },
   'rheintal': {
     title: 'Rheintal',
-    centerLatLng: [9.72, 47.41],
+    centerLngLat: [9.72, 47.41],
   },
   'steyr': {
     title: 'Steyr',
-    centerLatLng: [14.42, 48.04],
+    centerLngLat: [14.42, 48.04],
   },
   'wien': {
     title: 'Wien',
-    centerLatLng: [16.37, 48.21],
+    centerLngLat: [16.37, 48.21],
     nextbikeUrl: 'https://maps.nextbike.net/maps/nextbike.json?domains=wr,la&bikes=false',
   },
 };
@@ -91,19 +90,15 @@ function loadMapLibre() {
   rkGlobal.map = new maplibregl.Map({
     container: 'map',
     style: createBaseMapStyle(),
+    attributionControl: false,
     center: [16.3738, 48.2082], // Vienna center
     zoom: 11,
     minZoom: 0,
     maxZoom: 19
   });
 
-  // Initialize sidebar manually since we don't have leaflet-sidebar
-  initializeSidebar();
-
-  // Initialize map controls
+  // initializeSidebar();
   initializeMapControls();
-
-  // Initialize data loading
   initializeDataLoading();
 }
 
@@ -186,23 +181,22 @@ function initializeSidebar() {
 }
 
 function initializeMapControls() {
-  // Add zoom controls
-  rkGlobal.map.addControl(new maplibregl.NavigationControl(), 'top-right');
-
-  // Add scale control
   rkGlobal.map.addControl(new maplibregl.ScaleControl({
     maxWidth: 200,
     unit: 'metric'
-  }), 'top-left');
-
-  // Add geolocate control
+  }), 'bottom-right');
+  rkGlobal.map.addControl(new maplibregl.AttributionControl({
+    compact: true,
+  }), 'bottom-right');
+  rkGlobal.map.addControl(new maplibregl.NavigationControl(), 'top-right');
   rkGlobal.map.addControl(new maplibregl.GeolocateControl({
     positionOptions: {
       enableHighAccuracy: true
     },
     trackUserLocation: true,
-    showUserHeading: true
   }), 'top-right');
+
+  new maplibregl.Hash().addTo(rkGlobal.map);
 }
 
 function initializeDataLoading() {
@@ -219,7 +213,7 @@ function initializeDataLoading() {
   rkGlobal.map.on('zoomend', updateLayerVisibility);
 
   // Initialize layer control
-  initializeLayerControl();
+  // initializeLayerControl();
 }
 
 
@@ -249,9 +243,9 @@ function updateRadlkarteRegion(region) {
   rkGlobal.pageHeader().text('Radlkarte ' + configuration.title);
 
   // Center map on region
-  if (configuration.centerLatLng) {
+  if (configuration.centerLngLat) {
     rkGlobal.map.flyTo({
-      center: configuration.centerLatLng,
+      center: configuration.centerLngLat,
       zoom: rkGlobal.defaultZoom
     });
   }
@@ -362,7 +356,7 @@ function addPavedRouteLayers() {
         ['==', ['get', 'priority'], priority],
         ['!=', ['get', 'unpaved'], 'yes']
       ],
-      minzoom: rkGlobal.priorityReducedVisibilityFromZoom[priority],
+      minzoom: rkGlobal.priorityVisibilityFromZoom[priority],
       layout: {
         'line-cap': 'round',
         'line-join': 'round',
@@ -399,7 +393,7 @@ function addUnpavedRouteLayers() {
         ['==', ['get', 'priority'], priority],
         ['==', ['get', 'unpaved'], 'yes']
       ],
-      minzoom: rkGlobal.priorityReducedVisibilityFromZoom[priority],
+      minzoom: rkGlobal.priorityVisibilityFromZoom[priority],
       layout: {
         'line-cap': 'round',
         'line-join': 'round',
@@ -438,7 +432,7 @@ function addSteepSectionLayers() {
         ['==', ['get', 'priority'], priority],
         ['==', ['get', 'steep'], 'yes']
       ],
-      minzoom: rkGlobal.priorityReducedVisibilityFromZoom[priority],
+      minzoom: rkGlobal.priorityVisibilityFromZoom[priority],
       paint: {
         'line-width': [
           'interpolate',
@@ -483,11 +477,7 @@ function addOnewayArrowLayers() {
           ['==', ['get', 'priority'], priority],
           ['==', ['get', 'oneway'], 'yes']
         ],
-        minzoom: rkGlobal.priorityReducedVisibilityFromZoom[priority],
-        // layout: {
-        //   'line-cap': 'round',
-        //   'line-join': 'round',
-        // },
+        minzoom: Math.max(rkGlobal.priorityVisibilityFromZoom[priority], rkGlobal.onewayIconThreshold),
         paint: {
           'line-width': [
             'interpolate',
