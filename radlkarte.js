@@ -82,6 +82,11 @@ rkGlobal.configurations = {
     title: 'Steyr',
     centerLatLng: L.latLng(48.04, 14.42),
   },
+  'stpoelten': {
+    title: 'St. Pölten',
+    centerLatLng: L.latLng(48.20, 15.62),
+    nextbikeUrl: 'https://maps.nextbike.net/maps/nextbike.json?domains=la&bikes=false'
+  },
   'wien': {
     title: 'Wien',
     centerLatLng: L.latLng(48.21, 16.37),
