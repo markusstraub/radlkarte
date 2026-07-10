@@ -71,7 +71,7 @@ rkGlobal.configurations = {
   },
   'noe-suedost': {
     title: 'NÖ-Südost',
-    centerLatLng: L.latLng(47.67, 15.94),
+    centerLatLng: L.latLng(47.81, 16.24),
     nextbikeUrl: 'https://maps.nextbike.net/maps/nextbike.json?domains=la&bikes=false'
   },
   'rheintal': {
