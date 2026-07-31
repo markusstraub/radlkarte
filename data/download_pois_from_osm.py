@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Download latest points of interest for each Radlkarte region from the OpenStreetMap Overpass API"""
+
 import argparse
 import json
 import logging
@@ -8,6 +9,8 @@ from pathlib import Path
 from urllib.error import URLError
 from urllib.parse import urlencode
 from urllib.request import Request, urlopen
+
+USER_AGENT = "radlkarte.at POI downloader (+https://github.com/markusstraub/radlkarte/)"
 
 logFormatter = "%(asctime)s - %(levelname)s - %(message)s"
 logging.basicConfig(format=logFormatter, level=logging.INFO)
@@ -100,7 +103,7 @@ def _download_from_endpoints(query):
     for endpoint in OVERPASS_ENDPOINTS:
         data = urlencode({"data": query})
         data = data.encode("ascii")
-        request = Request(endpoint, data)
+        request = Request(endpoint, data, headers={"User-Agent": USER_AGENT})
 
         try:
             response = urlopen(request)
