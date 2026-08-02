@@ -100,6 +100,11 @@ Measured cost: 588 KB gzipped for all 8 regions (385 KB brotli); Wien alone is
 network data therefore costs roughly the same as a single screen of the base map the
 user downloads anyway.
 
+**This depends on compression, which is currently not enabled for GeoJSON** (see
+"Caching and compression" below — today Wien is served as 1.1 MB uncompressed).
+Enabling it is a prerequisite for this loading strategy, not an optimisation: without
+compression, eager-loading all areas would put 3.4 MB on the wire.
+
 On-demand loading by bounding box was considered and rejected: it saves at most
 ~420 KB in the best case and nothing when zoomed out to Austria, while adding
 viewport-intersection tests, partial-data edge cases, and a milder version of the
@@ -349,13 +354,51 @@ shared and Overpass slot allocation from them is unpredictable.
 The POI scripts are deployed with the site, so cron invokes the deployed copy.
 
 **Deploy must not delete cron-generated data.** POI output lives in a directory
-outside the deploy root and is served under its public path via an nginx `alias`, so
+outside the deploy root and is served under its public path via an Apache `Alias`, so
 an rsync with `--delete` physically cannot touch it.
 
-## Caching
+## Caching and compression
 
-The stale-cache problem (#48) is fixed structurally, using the header control the
-Debian server provides:
+The server is Apache on Debian.
+
+### Diagnosis
+
+Measured against the live site, both the stale-cache bug (#48) and a second,
+previously unnoticed problem share one root cause:
+
+| Asset | Compressed | Cache-Control |
+| --- | --- | --- |
+| `index.html` | yes | none |
+| `radlkarte.js` | yes | `max-age=86400` |
+| `*.geojson` | **no** | **none** |
+
+`mod_deflate` and the cache headers are both configured by MIME type. The
+`AddType` for `application/geo+json` was added correctly, but that type was never
+added to `AddOutputFilterByType` or to the expires configuration, so GeoJSON falls
+through both lists.
+
+**Compression.** `radlkarte-wien.geojson` is served as 1.1 MB uncompressed where it
+would be 167 KB gzipped — a 6.6× reduction. Across all regions, 3.4 MB versus
+588 KB. This should be fixed on the live site immediately; it does not depend on the
+rewrite, and the rewrite's eager-loading strategy depends on it.
+
+**Caching.** With no `Cache-Control` and no `Expires`, browsers apply **heuristic
+freshness** (RFC 9111 §4.2.2): given only a `Last-Modified`, they invent a lifetime
+of roughly 10% of the elapsed time since that date. A file last modified six months
+ago is treated as fresh for about eighteen days. Nothing in the configuration looks
+wrong, because the caching is entirely the browser's invention.
+
+This also explains why Ctrl+F5 does not help. A hard reload forces revalidation for
+the document and for subresources the page requests, but `loadGeoJson()` fetches via
+`$.getJSON` after page load. JS-initiated fetches use the normal cache mode, so the
+hard-reload bypass never reaches them.
+
+Both halves of the fix below address this independently: content-hashed filenames
+change the URL whenever the content changes, and explicit headers stop the browser
+guessing. The server must start sending `Cache-Control` — a required Apache change,
+not something the build can do on its own.
+
+### Strategy
 
 | Asset | Strategy |
 | --- | --- |
@@ -366,10 +409,38 @@ Debian server provides:
 
 Everything the build produces therefore cannot go stale by construction.
 
-The first task of the caching work is to read the current nginx/Apache configuration
-and identify what makes today's GeoJSONs survive Ctrl+F5. A far-future `Expires`
-header is the usual cause, but this must be confirmed rather than assumed before the
-fix is declared complete.
+The required Apache changes (needs `mod_deflate`, `mod_headers`, `mod_alias`):
+
+```apache
+# 1. compression for GeoJSON — apply to the live site now, independent of the rewrite
+AddOutputFilterByType DEFLATE application/geo+json
+
+# 2. hashed build output — safe to cache forever
+<FilesMatch "-[0-9a-zA-Z_-]{8,}\.(js|css|geojson)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+</FilesMatch>
+
+# 3. entry point — always revalidate
+<Files "index.html">
+    Header set Cache-Control "no-cache"
+</Files>
+
+# 4. cron-written POI data, outside the deploy root so rsync --delete cannot touch it
+Alias /data/poi /var/lib/radlkarte/poi
+<Directory /var/lib/radlkarte/poi>
+    Require all granted
+    Header set Cache-Control "no-cache"
+</Directory>
+```
+
+The hashed-filename pattern in (2) must be checked against Vite's actual output
+during implementation rather than assumed.
+
+Acceptance checks:
+
+- `curl -sI --compressed <geojson-url>` returns `content-encoding: gzip`.
+- Deploy, change a region GeoJSON, redeploy, and confirm a returning browser picks up
+  the change on a normal reload without a hard refresh.
 
 ## Testing
 
@@ -400,3 +471,6 @@ usual when every layer of the stack is replaced at once.
   misread later.
 - **Contributor barrier.** TypeScript and a build step raise the bar for casual code
   contributions. Data contributors, who work in JOSM, are unaffected.
+- **Caching depends on a server change.** The build cannot emit headers by itself. If
+  the Apache change is missed at cutover, hashed assets still work correctly, but the
+  cron-written POI files inherit the same heuristic-freshness bug that #48 describes.
