@@ -2,20 +2,23 @@
 
 Development guidelines for the website.
 
+## Setup
+
+To contribute you need
+- [Node.js](https://nodejs.org/en/download) (I would choose an LTS version)
+- [python](https://www.python.org/)
+- git
+
+Create a [personal fork from `markusstraub/radlkarte`](https://github.com/markusstraub/radlkarte/fork),
+clone it and execute `npm install` in its root folder. This will install all dependencies in your project.
 
 ## Local environment
 
-To use work on the radlkarte.at locally, either to develop the codebase or make using the scripts easier, you need to install Node.js on your computer. If you just want to run the radlkarte.at locally in your browser to, i.e. to preview your changes made in JOSM before committing them, you can do so by running the following command:
+Run radlkarte.at locally, e.g. to preview your changes made in JOSM before committing them
 
     npx http-server -a localhost -s
 
-Then you can open it in the browser using http://localhost:8080.
-
-## Setup
-
-First install [Node.js 18.x or newer](https://nodejs.org/en/learn/getting-started/how-to-install-nodejs) (please only use versions with an even major version number: `18.x`, `20.x`, …). npm comes with it, so there is nothing else to install.
-
-Now you have prepared your computer (you might whish to install an IDE like VSCode or Webstorm or a git client as well) and can setup the repository. Create a [personal fork from `markusstraub/radlkarte`](https://github.com/markusstraub/radlkarte/fork), clone it and execute `npm install` in its root folder. This will install all dependencies in your project (as of Feb. 2024 only the development tools).
+Then open http://localhost:8080 in your browser
 
 ## Available tools and scripts
 
