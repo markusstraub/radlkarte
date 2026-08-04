@@ -82,3 +82,78 @@ def deduplicate_by_osm_key(elements):
         seen.add(key)
         unique.append(element)
     return unique
+
+
+def format_address(tags):
+    """Human readable address, or None if there is no street.
+
+    Mirrors the format previously built in the browser
+    (extractAddressFromTagSoup in radlkarte.js).
+    """
+    street = tags.get("addr:street")
+    if not street:
+        return None
+
+    address = street
+    housenumber = tags.get("addr:housenumber")
+    if housenumber:
+        address += " " + housenumber
+
+    postcode = tags.get("addr:postcode")
+    city = tags.get("addr:city")
+    if postcode:
+        address += ", " + postcode
+        if city:
+            address += " " + city
+    elif city:
+        address += ", " + city
+    return address
+
+
+def normalize_website(tags):
+    """Website URL with a scheme, or None.
+
+    OSM values frequently omit the scheme. https is assumed rather than
+    http, because the map itself is served over https and browsers block
+    or warn about mixed active content.
+    """
+    website = tags.get("website") or tags.get("contact:website")
+    if not website:
+        return None
+    if not website.startswith("http"):
+        website = "https://" + website
+    return website
+
+
+def parse_data_date(overpass_json):
+    """Date of the OSM snapshot the data was cut from, e.g. '2026-08-01'."""
+    timestamp = overpass_json.get("osm3s", {}).get("timestamp_osm_base")
+    if not isinstance(timestamp, str):
+        return None
+    return timestamp.split("T")[0]
+
+
+def extract_properties(element, data_date):
+    """Flatten an element's tags to exactly the fields a popup needs.
+
+    Keys with no value are omitted rather than set to null, to keep the
+    output small - all of them are optional on the frontend anyway.
+    """
+    tags = element.get("tags", {})
+    properties = {
+        "osmType": element["type"],
+        "osmId": element["id"],
+    }
+    optional = (
+        ("dataDate", data_date),
+        ("name", tags.get("name")),
+        ("address", format_address(tags)),
+        ("website", normalize_website(tags)),
+        ("openingHours", tags.get("opening_hours")),
+        ("phone", tags.get("phone") or tags.get("contact:phone")),
+        ("operator", tags.get("operator")),
+    )
+    for key, value in optional:
+        if value:
+            properties[key] = value
+    return properties
