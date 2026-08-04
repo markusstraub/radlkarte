@@ -157,3 +157,67 @@ def extract_properties(element, data_date):
         if value:
             properties[key] = value
     return properties
+
+
+# (station query, line query) pairs that together form the transit layer
+TRANSIT_SOURCES = (("subway", "subwayLines"), ("railway", "railwayLines"))
+
+
+def index_lines_by_station(overpass_json):
+    """Map station name -> {line ref: colour}.
+
+    The 'convert' statements in the subwayLines / railwayLines queries emit
+    one synthetic element per (route, stop) pair, so ids repeat by design
+    and cannot be deduplicated. Aggregating by station name is what the
+    browser did previously (loadStationName2Line2Colour).
+    """
+    stations = {}
+    for element in overpass_json.get("elements", []):
+        tags = element.get("tags", {})
+        name = tags.get("name")
+        ref = tags.get("ref")
+        if not name or not ref:
+            continue
+        stations.setdefault(name, {})[ref] = tags.get("colour")
+    return stations
+
+
+def build_transit_features(
+    stations_json, lines_index, transit_type, data_date, seen_names
+):
+    """Build one feature per transit station.
+
+    Stations are deduplicated by name, not by OSM id: Overpass returns one
+    element per platform where several lines cross, and overlapping regions
+    return the same station repeatedly. seen_names is shared between the
+    subway and railway passes so a station served by both appears once,
+    matching the previous browser behaviour.
+    """
+    features = []
+    for element in stations_json.get("elements", []):
+        name = element.get("tags", {}).get("name")
+        if not name or name in seen_names:
+            continue
+
+        coordinates = element_coordinates(element)
+        if coordinates is None:
+            logging.warning("unusable coordinates for %s", osm_key(element))
+            continue
+
+        properties = extract_properties(element, data_date)
+        properties["transitType"] = transit_type
+        lines = lines_index.get(name, {})
+        if lines:
+            properties["lines"] = [
+                {"ref": ref, "colour": lines[ref]} for ref in sorted(lines)
+            ]
+
+        seen_names.add(name)
+        features.append(
+            {
+                "type": "Feature",
+                "geometry": {"type": "Point", "coordinates": coordinates},
+                "properties": properties,
+            }
+        )
+    return features

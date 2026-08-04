@@ -174,3 +174,89 @@ def test_opening_hours_is_kept_raw():
     element = node(1, opening_hours="Mo-Sa 08:00-19:00; PH off")
     properties = merge_pois.extract_properties(element, None)
     assert properties["openingHours"] == "Mo-Sa 08:00-19:00; PH off"
+
+
+def line_element(name, ref, colour):
+    """A synthetic element as produced by the 'convert' statements."""
+    return {"type": "node", "id": 1, "tags": {"name": name, "ref": ref, "colour": colour}}
+
+
+def station(id, name):
+    return {"type": "node", "id": id, "lat": 48.2, "lon": 16.3, "tags": {"name": name}}
+
+
+def test_index_lines_groups_refs_and_colours_by_station():
+    overpass = {
+        "elements": [
+            line_element("Karlsplatz", "U1", "#E20613"),
+            line_element("Karlsplatz", "U4", "#00963F"),
+            line_element("Stephansplatz", "U1", "#E20613"),
+        ]
+    }
+    index = merge_pois.index_lines_by_station(overpass)
+    assert index["Karlsplatz"] == {"U1": "#E20613", "U4": "#00963F"}
+    assert index["Stephansplatz"] == {"U1": "#E20613"}
+
+
+def test_index_lines_ignores_elements_without_name_or_ref():
+    overpass = {
+        "elements": [
+            {"type": "node", "id": 1, "tags": {"ref": "U1"}},
+            {"type": "node", "id": 2, "tags": {"name": "Nirgendwo"}},
+            {"type": "node", "id": 3, "tags": {}},
+        ]
+    }
+    assert merge_pois.index_lines_by_station(overpass) == {}
+
+
+def test_index_lines_tolerates_a_missing_colour():
+    overpass = {"elements": [{"type": "node", "id": 1, "tags": {"name": "A", "ref": "S1"}}]}
+    assert merge_pois.index_lines_by_station(overpass) == {"A": {"S1": None}}
+
+
+def test_transit_features_carry_type_and_sorted_lines():
+    stations = {"elements": [station(1, "Karlsplatz")]}
+    index = {"Karlsplatz": {"U4": "#00963F", "U1": "#E20613"}}
+    features = merge_pois.build_transit_features(stations, index, "subway", None, set())
+    assert len(features) == 1
+    properties = features[0]["properties"]
+    assert properties["transitType"] == "subway"
+    assert properties["lines"] == [
+        {"ref": "U1", "colour": "#E20613"},
+        {"ref": "U4", "colour": "#00963F"},
+    ]
+    assert features[0]["geometry"] == {"type": "Point", "coordinates": [16.3, 48.2]}
+
+
+def test_transit_features_omit_lines_when_there_are_none():
+    stations = {"elements": [station(1, "Kleinbahnhof")]}
+    features = merge_pois.build_transit_features(stations, {}, "railway", None, set())
+    assert "lines" not in features[0]["properties"]
+
+
+def test_transit_stations_are_deduplicated_by_name():
+    """Overpass returns one element per platform where lines cross."""
+    stations = {"elements": [station(1, "Karlsplatz"), station(2, "Karlsplatz")]}
+    features = merge_pois.build_transit_features(stations, {}, "subway", None, set())
+    assert len(features) == 1
+
+
+def test_transit_dedup_set_is_shared_across_subway_and_railway():
+    """A station served by both must appear once, as it does today."""
+    seen = set()
+    subway = {"elements": [station(1, "Praterstern")]}
+    railway = {"elements": [station(2, "Praterstern")]}
+    features = merge_pois.build_transit_features(subway, {}, "subway", None, seen)
+    features += merge_pois.build_transit_features(railway, {}, "railway", None, seen)
+    assert len(features) == 1
+    assert features[0]["properties"]["transitType"] == "subway"
+
+
+def test_transit_skips_stations_without_a_name():
+    stations = {"elements": [{"type": "node", "id": 1, "lat": 48.2, "lon": 16.3, "tags": {}}]}
+    assert merge_pois.build_transit_features(stations, {}, "subway", None, set()) == []
+
+
+def test_transit_skips_stations_with_unusable_coordinates():
+    stations = {"elements": [{"type": "way", "id": 1, "tags": {"name": "Kaputt"}}]}
+    assert merge_pois.build_transit_features(stations, {}, "railway", None, set()) == []
