@@ -133,20 +133,36 @@ node[priority][priority!=0][priority!=1][priority!=2]::rk_error {
     z-index: -2;
 }
 
-/* a way with an out-of-range mandatory value: the map drops these segments and
-   nothing on screen says why */
+/* a way attribute carrying a value radlkarte does not accept. The mandatory pair
+   must be 0|1|2. The optional flags are only ever read as "yes": radlkarte tests
+   them with a strict equality, so oneway=true or unpaved=true silently loses the
+   arrows or the dashes.
+
+   oneway=no is deliberately NOT flagged - it is valid OSM meaning "not oneway",
+   and radlkarte reads it as such. Only values that are neither yes nor no are
+   mistakes here. */
 way[priority][priority!=0][priority!=1][priority!=2],
-way[stress][stress!=0][stress!=1][stress!=2] {
+way[stress][stress!=0][stress!=1][stress!=2],
+way[unpaved][unpaved!=yes],
+way[steep][steep!=yes],
+way[oneway][oneway!=yes][oneway!=no] {
     casing-width: 9;
     casing-color: #FF0000;
     casing-opacity: 0.6;
 }
 
-/* a half-tagged way: priority and stress are both mandatory, so one without the
-   other is an unfinished segment. Scoped to ways that already carry one of the
-   two, so foreign OSM data is never flagged. */
+/* an unfinished segment: priority and stress are both mandatory, so a way that
+   carries route information but is missing either one will not render.
+
+   Scoped to ways that already carry one of the pair, or one of the optional route
+   flags, so this stays quiet on foreign OSM data, on the untagged ways JOSM
+   exports, and on the administrative boundary ways some region files keep as
+   reference geometry. */
 way[priority][!stress],
-way[stress][!priority] {
+way[stress][!priority],
+way[oneway][!priority][!stress],
+way[unpaved][!priority][!stress],
+way[steep][!priority][!stress] {
     casing-width: 9;
     casing-color: #FF00FF;
     casing-opacity: 0.6;

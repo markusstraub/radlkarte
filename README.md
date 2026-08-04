@@ -67,8 +67,8 @@ The style highlights problems while you edit:
 
 | Highlight | Meaning |
 | --- | --- |
-| Red ring / red casing | An attribute has a value radlkarte does not accept, e.g. `dismount=1` instead of `yes`, or `priority=x`. The object will not render on the map. |
-| Magenta casing | A segment has only one of the mandatory `priority` / `stress` pair, so it will not render. Often a typo in the key itself. |
+| Red ring / red casing | An attribute has a value radlkarte does not accept, e.g. `dismount=1` or `oneway=true` instead of `yes`, or `priority=x`. The object either will not render at all, or loses that attribute's effect — `oneway=true` silently loses its direction arrows. |
+| Magenta casing | A segment carries route information but is missing one of the mandatory `priority` / `stress` pair, so it will not render. Often a typo in the key itself, e.g. `proi` instead of `priority`. |
 | Yellow ring | A problem point without an explicit `priority`. Not an error — it renders with medium prominence — but it has not been reviewed yet. |
 
 `prepare_geojson.py` reports the same value errors on the command line and exits with
