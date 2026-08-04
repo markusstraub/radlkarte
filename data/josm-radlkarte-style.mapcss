@@ -76,7 +76,7 @@ node[speed100=yes] {
 }
 
 node[leisure=swimming_pool] {
-    icon-image: "presets/leisure/swimming_pool.svg";
+    icon-image: "presets/shop/swimming_pool.svg";
     text: auto;
 }
 
