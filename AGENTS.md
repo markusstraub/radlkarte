@@ -11,9 +11,9 @@ build step and no framework: `index.html` loads jQuery, Leaflet and plugins, and
 
 ## Commands
 
-Python tests (for `data/prepare_geojson.py`) live in `data/test/` and run with pytest:
+Python tests live in `data/test/` and run with pytest from the repository root:
 
-    cd data/test && pytest
+    pytest
 
 ## Architecture
 

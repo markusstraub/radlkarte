@@ -1,27 +1,27 @@
 #!/usr/bin/env python3
 
 """
-Run these unit tests with pytest.
+Run these unit tests with pytest from the repository root.
 """
 
 import filecmp
-import sys
-
-sys.path.append("..")
+from pathlib import Path
 
 import prepare_geojson
 
-input_geojson = "test.geojson"
-output_geojson = "test_output.geojson"
-expected_geojson = "expected.geojson"
+FIXTURE_DIR = Path(__file__).parent
+INPUT_GEOJSON = FIXTURE_DIR / "test.geojson"
+EXPECTED_GEOJSON = FIXTURE_DIR / "expected.geojson"
 
 
-def test_minify_josm_export():
-    prepare_geojson.minimize(input_geojson, output_geojson)
-    assert filecmp.cmp(output_geojson, expected_geojson)
+def test_minify_josm_export(tmp_path):
+    output = tmp_path / "output.geojson"
+    prepare_geojson.minimize(INPUT_GEOJSON, output)
+    assert filecmp.cmp(output, EXPECTED_GEOJSON, shallow=False)
 
 
-def test_minify_again():
-    prepare_geojson.minimize(input_geojson, output_geojson)
-    prepare_geojson.minimize(output_geojson, output_geojson)
-    assert filecmp.cmp(output_geojson, expected_geojson)
+def test_minify_again(tmp_path):
+    output = tmp_path / "output.geojson"
+    prepare_geojson.minimize(INPUT_GEOJSON, output)
+    prepare_geojson.minimize(output, output)
+    assert filecmp.cmp(output, EXPECTED_GEOJSON, shallow=False)
