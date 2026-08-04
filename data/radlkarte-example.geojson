@@ -664,7 +664,7 @@
         {
             "type": "Feature",
             "properties": {
-                "leisure": "swimming_pool_invalidtag"
+                "swimming": "yess"
             },
             "geometry": {
                 "type": "Point",
@@ -840,7 +840,7 @@
         {
             "type": "Feature",
             "properties": {
-                "leisure": "swimming_pool"
+                "swimming": "yes"
             },
             "geometry": {
                 "type": "Point",
