@@ -7,8 +7,10 @@ Supersedes: `RADLKARTE_2026_DRAFT_SPEC.md`
 ## Goal
 
 Rewrite radlkarte.at on MapLibre GL JS, replacing the Leaflet stack. The primary
-driver is rendering performance for the route network. Secondary drivers: load all
-coverage areas seamlessly instead of switching regions, remove the stale-cache
+driver is **interactive pan and zoom performance** for the route network: on the
+current site, panning and zooming are visibly bad in every browser tested, while a
+throwaway MapLibre prototype of the same network is smooth. Secondary drivers: load
+all coverage areas seamlessly instead of switching regions, remove the stale-cache
 problem (#48), and modernise the toolchain so dependencies can be maintained
 rather than hand-vendored.
 
@@ -58,6 +60,69 @@ Everything below exists today and must still work after the rewrite:
 - Matomo virtual pageviews per area
 
 ## Architecture
+
+### Map engine
+
+MapLibre GL JS 6.x. The decision was reopened and re-confirmed; this section records
+the reasoning so it is not relitigated.
+
+**What is slow today, and why MapLibre fixes it.** The bottleneck is not the number of
+features. `radlkarte.js` already merges the network with `turf.combine`, so Leaflet
+receives 71 merged MultiLineStrings — one per distinct style combination — for 11,510
+line features and ~85,000 vertices across all nine regions. The cost is per
+interaction, not per feature: on every `zoomend`, `updateStyles()` calls `setStyle` on
+all 71 layer groups and `setPatterns()` on the oneway decorators, which recomputes
+every arrow position in JavaScript, and Leaflet re-projects and rewrites the `d`
+attribute of every SVG path. In MapLibre the same styling is declarative — `step` and
+`interpolate` expressions evaluated on the GPU — so no JavaScript runs on zoom at all,
+and styling follows fractional zoom instead of stepping at integer levels.
+
+**Published benchmarks disagree, and are not the relevant measurement.** Balla & Gede
+(ICC 2025, doi:10.5194/ica-abs-10-14-2025) find Leaflet and OpenLayers fastest for line
+features up to 50k, with MapLibre "significantly slower than all other libraries" and
+carrying a ~350 ms fixed map-initialisation cost against ~35 ms. That benchmark
+measures load-to-first-render, not sustained interaction, which is the axis that
+matters here. A sub-second penalty on initial load is explicitly accepted.
+
+**Secondary technical wins**, independent of performance:
+
+- `symbol-placement: "line"` with `symbol-spacing` repeats and rotates the oneway
+  arrows natively, removing both `leaflet.polylineDecorator` and `turf`.
+- `icon-allow-overlap: false` declutters problem icons and POIs, which the Leaflet
+  implementation never did.
+- Vector base maps are native, enabling OpenFreeMap Positron.
+- `line-dasharray` is expressed in multiples of line width, so dash patterns scale
+  with zoom without the manual pixel arithmetic in `getUnpavedDashStyle`.
+- Actively released: 6.1.0 (2026-07-30). Leaflet's stable release is still 1.9.4 from
+  2023-05-18, with 2.0 in alpha since 2025-08-16.
+
+**Accepted trade-offs:**
+
+- **WebGL2 is required.** MapLibre 6 dropped WebGL1 support. Coverage is ~92–93%, and
+  affected devices — chiefly old low-end Android phones — get no map rather than a slow
+  one. Accepted, but it is a hard failure mode and should be watched after cutover.
+- **Bundle size**: `maplibre-gl` is ~245 KB gzipped, against ~42 KB for Leaflet and
+  ~82 KB for OpenLayers. Set against 588 KB of GeoJSON this is material but not
+  dominant.
+- MapLibre is ESM-only, which the Vite build handles.
+
+**Alternatives considered and rejected:**
+
+- **Stay on Leaflet and optimise** (batch restyling, `preferCanvas`, cheaper arrows).
+  Cheapest option and the benchmarks favour it, but it does not deliver a vector base
+  map, decluttering, or GPU-side zoom styling, and it leaves the project on a library
+  whose stable release is three years old.
+- **OpenLayers 10.x with `ol-mapbox-style`.** The strongest alternative: fast for
+  lines, actively released, smaller. Rejected because repeated symbols along a line are
+  not supported — `ol-mapbox-style` places a single symbol at the line midpoint
+  (openlayers/ol-mapbox-style#230) and native OpenLayers requires manual
+  `forEachSegment` placement, so the oneway arrows would stay hand-rolled — and it has
+  no GPU-side equivalent of style expressions.
+- **`maplibre-gl-leaflet` hybrid.** MapLibre would render only the base map while the
+  network stayed in Leaflet, addressing none of the drivers, and input handling
+  visibly lags because Leaflet owns the events.
+- **deck.gl.** GPU line rendering, but no base map of its own, and dashes, arrows,
+  labels and popups would all be hand-built.
 
 ### Build and dependencies
 
@@ -262,6 +327,16 @@ override a bad guess.
 Required changes: `data/josm-radlkarte-style.mapcss` gains visual feedback for the
 attribute, and `prepare_geojson.py` validates it. When the attribute is absent the
 default is 1 (medium prominency).
+
+**Consequence: this is a data migration, done by hand.** No existing problem point
+carries the attribute, so all of them fall back to priority 1 and pick up that
+level's higher zoom threshold and smaller icon. Icons that are visible at overview
+zooms today will not appear until someone raises them to 0 explicitly. This is
+intended — the default should be the middle of the range, not the loudest — but it
+means the person responsible for each area has to review their problem points in JOSM
+and set `priority` where the fallback is wrong. The work is per-area and can proceed
+gradually after cutover; it does not block the rewrite, and no migration script is
+appropriate, since only the area maintainer can judge which spots deserve prominence.
 
 ### Visual treatment
 
@@ -470,6 +545,15 @@ usual when every layer of the stack is replaced at once.
   misread later.
 - **Contributor barrier.** TypeScript and a build step raise the bar for casual code
   contributions. Data contributors, who work in JOSM, are unaffected.
+- **Problem icons are quieter at cutover.** Every existing problem point defaults to
+  priority 1, so some icons visible at overview zooms today disappear until area
+  maintainers set `priority` in JOSM. Intended, but it depends on other people's work
+  and lands as a visible change for users, so it needs announcing rather than
+  shipping silently.
+- **WebGL2 hard requirement.** Devices without WebGL2 lose the map entirely instead of
+  degrading. See "Map engine" for the accepted reasoning; the mitigation, if the loss
+  turns out to be visible in the Matomo device breakdown, is a static fallback notice
+  rather than a second render path.
 - **Caching depends on a server change.** The build cannot emit headers by itself. If
   the Apache change is missed at cutover, hashed assets still work correctly, but the
   cron-written POI files inherit the same heuristic-freshness bug that #48 describes.
