@@ -19,6 +19,57 @@ import sys
 logFormatter = "%(asctime)s - %(levelname)s - %(message)s"
 logging.basicConfig(format=logFormatter, level=logging.INFO)
 
+PROBLEM_ATTRIBUTES = ("dismount", "nocargo", "warning", "speed100")
+VALID_PRIORITIES = ("0", "1", "2")
+# non-problem point categories the map renders: key -> the only allowed value
+OTHER_POINT_CATEGORIES = {"leisure": "swimming_pool"}
+
+
+def validate_point_properties(feature):
+    """Check a Point feature's problem-marker attributes and other categories.
+
+    Recognized keys are problem attributes (dismount, nocargo, warning, speed100),
+    priority (optional), and other categories like leisure.
+
+    A Point with NO recognized keys is valid (it may carry foreign tags or be a
+    JOSM export artifact). A Point with recognized keys must have valid values.
+
+    'priority' is optional: an absent priority means the point has not been
+    reviewed yet and the frontend renders it with medium prominence. It is
+    deliberately not filled in here, so that unreviewed points stay
+    recognisable in JOSM.
+
+    :returns a list of human readable problem descriptions (empty if valid)
+    """
+    properties = feature["properties"] if feature["properties"] else {}
+    problems = []
+
+    # Check problem attributes that are present
+    for attribute in PROBLEM_ATTRIBUTES:
+        if attribute in properties:
+            if str(properties[attribute]) != "yes":
+                problems.append(
+                    "{}={} (only 'yes' is allowed)".format(attribute, properties[attribute])
+                )
+
+    # Check other point categories
+    for key, expected_value in OTHER_POINT_CATEGORIES.items():
+        if key in properties:
+            if str(properties[key]) != expected_value:
+                problems.append(
+                    "{}={} (only '{}' is allowed)".format(key, properties[key], expected_value)
+                )
+
+    # Check priority if present
+    if "priority" in properties and str(properties["priority"]) not in VALID_PRIORITIES:
+        problems.append(
+            "priority={} (allowed: {})".format(
+                properties["priority"], ", ".join(VALID_PRIORITIES)
+            )
+        )
+
+    return problems
+
 
 def enforce_int_id_in_feature_properties(feature):
     if feature["properties"] is None:
@@ -115,11 +166,11 @@ def minimize(infile, outfile):
             data = json.load(json_file)
     except json.JSONDecodeError:
         logging.warning("{} is not a valid json file - skipping.".format(infile))
-        return
+        return 0
 
     if "features" not in data:
         logging.warning("{} is not a valid geojson file - skipping.".format(infile))
-        return
+        return 0
 
     features = data["features"]
     logging.info("{} features parsed from {}".format(len(features), infile))
@@ -132,6 +183,19 @@ def minimize(infile, outfile):
     max_id = max(1, get_max_id(features))
     logging.info("max id found was {}".format(max_id))
     set_new_ids(bad_features, max_id + 1)
+
+    invalid_count = 0
+    for feature in features:
+        if feature["geometry"]["type"] != "Point":
+            continue
+        problems = validate_point_properties(feature)
+        if problems:
+            invalid_count += 1
+            logging.warning(
+                "point id {}: {}".format(
+                    feature["properties"]["id"], "; ".join(problems)
+                )
+            )
 
     id_to_feature = {feature["properties"]["id"]: feature for feature in features}
     sorted_ids = sorted(id_to_feature.keys())
@@ -153,10 +217,19 @@ def minimize(infile, outfile):
             len(sorted_ids), len(bad_features), outfile
         )
     )
+    return invalid_count
 
 if __name__ == "__main__":
     if len(sys.argv) > 1:
+        invalid_total = 0
         for infile in sys.argv[1:]:
-            minimize(infile, infile)
+            invalid_total += minimize(infile, infile)
+        if invalid_total > 0:
+            logging.error(
+                "{} point feature(s) have invalid attributes - see warnings above".format(
+                    invalid_total
+                )
+            )
+            sys.exit(1)
     else:
         print("Usage: one or more geojson files to be minimized in-place as arguments")
