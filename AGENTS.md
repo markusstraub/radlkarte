@@ -13,6 +13,8 @@ anything:
 
 - Design spec: `docs/superpowers/specs/2026-08-02-radlkarte-2026-design.md`
 - Implementation plans: `docs/superpowers/plans/`
+- Known code issues in the tooling: `docs/follow-ups.md`
+- Known errors in the authored route data: `docs/known-data-errors.md`
 
 The spec is the authority on intended behaviour. Where this file and the spec
 disagree, the spec wins and this file needs updating.

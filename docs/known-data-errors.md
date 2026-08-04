@@ -5,7 +5,7 @@ added. These are pre-existing errors in the committed route data, not regression
 had simply never been reported before.
 
 Everything here needs an **area maintainer** to fix it in JOSM. Nothing here is a code
-bug. Delete a row once it is fixed.
+bug — for those see [follow-ups](follow-ups.md). Delete a row once it is fixed.
 
 Re-derive the current list at any time:
 
