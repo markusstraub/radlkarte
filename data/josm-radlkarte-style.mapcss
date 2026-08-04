@@ -76,7 +76,7 @@ node[speed100=yes] {
 }
 
 node[leisure=swimming_pool] {
-    icon-image: "presets/leisure/swimming_pool.svg";
+    icon-image: "presets/shop/swimming_pool.svg";
     text: auto;
 }
 
@@ -91,14 +91,17 @@ node[priority=2] {
     icon-width: 12;
 }
 
-/* problem points still missing an explicit priority - these need review */
-node[dismount=yes][!priority],
-node[nocargo=yes][!priority],
-node[warning=yes][!priority],
-node[speed100=yes][!priority],
-node[leisure=swimming_pool][!priority] {
+/* problem points still missing an explicit priority - these need review.
+   Drawn on its own subpart: JOSM creates one style element per subpart, so a
+   symbol on the default subpart is dropped in favour of icon-image. */
+node[dismount=yes][!priority]::priority_review,
+node[nocargo=yes][!priority]::priority_review,
+node[warning=yes][!priority]::priority_review,
+node[speed100=yes][!priority]::priority_review,
+node[leisure=swimming_pool][!priority]::priority_review {
     symbol-shape: circle;
     symbol-size: 28;
     symbol-stroke-width: 3;
     symbol-stroke-color: #FFFF00;
+    z-index: -1;
 }
