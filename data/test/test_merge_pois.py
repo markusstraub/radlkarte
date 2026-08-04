@@ -4,6 +4,8 @@
 Run these unit tests with pytest from the repository root.
 """
 
+import json
+
 import merge_pois
 
 
@@ -260,3 +262,90 @@ def test_transit_skips_stations_without_a_name():
 def test_transit_skips_stations_with_unusable_coordinates():
     stations = {"elements": [{"type": "way", "id": 1, "tags": {"name": "Kaputt"}}]}
     assert merge_pois.build_transit_features(stations, {}, "railway", None, set()) == []
+
+
+def write_overpass(directory, filename, elements, timestamp="2026-08-01T20:14:37Z"):
+    payload = {"osm3s": {"timestamp_osm_base": timestamp}, "elements": elements}
+    (directory / filename).write_text(json.dumps(payload), encoding="utf-8")
+
+
+def test_merge_basic_poi_type_reads_every_region(tmp_path):
+    write_overpass(tmp_path, "wien-drinkingWater.json", [node(1), node(2)])
+    write_overpass(tmp_path, "linz-drinkingWater.json", [node(3)])
+    collection = merge_pois.merge_basic_poi_type(tmp_path, "drinkingWater")
+    assert collection["type"] == "FeatureCollection"
+    assert len(collection["features"]) == 3
+
+
+def test_merge_basic_poi_type_deduplicates_across_regions(tmp_path):
+    write_overpass(tmp_path, "wien-drinkingWater.json", [node(1), node(2)])
+    write_overpass(tmp_path, "bruckleitha-drinkingWater.json", [node(1)])
+    collection = merge_pois.merge_basic_poi_type(tmp_path, "drinkingWater")
+    assert len(collection["features"]) == 2
+
+
+def test_merge_basic_poi_type_drops_inaccessible_pois(tmp_path):
+    write_overpass(tmp_path, "wien-drinkingWater.json", [node(1), node(2, access="private")])
+    collection = merge_pois.merge_basic_poi_type(tmp_path, "drinkingWater")
+    assert len(collection["features"]) == 1
+    assert collection["features"][0]["properties"]["osmId"] == 1
+
+
+def test_merge_basic_poi_type_does_not_match_other_types(tmp_path):
+    """'*-subway.json' must not pick up '*-subwayLines.json'."""
+    write_overpass(tmp_path, "wien-subway.json", [node(1)])
+    write_overpass(tmp_path, "wien-subwayLines.json", [node(2)])
+    collection = merge_pois.merge_basic_poi_type(tmp_path, "subway")
+    assert len(collection["features"]) == 1
+
+
+def test_merge_basic_poi_type_handles_a_missing_type(tmp_path):
+    collection = merge_pois.merge_basic_poi_type(tmp_path, "bicyclePump")
+    assert collection == {"type": "FeatureCollection", "features": []}
+
+
+def test_merge_basic_poi_type_output_is_sorted_by_osm_key(tmp_path):
+    """Ids sort numerically, not as strings - 4 before 30."""
+    write_overpass(tmp_path, "wien-drinkingWater.json", [node(30), node(4)])
+    collection = merge_pois.merge_basic_poi_type(tmp_path, "drinkingWater")
+    assert [f["properties"]["osmId"] for f in collection["features"]] == [4, 30]
+
+
+def test_merge_transit_combines_subway_and_railway(tmp_path):
+    write_overpass(tmp_path, "wien-subway.json", [station(1, "Karlsplatz")])
+    write_overpass(tmp_path, "wien-subwayLines.json", [line_element("Karlsplatz", "U1", "#E20613")])
+    write_overpass(tmp_path, "linz-railway.json", [station(2, "Linz Hbf")])
+    write_overpass(tmp_path, "linz-railwayLines.json", [])
+    collection = merge_pois.merge_transit(tmp_path)
+    types = sorted(f["properties"]["transitType"] for f in collection["features"])
+    assert types == ["railway", "subway"]
+
+
+def test_merge_transit_tolerates_regions_without_subway(tmp_path):
+    """download_pois_from_osm.py only downloads subway data for wien."""
+    write_overpass(tmp_path, "linz-railway.json", [station(1, "Linz Hbf")])
+    collection = merge_pois.merge_transit(tmp_path)
+    assert len(collection["features"]) == 1
+
+
+def test_write_feature_collection_is_deterministic(tmp_path):
+    collection = {"type": "FeatureCollection", "features": [
+        {"type": "Feature", "geometry": {"type": "Point", "coordinates": [16.3, 48.2]},
+         "properties": {"osmId": 1, "osmType": "node", "name": "A"}}]}
+    first = merge_pois.write_feature_collection(tmp_path, "drinkingWater", collection)
+    content = first.read_bytes()
+    merge_pois.write_feature_collection(tmp_path, "drinkingWater", collection)
+    assert first.name == "drinkingWater.geojson"
+    assert first.read_bytes() == content
+
+
+def test_main_writes_one_file_per_poi_type(tmp_path):
+    overpass_dir = tmp_path / "overpass"
+    overpass_dir.mkdir()
+    write_overpass(overpass_dir, "wien-drinkingWater.json", [node(1)])
+    out_dir = tmp_path / "poi"
+    merge_pois.main(overpass_dir, out_dir)
+    written = sorted(path.name for path in out_dir.glob("*.geojson"))
+    assert written == sorted(
+        ["transit.geojson"] + [f"{poi_type}.geojson" for poi_type in merge_pois.OSM_POI_TYPES]
+    )

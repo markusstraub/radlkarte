@@ -221,3 +221,115 @@ def build_transit_features(
             }
         )
     return features
+
+
+def _load_overpass_files(overpass_dir, data_name):
+    """Yield (parsed json, data date) for every region's file of one query.
+
+    Matching is exact on the suffix so that '*-subway.json' does not also
+    pick up '*-subwayLines.json'. Sorted for deterministic output.
+    """
+    for path in sorted(overpass_dir.glob("*-{}.json".format(data_name))):
+        with open(path, encoding="utf-8") as file_pointer:
+            try:
+                overpass_json = json.load(file_pointer)
+            except json.JSONDecodeError:
+                logging.warning("%s is not valid json - skipping", path)
+                continue
+        yield overpass_json, parse_data_date(overpass_json)
+
+
+def merge_basic_poi_type(overpass_dir, poi_type):
+    """Merge every region's download of one POI type into a FeatureCollection."""
+    elements = []
+    data_dates = {}
+    for overpass_json, data_date in _load_overpass_files(overpass_dir, poi_type):
+        for element in overpass_json.get("elements", []):
+            elements.append(element)
+            data_dates.setdefault(osm_key(element), data_date)
+
+    features = []
+    for element in deduplicate_by_osm_key(elements):
+        if not is_accessible(element):
+            continue
+        coordinates = element_coordinates(element)
+        if coordinates is None:
+            logging.warning("unusable coordinates for %s", osm_key(element))
+            continue
+        features.append(
+            {
+                "type": "Feature",
+                "geometry": {"type": "Point", "coordinates": coordinates},
+                "properties": extract_properties(
+                    element, data_dates[osm_key(element)]
+                ),
+            }
+        )
+
+    features.sort(key=lambda f: (f["properties"]["osmType"], f["properties"]["osmId"]))
+    logging.info("%s: %d feature(s) from %d element(s)", poi_type, len(features), len(elements))
+    return {"type": "FeatureCollection", "features": features}
+
+
+def merge_transit(overpass_dir):
+    """Merge subway and railway stations into a single FeatureCollection."""
+    features = []
+    seen_names = set()
+    for station_query, lines_query in TRANSIT_SOURCES:
+        lines_index = {}
+        for overpass_json, _ in _load_overpass_files(overpass_dir, lines_query):
+            for name, lines in index_lines_by_station(overpass_json).items():
+                lines_index.setdefault(name, {}).update(lines)
+
+        for overpass_json, data_date in _load_overpass_files(
+            overpass_dir, station_query
+        ):
+            features += build_transit_features(
+                overpass_json, lines_index, station_query, data_date, seen_names
+            )
+
+    features.sort(key=lambda f: (f["properties"]["osmType"], f["properties"]["osmId"]))
+    logging.info("transit: %d station(s)", len(features))
+    return {"type": "FeatureCollection", "features": features}
+
+
+def write_feature_collection(out_dir, name, collection):
+    """Write one POI type to <out_dir>/<name>.geojson.
+
+    :returns the path written
+    """
+    out_dir.mkdir(parents=True, exist_ok=True)
+    path = out_dir / "{}.geojson".format(name)
+    with open(path, "w", encoding="utf-8") as file_pointer:
+        json.dump(collection, file_pointer, sort_keys=True, ensure_ascii=False)
+    return path
+
+
+def main(overpass_dir, out_dir):
+    logging.info("merging Overpass data from '%s'", overpass_dir)
+    if not overpass_dir.is_dir():
+        logging.error("'%s' does not exist - run download_pois_from_osm.py first", overpass_dir)
+        raise SystemExit(1)
+
+    write_feature_collection(out_dir, "transit", merge_transit(overpass_dir))
+    for poi_type in OSM_POI_TYPES:
+        write_feature_collection(
+            out_dir, poi_type, merge_basic_poi_type(overpass_dir, poi_type)
+        )
+    logging.info("all output written to '%s'", out_dir)
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "in",
+        type=Path,
+        help="directory containing downloaded OpenStreetMap JSON files",
+    )
+    parser.add_argument(
+        "out",
+        type=Path,
+        help="directory for the merged per-type GeoJSON files",
+    )
+    args = vars(parser.parse_args())
+    main(args["in"], args["out"])

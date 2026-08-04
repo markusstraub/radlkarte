@@ -19,6 +19,7 @@
     "serve": "http-server -a localhost -p 8081 -c-1",
     "geojson": "./data/prepare_geojson.py",
     "pois": "./data/download_pois_from_osm.py data data/osm-overpass",
+    "pois:merge": "./data/merge_pois.py data/osm-overpass data/poi",
     "pois:klagenfurt": "yarn pois --only-region klagenfurt",
     "pois:linz": "yarn pois --only-region linz",
     "pois:noe-suedost": "yarn pois --only-region noe-suedost",
