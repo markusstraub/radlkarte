@@ -4,71 +4,106 @@ This file provides guidance to AI coding agents when working with code in this r
 
 ## What this is
 
-radlkarte.at is a static, vanilla-JS website (Leaflet map) that shows recommended
-bicycle routes plus cycling-relevant POIs for several Austrian regions. There is no
-build step and no framework: `index.html` loads jQuery, Leaflet and plugins, and
-`radlkarte.js` directly, and route/POI data comes from GeoJSON files under `data/`.
+radlkarte.at shows recommended bicycle routes plus cycling-relevant POIs for several
+Austrian regions.
+
+**This repository is mid-rewrite.** The 2026 redesign replaces the entire frontend
+stack; the data tooling has already been rebuilt. Read the design before changing
+anything:
+
+- Design spec: `docs/superpowers/specs/2026-08-02-radlkarte-2026-design.md`
+- Implementation plans: `docs/superpowers/plans/`
+
+The spec is the authority on intended behaviour. Where this file and the spec
+disagree, the spec wins and this file needs updating.
 
 ## Commands
 
-Python tests live in `data/test/` and run with pytest from the repository root:
+    pytest                  # Python tests (data/test/), run from the repository root
+    yarn geojson <file>     # minify + bbox + stable ids + validate an authored GeoJSON
+    yarn pois               # download POIs from Overpass, per region, into data/osm-overpass/
+    yarn pois:merge         # merge those downloads into data/poi/<type>.geojson
 
-    pytest
+## Target architecture
 
-## Architecture
+**MapLibre GL JS, Vite and TypeScript.** The route network is drawn with one line
+layer per priority level, so z-ordering comes from style layer order rather than
+computed z-indexes. Zoom-dependent width, opacity and visibility are declarative
+`step`/`interpolate` expressions evaluated on the GPU — no JavaScript runs on zoom.
+Oneway arrows are a `symbol` layer with `symbol-placement: "line"`. Problem icons and
+POIs are symbol layers with `icon-allow-overlap: false` for automatic decluttering.
 
-**Single global namespace.** All map state lives on one global object, `rkGlobal`
-(defined at the top of `radlkarte.js`): the Leaflet map instance, per-region
-configuration (`rkGlobal.configurations`), style/zoom-threshold constants, and
-layer groups for both route segments (`rkGlobal.segments`) and POIs
-(`rkGlobal.poiLayers`). There are no modules/imports — every script tag in
-`index.html` contributes to the same global scope, in load order.
+The decision to use MapLibre was reopened and re-confirmed; the reasoning, the
+rejected alternatives (staying on Leaflet, OpenLayers, deck.gl, a hybrid) and the
+accepted trade-offs — notably that MapLibre 6 requires WebGL2 — are recorded in the
+spec's "Map engine" section. Do not relitigate without reading it.
 
-**Region switching drives everything.** Each region (wien, linz, klagenfurt, …) is
-an entry in `rkGlobal.configurations` with a title, center coordinates, and an
-optional `nextbikeUrl`. The current region is stored in the URL hash and handled by
-a customized `leaflet-hash` plugin (`js/leaflet-hash-1.0.1-customized/`), which
-calls `updateRadlkarteRegion()` on change. That function clears existing
-segments/markers, loads `data/radlkarte-<region>.geojson` via `loadGeoJson()`, and
-reloads whichever POI layers (Nextbike, OSM POI types) are currently visible.
-Auto-switching to the region nearest the map center also runs off this path
-(`rkGlobal.autoSwitchDistanceMeters`).
+**No region concept.** All coverage areas load at once and nothing is ever unloaded.
+Regions survive only as sidebar navigation bookmarks, a derived Matomo label, and a
+legacy-hash redirect. Region is gone from the data layer, application state and URL.
 
-**Route rendering is data-driven from GeoJSON properties.** GeoJSON line features
-carry `priority` (0=main/2=local) and `stress` (0=calm/2=stressful); these two
-values drive color/width via `updateStyles()` / `getLineStyle()`, and zoom-based
-visibility thresholds (`rkGlobal.priorityFullVisibleFromZoom`,
-`priorityReducedVisibilityFromZoom`) control what's shown at each zoom level.
-Optional flags (`oneway`, `steep`, `unpaved`) add decorators: arrow patterns via
-`leaflet.polylineDecorator`, dash patterns, or bristle-like steep markers. Point
-features (`dismount`, `nocargo`, `warning` + `description`) become problem-icon
-markers via `createProblemMarkersIncludingPopup()`, split into low/high-zoom layer
-groups.
+**Source is modular**, replacing the single `rkGlobal` god-object: `map/` (style
+construction, layers, icons), `data/` (network and POI loading), `ui/` (sidebar, layer
+switcher, search, popups), `state/` (URL hash, Matomo).
 
-**POI data has two independent sources**, both keyed by region:
-1. OSM Overpass data, pre-downloaded per region/type into `data/osm-overpass/*.json`
-   by `data/download_pois_from_osm.py` (run via `yarn pois*`), and currently
-   rendered client-side by `clearAndLoadBasicOsmPoi()`, which reads
-   `data/osm-overpass/*.json` directly for the active region. `data/merge_pois.py`
-   (`yarn pois:merge`) additionally merges those downloads into region-agnostic
-   per-type files in `data/poi/*.geojson`, deduplicating across overlapping region
-   bounding boxes and flattening the OSM tags to the fields popups need. Nothing
-   consumes `data/poi/*.geojson` yet — it is groundwork for a later frontend
-   change. Neither directory is committed to git.
-2. Live Nextbike bike-share data, fetched client-side per region's `nextbikeUrl`
-   by `clearAndLoadNextbike()`.
+## Data pipeline
 
-**Route data authoring happens outside this repo's JS**, in JOSM: contributors edit
-GeoJSON using `data/josm-radlkarte-style.mapcss` for visual feedback, then run
-`data/prepare_geojson.py` (via `yarn geojson`) to minify, add a bounding box, and
-assign stable `id`s before committing. See README.md for the full attribute
-reference (`priority`, `stress`, `oneway`, `steep`, `unpaved`, `dismount`,
-`nocargo`, `warning`, `description`).
+Route data is authored by hand; POI data is generated. They have separate lifecycles —
+code deploys from CI, POI data refreshes from cron on the server.
 
-**Third-party libraries are vendored, not installed.** Everything under `js/*` and
-`css/font-awesome-*`, `css/roboto/`, `css/museo-*` is a checked-in copy of a
-specific library version (Leaflet, sidebar, geocoder, polylineDecorator, hash
-plugin, locate control, turf, jQuery, opening_hours.js) — there is no npm/yarn
-dependency for the runtime site, only for dev tooling (`html5-lint`, `http-server`,
-`jshint`). The `leaflet-hash` plugin is explicitly "customized" in-repo, so don't
-expect upstream behavior to match.
+**Route data** lives in `data/radlkarte-<region>.geojson`, one file per area with one
+person responsible for each, and is committed to git. Contributors author it in JOSM
+using `data/josm-radlkarte-style.mapcss` for visual feedback, then run
+`yarn geojson` (`data/prepare_geojson.py`) to minify, compute the bbox and assign
+stable `id`s.
+
+`prepare_geojson.py` also validates point attributes. It **checks values, never
+presence**: a recognised key carrying a bad value is reported and the process exits
+non-zero, while a point carrying none of the recognised keys is passed over in
+silence. That distinction is deliberate — requiring presence was measured first and
+flagged 369 of 948 points, of which 6 were real mistakes and the rest were JOSM export
+artifacts. The MapCSS style mirrors the same rules as red highlights, so the two must
+be kept in sync when the vocabulary changes. README.md holds the attribute reference
+and the meaning of each highlight colour.
+
+**POI data** is generated in two steps and is **not** committed to git:
+
+1. `data/download_pois_from_osm.py` (`yarn pois`) queries Overpass once per region and
+   POI type into `data/osm-overpass/<region>-<type>.json`. Queries stay per-region with
+   small bounding boxes because Austria-wide queries exceed Overpass timeouts, and they
+   run from the server's IP, which has working reputation with the public instances.
+2. `data/merge_pois.py` (`yarn pois:merge`) merges those into one region-agnostic
+   `data/poi/<type>.geojson` per type — the POI source the frontend reads. It
+   deduplicates across overlapping region bounding boxes, flattens the OSM tag soup to
+   the fields popups need, and writes deterministic output so repeated cron runs do not
+   churn HTTP caches.
+
+Deduplication is load-bearing, not cosmetic: bruckleitha, wien and noe-suedost overlap
+around Vienna, and since every area now loads simultaneously, duplicates would render
+as plausible-looking extra markers. Regular POIs dedupe on the OSM `type/id` key.
+Transit cannot — the `convert` statements in the `subwayLines`/`railwayLines` queries
+emit one synthetic element per (route, stop) pair, so ids repeat by design — and
+dedupes by station name instead, with one shared set across the subway and railway
+passes so a station served by both appears once.
+
+Popup properties emitted per feature: `osmType`, `osmId`, `dataDate`, and, when
+present, `name`, `address`, `website`, `openingHours`, `phone`, `operator`. Transit
+features add `transitType` and a `lines` list of `{ref, colour}`, where `colour` may be
+`null`. `openingHours` is deliberately a raw OSM string — the `opening_hours` library
+evaluates "open now" client-side against the viewer's clock.
+
+Live Nextbike data is fetched client-side and is not part of this pipeline. A single
+request covers every area.
+
+## Legacy code being replaced
+
+`index.html`, `radlkarte.js` and everything under `js/` are the outgoing Leaflet
+implementation: one global `rkGlobal` object, region switching driven by a customised
+`leaflet-hash` plugin, POIs read straight from `data/osm-overpass/`, and every
+third-party library vendored as a checked-in copy rather than an npm dependency. It is
+still what production serves.
+
+Treat it as reference, not as a pattern to extend. New work belongs in the rewrite, and
+the vendored libraries (jQuery, Leaflet, turf, polylineDecorator, sidebar, geocoder,
+locate control, hash plugin) are all slated for removal — `opening_hours` is the one
+kept, moved to npm.
