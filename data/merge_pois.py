@@ -224,11 +224,21 @@ def build_transit_features(
 
 
 def _load_overpass_files(overpass_dir, data_name):
-    """Yield (parsed json, data date) for every region's file of one query.
+    """All of a query's per-region downloads, freshest snapshot first.
 
     Matching is exact on the suffix so that '*-subway.json' does not also
-    pick up '*-subwayLines.json'. Sorted for deterministic output.
+    pick up '*-subwayLines.json'.
+
+    Order matters downstream: deduplication keeps the first occurrence of an
+    element, so putting the freshest region first makes the freshest copy of a
+    POI win, along with its dataDate. Regions are refreshed independently (see
+    the pois:<region> scripts), so their snapshot dates routinely differ by
+    weeks. Files without a parseable date sort last, and ties fall back to the
+    filename so the output stays deterministic.
+
+    :returns a list of (parsed json, data date) tuples
     """
+    loaded = []
     for path in sorted(overpass_dir.glob("*-{}.json".format(data_name))):
         with open(path, encoding="utf-8") as file_pointer:
             try:
@@ -236,14 +246,35 @@ def _load_overpass_files(overpass_dir, data_name):
             except json.JSONDecodeError:
                 logging.warning("%s is not valid json - skipping", path)
                 continue
-        yield overpass_json, parse_data_date(overpass_json)
+        loaded.append((overpass_json, parse_data_date(overpass_json), path.name))
+
+    # two stable passes: filename ascending, then date descending. Python's sort
+    # is stable, so equal dates keep filename order.
+    loaded.sort(key=lambda item: item[2])
+    loaded.sort(key=lambda item: item[1] or "", reverse=True)
+    return [(overpass_json, data_date) for overpass_json, data_date, _ in loaded]
 
 
 def merge_basic_poi_type(overpass_dir, poi_type):
-    """Merge every region's download of one POI type into a FeatureCollection."""
+    """Merge every region's download of one POI type into a FeatureCollection.
+
+    :returns the FeatureCollection, or None if no source file existed at all.
+        None and an empty FeatureCollection mean different things: the latter is
+        a real answer ("we looked, there are none"), the former means we have no
+        data to speak for this type and must not overwrite what is already there.
+    """
+    sources = _load_overpass_files(overpass_dir, poi_type)
+    if not sources:
+        logging.warning(
+            "%s: no source file in '%s' - not writing anything for this type",
+            poi_type,
+            overpass_dir,
+        )
+        return None
+
     elements = []
     data_dates = {}
-    for overpass_json, data_date in _load_overpass_files(overpass_dir, poi_type):
+    for overpass_json, data_date in sources:
         for element in overpass_json.get("elements", []):
             elements.append(element)
             data_dates.setdefault(osm_key(element), data_date)
@@ -272,21 +303,35 @@ def merge_basic_poi_type(overpass_dir, poi_type):
 
 
 def merge_transit(overpass_dir):
-    """Merge subway and railway stations into a single FeatureCollection."""
+    """Merge subway and railway stations into a single FeatureCollection.
+
+    A missing subway download is normal - only wien has one - so this only
+    reports "no data" when neither station query produced a file.
+
+    :returns the FeatureCollection, or None if no station file existed at all.
+    """
     features = []
     seen_names = set()
+    station_files = 0
     for station_query, lines_query in TRANSIT_SOURCES:
         lines_index = {}
         for overpass_json, _ in _load_overpass_files(overpass_dir, lines_query):
             for name, lines in index_lines_by_station(overpass_json).items():
                 lines_index.setdefault(name, {}).update(lines)
 
-        for overpass_json, data_date in _load_overpass_files(
-            overpass_dir, station_query
-        ):
+        stations = _load_overpass_files(overpass_dir, station_query)
+        station_files += len(stations)
+        for overpass_json, data_date in stations:
             features += build_transit_features(
                 overpass_json, lines_index, station_query, data_date, seen_names
             )
+
+    if station_files == 0:
+        logging.warning(
+            "transit: no source file in '%s' - not writing anything for this type",
+            overpass_dir,
+        )
+        return None
 
     features.sort(key=lambda f: (f["properties"]["osmType"], f["properties"]["osmId"]))
     logging.info("transit: %d station(s)", len(features))
@@ -311,12 +356,30 @@ def main(overpass_dir, out_dir):
         logging.error("'%s' does not exist - run download_pois_from_osm.py first", overpass_dir)
         raise SystemExit(1)
 
-    write_feature_collection(out_dir, "transit", merge_transit(overpass_dir))
-    for poi_type in OSM_POI_TYPES:
-        write_feature_collection(
-            out_dir, poi_type, merge_basic_poi_type(overpass_dir, poi_type)
+    collections = [("transit", merge_transit(overpass_dir))]
+    collections += [
+        (poi_type, merge_basic_poi_type(overpass_dir, poi_type))
+        for poi_type in OSM_POI_TYPES
+    ]
+
+    written = 0
+    for name, collection in collections:
+        # None means no source file existed. Writing an empty FeatureCollection
+        # here would replace a previously good file with nothing, so a single
+        # failed download would silently empty a POI layer on the live site.
+        if collection is None:
+            continue
+        write_feature_collection(out_dir, name, collection)
+        written += 1
+
+    skipped = len(collections) - written
+    if skipped:
+        logging.warning(
+            "%d of %d POI type(s) had no source data and were left untouched",
+            skipped,
+            len(collections),
         )
-    logging.info("all output written to '%s'", out_dir)
+    logging.info("%d POI type(s) written to '%s'", written, out_dir)
 
 
 if __name__ == "__main__":

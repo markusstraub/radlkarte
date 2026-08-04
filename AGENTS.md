@@ -84,6 +84,13 @@ and the meaning of each highlight colour.
    the fields popups need, and writes deterministic output so repeated cron runs do not
    churn HTTP caches.
 
+   Two behaviours worth knowing before changing it. Regions are refreshed
+   independently, so their Overpass snapshots differ in age: sources are processed
+   freshest-first so that the newest copy of a duplicated POI wins, along with its
+   `dataDate`. And a POI type with no source file at all is **skipped**, not written as
+   an empty collection — otherwise one failed download would replace a good file with
+   nothing and silently empty a map layer.
+
 Deduplication is load-bearing, not cosmetic: bruckleitha, wien and noe-suedost overlap
 around Vienna, and since every area now loads simultaneously, duplicates would render
 as plausible-looking extra markers. Regular POIs dedupe on the OSM `type/id` key.

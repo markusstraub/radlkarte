@@ -299,11 +299,6 @@ def test_merge_basic_poi_type_does_not_match_other_types(tmp_path):
     assert len(collection["features"]) == 1
 
 
-def test_merge_basic_poi_type_handles_a_missing_type(tmp_path):
-    collection = merge_pois.merge_basic_poi_type(tmp_path, "bicyclePump")
-    assert collection == {"type": "FeatureCollection", "features": []}
-
-
 def test_merge_basic_poi_type_output_is_sorted_by_osm_key(tmp_path):
     """Ids sort numerically, not as strings - 4 before 30."""
     write_overpass(tmp_path, "wien-drinkingWater.json", [node(30), node(4)])
@@ -339,13 +334,77 @@ def test_write_feature_collection_is_deterministic(tmp_path):
     assert first.read_bytes() == content
 
 
-def test_main_writes_one_file_per_poi_type(tmp_path):
+def test_main_only_writes_types_that_have_source_data(tmp_path):
+    """A type with no download must not be written at all.
+
+    Writing an empty FeatureCollection would replace a previously good file, so
+    one failed download would silently empty a POI layer.
+    """
     overpass_dir = tmp_path / "overpass"
     overpass_dir.mkdir()
     write_overpass(overpass_dir, "wien-drinkingWater.json", [node(1)])
     out_dir = tmp_path / "poi"
     merge_pois.main(overpass_dir, out_dir)
-    written = sorted(path.name for path in out_dir.glob("*.geojson"))
-    assert written == sorted(
-        ["transit.geojson"] + [f"{poi_type}.geojson" for poi_type in merge_pois.OSM_POI_TYPES]
+    assert [path.name for path in out_dir.glob("*.geojson")] == ["drinkingWater.geojson"]
+
+
+def test_main_leaves_an_existing_file_untouched_when_its_download_is_missing(tmp_path):
+    overpass_dir = tmp_path / "overpass"
+    overpass_dir.mkdir()
+    write_overpass(overpass_dir, "wien-drinkingWater.json", [node(1)])
+    out_dir = tmp_path / "poi"
+    out_dir.mkdir()
+    stale = out_dir / "bicycleShop.geojson"
+    stale.write_text("PREVIOUS GOOD DATA", encoding="utf-8")
+
+    merge_pois.main(overpass_dir, out_dir)
+
+    assert stale.read_text(encoding="utf-8") == "PREVIOUS GOOD DATA"
+
+
+def test_merge_returns_none_when_no_source_file_exists(tmp_path):
+    assert merge_pois.merge_basic_poi_type(tmp_path, "bicyclePump") is None
+    assert merge_pois.merge_transit(tmp_path) is None
+
+
+def test_merge_returns_an_empty_collection_when_sources_hold_no_features(tmp_path):
+    """Distinct from None: we looked, and there genuinely are none."""
+    write_overpass(tmp_path, "wien-bicyclePump.json", [])
+    assert merge_pois.merge_basic_poi_type(tmp_path, "bicyclePump") == {
+        "type": "FeatureCollection",
+        "features": [],
+    }
+
+
+def test_the_freshest_region_wins_a_duplicate(tmp_path):
+    """Regions are refreshed independently, so their snapshots differ in age."""
+    write_overpass(
+        tmp_path, "wien-drinkingWater.json", [node(1, name="new")],
+        timestamp="2026-08-04T10:00:00Z",
     )
+    write_overpass(
+        tmp_path, "bruckleitha-drinkingWater.json", [node(1, name="old")],
+        timestamp="2026-07-02T10:00:00Z",
+    )
+    features = merge_pois.merge_basic_poi_type(tmp_path, "drinkingWater")["features"]
+    assert len(features) == 1
+    # wien is alphabetically last but has the fresher snapshot, so it must win
+    assert features[0]["properties"]["name"] == "new"
+    assert features[0]["properties"]["dataDate"] == "2026-08-04"
+
+
+def test_a_file_without_a_date_loses_to_one_with_a_date(tmp_path):
+    write_overpass(tmp_path, "aaa-drinkingWater.json", [node(1, name="undated")], timestamp=None)
+    write_overpass(
+        tmp_path, "zzz-drinkingWater.json", [node(1, name="dated")],
+        timestamp="2026-07-02T10:00:00Z",
+    )
+    features = merge_pois.merge_basic_poi_type(tmp_path, "drinkingWater")["features"]
+    assert features[0]["properties"]["name"] == "dated"
+
+
+def test_equal_dates_fall_back_to_filename_order(tmp_path):
+    write_overpass(tmp_path, "bbb-drinkingWater.json", [node(1, name="bbb")])
+    write_overpass(tmp_path, "aaa-drinkingWater.json", [node(1, name="aaa")])
+    features = merge_pois.merge_basic_poi_type(tmp_path, "drinkingWater")["features"]
+    assert features[0]["properties"]["name"] == "aaa"
