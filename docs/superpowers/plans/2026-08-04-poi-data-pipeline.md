@@ -1382,7 +1382,8 @@ if __name__ == "__main__":
 - [ ] **Step 4: Run the full suite to verify it passes**
 
 Run: `cd /home/evod/projects/radlkarte && pytest -v`
-Expected: PASS, `57 passed` — 11 in `test_prepare_geojson.py` and 46 in `test_merge_pois.py`.
+Expected: PASS, `60 passed` — 14 in `test_prepare_geojson.py` and 46 in `test_merge_pois.py`.
+(Was written as 57/11 before Task 2's validation rule changed and added three tests.)
 
 - [ ] **Step 5: Make the script executable and wire it up**
 
