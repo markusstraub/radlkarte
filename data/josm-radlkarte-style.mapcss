@@ -1,8 +1,14 @@
-/** 
- * radlkarte uses three attributes:
+/**
+ * radlkarte way attributes:
  * priority=0|1|2 (mandatory)
  * stress=0|1|2 (mandatory)
  * oneway=yes (optional)
+ * unpaved=yes, steep=yes (optional)
+ *
+ * radlkarte problem point attributes and other point categories:
+ * one of dismount=yes, nocargo=yes, warning=yes, speed100=yes, leisure=swimming_pool (to render a point)
+ * priority=0|1|2 (optional; absent means "not reviewed yet")
+ * description=... (free text)
  */
 
 /* stress: 0=calm, 1=medium, 2=stressful */
@@ -62,4 +68,37 @@ node[nocargo=yes] {
 node[warning=yes] {
     icon-image: "warning-small.svg";
     text: auto;
+}
+
+node[speed100=yes] {
+    icon-image: "presets/vehicle/restriction/maxspeed.svg";
+    text: auto;
+}
+
+node[leisure=swimming_pool] {
+    icon-image: "presets/leisure/swimming_pool.svg";
+    text: auto;
+}
+
+/* problem point prominence: 0=most prominent, 1=medium, 2=least */
+node[priority=0] {
+    icon-width: 24;
+}
+node[priority=1] {
+    icon-width: 18;
+}
+node[priority=2] {
+    icon-width: 12;
+}
+
+/* problem points still missing an explicit priority - these need review */
+node[dismount=yes][!priority],
+node[nocargo=yes][!priority],
+node[warning=yes][!priority],
+node[speed100=yes][!priority],
+node[leisure=swimming_pool][!priority] {
+    symbol-shape: circle;
+    symbol-size: 28;
+    symbol-stroke-width: 3;
+    symbol-stroke-color: #FFFF00;
 }
