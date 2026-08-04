@@ -53,7 +53,7 @@ Everything below exists today and must still work after the rewrite:
   - direction arrows for `oneway=yes`
 - Problem icons with popups showing type and `description`, at low and high zoom
   - including the combined icon when a point carries both `dismount` and `nocargo`
-- Bathing spots: `leisure=swimming_pool` points with their own icon and popup
+- Bathing spots: `swimming=yes` points with their own icon and popup
 - Controls: zoom buttons, scale bar, geolocation with follow, address search,
   base-layer switch, overlay switch
 - Sidebar: Übersicht/Legende, News, Info, Download, Kontakt, Datenschutz
@@ -326,9 +326,17 @@ Two point categories that already exist are easy to lose in the rewrite and are 
 out here because `getProblemIcons` (`radlkarte.js:1002`) is the only place they are
 written down today:
 
-- **`leisure=swimming_pool`** is a rendered point category with its own icon
-  (`css/swimming.svg`), not a problem type. Klagenfurt carries seven named bathing
-  spots. It takes `description` and `priority` like any other point.
+- **`swimming=yes`** is a rendered point category with its own icon
+  (`css/swimming.svg`), not a problem type. It takes `description` and `priority` like
+  any other point.
+
+  Renamed from `leisure=swimming_pool` so that every radlkarte attribute uses the same
+  yes-flag format instead of borrowing an OSM tag. **The seven Klagenfurt bathing spots
+  (`radlkarte-klagenfurt.geojson` ids 452-458) are retagged at cutover, not before**:
+  the outgoing frontend tests `leisure === 'swimming_pool'` (`radlkarte.js:1002`), so
+  retagging early would make them vanish from the live site. Until then they render on
+  production and nowhere in the rewrite. `leisure` is no longer a recognised key, so
+  `prepare_geojson.py` passes those points over in silence rather than reporting them.
 - **`dismount` + `nocargo` together** render a single combined icon, not two
   overlapping ones. A naive one-symbol-layer-per-attribute design would draw both.
 
@@ -344,7 +352,7 @@ attribute, and `prepare_geojson.py` validates it. When the attribute is absent t
 default is 1 (medium prominency).
 
 **Validation checks values, never presence.** A recognised key with a bad value is
-reported (`warning=2`, `priority=-1`, `leisure=park`); a point carrying none of the
+reported (`warning=2`, `priority=-1`, `swimming=pool`); a point carrying none of the
 recognised keys is passed over in silence. Requiring presence was tried and measured
 first: it flagged 369 of 948 points, of which 6 were real mistakes. The rest are JOSM
 export artifacts — points with no properties at all, or with way attributes such as
@@ -574,6 +582,26 @@ usual when every layer of the stack is replaced at once.
   maintainers set `priority` in JOSM. Intended, but it depends on other people's work
   and lands as a visible change for users, so it needs announcing rather than
   shipping silently.
+- **Bathing spots disappear if the retag is missed.** The seven Klagenfurt points still
+  carry `leisure=swimming_pool`; the rewrite only renders `swimming=yes`. The retag is
+  deliberately deferred to cutover because doing it earlier breaks the live site, which
+  means it is a step that has to happen *during* the switch, not before or after. See
+  the cutover checklist below.
+
+## Cutover checklist
+
+Steps that cannot be done ahead of time because they would break the live site, and
+cannot be forgotten because they are user-visible:
+
+1. Retag the seven Klagenfurt bathing spots from `leisure=swimming_pool` to
+   `swimming=yes` (`radlkarte-klagenfurt.geojson` ids 452-458), then run
+   `yarn geojson` on the file. Doing this before cutover removes them from production;
+   not doing it at cutover removes them from the rewrite.
+2. Apply the Apache changes from "Caching and compression" — compression for
+   `application/geo+json` is a prerequisite for eager-loading every area, not an
+   optimisation.
+3. Announce the problem-icon prominence change to area maintainers, with the list of
+   points still lacking an explicit `priority`.
 - **WebGL2 hard requirement.** Devices without WebGL2 lose the map entirely instead of
   degrading. See "Map engine" for the accepted reasoning; the mitigation, if the loss
   turns out to be visible in the Matomo device breakdown, is a static fallback notice
