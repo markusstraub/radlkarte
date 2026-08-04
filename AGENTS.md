@@ -19,10 +19,14 @@ disagree, the spec wins and this file needs updating.
 
 ## Commands
 
-    pytest                  # Python tests (data/test/), run from the repository root
-    yarn geojson <file>     # minify + bbox + stable ids + validate an authored GeoJSON
-    yarn pois               # download POIs from Overpass, per region, into data/osm-overpass/
-    yarn pois:merge         # merge those downloads into data/poi/<type>.geojson
+    pytest                          # Python tests (data/test/), from the repository root
+    npm install                     # dev tooling; npm, not yarn (see below)
+    npm run geojson -- <file>       # minify + bbox + stable ids + validate an authored GeoJSON
+    npm run pois                    # download POIs from Overpass, per region, into data/osm-overpass/
+    npm run pois:merge              # merge those downloads into data/poi/<type>.geojson
+
+npm scripts need `--` before arguments meant for the underlying script, so
+`npm run geojson -- data/radlkarte-wien.geojson` — without it npm swallows the path.
 
 ## Target architecture
 
@@ -54,7 +58,7 @@ code deploys from CI, POI data refreshes from cron on the server.
 **Route data** lives in `data/radlkarte-<region>.geojson`, one file per area with one
 person responsible for each, and is committed to git. Contributors author it in JOSM
 using `data/josm-radlkarte-style.mapcss` for visual feedback, then run
-`yarn geojson` (`data/prepare_geojson.py`) to minify, compute the bbox and assign
+`npm run geojson` (`data/prepare_geojson.py`) to minify, compute the bbox and assign
 stable `id`s.
 
 `prepare_geojson.py` also validates point attributes. It **checks values, never
@@ -68,11 +72,11 @@ and the meaning of each highlight colour.
 
 **POI data** is generated in two steps and is **not** committed to git:
 
-1. `data/download_pois_from_osm.py` (`yarn pois`) queries Overpass once per region and
+1. `data/download_pois_from_osm.py` (`npm run pois`) queries Overpass once per region and
    POI type into `data/osm-overpass/<region>-<type>.json`. Queries stay per-region with
    small bounding boxes because Austria-wide queries exceed Overpass timeouts, and they
    run from the server's IP, which has working reputation with the public instances.
-2. `data/merge_pois.py` (`yarn pois:merge`) merges those into one region-agnostic
+2. `data/merge_pois.py` (`npm run pois:merge`) merges those into one region-agnostic
    `data/poi/<type>.geojson` per type — the POI source the frontend reads. It
    deduplicates across overlapping region bounding boxes, flattens the OSM tag soup to
    the fields popups need, and writes deterministic output so repeated cron runs do not

@@ -447,7 +447,7 @@ the `<a href="#bruckleitha">`-style anchors in the current sidebar.
 Code deploys from CI; data refreshes on the server. The two have genuinely different
 lifecycles — a POI refresh should not require a code deploy, and vice versa.
 
-**GitHub Actions**, on push to `main`: `npm ci && vite build`, then rsync `dist/` to
+**GitHub Actions**, on push to `main`: `npm ci && npm run build`, then rsync `dist/` to
 the Debian server over SSH using a deploy key stored as a repository secret. This
 replaces the current `git pull` on the server and keeps the Node toolchain off
 production, so build failures surface in CI rather than on the live site.
@@ -595,7 +595,7 @@ cannot be forgotten because they are user-visible:
 
 1. Retag the seven Klagenfurt bathing spots from `leisure=swimming_pool` to
    `swimming=yes` (`radlkarte-klagenfurt.geojson` ids 452-458), then run
-   `yarn geojson` on the file. Doing this before cutover removes them from production;
+   `npm run geojson -- <file>` on it. Doing this before cutover removes them from production;
    not doing it at cutover removes them from the rewrite.
 2. Apply the Apache changes from "Caching and compression" — compression for
    `application/geo+json` is a prerequisite for eager-loading every area, not an

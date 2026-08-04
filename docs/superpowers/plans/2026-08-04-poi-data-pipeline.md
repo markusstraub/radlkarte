@@ -16,8 +16,9 @@
 - `opening_hours` values are emitted as **raw OSM strings**. Evaluation stays in the browser (the `opening_hours` library needs the viewer's clock).
 - Coordinates are rounded to **5 decimal places**, matching `restrict_decimal_precision` in `prepare_geojson.py`.
 - Problem-point attribute vocabulary: `dismount`, `nocargo`, `warning`, `speed100` — value always `yes`.
-- Additional rendered point category: `leisure` — value always `swimming_pool`. Not a
-  problem type, but validated the same way.
+- Additional rendered point category: `swimming` — value always `yes`. Not a problem
+  type, but validated the same way. (Renamed from `leisure=swimming_pool` in 84c9c5e so
+  every radlkarte attribute uses the same yes-flag format.)
 - **Validation checks values, never presence.** A recognised key with a bad value is
   reported; a point carrying none of the recognised keys is valid and silent. (Amended
   2026-08-04 after Task 2 measured the presence-requiring rule against real data: it
@@ -1408,9 +1409,9 @@ In `AGENTS.md`, in the POI paragraph, replace the sentence describing source 1 w
 
 ```markdown
 1. OSM Overpass data, pre-downloaded per region/type into `data/osm-overpass/*.json`
-   by `data/download_pois_from_osm.py` (run via `yarn pois*`), then merged into
+   by `data/download_pois_from_osm.py` (run via `npm run pois*`), then merged into
    region-agnostic per-type files in `data/poi/*.geojson` by `data/merge_pois.py`
-   (`yarn pois:merge`), which deduplicates across overlapping region bounding boxes
+   (`npm run pois:merge`), which deduplicates across overlapping region bounding boxes
    and flattens the OSM tags to the fields popups need. Neither directory is
    committed to git.
 ```
@@ -1449,8 +1450,8 @@ The unit tests use synthetic fixtures. The deduplication claim — that regions 
 
 ```bash
 cd /home/evod/projects/radlkarte
-yarn pois --only-region wien --only-query drinkingWater
-yarn pois --only-region bruckleitha --only-query drinkingWater
+npm run pois -- --only-region wien --only-query drinkingWater
+npm run pois -- --only-region bruckleitha --only-query drinkingWater
 ```
 
 Expected: two files in `data/osm-overpass/`. If Overpass rate-limits, wait and retry — do not work around it by faking data.
@@ -1468,7 +1469,7 @@ for path in pathlib.Path('data/osm-overpass').glob('*-drinkingWater.json'):
     total += n
 print('raw total:', total)
 "
-yarn pois:merge
+npm run pois:merge
 python3 -c "
 import json
 print('merged:', len(json.load(open('data/poi/drinkingWater.geojson'))['features']))
@@ -1499,7 +1500,7 @@ Confirm: `geometry.coordinates` is `[lon, lat]` with at most 5 decimals, `proper
 ```bash
 cd /home/evod/projects/radlkarte
 sha256sum data/poi/drinkingWater.geojson
-yarn pois:merge
+npm run pois:merge
 sha256sum data/poi/drinkingWater.geojson
 ```
 
