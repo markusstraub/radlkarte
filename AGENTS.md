@@ -25,8 +25,10 @@ disagree, the spec wins and this file needs updating.
     npm run pois                    # download POIs from Overpass, per region, into data/osm-overpass/
     npm run pois:merge              # merge those downloads into data/poi/<type>.geojson
 
-npm scripts need `--` before arguments meant for the underlying script, so
-`npm run geojson -- data/radlkarte-wien.geojson` — without it npm swallows the path.
+npm consumes anything starting with `-` as its own option, so flag arguments must
+follow a `--`: `npm run pois -- --only-region wien`. Without it npm warns
+`Unknown cli config` and the script runs with no arguments. Plain paths pass through
+either way; always using `--` is the safe habit.
 
 ## Target architecture
 
