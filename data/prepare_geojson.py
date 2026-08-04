@@ -21,15 +21,16 @@ logging.basicConfig(format=logFormatter, level=logging.INFO)
 
 PROBLEM_ATTRIBUTES = ("dismount", "nocargo", "warning", "speed100")
 VALID_PRIORITIES = ("0", "1", "2")
-# non-problem point categories the map renders: key -> the only allowed value
-OTHER_POINT_CATEGORIES = {"leisure": "swimming_pool"}
+# non-problem point categories the map renders: key -> the only allowed value.
+# Keep in sync with data/josm-radlkarte-style.mapcss, which visualises the same rules.
+OTHER_POINT_CATEGORIES = {"swimming": "yes"}
 
 
 def validate_point_properties(feature):
     """Check a Point feature's problem-marker attributes and other categories.
 
     Recognized keys are problem attributes (dismount, nocargo, warning, speed100),
-    priority (optional), and other categories like leisure.
+    priority (optional), and other rendered categories such as swimming.
 
     A Point with NO recognized keys is valid (it may carry foreign tags or be a
     JOSM export artifact). A Point with recognized keys must have valid values.

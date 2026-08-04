@@ -88,16 +88,24 @@ def test_minimize_returns_invalid_point_count(tmp_path):
     assert prepare_geojson.minimize(source, tmp_path / "out.geojson") == 1
 
 
-def test_leisure_swimming_pool_is_valid():
-    """leisure=swimming_pool is a valid point category."""
-    assert prepare_geojson.validate_point_properties(point(leisure="swimming_pool")) == []
+def test_swimming_is_a_valid_point_category():
+    """swimming=yes marks a bathing spot - a rendered category, not a problem."""
+    assert prepare_geojson.validate_point_properties(point(swimming="yes")) == []
 
 
-def test_leisure_with_wrong_value_is_reported():
-    """leisure with any other value is reported."""
-    problems = prepare_geojson.validate_point_properties(point(leisure="park"))
+def test_swimming_with_wrong_value_is_reported():
+    """swimming with any other value is reported."""
+    problems = prepare_geojson.validate_point_properties(point(swimming="pool"))
     assert len(problems) == 1
-    assert "leisure=park" in problems[0]
+    assert "swimming=pool" in problems[0]
+
+
+def test_unrecognised_key_is_silent():
+    """A leftover leisure=swimming_pool is now just a foreign tag, so it is ignored.
+
+    Only recognised keys are validated; a point carrying none of them is valid.
+    """
+    assert prepare_geojson.validate_point_properties(point(leisure="swimming_pool")) == []
 
 
 def test_point_with_no_properties_is_valid():
