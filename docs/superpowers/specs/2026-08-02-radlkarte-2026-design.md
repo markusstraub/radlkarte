@@ -152,7 +152,7 @@ On a debounced `moveend` (~1–2 s of map idle), the map center is matched again
 region bounding boxes — the bbox `prepare_geojson.py` already writes into each file —
 falling back to the nearest region center. A virtual pageview fires only when the
 derived value differs from the last one tracked. When the map is outside all
-coverage areas or below a minimum zoom threshold, the bucket is `/übersicht`.
+coverage areas or below a minimum zoom threshold, the bucket is `/overview`.
 
 Because the virtual URLs are unchanged, historical statistics stay comparable.
 Expect a step in the graphs at cutover regardless: today a visit produces 1–3
@@ -261,8 +261,7 @@ override a bad guess.
 
 Required changes: `data/josm-radlkarte-style.mapcss` gains visual feedback for the
 attribute, and `prepare_geojson.py` validates it. When the attribute is absent the
-default is 0 (most prominent), so existing data keeps today's behaviour and no data
-migration is needed.
+default is 1 (medium prominency).
 
 ### Visual treatment
 
