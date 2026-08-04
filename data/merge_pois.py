@@ -64,3 +64,21 @@ def is_accessible(element):
     """False for POIs the general public may not use."""
     access = element.get("tags", {}).get("access")
     return access not in BLOCKED_ACCESS
+
+
+def deduplicate_by_osm_key(elements):
+    """Keep the first occurrence of each OSM element.
+
+    Region bounding boxes overlap, so the same element is downloaded once
+    per covering region. Duplicates are harmless today because only one
+    region is loaded at a time, but the rewrite loads all of them at once.
+    """
+    seen = set()
+    unique = []
+    for element in elements:
+        key = osm_key(element)
+        if key in seen:
+            continue
+        seen.add(key)
+        unique.append(element)
+    return unique

@@ -51,3 +51,36 @@ def test_restricted_access_values_are_not_accessible():
     for value in ("no", "private", "permit"):
         element = {"type": "node", "id": 1, "tags": {"access": value}}
         assert merge_pois.is_accessible(element) is False, value
+
+
+def node(id, **tags):
+    return {"type": "node", "id": id, "lat": 48.2, "lon": 16.3, "tags": tags}
+
+
+def test_deduplicate_keeps_distinct_elements():
+    elements = [node(1), node(2), node(3)]
+    assert len(merge_pois.deduplicate_by_osm_key(elements)) == 3
+
+
+def test_deduplicate_collapses_the_same_element_from_two_regions():
+    """bruckleitha, wien and noe-suedost overlap around Vienna."""
+    wien = [node(1, name="Radgeschäft"), node(2)]
+    bruckleitha = [node(1, name="Radgeschäft"), node(9)]
+    merged = merge_pois.deduplicate_by_osm_key(wien + bruckleitha)
+    assert [element["id"] for element in merged] == [1, 2, 9]
+
+
+def test_deduplicate_distinguishes_types_with_the_same_id():
+    """OSM ids are only unique per element type."""
+    elements = [
+        {"type": "node", "id": 1},
+        {"type": "way", "id": 1},
+        {"type": "relation", "id": 1},
+    ]
+    assert len(merge_pois.deduplicate_by_osm_key(elements)) == 3
+
+
+def test_deduplicate_keeps_the_first_occurrence():
+    elements = [node(1, name="first"), node(1, name="second")]
+    merged = merge_pois.deduplicate_by_osm_key(elements)
+    assert merged[0]["tags"]["name"] == "first"
