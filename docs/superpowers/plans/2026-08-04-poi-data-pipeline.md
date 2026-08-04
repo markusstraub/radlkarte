@@ -16,6 +16,12 @@
 - `opening_hours` values are emitted as **raw OSM strings**. Evaluation stays in the browser (the `opening_hours` library needs the viewer's clock).
 - Coordinates are rounded to **5 decimal places**, matching `restrict_decimal_precision` in `prepare_geojson.py`.
 - Problem-point attribute vocabulary: `dismount`, `nocargo`, `warning`, `speed100` — value always `yes`.
+- Additional rendered point category: `leisure` — value always `swimming_pool`. Not a
+  problem type, but validated the same way.
+- **Validation checks values, never presence.** A recognised key with a bad value is
+  reported; a point carrying none of the recognised keys is valid and silent. (Amended
+  2026-08-04 after Task 2 measured the presence-requiring rule against real data: it
+  flagged 369 points, 6 of them real. See the spec's Priority section.)
 - Priority vocabulary: `0`, `1`, `2` where 0 is most prominent. **Absence is meaningful** and must never be filled in at build time (see Task 2).
 - All log output goes through `logging`, format as already configured in the two existing scripts.
 - Run tests from the repository root with `pytest`.

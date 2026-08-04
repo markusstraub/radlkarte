@@ -52,6 +52,8 @@ Everything below exists today and must still work after the rewrite:
   - bristles for `steep=yes`
   - direction arrows for `oneway=yes`
 - Problem icons with popups showing type and `description`, at low and high zoom
+  - including the combined icon when a point carries both `dismount` and `nocargo`
+- Bathing spots: `leisure=swimming_pool` points with their own icon and popup
 - Controls: zoom buttons, scale bar, geolocation with follow, address search,
   base-layer switch, overlay switch
 - Sidebar: Übersicht/Legende, News, Info, Download, Kontakt, Datenschutz
@@ -320,6 +322,19 @@ Point features gain an explicit `priority` attribute (0/1/2), the same vocabular
 line segments, authored in JOSM. The mapper decides: a genuinely nasty spot on a
 local route can still be flagged prominently.
 
+Two point categories that already exist are easy to lose in the rewrite and are called
+out here because `getProblemIcons` (`radlkarte.js:1002`) is the only place they are
+written down today:
+
+- **`leisure=swimming_pool`** is a rendered point category with its own icon
+  (`css/swimming.svg`), not a problem type. Klagenfurt carries seven named bathing
+  spots. It takes `description` and `priority` like any other point.
+- **`dismount` + `nocargo` together** render a single combined icon, not two
+  overlapping ones. A naive one-symbol-layer-per-attribute design would draw both.
+
+Neither is a problem attribute, so `prepare_geojson.py` validates their values but
+never requires their presence — see below.
+
 Derivation from the nearest line segment was considered and rejected — it is fragile
 where routes of different priority meet at junctions, and gives the mapper no way to
 override a bad guess.
@@ -327,6 +342,15 @@ override a bad guess.
 Required changes: `data/josm-radlkarte-style.mapcss` gains visual feedback for the
 attribute, and `prepare_geojson.py` validates it. When the attribute is absent the
 default is 1 (medium prominency).
+
+**Validation checks values, never presence.** A recognised key with a bad value is
+reported (`warning=2`, `priority=-1`, `leisure=park`); a point carrying none of the
+recognised keys is passed over in silence. Requiring presence was tried and measured
+first: it flagged 369 of 948 points, of which 6 were real mistakes. The rest are JOSM
+export artifacts — points with no properties at all, or with way attributes such as
+`priority`+`stress` on a node — which the map has always silently skipped. Under the
+value-only rule the same data yields exactly those 6 real mistakes, which makes the
+script's exit code meaningful enough to gate on later.
 
 **Consequence: this is a data migration, done by hand.** No existing problem point
 carries the attribute, so all of them fall back to priority 1 and pick up that
