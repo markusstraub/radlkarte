@@ -1,8 +1,8 @@
 {
   "name": "@radlobby-at/radlkarte",
   "description": "Website for desktop, tablet & smartphone usage with the goal to provide useful (route) information for cyclists.",
-  "version": "1.0.0",
-  "author": "Radlobby Östereich (https://radlobby.at)",
+  "version": "2026.0.0",
+  "author": "Markus Straub, Radlobby Östereich (https://radlobby.at)",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
@@ -11,7 +11,7 @@
   "bugs": {
     "url": "https://github.com/markusstraub/radlkarte/issues"
   },
-  "homepage": "https://github.com/markusstraub/radlkarte",
+  "homepage": "https://www.radlkarte.at",
   "private": true,
   "scripts": {
     "start": "why",
