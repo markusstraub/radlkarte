@@ -47,11 +47,14 @@ groups.
 
 **POI data has two independent sources**, both keyed by region:
 1. OSM Overpass data, pre-downloaded per region/type into `data/osm-overpass/*.json`
-   by `data/download_pois_from_osm.py` (run via `yarn pois*`), then merged into
-   region-agnostic per-type files in `data/poi/*.geojson` by `data/merge_pois.py`
-   (`yarn pois:merge`), which deduplicates across overlapping region bounding boxes
-   and flattens the OSM tags to the fields popups need. Neither directory is
-   committed to git.
+   by `data/download_pois_from_osm.py` (run via `yarn pois*`), and currently
+   rendered client-side by `clearAndLoadBasicOsmPoi()`, which reads
+   `data/osm-overpass/*.json` directly for the active region. `data/merge_pois.py`
+   (`yarn pois:merge`) additionally merges those downloads into region-agnostic
+   per-type files in `data/poi/*.geojson`, deduplicating across overlapping region
+   bounding boxes and flattening the OSM tags to the fields popups need. Nothing
+   consumes `data/poi/*.geojson` yet — it is groundwork for a later frontend
+   change. Neither directory is committed to git.
 2. Live Nextbike bike-share data, fetched client-side per region's `nextbikeUrl`
    by `clearAndLoadNextbike()`.
 
