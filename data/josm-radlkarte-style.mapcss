@@ -105,3 +105,49 @@ node[leisure=swimming_pool][!priority]::priority_review {
     symbol-stroke-color: #FFFF00;
     z-index: -1;
 }
+
+/* ---------------------------------------------------------------------------
+ * Error visualisation. Red means "prepare_geojson.py rejects this, or the map
+ * silently drops it". These mirror validate_point_properties() in
+ * data/prepare_geojson.py - keep the two in sync when the vocabulary changes.
+ *
+ * Each rule matches "key present AND value wrong", never "key absent": a point
+ * with none of the recognised keys is valid, and a bare [!key] selector would
+ * light up every unrelated object when this style is active on plain OSM data.
+ * --------------------------------------------------------------------------- */
+
+/* a recognised point attribute carrying a value the validator rejects,
+   e.g. dismount=1, warning=2, a free-text warning, leisure=park */
+node[dismount][dismount!=yes]::rk_error,
+node[nocargo][nocargo!=yes]::rk_error,
+node[warning][warning!=yes]::rk_error,
+node[speed100][speed100!=yes]::rk_error,
+node[leisure][leisure!=swimming_pool]::rk_error,
+node[priority][priority!=0][priority!=1][priority!=2]::rk_error {
+    symbol-shape: circle;
+    symbol-size: 34;
+    symbol-stroke-width: 4;
+    symbol-stroke-color: #FF0000;
+    symbol-fill-color: #FF0000;
+    symbol-fill-opacity: 0.25;
+    z-index: -2;
+}
+
+/* a way with an out-of-range mandatory value: the map drops these segments and
+   nothing on screen says why */
+way[priority][priority!=0][priority!=1][priority!=2],
+way[stress][stress!=0][stress!=1][stress!=2] {
+    casing-width: 9;
+    casing-color: #FF0000;
+    casing-opacity: 0.6;
+}
+
+/* a half-tagged way: priority and stress are both mandatory, so one without the
+   other is an unfinished segment. Scoped to ways that already carry one of the
+   two, so foreign OSM data is never flagged. */
+way[priority][!stress],
+way[stress][!priority] {
+    casing-width: 9;
+    casing-color: #FF00FF;
+    casing-opacity: 0.6;
+}
