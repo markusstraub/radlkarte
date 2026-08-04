@@ -1,14 +1,6 @@
 /**
- * radlkarte way attributes:
- * priority=0|1|2 (mandatory)
- * stress=0|1|2 (mandatory)
- * oneway=yes (optional)
- * unpaved=yes, steep=yes (optional)
- *
- * radlkarte problem point attributes and other point categories:
- * one of dismount=yes, nocargo=yes, warning=yes, speed100=yes, leisure=swimming_pool (to render a point)
- * priority=0|1|2 (optional; absent means "not reviewed yet")
- * description=... (free text)
+ * Radlkarte.at style. 
+ * See https://github.com/markusstraub/radlkarte/blob/main/README.md for spec.
  */
 
 /* stress: 0=calm, 1=medium, 2=stressful */
@@ -75,12 +67,12 @@ node[speed100=yes] {
     text: auto;
 }
 
-node[leisure=swimming_pool] {
+node[swimming=yes] {
     icon-image: "presets/shop/swimming_pool.svg";
     text: auto;
 }
 
-/* problem point prominence: 0=most prominent, 1=medium, 2=least */
+/* point prominence: 0=most prominent, 1=medium, 2=least */
 node[priority=0] {
     icon-width: 24;
 }
@@ -91,14 +83,14 @@ node[priority=2] {
     icon-width: 12;
 }
 
-/* problem points still missing an explicit priority - these need review.
+/* mark points still missing an explicit priority.
    Drawn on its own subpart: JOSM creates one style element per subpart, so a
    symbol on the default subpart is dropped in favour of icon-image. */
 node[dismount=yes][!priority]::priority_review,
 node[nocargo=yes][!priority]::priority_review,
 node[warning=yes][!priority]::priority_review,
 node[speed100=yes][!priority]::priority_review,
-node[leisure=swimming_pool][!priority]::priority_review {
+node[swimming=yes][!priority]::priority_review {
     symbol-shape: circle;
     symbol-size: 28;
     symbol-stroke-width: 3;
@@ -116,13 +108,12 @@ node[leisure=swimming_pool][!priority]::priority_review {
  * light up every unrelated object when this style is active on plain OSM data.
  * --------------------------------------------------------------------------- */
 
-/* a recognised point attribute carrying a value the validator rejects,
-   e.g. dismount=1, warning=2, a free-text warning, leisure=park */
+/* a recognised point attribute carrying a value the validator rejects */
 node[dismount][dismount!=yes]::rk_error,
 node[nocargo][nocargo!=yes]::rk_error,
 node[warning][warning!=yes]::rk_error,
 node[speed100][speed100!=yes]::rk_error,
-node[leisure][leisure!=swimming_pool]::rk_error,
+node[swimming][swimming!=yes]::rk_error,
 node[priority][priority!=0][priority!=1][priority!=2]::rk_error {
     symbol-shape: circle;
     symbol-size: 34;
@@ -136,16 +127,12 @@ node[priority][priority!=0][priority!=1][priority!=2]::rk_error {
 /* a way attribute carrying a value radlkarte does not accept. The mandatory pair
    must be 0|1|2. The optional flags are only ever read as "yes": radlkarte tests
    them with a strict equality, so oneway=true or unpaved=true silently loses the
-   arrows or the dashes.
-
-   oneway=no is deliberately NOT flagged - it is valid OSM meaning "not oneway",
-   and radlkarte reads it as such. Only values that are neither yes nor no are
-   mistakes here. */
+   arrows or the dashes.*/
 way[priority][priority!=0][priority!=1][priority!=2],
 way[stress][stress!=0][stress!=1][stress!=2],
 way[unpaved][unpaved!=yes],
 way[steep][steep!=yes],
-way[oneway][oneway!=yes][oneway!=no] {
+way[oneway][oneway!=yes] {
     casing-width: 9;
     casing-color: #FF0000;
     casing-opacity: 0.6;
@@ -164,6 +151,6 @@ way[oneway][!priority][!stress],
 way[unpaved][!priority][!stress],
 way[steep][!priority][!stress] {
     casing-width: 9;
-    casing-color: #FF00FF;
+    casing-color: #FF0000;
     casing-opacity: 0.6;
 }
