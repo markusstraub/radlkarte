@@ -17,7 +17,7 @@
     "start": "why",
     "serve": "http-server -a localhost -p 8081 -c-1",
     "network:prepare": "./data/prepare_network.py data/radlkarte-*.geojson",
-    "pois:download": "./data/download_pois_from_osm.py data data/pois-raw",
+    "pois:download": "./data/download_pois_from_osm.py --delay 30 data data/pois-raw",
     "pois:merge": "./data/merge_pois.py data/pois-raw data/pois",
     "lint": "npm run lint:html && npm run lint:js",
     "lint:html": "python3 ./node_modules/html5-lint/html5check.py index.html",

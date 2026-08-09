@@ -5,6 +5,7 @@ import argparse
 import json
 import logging
 import shutil
+import time
 from pathlib import Path
 from urllib.error import URLError
 from urllib.parse import urlencode
@@ -19,7 +20,7 @@ logging.basicConfig(format=logFormatter, level=logging.INFO)
 # see https://wiki.openstreetmap.org/wiki/Overpass_API#Public_Overpass_API_instances
 OVERPASS_ENDPOINTS = [
     "https://overpass-api.de/api/interpreter",
-    "https://overpass.kumi.systems/api/interpreter",
+    "https://overpass.private.coffee/api/interpreter",
 ]
 
 QUERY_TEMPLATE = """[out:json][timeout:120][bbox:{min_lat},{min_lon},{max_lat},{max_lon}];
@@ -159,6 +160,11 @@ def main(radlkarte_dir, out_dir, only_region, only_query):
                 logging.warning(f"failed with HTTP status code {status_code}")
                 failed_datasets.append(f"{region_name}-{data_name}")
 
+            delay_secs = int(args["delay"])
+            if delay_secs > 0:
+                logging.info(f"waiting {delay_secs} seconds before next request..")
+                time.sleep(args["delay"])
+
     if len(failed_datasets) == 0:
         logging.info(f"successfully downloaded all {success_count} data set(s)")
     else:
@@ -178,6 +184,13 @@ if __name__ == "__main__":
         "out",
         type=Path,
         help="directory for storage of downloaded OpenStreetMap JSON files",
+    )
+    parser.add_argument(
+        "--delay",
+        type=int,
+        metavar="SECONDS",
+        default=0,
+        help="delay between requests to avoid overloading the Overpass API",
     )
     parser.add_argument(
         "--only-region",
