@@ -16,15 +16,9 @@
   "scripts": {
     "start": "why",
     "serve": "http-server -a localhost -p 8081 -c-1",
-    "geojson": "./data/prepare_geojson.py",
-    "pois": "./data/download_pois_from_osm.py data data/osm-overpass",
-    "pois:merge": "./data/merge_pois.py data/osm-overpass data/poi",
-    "pois:klagenfurt": "npm run pois -- --only-region klagenfurt",
-    "pois:linz": "npm run pois -- --only-region linz",
-    "pois:noe-suedost": "npm run pois -- --only-region noe-suedost",
-    "pois:rheintal": "npm run pois -- --only-region rheintal",
-    "pois:steyr": "npm run pois -- --only-region steyr",
-    "pois:wien": "npm run pois -- --only-region wien",
+    "network:prepare": "./data/prepare_network.py data/radlkarte-*.geojson",
+    "pois:download": "./data/download_pois_from_osm.py data data/pois-raw",
+    "pois:merge": "./data/merge_pois.py data/pois-raw data/pois",
     "lint": "npm run lint:html && npm run lint:js",
     "lint:html": "python3 ./node_modules/html5-lint/html5check.py index.html",
     "lint:js": "jshint radlkarte.js"

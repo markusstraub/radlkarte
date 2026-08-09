@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
-"""Radlkarte GeoJSON Preparation Script
+"""Radlkarte Network Preparation Script
 
-This script deals with GeoJSON files produced by JOSM,
+This script deals with GeoJSON network files produced by JOSM,
 i.e. a FeatureCollection with Points and LineStrings,
 and serves these purposes:
 1) reduce file size (for faster download)
 2) calculate the bbox
 3) stable feature order for minimum diffs after changes
    (JOSM unfortunately reorders the GeoJSON)
+4) human explorable file (one feature per line)
 
 For the latter point it adds unique ids to each feature and gracefully
 handles duplicate and invalid ids.

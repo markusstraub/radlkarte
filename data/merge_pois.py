@@ -341,12 +341,21 @@ def merge_transit(overpass_dir):
 def write_feature_collection(out_dir, name, collection):
     """Write one POI type to <out_dir>/<name>.geojson.
 
+    Formatted like the network files (one feature per line) written by prepare_network.py: one
+
     :returns the path written
     """
     out_dir.mkdir(parents=True, exist_ok=True)
     path = out_dir / "{}.geojson".format(name)
+    features = collection["features"]
     with open(path, "w", encoding="utf-8") as file_pointer:
-        json.dump(collection, file_pointer, sort_keys=True, ensure_ascii=False)
+        file_pointer.write('{"type": "FeatureCollection", "features": [')
+        for index, feature in enumerate(features):
+            file_pointer.write(",\n" if index else "\n")
+            file_pointer.write(
+                json.dumps(feature, sort_keys=True, ensure_ascii=False)
+            )
+        file_pointer.write("]}\n" if not features else "\n]}\n")
     return path
 
 

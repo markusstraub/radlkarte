@@ -117,6 +117,15 @@ Then open http://localhost:8081 — caching is disabled. (`npx http-server -a lo
 > all. Plain file paths are passed through either way, but always adding `--` is the
 > habit that never bites.
 
+## Deployment
+
+**future status (not yet fully implemented)**
+
+- Live deployment is on a Debian server running Apache.
+- HTML/JS: update via GitHub Actions. Each commit to `main` leads to a rebuild and push of the built website to the server.
+- Network GeoJSON: update via GitHub Actions as the HTML/JS part
+- POI data: update via cronjob on the server
+
 ## License
 
 The license for all our code and data is [here](LICENSE).
