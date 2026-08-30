@@ -747,7 +747,7 @@ function loadLeaflet() {
     minZoom: 0,
     maxZoom: 19
   });
-  let cartodbPositronLowZoom = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+  let cartodbPositronLowZoom = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png?key=cb1_2kc7_1_00ea1d8c338fae15b92cd34e', {
     attribution: '&copy; <a href="https://www.openstreetmap.org" target="_blank">OpenStreetMap</a> contributors | &copy; <a href="https://carto.com/attributions" target="_blank">CARTO</a>',
     subdomains: 'abcd',
     minZoom: 0,
