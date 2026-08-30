@@ -124,3 +124,7 @@ region. Worth one count then:
 Duplicates in that output are the interesting case — the merge already removed the
 same-name collisions, so what you are looking for is names that *should* have been
 distinct.
+
+## Markus' Notes
+
+- Overpass API is flaky.. constantly getting denied / timeouts. Switch to downloading geofabrik export and extracting from there should be much more reliable
