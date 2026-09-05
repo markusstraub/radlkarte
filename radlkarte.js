@@ -64,6 +64,11 @@ rkGlobal.configurations = {
     centerLatLng: L.latLng(46.62, 14.31),
     nextbikeUrl: 'https://maps.nextbike.net/maps/nextbike.json?domains=ka&bikes=false'
   },
+  'krems': {
+    title: 'Krems',
+    centerLatLng: L.latLng(48.41, 15.6),
+    nextbikeUrl: 'https://maps.nextbike.net/maps/nextbike.json?domains=la&bikes=false'
+  },
   'linz': {
     title: 'Linz',
     centerLatLng: L.latLng(48.30, 14.26),
