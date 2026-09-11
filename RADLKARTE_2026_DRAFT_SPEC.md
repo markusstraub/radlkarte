@@ -2,6 +2,8 @@
 
 ## Keep existing features
 
+See the definition of "Features" and "Route Data" in [README.md](README.md)
+
 - Route network with color representing `stress` and line width representing `priority`
   - dashed style for `unpaved=yes`
   - bristles for `steep=yes`
@@ -36,9 +38,10 @@
 - check if we can still have basic Mapnik for high zoom levels (full details of OSM are useful!)
 - support for hillshading / contour lines in map?
 
-### Gotchas
-- How to handle the POI downloading process? Currently it is per .geojson. We don't want to strain the overpass API!
 
-## Major possible future features
-- Routing on the radlkarte network: user selects start and end point and gets a route on the radlkarte network (origin/destination are simply snapped to the network, no real routing on OpenStreetMap involved!)
+# Gotchas
+
+- Until now we had absolutely no build system. HTML and JS were edited by hand, the full repo is updated via a `git pull` cron-job on a Debian server that servers this via a webserver. We can changes this but must keep the process free of charge - and ideally keep tooling to a minimum.
+- How to handle the POI downloading process? Currently it is per .geojson. We don't want to strain the overpass API! Right now this is also executed via cron-job directly on the server
+- A possible future feature is routing on the radlkarte network: user selects start and end point and gets a route on the radlkarte network (origin/destination are simply snapped to the network, no real routing on OpenStreetMap involved!)
   - User should be able to adjust sensitivity to stressful segments (from completely avoiding them to fully accepting them)
